@@ -15,16 +15,16 @@ RUN pecl install redis-6.0.2 && docker-php-ext-enable redis
 # Kafka 
 RUN pecl install rdkafka && docker-php-ext-enable rdkafka
 
-WORKDIR /app/backend
+WORKDIR /app
 
 COPY . .
 
 RUN composer install --no-scripts
 
 COPY ./kafka_consumers.conf /etc/supervisor/conf.d/kafka_consumers.conf
-COPY ./start.sh /app/backend/start.sh
+COPY ./start.sh /app/start.sh
 
 EXPOSE 8000
-CMD ["/app/backend/start.sh"]
+CMD ["/app/start.sh"]
 
 
