@@ -12,3 +12,7 @@ Route::get('/metrics', function () {
 Route::get('/metrics/wipe', function () {
     app(PrometheusServiceProxy::class)->clearMetrics();
 });
+
+Route::get('/aaa', function () {
+    return '1231231';
+});
