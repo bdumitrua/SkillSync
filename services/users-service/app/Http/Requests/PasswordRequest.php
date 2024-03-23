@@ -11,7 +11,7 @@ class PasswordRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,16 @@ class PasswordRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'password' => 'required|string|min:8',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'password.required' => 'Пароль обязателен к заполнению.',
+            'password.string' => 'Пароль должен быть строкой.',
+            'password.min' => 'Пароль должен быть не менее 8 символов.',
         ];
     }
 }

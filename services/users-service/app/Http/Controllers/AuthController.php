@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\AuthRegistration;
-use App\AuthReset;
 use App\Http\Requests\AuthConfirmCodeRequest;
 use App\Http\Requests\CheckEmailRequest;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\PasswordRequest;
+use App\Models\AuthReset;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
 
@@ -21,17 +20,10 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function registrationStart(CreateUserRequest $request)
+    public function register(CreateUserRequest $request)
     {
         return $this->handleServiceCall(function () use ($request) {
-            return $this->authService->registrationStart($request);
-        });
-    }
-
-    public function registrationConfirm(AuthRegistration $authRegistration, AuthConfirmCodeRequest $request)
-    {
-        return $this->handleServiceCall(function () use ($authRegistration, $request) {
-            return $this->authService->registrationConfirm($authRegistration, $request);
+            return $this->authService->register($request);
         });
     }
 

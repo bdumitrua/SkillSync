@@ -27,34 +27,6 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
-
-        try {
-            $client = ClientBuilder::create()
-                ->setHosts([config('services.elasticsearch.host')])
-                ->build();
-
-            $params = [
-                'index' => 'users',
-                'body' => [
-                    'mappings' => [
-                        'properties' => [
-                            'first_name' => [
-                                'type' => 'text'
-                            ],
-                            'second_name' => [
-                                'type' => 'text'
-                            ],
-                            'nick_name' => [
-                                'type' => 'text'
-                            ],
-                        ]
-                    ]
-                ]
-            ];
-
-            $client->indices()->create($params);
-        } catch (\Elastic\Elasticsearch\Exception\ClientResponseException $e) {
-        }
     }
 
     /**
@@ -64,13 +36,5 @@ return new class extends Migration
     {
         // Удаление таблицы пользователей из базы данных
         Schema::dropIfExists('users');
-
-        // Удаление индекса из Elasticsearch
-        $client = ClientBuilder::create()
-            ->setHosts([config('services.elasticsearch.host')])
-            ->build();
-
-        $params = ['index' => 'users'];
-        $client->indices()->delete($params);
     }
 };
