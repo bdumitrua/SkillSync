@@ -15,6 +15,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-# Указываем контейнеру, что он может принимать трафик на порту 80
-EXPOSE 8080
+# Указываем контейнеру, что он может принимать трафик на порту 8080
+EXPOSE 5167
 ENTRYPOINT ["dotnet", "teams-service.dll"]
