@@ -16,5 +16,5 @@ WORKDIR /app
 COPY --from=build-env /app/out .
 
 # Указываем контейнеру, что он может принимать трафик на порту 80
-EXPOSE 80
+EXPOSE 8080
 ENTRYPOINT ["dotnet", "teams-service.dll"]

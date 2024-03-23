@@ -1,17 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 
-// using TeamsService.Data;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-// Добавляем сервисы в контейнер DI
-// builder.Services.AddDbContext<TeamsContext>(options =>
-//     options.UseMySQL(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Добавляем контроллеры, если они еще не добавлены
 builder.Services.AddControllers();
