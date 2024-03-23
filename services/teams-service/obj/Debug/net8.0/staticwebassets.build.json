@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "+2LUiWs/Isc00Dm8YZFDC75chT6l5RoiwxGO6LulYwc=",
+  "Source": "teams-service",
+  "BasePath": "_content/teams-service",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "teams-service/wwwroot",
+      "Source": "teams-service",
+      "ContentRoot": "/Users/dumitru/Desktop/inspirelink/services/teams-service/wwwroot/",
+      "BasePath": "_content/teams-service",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}
