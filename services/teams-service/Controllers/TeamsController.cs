@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using TeamsService.Data;
+using TeamsService.Dtos.Team;
+using TeamsService.Mappers;
 using TeamsService.Models;
 
 namespace TeamsService.Controllers
@@ -7,27 +10,43 @@ namespace TeamsService.Controllers
     [ApiController]
     public class TeamsController : ControllerBase
     {
-        // Для примера добавим статичный список команд
-        private static List<Team> teams = new List<Team>
+        private readonly ApplicationDBContext _context;
+
+        public TeamsController(ApplicationDBContext context)
         {
-            new Team { Id = 1, Name = "Team A" },
-            new Team { Id = 2, Name = "Team AA" },
-        };
+            _context = context;
+        }
 
         [HttpGet]
-        public ActionResult<List<Team>> GetAll() => teams;
+        public ActionResult<List<Team>> GetAll()
+        {
+            var teams = _context.Teams.ToList().Select(t => t.ToTeamDto());
+
+            return Ok(teams);
+        }
 
         [HttpGet("{id}")]
-        public ActionResult<Team> Get(int id)
+        public ActionResult<Team> GetById(int id)
         {
-            var team = teams.FirstOrDefault(t => t.Id == id);
+            var team = _context.Teams.Find(id);
 
             if (team == null)
             {
                 return NotFound();
             }
 
-            return team;
+            return Ok(team);
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromBody] CreateTeamRequestDto teamDto)
+        {
+            var teamModel = teamDto.ToTeamFromCreateDTO();
+
+            _context.Teams.Add(teamModel);
+            _context.SaveChanges();
+
+            return CreatedAtAction(nameof(GetById), new { id = teamModel.Id }, teamModel);
         }
     }
 }
