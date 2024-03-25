@@ -36,6 +36,39 @@ services:
         networks:
             - app
 
+    teams-service:
+        build:
+            context: ./services/teams-service
+            dockerfile: Dockerfile
+        ports:
+            - "8002:8080"
+        environment:
+            - ASPNETCORE_ENVIRONMENT=Development
+            - ConnectionStrings__TeamsDatabase=Server=teams-db;Port=3306;Database=teams_db;User=user;Password=password;
+        depends_on:
+            - teams-db
+            - redis
+            - elasticsearch
+            - kafka
+            - prometheus
+        networks:
+            - app
+
+    teams-db:
+        image: mysql:8.3
+        environment:
+            MYSQL_DATABASE: teams_db
+            MYSQL_USER: user
+            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: rootpassword
+        ports:
+            - "3308:3306"
+        volumes:
+            - teams-data:/var/lib/mysql
+        restart: unless-stopped
+        networks:
+            - app
+
     redis:
         image: redis:7.2.3
         command: redis-server /etc/redis/redis.conf
@@ -110,3 +143,4 @@ volumes:
     node_modules:
     users-vendor:
     users-data:
+    teams-data:
