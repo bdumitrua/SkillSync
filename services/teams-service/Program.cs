@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using TeamsService.Data;
+using TeamsService.Intefaces;
+using TeamsService.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,8 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 });
+
+builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 
 var app = builder.Build();
 
