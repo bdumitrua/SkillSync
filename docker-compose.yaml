@@ -44,7 +44,6 @@ services:
             - "8002:8080"
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - ConnectionStrings__TeamsDatabase=Server=teams-db;Port=3306;Database=teams_db;User=user;Password=password;
         depends_on:
             - teams-db
             - redis
