@@ -59,6 +59,11 @@ namespace TeamsService.Controllers
             UpdateTeamRequestDto updateTeamDto
         )
         {
+            if (updateTeamDto.IsEmpty())
+            {
+                return BadRequest();
+            }
+
             Team? teamModel = await _teamRepository.UpdateAsync(id, updateTeamDto);
 
             if (teamModel == null)

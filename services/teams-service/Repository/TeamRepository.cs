@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TeamsService.Data;
 using TeamsService.Dtos.Team;
 using TeamsService.Intefaces;
+using TeamsService.Mappers;
 using TeamsService.Models;
 
 namespace TeamsService.Repository
@@ -57,7 +58,7 @@ namespace TeamsService.Repository
                 return null;
             }
 
-            teamModel.Name = updateTeamDto.Name;
+            teamModel.UpdateModelFromDto(updateTeamDto);
 
             await _context.SaveChangesAsync();
 

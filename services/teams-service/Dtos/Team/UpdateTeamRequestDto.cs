@@ -1,7 +1,9 @@
 namespace TeamsService.Dtos.Team
 {
-    public class UpdateTeamRequestDto
+    public class UpdateTeamRequestDto : BaseRequestDto
     {
-        public string Name { get; set; } = string.Empty;
+        public string? Name { get; set; }
+        public string? Avatar { get; set; }
+        public string? Description { get; set; }
     }
 }

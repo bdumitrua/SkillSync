@@ -9,5 +9,6 @@ namespace TeamsService.Data
             : base(dbContextOptions) { }
 
         public DbSet<Team> Teams { get; set; }
+        public DbSet<TeamMember> TeamMembers { get; set; }
     }
 }
