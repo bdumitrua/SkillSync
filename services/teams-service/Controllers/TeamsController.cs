@@ -8,7 +8,7 @@ using TeamsService.Models;
 
 namespace TeamsService.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/teams")]
     [ApiController]
     public class TeamsController : ControllerBase
     {
