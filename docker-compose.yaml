@@ -68,6 +68,39 @@ services:
         networks:
             - app
 
+    # posts-service:
+    #     build:
+    #         context: ./services/posts_service
+    #         dockerfile: Dockerfile
+    #     volumes:
+    #         - ./services/posts_service:/app
+    #         - .venv:/app/.venv
+    #     ports:
+    #         - 8003:5000
+    #     depends_on:
+    #         - posts-db
+    #         - redis
+    #         - elasticsearch
+    #         - kafka
+    #         - prometheus
+    #     networks:
+    #         - app
+
+    # posts-db:
+    #     image: mysql:8.3
+    #     environment:
+    #         MYSQL_DATABASE: posts_db
+    #         MYSQL_USER: user
+    #         MYSQL_PASSWORD: password
+    #         MYSQL_ROOT_PASSWORD: rootpassword
+    #     ports:
+    #         - "3309:3306"
+    #     volumes:
+    #         - posts-data:/var/lib/mysql
+    #     restart: unless-stopped
+    #     networks:
+    #         - app
+
     redis:
         image: redis:7.2.3
         command: redis-server /etc/redis/redis.conf
@@ -143,3 +176,4 @@ volumes:
     users-vendor:
     users-data:
     teams-data:
+    # posts-data:
