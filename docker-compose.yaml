@@ -74,15 +74,11 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ./services/posts_service:/app
-            # - .venv:/app/.venv
+            # - ./tmp/app/mysqld:/run/mysqld
         ports:
             - 8003:8000
         depends_on:
             - posts-db
-            - redis
-            - elasticsearch
-            - kafka
-            - prometheus
         networks:
             - app
 
@@ -97,6 +93,7 @@ services:
             - "3309:3306"
         volumes:
             - posts-data:/var/lib/mysql
+            # - ./tmp/app/mysqld:/var/run/mysqld
         restart: unless-stopped
         networks:
             - app
