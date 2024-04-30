@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+-lpsfh7yyv9=m4oukp6bof$@de#kx&3#r2y5yj@q!za!!q8q-'
+SECRET_KEY = 'EcW37WaYTdyzhaeeAvKeHrkmP3v1tSKv1Y4k6f06SeyKgWh75kOG48RL94XhHhTk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -44,6 +44,8 @@ MIDDLEWARE = [
     # 'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'posts.middleware.JWTMiddleware'
 ]
 
 ROOT_URLCONF = 'posts_service.urls'

@@ -4,18 +4,31 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404
 from .models import Post
 from .forms import UpdatePostForm, CreatePostForm
+from .serializers import PostSerializer
 
 # Request methods
 
 
 def index(request):
+    check_request_method(request, 'GET')
+
     all_posts = Post.objects.all()
-    posts_list = list(all_posts.values())
 
-    return JsonResponse(posts_list, safe=False)
+    serializer = PostSerializer(all_posts, many=True)
+
+    return JsonResponse(serializer.data, safe=False)
 
 
-def create(request):
+def show(request, id):
+    check_request_method(request, 'GET')
+
+    post = get_object_or_404(Post, id=id)
+    serializer = PostSerializer(post)
+
+    return JsonResponse(serializer.data)
+
+
+def auth_create(request):
     check_request_method(request, 'POST')
 
     data = json.loads(request.body)
@@ -31,7 +44,7 @@ def create(request):
     })
 
 
-def update(request, id):
+def auth_update(request, id):
     check_request_method(request, 'PUT')
 
     data = json.loads(request.body)
@@ -41,21 +54,36 @@ def update(request, id):
         return JsonResponse({'errors': form.errors}, status=422)
 
     post = get_object_or_404(Post, id=id)
+    if not user_own_post(post, request.user_id):
+        return JsonResponse('Insufficient rights', status=403)
+
     update_post_model(post, data)
 
     return JsonResponse({'message': 'Post updated successfully', 'post_id': post.id})
 
 
-def delete(request, id):
+def auth_delete(request, id):
     check_request_method(request, 'DELETE')
 
     post = get_object_or_404(Post, id=id)
+
+    if not user_own_post(post, request.user_id):
+        return JsonResponse({'error': 'Insufficient rights'}, status=403)
+
     post.delete()
 
     return JsonResponse({'message': 'Post deleted successfully', 'post_id': id})
 
 
 # Additional functions
+
+def user_own_post(post, user_id):
+    if (post.entity_type == 'team'):
+        # TODO
+        return True
+    else:
+        return post.entity_id == user_id
+
 
 def update_post_model(post, data):
     post.text = data.get('text')
