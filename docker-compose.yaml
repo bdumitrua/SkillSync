@@ -74,7 +74,6 @@ services:
             dockerfile: Dockerfile
         volumes:
             - ./services/posts_service:/app
-            # - ./tmp/app/mysqld:/run/mysqld
         ports:
             - 8003:8000
         depends_on:
@@ -93,7 +92,6 @@ services:
             - "3309:3306"
         volumes:
             - posts-data:/var/lib/mysql
-            # - ./tmp/app/mysqld:/var/run/mysqld
         restart: unless-stopped
         networks:
             - app
