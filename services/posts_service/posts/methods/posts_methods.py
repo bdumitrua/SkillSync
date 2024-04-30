@@ -1,34 +1,37 @@
 import json
-from django.http import HttpResponse, JsonResponse, Http404
-from django.core.exceptions import ObjectDoesNotExist
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from .models import Post
-from .forms import UpdatePostForm, CreatePostForm
-from .serializers import PostSerializer
+from django.db.models import Count
+
+from posts.models import Post
+from posts.forms import UpdatePostForm, CreatePostForm
+from posts.serializers import PostSerializer
+from .utils import *
 
 # Request methods
 
 
-def index(request):
+def posts_index(request):
     check_request_method(request, 'GET')
 
-    all_posts = Post.objects.all()
+    all_posts = Post.objects.annotate(likes_count=Count('postlike')).all()
 
     serializer = PostSerializer(all_posts, many=True)
 
     return JsonResponse(serializer.data, safe=False)
 
 
-def show(request, id):
+def posts_show(request, id):
     check_request_method(request, 'GET')
 
-    post = get_object_or_404(Post, id=id)
+    post = get_object_or_404(Post.objects.annotate(
+        likes_count=Count('postlike')), id=id)
     serializer = PostSerializer(post)
 
     return JsonResponse(serializer.data)
 
 
-def auth_create(request):
+def auth_posts_create(request):
     check_request_method(request, 'POST')
 
     data = json.loads(request.body)
@@ -44,7 +47,7 @@ def auth_create(request):
     })
 
 
-def auth_update(request, id):
+def auth_posts_update(request, id):
     check_request_method(request, 'PUT')
 
     data = json.loads(request.body)
@@ -62,7 +65,7 @@ def auth_update(request, id):
     return JsonResponse({'message': 'Post updated successfully', 'post_id': post.id})
 
 
-def auth_delete(request, id):
+def auth_posts_delete(request, id):
     check_request_method(request, 'DELETE')
 
     post = get_object_or_404(Post, id=id)
@@ -98,8 +101,3 @@ def create_post_model(data):
         entity_type=data.get('entity_type'),
         entity_id=data.get('entity_id'),
     )
-
-
-def check_request_method(request, method):
-    if request.method != method:
-        raise Http404(f"Only {method} requests are allowed")

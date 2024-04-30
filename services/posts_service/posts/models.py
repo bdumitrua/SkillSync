@@ -15,3 +15,9 @@ class Post(models.Model):
 
     def __str__(self):
         return f'Post:{self.id} - {self.text}'
+
+
+class PostLike(models.Model):
+    id = models.AutoField(primary_key=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user_id = models.IntegerField()
