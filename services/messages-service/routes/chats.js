@@ -1,24 +1,26 @@
-var express = require("express");
-const { getLastChatId, createChat } = require("../data/firebase");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 
-router.get("/", function (req, res, next) {
-	res.send("User chats");
+const { getLastChatId, createChat } = require("../data/firebase");
+const authToken = require("../middleware/authToken");
+
+router.get("/", authToken, (req, res) => {
+	res.send(`User ${req.userId} ${req.userEmail} chats`);
 });
 
-router.get("/:id", function (req, res, next) {
+router.get("/:id", authToken, (req, res) => {
 	const chatId = req.params.id;
 
 	res.send(`Chat id ${chatId} messages`);
 });
 
-router.get("/members/:id", function (req, res, next) {
+router.get("/members/:id", authToken, (req, res) => {
 	const chatId = req.params.id;
 
 	res.send(`Chat id ${chatId} members`);
 });
 
-router.post("/", function (req, res, next) {
+router.post("/", authToken, (req, res) => {
 	const teamId = req.body.teamId;
 	const name = req.body.name;
 	const avatarUrl = req.body.avatarUrl;
