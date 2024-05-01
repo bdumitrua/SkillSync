@@ -96,6 +96,18 @@ services:
         networks:
             - app
 
+    messages-service:
+        build:
+            context: ./services/messages-service
+            dockerfile: Dockerfile
+        ports:
+            - "8004:3000"
+        volumes:
+            - ./services/messages-service:/app
+            - messages-node_modules:/app/node_modules
+        networks:
+            - app
+
     redis:
         image: redis:7.2.3
         command: redis-server /etc/redis/redis.conf
@@ -169,6 +181,7 @@ networks:
 volumes:
     node_modules:
     users-vendor:
+    messages-node_modules:
     users-data:
     teams-data:
     posts-data:
