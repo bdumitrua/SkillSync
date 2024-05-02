@@ -6,6 +6,7 @@ use App\Prometheus\PrometheusServiceProxy;
 use Database\Factories\UserFactory;
 use Elastic\ScoutDriverPlus\Searchable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -51,11 +52,6 @@ class User extends Authenticatable implements JWTSubject
         'token_invalid_before' => 'datetime',
     ];
 
-    /**
-     * Get the indexable data array for the model.
-     *
-     * @return array
-     */
     public function toSearchableArray(): array
     {
         return [
@@ -65,29 +61,16 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    /**
-     * @return string
-     */
     public function searchableAs(): string
     {
         return 'users';
     }
 
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
     public function getJWTIdentifier()
     {
         return $this->getKey();
     }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
     public function getJWTCustomClaims(): array
     {
         return [
@@ -101,9 +84,6 @@ class User extends Authenticatable implements JWTSubject
         return UserFactory::new();
     }
 
-    /**
-     * @return void
-     */
     protected static function boot(): void
     {
         parent::boot();
@@ -111,5 +91,29 @@ class User extends Authenticatable implements JWTSubject
         static::created(function ($user) {
             app(PrometheusServiceProxy::class)->incrementEntityCreatedCount('User');
         });
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function subscribers(): HasMany
+    {
+        return $this->hasMany(UserSubscription::class, 'subscribed_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function subscribtions(): HasMany
+    {
+        return $this->hasMany(UserSubscription::class, 'subscriber_id', 'id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function interests(): HasMany
+    {
+        return $this->hasMany(UserInterest::class, 'user_id', 'id');
     }
 }

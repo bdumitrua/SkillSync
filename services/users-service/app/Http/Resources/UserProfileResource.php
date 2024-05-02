@@ -11,12 +11,14 @@ class UserProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         $age = TimeHelper::calculateAge($this->birthdate);
+        $interests = (UserInterestResource::collection($this->interests))->resolve();
 
         return [
             'id' => $this->id,
             'firstName' => $this->first_name,
             'lastName' => $this->last_name,
             'nickName' => $this->nick_name,
+            'interests' => $interests,
             'phone' => $this->phone,
             'email' => $this->email,
             'about' => $this->about,

@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserDataResource;
 use App\Http\Resources\UserProfileResource;
 use App\Models\User;
+use App\Repository\UserInterestRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserSubscriptionRepository;
 use App\Traits\CreateDTO;
@@ -22,14 +23,17 @@ class UserService
     use CreateDTO;
 
     private UserRepository $userRepository;
+    private UserInterestRepository $userInterestRepository;
     private UserSubscriptionRepository $userSubscriptionRepository;
     private ?int $authorizedUserId;
 
     public function __construct(
         UserRepository $userRepository,
+        UserInterestRepository $userInterestRepository,
         UserSubscriptionRepository $userSubscriptionRepository,
     ) {
         $this->userRepository = $userRepository;
+        $this->userInterestRepository = $userInterestRepository;
         $this->userSubscriptionRepository = $userSubscriptionRepository;
         $this->authorizedUserId = Auth::id();
     }
@@ -49,6 +53,8 @@ class UserService
             $user->id !== $this->authorizedUserId
             // Нет подписки
             && !$this->userSubscriptionRepository->existsByBothIds($this->authorizedUserId, $user->id);
+
+        $userData->interests = $this->userInterestRepository->getByUserId($userData->id);
 
         return new UserProfileResource(
             $userData
