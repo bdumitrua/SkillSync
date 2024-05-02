@@ -24,7 +24,8 @@ class UserProfileResource extends JsonResource
             'address' => $this->address,
             'gender' => $this->gender,
             'birthdate' => $this->birthdate,
-            'age' => $age
+            'age' => $age,
+            'canSubscribe' => $this->canSubscribe,
         ];
     }
 }

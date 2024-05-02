@@ -9,6 +9,7 @@ use App\Http\Resources\UserDataResource;
 use App\Http\Resources\UserProfileResource;
 use App\Models\User;
 use App\Repository\UserRepository;
+use App\Repository\UserSubscriptionRepository;
 use App\Traits\CreateDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,11 +22,15 @@ class UserService
     use CreateDTO;
 
     private UserRepository $userRepository;
+    private UserSubscriptionRepository $userSubscriptionRepository;
     private ?int $authorizedUserId;
 
-    public function __construct(UserRepository $userRepository)
-    {
+    public function __construct(
+        UserRepository $userRepository,
+        UserSubscriptionRepository $userSubscriptionRepository,
+    ) {
         $this->userRepository = $userRepository;
+        $this->userSubscriptionRepository = $userSubscriptionRepository;
         $this->authorizedUserId = Auth::id();
     }
 
@@ -38,8 +43,15 @@ class UserService
 
     public function show(User $user): JsonResource
     {
+        $userData = $this->userRepository->getById($user->id);
+        $userData->canSubscribe =
+            // Не сам пользователь
+            $user->id !== $this->authorizedUserId
+            // Нет подписки
+            && !$this->userSubscriptionRepository->existsByBothIds($this->authorizedUserId, $user->id);
+
         return new UserProfileResource(
-            $this->userRepository->getById($user->id)
+            $userData
         );
     }
 

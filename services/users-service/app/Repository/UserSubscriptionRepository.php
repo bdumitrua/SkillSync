@@ -34,6 +34,17 @@ class UserSubscriptionRepository
     }
 
     /**
+     * @param int $subscriberId
+     * @param int $subscribedId
+     * 
+     * @return bool
+     */
+    public function existsByBothIds(int $subscriberId, int $subscribedId): bool
+    {
+        return $this->queryByBothIds($subscriberId, $subscribedId)->exists();
+    }
+
+    /**
      * @param int $userId
      * 
      * @return array
