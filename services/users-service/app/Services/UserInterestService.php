@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\UnprocessableContentException;
+use App\Helpers\ResponseHelper;
 use App\Http\Requests\AddUserInterestRequest;
 use App\Models\UserInterest;
 use App\Repository\UserInterestRepository;
@@ -25,9 +26,9 @@ class UserInterestService
     /**
      * @param AddUserInterestRequest $request
      * 
-     * @return void
+     * @return Response
      */
-    public function add(AddUserInterestRequest $request): void
+    public function add(AddUserInterestRequest $request): Response
     {
         $userInterest = $this->userInterestRepository->getByUserAndTitle(
             $this->authorizedUserId,
@@ -39,6 +40,7 @@ class UserInterestService
         }
 
         $this->userInterestRepository->add($this->authorizedUserId, $request->title);
+        return ResponseHelper::created();
     }
 
     /**

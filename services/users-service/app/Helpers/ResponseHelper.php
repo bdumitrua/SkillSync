@@ -6,9 +6,14 @@ use Illuminate\Http\Response;
 
 class ResponseHelper
 {
-    public static function successResponse(): Response
+    public static function ok(): Response
     {
         return response(null, Response::HTTP_OK);
+    }
+
+    public static function created(): Response
+    {
+        return response(null, Response::HTTP_CREATED);
     }
 
     public static function noContent(): Response

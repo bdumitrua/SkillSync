@@ -57,28 +57,29 @@ class UserSubscriptionService
     /**
      * @param User $user
      * 
-     * @return Response|null
+     * @return Response
      */
-    public function subscribe(User $user): ?Response
+    public function subscribe(User $user): Response
     {
-        $subscriptionExists = $this->userSubscriptionRepository->getByBothIds(
+        $subscription = $this->userSubscriptionRepository->getByBothIds(
             $this->authorizedUserId,
             $user->id
-        )->exists();
+        );
 
-        if ($subscriptionExists) {
+        if (!empty($subscription)) {
             return ResponseHelper::noContent();
         }
 
         $this->userSubscriptionRepository->subscribe($this->authorizedUserId, $user->id);
+        return ResponseHelper::created();
     }
 
     /**
      * @param User $user
      * 
-     * @return Response|null
+     * @return Response
      */
-    public function unsubscribe(User $user): ?Response
+    public function unsubscribe(User $user): Response
     {
         $subscription = $this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id);
         if (empty($subscription)) {
@@ -86,6 +87,7 @@ class UserSubscriptionService
         }
 
         $this->userSubscriptionRepository->unsubscribe($subscription);
+        return ResponseHelper::ok();
     }
 
     /**

@@ -39,6 +39,9 @@ class UserService
         $this->authorizedUserId = Auth::id();
     }
 
+    /**
+     * @return JsonResource
+     */
     public function index(): JsonResource
     {
         return new UserDataResource(
@@ -46,6 +49,11 @@ class UserService
         );
     }
 
+    /**
+     * @param User $user
+     * 
+     * @return JsonResource
+     */
     public function show(User $user): JsonResource
     {
         $userData = $this->userRepository->getById($user->id);
@@ -53,7 +61,7 @@ class UserService
             // Не сам пользователь
             $user->id !== $this->authorizedUserId
             // Нет подписки
-            && !$this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id)->exists();
+            && empty($this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id));
 
         $userData->interests = $this->userInterestRepository->getByUserId($userData->id);
 
@@ -62,6 +70,11 @@ class UserService
         );
     }
 
+    /**
+     * @param UpdateUserRequest $request
+     * 
+     * @return Response
+     */
     public function update(UpdateUserRequest $request): Response
     {
         $this->validateRequestEmail($request->email, $this->authorizedUserId);
@@ -72,9 +85,15 @@ class UserService
             return ResponseHelper::internalError();
         }
 
-        return ResponseHelper::successResponse();
+        return ResponseHelper::ok();
     }
 
+    /**
+     * @param string $email
+     * @param int $authorizedUserId
+     * 
+     * @return void
+     */
     protected function validateRequestEmail(string $email, int $authorizedUserId): void
     {
         $userByEmail = $this->userRepository->getByEmail($email);
