@@ -25,7 +25,10 @@ SECRET_KEY = 'EcW37WaYTdyzhaeeAvKeHrkmP3v1tSKv1Y4k6f06SeyKgWh75kOG48RL94XhHhTk'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'posts-service',
+    'localhost'
+]
 
 
 # Application definition

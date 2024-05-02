@@ -11,5 +11,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build-env /app/out .
 
+# TODO 
+# Doesn't work :(
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "teams-service.dll"]
