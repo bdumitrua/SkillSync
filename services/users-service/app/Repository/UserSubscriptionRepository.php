@@ -2,12 +2,9 @@
 
 namespace App\Repository;
 
-use App\Helpers\ResponseHelper;
 use App\Models\UserSubscription;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 
 class UserSubscriptionRepository
 {
@@ -23,25 +20,16 @@ class UserSubscriptionRepository
      * @param int $subscriberId
      * @param int $subscribedId
      * 
-     * @return Builder
+     * @return UserSubscription|null
      */
-    protected function queryByBothIds(int $subscriberId, int $subscribedId): Builder
+    public function getByBothIds(int $subscriberId, int $subscribedId): ?UserSubscription
     {
-        return $this->userSubscription->newQuery()->where([
-            'subscriber_id' => $subscriberId,
-            'subscribed_id' => $subscribedId,
-        ]);
-    }
-
-    /**
-     * @param int $subscriberId
-     * @param int $subscribedId
-     * 
-     * @return bool
-     */
-    public function existsByBothIds(int $subscriberId, int $subscribedId): bool
-    {
-        return $this->queryByBothIds($subscriberId, $subscribedId)->exists();
+        return $this->userSubscription
+            ->where([
+                'subscriber_id' => $subscriberId,
+                'subscribed_id' => $subscribedId,
+            ])
+            ->first();
     }
 
     /**
@@ -80,38 +68,23 @@ class UserSubscriptionRepository
      * @param int $subscriberId
      * @param int $subscribedId
      * 
-     * @return Response
+     * @return void
      */
-    public function subscribe(int $subscriberId, int $subscribedId): Response
+    public function subscribe(int $subscriberId, int $subscribedId): void
     {
-        $subscriptionExists = $this->queryByBothIds($subscriberId, $subscribedId)->exists();
-        if ($subscriptionExists) {
-            return ResponseHelper::noContent();
-        }
-
         $this->userSubscription->create([
             'subscriber_id' => $subscriberId,
             'subscribed_id' => $subscribedId,
         ]);
-
-        return ResponseHelper::successResponse();
     }
 
     /**
-     * @param int $subscriberId
-     * @param int $subscribedId
+     * @param UserSubscription $userSubscription
      * 
-     * @return Response
+     * @return void
      */
-    public function unsubscribe(int $subscriberId, int $subscribedId): Response
+    public function unsubscribe(UserSubscription $userSubscription): void
     {
-        $subscription = $this->queryByBothIds($subscriberId, $subscribedId)->first();
-        if (empty($subscription)) {
-            return ResponseHelper::badRequest();
-        }
-
-        $subscription->delete();
-
-        return ResponseHelper::successResponse();
+        $userSubscription->delete();
     }
 }

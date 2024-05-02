@@ -46,16 +46,10 @@ class UserRepository
         return $this->user->where('email', '=', $email)->first();
     }
 
-    public function update(int $userId, UpdateUserDTO $dto): Response
+    public function update(int $userId, UpdateUserDTO $dto): bool
     {
         $user = $this->queryById($userId)->first();
 
-        $updatedSuccessfully = $this->updateFromDto($user, $dto);
-
-        if (!$updatedSuccessfully) {
-            return ResponseHelper::internalError();
-        }
-
-        return ResponseHelper::successResponse();
+        return $this->updateFromDto($user, $dto);
     }
 }

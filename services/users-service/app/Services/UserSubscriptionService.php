@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Helpers\ResponseHelper;
 use App\Http\Resources\UserSubscriptionResoruce;
 use App\Models\User;
 use App\Repository\UserRepository;
@@ -56,21 +57,35 @@ class UserSubscriptionService
     /**
      * @param User $user
      * 
-     * @return Response
+     * @return Response|null
      */
-    public function subscribe(User $user): Response
+    public function subscribe(User $user): ?Response
     {
-        return $this->userSubscriptionRepository->subscribe($this->authorizedUserId, $user->id);
+        $subscriptionExists = $this->userSubscriptionRepository->getByBothIds(
+            $this->authorizedUserId,
+            $user->id
+        )->exists();
+
+        if ($subscriptionExists) {
+            return ResponseHelper::noContent();
+        }
+
+        $this->userSubscriptionRepository->subscribe($this->authorizedUserId, $user->id);
     }
 
     /**
      * @param User $user
      * 
-     * @return Response
+     * @return Response|null
      */
-    public function unsubscribe(User $user): Response
+    public function unsubscribe(User $user): ?Response
     {
-        return $this->userSubscriptionRepository->unsubscribe($this->authorizedUserId, $user->id);
+        $subscription = $this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id);
+        if (empty($subscription)) {
+            return ResponseHelper::badRequest();
+        }
+
+        $this->userSubscriptionRepository->unsubscribe($subscription);
     }
 
     /**

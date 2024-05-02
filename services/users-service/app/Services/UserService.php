@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\UpdateUserDTO;
 use App\Exceptions\UnprocessableContentException;
+use App\Helpers\ResponseHelper;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserDataResource;
 use App\Http\Resources\UserProfileResource;
@@ -52,7 +53,7 @@ class UserService
             // Не сам пользователь
             $user->id !== $this->authorizedUserId
             // Нет подписки
-            && !$this->userSubscriptionRepository->existsByBothIds($this->authorizedUserId, $user->id);
+            && !$this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id)->exists();
 
         $userData->interests = $this->userInterestRepository->getByUserId($userData->id);
 
@@ -66,7 +67,12 @@ class UserService
         $this->validateRequestEmail($request->email, $this->authorizedUserId);
         $updateUserDTO = $this->createDTO($request, UpdateUserDTO::class);
 
-        return $this->userRepository->update($this->authorizedUserId, $updateUserDTO);
+        $updatedSuccessfully = $this->userRepository->update($this->authorizedUserId, $updateUserDTO);
+        if (!$updatedSuccessfully) {
+            return ResponseHelper::internalError();
+        }
+
+        return ResponseHelper::successResponse();
     }
 
     protected function validateRequestEmail(string $email, int $authorizedUserId): void
