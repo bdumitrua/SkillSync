@@ -3,11 +3,6 @@
 namespace App\Services;
 
 use App\DTO\UpdateUserDTO;
-use App\Exceptions\CodeNotConfirmedException;
-use App\Exceptions\IncorrectCodeException;
-use App\Exceptions\InvalidCredetialsException;
-use App\Exceptions\InvalidTokenException;
-use App\Exceptions\NotFoundException;
 use App\Exceptions\UnprocessableContentException;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserDataResource;

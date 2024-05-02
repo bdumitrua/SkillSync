@@ -7,6 +7,7 @@ use App\Helpers\ResponseHelper;
 use App\Models\User;
 use App\Traits\UpdateFromDTO;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 
 class UserRepository
@@ -29,6 +30,15 @@ class UserRepository
     public function getById(int $userId): ?User
     {
         return $this->queryById($userId)->first();
+    }
+
+    public function getByIds(array $usersIds): Collection
+    {
+        return new Collection(array_map(function ($userId) {
+            if (!empty($user = $this->getById($userId))) {
+                return $user;
+            }
+        }, $usersIds));
     }
 
     public function getByEmail(string $email): ?User

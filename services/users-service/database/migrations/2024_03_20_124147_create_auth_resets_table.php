@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('auth_resets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->index();
             $table->string('code');
             $table->boolean('confirmed')->default(false);
             $table->timestamps();
