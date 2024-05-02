@@ -17,10 +17,8 @@ trait UpdateFromDTO
     {
         $dtoProperties = get_object_vars($dto);
         foreach ($dtoProperties as $property => $value) {
-            if ($value !== null) {
-                $property = StringHelper::camelToSnake($property);
-                $entity->$property = $value;
-            }
+            $property = StringHelper::camelToSnake($property);
+            $entity->$property = $value;
         }
 
         return $entity->save();

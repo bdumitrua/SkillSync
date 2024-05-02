@@ -36,10 +36,10 @@ class AuthService
     {
         User::create([
             'first_name' => $request->firstName,
-            'second_name' => $request->secondName,
+            'last_name' => $request->lastName,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'birth_date' => $request->birthDate,
+            'birthdate' => $request->birthdate,
         ]);
 
         $token = auth()->attempt([

@@ -26,6 +26,7 @@ class Controller extends BaseController
                 return response()->json(null, 200);
             }
 
+
             if ($response instanceof JsonResource) {
                 return response()->json($response);
             }

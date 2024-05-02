@@ -24,14 +24,16 @@ class User extends Authenticatable implements JWTSubject
 
     protected $fillable = [
         'first_name',
-        'second_name',
+        'last_name',
         'nick_name',
         'email',
         'password',
+        'phone',
         'about',
         'avatar',
         'address',
-        'birth_date',
+        'birthdate',
+        'gender',
         'token_invalid_before'
     ];
 
@@ -41,12 +43,12 @@ class User extends Authenticatable implements JWTSubject
 
     protected $searchable = [
         'first_name',
-        'second_name',
+        'last_name',
         'nick_name',
     ];
 
     protected $casts = [
-        'token_invalid_before' => 'datetime:YYYY-MM-DDTHH:MM:SS.uuuuuuZ',
+        'token_invalid_before' => 'datetime',
     ];
 
     /**
@@ -58,7 +60,7 @@ class User extends Authenticatable implements JWTSubject
     {
         return [
             'first_name' => $this->first_name,
-            'second_name' => $this->second_name,
+            'last_name' => $this->last_name,
             'nick_name' => $this->nick_name,
         ];
     }
