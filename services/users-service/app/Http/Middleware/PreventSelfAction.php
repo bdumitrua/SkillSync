@@ -11,12 +11,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PreventSelfAction
 {
-    /**
-     * @param Request $request
-     * @param Closure $next
-     * 
-     * @return Response
-     */
     public function handle(Request $request, Closure $next): Response
     {
         /** @var UserGroup */

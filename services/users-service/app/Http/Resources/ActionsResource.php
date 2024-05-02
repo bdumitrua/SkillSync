@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Route;
 
 class ActionsResource extends JsonResource
 {
-    /**
-     * @param Request $request
-     * 
-     * @return array
-     */
     public function toArray(Request $request): array
     {
         $actionName = $this->resource[0];

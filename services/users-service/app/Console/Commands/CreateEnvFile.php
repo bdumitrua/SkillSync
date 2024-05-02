@@ -7,23 +7,10 @@ use Illuminate\Support\Facades\File;
 
 class CreateEnvFile extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'create:env';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Create a new .env file from .env.example';
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         if (File::exists(base_path('.env'))) {

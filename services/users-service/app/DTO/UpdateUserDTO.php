@@ -4,18 +4,6 @@ namespace App\DTO;
 
 class UpdateUserDTO
 {
-    // 'firstName' => 'required|string|max:255',
-    //         'lastName' => 'required|string|max:255',
-    //         'email' => 'required|string|email|max:255',
-    //         'birthdate' => 'required|date|date_format:Y-m-d',
-
-    //         'phone' => 'string|min:5',
-    //         'nickName' => 'string|min:3|max:30',
-    //         'about' => 'string|max:255',
-    //         'address' => 'string|max:255',
-    //         'avatar' => 'string',
-    //         'gender' => 'string|in:man,woman'
-
     public string $firstName;
     public string $lastName;
     public string $email;

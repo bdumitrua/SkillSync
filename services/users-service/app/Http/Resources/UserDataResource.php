@@ -9,11 +9,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserDataResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         $age = TimeHelper::calculateAge($this->birthdate);

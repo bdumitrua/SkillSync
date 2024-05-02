@@ -7,23 +7,10 @@ use Illuminate\Support\Facades\DB;
 
 class CreateDatabase extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'create:db';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Create database from .env';
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $databaseName = config('database.connections.mysql.database');

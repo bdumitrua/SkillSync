@@ -12,20 +12,11 @@ class PrometheusMiddleware
 {
     protected $prometheusService;
 
-    /**
-     * @param PrometheusServiceProxy $prometheusService
-     */
     public function __construct(PrometheusServiceProxy $prometheusService)
     {
         $this->prometheusService = $prometheusService;
     }
 
-    /**
-     * @param Request $request
-     * @param Closure $next
-     * 
-     * @return Response
-     */
     public function handle(Request $request, Closure $next): Response
     {
         // $routeName = $request->route()->getName();

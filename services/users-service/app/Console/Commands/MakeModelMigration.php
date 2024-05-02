@@ -7,23 +7,10 @@ use Illuminate\Support\Facades\Artisan;
 
 class MakeModelMigration extends Command
 {
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
     protected $signature = 'make:model:migration {model}';
 
-    /**
-     * The console command description.
-     *
-     * @var string
-     */
     protected $description = 'Creates migration, factory and seeder for model';
 
-    /**
-     * Execute the console command.
-     */
     public function handle()
     {
         $model = $this->argument('model');
