@@ -1,11 +1,10 @@
 namespace TeamsService.Models
 {
-    public class TeamMember : BaseModel
+    public class TeamVacancy : BaseModel
     {
-        public int UserId { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
         public int TeamId { get; set; }
-        public bool IsModerator { get; set; } = false;
-        public string? About { get; set; }
         public Team Team { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

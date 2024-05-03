@@ -10,5 +10,9 @@ namespace TeamsService.Data
 
         public DbSet<Team> Teams { get; set; }
         public DbSet<TeamMember> TeamMembers { get; set; }
+        public DbSet<TeamScope> TeamScopes { get; set; }
+        public DbSet<TeamLink> TeamLinks { get; set; }
+        public DbSet<TeamVacancy> TeamVacancies { get; set; }
+        public DbSet<TeamApplication> TeamApplications { get; set; }
     }
 }
