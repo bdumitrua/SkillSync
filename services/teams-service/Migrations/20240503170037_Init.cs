@@ -155,7 +155,7 @@ namespace teams_service.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     VacancyId = table.Column<int>(type: "int", nullable: false),
-                    TeamVacancyId = table.Column<int>(type: "int", nullable: false),
+                    TeamVacancyId = table.Column<int>(type: "int", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
@@ -165,8 +165,7 @@ namespace teams_service.Migrations
                         name: "FK_TeamApplications_TeamVacancies_TeamVacancyId",
                         column: x => x.TeamVacancyId,
                         principalTable: "TeamVacancies",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 

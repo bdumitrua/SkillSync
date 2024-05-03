@@ -12,7 +12,7 @@ using TeamsService.Data;
 namespace teams_service.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240503164409_Init")]
+    [Migration("20240503170037_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -77,7 +77,7 @@ namespace teams_service.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("TeamVacancyId")
+                    b.Property<int?>("TeamVacancyId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
@@ -225,9 +225,7 @@ namespace teams_service.Migrations
                 {
                     b.HasOne("TeamsService.Models.TeamVacancy", "TeamVacancy")
                         .WithMany()
-                        .HasForeignKey("TeamVacancyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("TeamVacancyId");
 
                     b.Navigation("TeamVacancy");
                 });

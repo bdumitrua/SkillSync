@@ -27,7 +27,7 @@ namespace TeamsService.Controllers
         public async Task<IActionResult> GetAll()
         {
             var teams = await _teamRepository.GetAllAsync();
-            var teamDto = teams.Select(t => t.ToTeamDto());
+            var teamDto = teams.Select(t => t.TeamToDto());
 
             return Ok(teamDto);
         }
@@ -48,7 +48,7 @@ namespace TeamsService.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTeamRequestDto teamDto)
         {
-            Team? teamModel = teamDto.ToTeamFromCreateDTO();
+            Team? teamModel = teamDto.TeamFromCreateRequestDTO();
             await _teamRepository.CreateAsync(teamModel);
 
             return CreatedAtAction(nameof(GetById), new { id = teamModel.Id }, teamModel);
@@ -73,7 +73,7 @@ namespace TeamsService.Controllers
                 return NotFound();
             }
 
-            return Ok(teamModel.ToTeamDto());
+            return Ok(teamModel.TeamToDto());
         }
 
         [HttpDelete]

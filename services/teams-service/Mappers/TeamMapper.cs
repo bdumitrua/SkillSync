@@ -5,7 +5,7 @@ namespace TeamsService.Mappers
 {
     public static class TeamMapper
     {
-        public static TeamDto ToTeamDto(this Team teamModel)
+        public static TeamDto TeamToDto(this Team teamModel)
         {
             return new TeamDto
             {
@@ -16,7 +16,7 @@ namespace TeamsService.Mappers
             };
         }
 
-        public static Team ToTeamFromCreateDTO(this CreateTeamRequestDto TeamDto)
+        public static Team TeamFromCreateRequestDTO(this CreateTeamRequestDto TeamDto)
         {
             return new Team
             {
