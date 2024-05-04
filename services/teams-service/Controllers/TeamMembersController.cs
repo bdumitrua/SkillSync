@@ -4,7 +4,7 @@ using TeamsService.Attributes;
 using TeamsService.Data;
 using TeamsService.Dtos.TeamDto;
 using TeamsService.Dtos.TeamMemberDto;
-using TeamsService.Intefaces;
+using TeamsService.Intefaces.Repository;
 using TeamsService.Mappers;
 using TeamsService.Models;
 

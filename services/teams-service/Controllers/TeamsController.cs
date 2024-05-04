@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using TeamsService.Attributes;
 using TeamsService.Data;
 using TeamsService.Dtos.TeamDto;
-using TeamsService.Intefaces;
+using TeamsService.Intefaces.Repository;
 using TeamsService.Mappers;
 using TeamsService.Models;
 
@@ -20,8 +20,8 @@ namespace TeamsService.Controllers
 
         public TeamsController(ApplicationDBContext context, ITeamRepository teamRepository)
         {
-            _teamRepository = teamRepository;
             _context = context;
+            _teamRepository = teamRepository;
         }
 
         [HttpGet]

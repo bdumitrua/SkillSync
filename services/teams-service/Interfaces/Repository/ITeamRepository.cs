@@ -1,7 +1,7 @@
 using TeamsService.Dtos.TeamDto;
 using TeamsService.Models;
 
-namespace TeamsService.Intefaces
+namespace TeamsService.Intefaces.Repository
 {
     public interface ITeamRepository
     {
