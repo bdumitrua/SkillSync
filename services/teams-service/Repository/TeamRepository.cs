@@ -24,19 +24,12 @@ namespace TeamsService.Repository
             return teamModel;
         }
 
-        public async Task<Team?> DeleteAsync(int id)
+        public async Task<Team?> DeleteAsync(Team team)
         {
-            var teamModel = await _context.Teams.FirstOrDefaultAsync(team => team.Id == id);
-
-            if (teamModel == null)
-            {
-                return null;
-            }
-
-            _context.Teams.Remove(teamModel);
+            _context.Teams.Remove(team);
             await _context.SaveChangesAsync();
 
-            return teamModel;
+            return team;
         }
 
         public Task<List<Team>> GetAllAsync()
@@ -49,20 +42,13 @@ namespace TeamsService.Repository
             return await _context.Teams.FirstOrDefaultAsync(team => team.Id == id);
         }
 
-        public async Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto updateTeamDto)
+        public async Task<Team?> UpdateAsync(Team team, UpdateTeamRequestDto updateTeamDto)
         {
-            var teamModel = await GetByIdAsync(id);
-
-            if (teamModel == null)
-            {
-                return null;
-            }
-
-            teamModel.UpdateModelFromDto(updateTeamDto);
+            team.UpdateModelFromDto(updateTeamDto);
 
             await _context.SaveChangesAsync();
 
-            return teamModel;
+            return team;
         }
     }
 }

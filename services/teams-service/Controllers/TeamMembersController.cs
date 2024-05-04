@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TeamsService.Attributes;
 using TeamsService.Data;
 using TeamsService.Dtos.TeamDto;
 using TeamsService.Dtos.TeamMemberDto;
@@ -20,10 +21,10 @@ namespace TeamsService.Controllers
             _teamMemberRepository = teamMemberRepository;
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<List<TeamMember>>> GetById(int id)
+        [HttpGet("{teamId}")]
+        public async Task<ActionResult<List<TeamMember>>> GetById([BindTeam] Team team)
         {
-            var teamMember = await _teamMemberRepository.GetByTeamIdAsync(id);
+            var teamMember = await _teamMemberRepository.GetByTeamIdAsync(team.Id);
 
             return Ok(teamMember);
         }

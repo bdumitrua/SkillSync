@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TeamsService.Attributes;
 using TeamsService.Data;
 using TeamsService.Dtos.TeamDto;
 using TeamsService.Intefaces;
@@ -32,16 +33,9 @@ namespace TeamsService.Controllers
             return Ok(teamDto);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Team>> GetById(int id)
+        [HttpGet("{teamId}")]
+        public ActionResult<Team> GetById([BindTeam] Team team)
         {
-            var team = await _teamRepository.GetByIdAsync(id);
-
-            if (team == null)
-            {
-                return NotFound();
-            }
-
             return Ok(team);
         }
 
@@ -55,9 +49,9 @@ namespace TeamsService.Controllers
         }
 
         [HttpPut]
-        [Route("{id}")]
+        [Route("{teamId}")]
         public async Task<IActionResult> Update(
-            [FromRoute] int id,
+            [BindTeam] Team team,
             UpdateTeamRequestDto updateTeamDto
         )
         {
@@ -66,7 +60,7 @@ namespace TeamsService.Controllers
                 return BadRequest();
             }
 
-            Team? teamModel = await _teamRepository.UpdateAsync(id, updateTeamDto);
+            Team? teamModel = await _teamRepository.UpdateAsync(team, updateTeamDto);
 
             if (teamModel == null)
             {
@@ -77,15 +71,10 @@ namespace TeamsService.Controllers
         }
 
         [HttpDelete]
-        [Route("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] int id)
+        [Route("{teamId}")]
+        public async Task<IActionResult> Delete([BindTeam] Team team)
         {
-            Team? teamModel = await _teamRepository.DeleteAsync(id);
-
-            if (teamModel == null)
-            {
-                return NotFound();
-            }
+            await _teamRepository.DeleteAsync(team);
 
             return NoContent();
         }

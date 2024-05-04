@@ -8,7 +8,7 @@ namespace TeamsService.Intefaces
         Task<List<Team>> GetAllAsync();
         Task<Team?> GetByIdAsync(int id);
         Task<Team> CreateAsync(Team teamModel);
-        Task<Team?> UpdateAsync(int id, UpdateTeamRequestDto updateTeamDto);
-        Task<Team?> DeleteAsync(int id);
+        Task<Team?> UpdateAsync(Team team, UpdateTeamRequestDto updateTeamDto);
+        Task<Team?> DeleteAsync(Team team);
     }
 }
