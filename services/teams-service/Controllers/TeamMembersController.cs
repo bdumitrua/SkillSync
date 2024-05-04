@@ -29,12 +29,13 @@ namespace TeamsService.Controllers
             return Ok(teamMember);
         }
 
-        [HttpPost]
+        [HttpPost("{teamId}")]
         public async Task<ActionResult<TeamMember>> Add(
+            [BindTeam] Team team,
             [FromBody] CreateTeamMemberRequestDto createTeamMemberDto
         )
         {
-            TeamMember teamMember = createTeamMemberDto.ToTeamMemberFromRequestDTO();
+            TeamMember teamMember = createTeamMemberDto.ToTeamMemberFromRequestDTO(team.Id);
             await _teamMemberRepository.AddMemberAsync(teamMember);
 
             return Ok(teamMember);

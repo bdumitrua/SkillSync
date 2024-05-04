@@ -9,9 +9,6 @@ namespace TeamsService.Dtos.TeamMemberDto
         public int UserId { get; set; }
 
         [Required]
-        public int TeamId { get; set; }
-
-        [Required]
         public bool IsModerator { get; set; }
     }
 }

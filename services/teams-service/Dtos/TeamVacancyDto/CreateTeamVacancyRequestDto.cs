@@ -9,8 +9,5 @@ namespace TeamsService.Dtos.TeamVacancyDto
 
         [Required]
         public string Description { get; set; } = string.Empty;
-
-        [Required]
-        public int TeamId { get; set; }
     }
 }

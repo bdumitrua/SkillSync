@@ -10,8 +10,5 @@ namespace TeamsService.Dtos.TeamDto
         public string? Description { get; set; }
         public string? Email { get; set; }
         public string? Site { get; set; }
-
-        [Required]
-        public int AdminId { get; set; }
     }
 }

@@ -8,17 +8,27 @@ namespace TeamsService.Mappers
     {
         public static TeamMemberDto TeamMemberToDto(this TeamMember teamMember)
         {
-            return new TeamMemberDto { UserId = teamMember.UserId, TeamId = teamMember.TeamId };
+            return new TeamMemberDto
+            {
+                UserId = teamMember.UserId,
+                TeamId = teamMember.TeamId,
+                About = teamMember.About,
+                IsModerator = teamMember.IsModerator,
+                CreatedAt = teamMember.CreatedAt,
+                UpdatedAt = teamMember.UpdatedAt,
+            };
         }
 
         public static TeamMember ToTeamMemberFromRequestDTO(
-            this CreateTeamMemberRequestDto teamMemberRequestDto
+            this CreateTeamMemberRequestDto teamMemberRequestDto,
+            int teamId
         )
         {
             return new TeamMember
             {
+                IsModerator = teamMemberRequestDto.IsModerator,
                 UserId = teamMemberRequestDto.UserId,
-                TeamId = teamMemberRequestDto.TeamId,
+                TeamId = teamId,
             };
         }
     }

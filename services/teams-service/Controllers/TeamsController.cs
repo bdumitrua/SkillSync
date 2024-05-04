@@ -40,9 +40,15 @@ namespace TeamsService.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTeamRequestDto teamDto)
         {
-            Team? teamModel = teamDto.TeamFromCreateRequestDTO();
+            string? jwtUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (int.TryParse(jwtUserId, out int authorizedUserId))
+                return StatusCode(500, new { error = "Invalid token data, contact tech support." });
+
+            Team? teamModel = teamDto.TeamFromCreateRequestDTO(authorizedUserId);
             await _teamRepository.CreateAsync(teamModel);
 
             return CreatedAtAction(nameof(GetById), new { id = teamModel.Id }, teamModel);

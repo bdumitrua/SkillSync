@@ -12,17 +12,26 @@ namespace TeamsService.Mappers
                 Id = teamModel.Id,
                 Name = teamModel.Name,
                 Avatar = teamModel.Avatar,
-                Description = teamModel.Description
+                Description = teamModel.Description,
+                Email = teamModel.Email,
+                Site = teamModel.Site,
+                ChatId = teamModel.ChatId,
+                AdminId = teamModel.AdminId,
+                CreatedAt = teamModel.CreatedAt,
+                UpdatedAt = teamModel.UpdatedAt,
             };
         }
 
-        public static Team TeamFromCreateRequestDTO(this CreateTeamRequestDto TeamDto)
+        public static Team TeamFromCreateRequestDTO(this CreateTeamRequestDto TeamDto, int userId)
         {
             return new Team
             {
+                AdminId = userId,
                 Name = TeamDto.Name,
                 Avatar = TeamDto.Avatar,
-                Description = TeamDto.Description
+                Description = TeamDto.Description,
+                Email = TeamDto.Email,
+                Site = TeamDto.Site,
             };
         }
     }
