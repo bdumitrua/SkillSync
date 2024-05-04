@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TeamsService.Data;
-using TeamsService.Dtos.Team;
+using TeamsService.Dtos.TeamMemberDto;
 using TeamsService.Intefaces;
 using TeamsService.Mappers;
 using TeamsService.Models;
@@ -31,11 +31,13 @@ namespace TeamsService.Repository
                 .ToListAsync();
         }
 
-        public async Task<TeamMember?> RemoveMemberAsync(TeamMemberRequestDto teamMemberRequestDto)
+        public async Task<TeamMember?> RemoveMemberAsync(
+            RemoveTeamMemberRequestDto removeTeamMemberRequestDto
+        )
         {
             TeamMember? teamMember = await _context.TeamMembers.FirstOrDefaultAsync(teamMember =>
-                teamMember.UserId == teamMemberRequestDto.UserId
-                && teamMember.TeamId == teamMemberRequestDto.TeamId
+                teamMember.UserId == removeTeamMemberRequestDto.UserId
+                && teamMember.TeamId == removeTeamMemberRequestDto.TeamId
             );
 
             if (teamMember == null)

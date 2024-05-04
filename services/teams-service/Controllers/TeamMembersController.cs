@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TeamsService.Data;
-using TeamsService.Dtos.Team;
+using TeamsService.Dtos.TeamDto;
+using TeamsService.Dtos.TeamMemberDto;
 using TeamsService.Intefaces;
 using TeamsService.Mappers;
 using TeamsService.Models;
@@ -29,7 +30,7 @@ namespace TeamsService.Controllers
 
         [HttpPost]
         public async Task<ActionResult<TeamMember>> Add(
-            [FromBody] TeamMemberRequestDto createTeamMemberDto
+            [FromBody] CreateTeamMemberRequestDto createTeamMemberDto
         )
         {
             TeamMember teamMember = createTeamMemberDto.ToTeamMemberFromRequestDTO();
@@ -40,11 +41,11 @@ namespace TeamsService.Controllers
 
         [HttpDelete]
         public async Task<IActionResult> Remove(
-            [FromBody] TeamMemberRequestDto teamMemberRequestDto
+            [FromBody] RemoveTeamMemberRequestDto removeTeamMemberRequestDto
         )
         {
             TeamMember? teamMember = await _teamMemberRepository.RemoveMemberAsync(
-                teamMemberRequestDto
+                removeTeamMemberRequestDto
             );
 
             if (teamMember == null)

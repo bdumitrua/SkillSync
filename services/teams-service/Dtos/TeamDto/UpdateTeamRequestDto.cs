@@ -1,4 +1,4 @@
-namespace TeamsService.Dtos.Team
+namespace TeamsService.Dtos.TeamDto
 {
     public class UpdateTeamRequestDto : BaseRequestDto
     {

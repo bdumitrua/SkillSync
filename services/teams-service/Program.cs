@@ -69,6 +69,7 @@ builder
     })
     .AddJwtBearer(options =>
     {
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
@@ -81,6 +82,7 @@ builder
             ),
             ValidateLifetime = true,
         };
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
     });
 
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();

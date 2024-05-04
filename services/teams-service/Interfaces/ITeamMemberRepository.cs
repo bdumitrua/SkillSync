@@ -1,4 +1,4 @@
-using TeamsService.Dtos.Team;
+using TeamsService.Dtos.TeamMemberDto;
 using TeamsService.Models;
 
 namespace TeamsService.Intefaces
@@ -7,6 +7,6 @@ namespace TeamsService.Intefaces
     {
         Task<List<TeamMember>> GetByTeamIdAsync(int teamId);
         Task<TeamMember> AddMemberAsync(TeamMember teamMember);
-        Task<TeamMember?> RemoveMemberAsync(TeamMemberRequestDto teamMemberRequestDto);
+        Task<TeamMember?> RemoveMemberAsync(RemoveTeamMemberRequestDto teamMemberRequestDto);
     }
 }

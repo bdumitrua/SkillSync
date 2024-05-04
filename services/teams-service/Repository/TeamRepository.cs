@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TeamsService.Data;
-using TeamsService.Dtos.Team;
+using TeamsService.Dtos.TeamDto;
 using TeamsService.Intefaces;
 using TeamsService.Mappers;
 using TeamsService.Models;

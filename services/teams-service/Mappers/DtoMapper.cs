@@ -1,5 +1,4 @@
 using TeamsService.Dtos;
-using TeamsService.Dtos.Team;
 using TeamsService.Models;
 
 namespace TeamsService.Mappers

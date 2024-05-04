@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace TeamsService.Dtos.Team
+namespace TeamsService.Dtos.TeamDto
 {
     public class CreateTeamRequestDto : BaseRequestDto
     {
@@ -10,6 +10,8 @@ namespace TeamsService.Dtos.Team
         public string? Description { get; set; }
         public string? Email { get; set; }
         public string? Site { get; set; }
+
+        [Required]
         public int AdminId { get; set; }
     }
 }

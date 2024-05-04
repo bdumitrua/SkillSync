@@ -12,7 +12,9 @@ namespace TeamsService.Services
         public TokenService(IConfiguration config)
         {
             _config = config;
+#pragma warning disable CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));
+#pragma warning restore CS8604 // Возможно, аргумент-ссылка, допускающий значение NULL.
         }
     }
 }
