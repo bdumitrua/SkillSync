@@ -16,22 +16,28 @@ namespace TeamsService.Repository
             _context = context;
         }
 
-        public async Task<TeamMember> AddMemberAsync(TeamMember teamMember)
+        public async Task<TeamMemberDto> AddMemberAsync(TeamMember teamMember)
         {
             await _context.TeamMembers.AddAsync(teamMember);
             await _context.SaveChangesAsync();
 
-            return teamMember;
+            return teamMember.TeamMemberToDto();
         }
 
-        public async Task<List<TeamMember>> GetByTeamIdAsync(int teamId)
+        public async Task<List<TeamMemberDto>> GetByTeamIdAsync(int teamId)
         {
-            return await _context
+            List<TeamMember> teamMembers = await _context
                 .TeamMembers.Where(teamMember => teamMember.TeamId == teamId)
                 .ToListAsync();
+
+            List<TeamMemberDto> teamMemberDtos = teamMembers
+                .Select(tm => tm.TeamMemberToDto())
+                .ToList();
+
+            return teamMemberDtos;
         }
 
-        public async Task<TeamMember?> RemoveMemberAsync(
+        public async Task<bool?> RemoveMemberAsync(
             RemoveTeamMemberRequestDto removeTeamMemberRequestDto
         )
         {
@@ -48,7 +54,7 @@ namespace TeamsService.Repository
             _context.TeamMembers.Remove(teamMember);
             await _context.SaveChangesAsync();
 
-            return teamMember;
+            return true;
         }
     }
 }

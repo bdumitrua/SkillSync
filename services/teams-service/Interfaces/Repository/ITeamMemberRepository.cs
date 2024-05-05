@@ -5,8 +5,8 @@ namespace TeamsService.Intefaces.Repository
 {
     public interface ITeamMemberRepository
     {
-        Task<List<TeamMember>> GetByTeamIdAsync(int teamId);
-        Task<TeamMember> AddMemberAsync(TeamMember teamMember);
-        Task<TeamMember?> RemoveMemberAsync(RemoveTeamMemberRequestDto teamMemberRequestDto);
+        Task<List<TeamMemberDto>> GetByTeamIdAsync(int teamId);
+        Task<TeamMemberDto> AddMemberAsync(TeamMember teamMember);
+        Task<bool?> RemoveMemberAsync(RemoveTeamMemberRequestDto teamMemberRequestDto);
     }
 }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TeamsService.Attributes;
@@ -22,7 +23,8 @@ namespace TeamsService.Controllers
         }
 
         [HttpGet("{teamId}")]
-        public async Task<ActionResult<List<TeamMember>>> GetById([BindTeam] Team team)
+        [Authorize]
+        public async Task<ActionResult<List<TeamMemberDto>>> GetById([BindTeam] Team team)
         {
             var teamMember = await _teamMemberRepository.GetByTeamIdAsync(team.Id);
 
@@ -30,6 +32,7 @@ namespace TeamsService.Controllers
         }
 
         [HttpPost("{teamId}")]
+        [Authorize]
         public async Task<ActionResult<TeamMember>> Add(
             [BindTeam] Team team,
             [FromBody] CreateTeamMemberRequestDto createTeamMemberDto
@@ -42,15 +45,16 @@ namespace TeamsService.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         public async Task<IActionResult> Remove(
             [FromBody] RemoveTeamMemberRequestDto removeTeamMemberRequestDto
         )
         {
-            TeamMember? teamMember = await _teamMemberRepository.RemoveMemberAsync(
+            bool? deletingStatus = await _teamMemberRepository.RemoveMemberAsync(
                 removeTeamMemberRequestDto
             );
 
-            if (teamMember == null)
+            if (deletingStatus == null)
             {
                 return NotFound();
             }

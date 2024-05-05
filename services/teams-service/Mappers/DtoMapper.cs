@@ -10,7 +10,7 @@ namespace TeamsService.Mappers
             var requestDtoType = requestDto.GetType();
             foreach (var property in requestDtoType.GetProperties())
             {
-                var value = property.GetValue(requestDtoType);
+                var value = property.GetValue(requestDto); // Используйте экземпляр DTO, а не Type
                 if (value != null)
                 {
                     return false;
@@ -26,16 +26,26 @@ namespace TeamsService.Mappers
 
             foreach (var property in requestDtoType.GetProperties())
             {
-                var value = property.GetValue(requestDto);
+                object? value = property.GetValue(requestDto);
                 if (value != null)
                 {
                     var entityModelProperty = entityModelType.GetProperty(property.Name);
                     if (
                         entityModelProperty != null
+                        && entityModelProperty.CanWrite
                         && entityModelProperty.PropertyType == property.PropertyType
                     )
                     {
-                        entityModelProperty.SetValue(entityModel, value);
+                        try
+                        {
+                            entityModelProperty.SetValue(entityModel, value);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(
+                                $"Error setting property {property.Name}: {ex.Message}"
+                            );
+                        }
                     }
                 }
             }

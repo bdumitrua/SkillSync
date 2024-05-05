@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TeamsService.Models
 {
     public class TeamLink : BaseModel
@@ -8,6 +10,8 @@ namespace TeamsService.Models
         public string? IconType { get; set; }
         public bool IsPrivate { get; set; } = false;
         public int TeamId { get; set; }
+
+        [JsonIgnore]
         public Team? Team { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

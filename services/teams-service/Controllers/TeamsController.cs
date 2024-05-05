@@ -15,16 +15,15 @@ namespace TeamsService.Controllers
     [ApiController]
     public class TeamsController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
         private readonly ITeamRepository _teamRepository;
 
-        public TeamsController(ApplicationDBContext context, ITeamRepository teamRepository)
+        public TeamsController(ITeamRepository teamRepository)
         {
-            _context = context;
             _teamRepository = teamRepository;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var teams = await _teamRepository.GetAllAsync();
@@ -34,6 +33,7 @@ namespace TeamsService.Controllers
         }
 
         [HttpGet("{teamId}")]
+        [Authorize]
         public ActionResult<Team> GetById([BindTeam] Team team)
         {
             return Ok(team);
@@ -45,17 +45,18 @@ namespace TeamsService.Controllers
         {
             string? jwtUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (int.TryParse(jwtUserId, out int authorizedUserId))
+            if (!int.TryParse(jwtUserId, out int authorizedUserId))
                 return StatusCode(500, new { error = "Invalid token data, contact tech support." });
 
             Team? teamModel = teamDto.TeamFromCreateRequestDTO(authorizedUserId);
             await _teamRepository.CreateAsync(teamModel);
 
-            return CreatedAtAction(nameof(GetById), new { id = teamModel.Id }, teamModel);
+            return Ok();
         }
 
         [HttpPut]
         [Route("{teamId}")]
+        [Authorize]
         public async Task<IActionResult> Update(
             [BindTeam] Team team,
             UpdateTeamRequestDto updateTeamDto
@@ -78,6 +79,7 @@ namespace TeamsService.Controllers
 
         [HttpDelete]
         [Route("{teamId}")]
+        [Authorize]
         public async Task<IActionResult> Delete([BindTeam] Team team)
         {
             await _teamRepository.DeleteAsync(team);
