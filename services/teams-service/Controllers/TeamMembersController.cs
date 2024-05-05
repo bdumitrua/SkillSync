@@ -24,7 +24,7 @@ namespace TeamsService.Controllers
 
         [HttpGet("{teamId}")]
         [Authorize]
-        public async Task<ActionResult<List<TeamMemberDto>>> GetById([BindTeam] Team team)
+        public async Task<ActionResult<List<TeamMember>>> GetById([BindTeam] Team team)
         {
             var teamMember = await _teamMemberRepository.GetByTeamIdAsync(team.Id);
 
@@ -39,7 +39,7 @@ namespace TeamsService.Controllers
         )
         {
             TeamMember teamMember = createTeamMemberDto.ToTeamMemberFromRequestDTO(team.Id);
-            await _teamMemberRepository.AddMemberAsync(teamMember);
+            teamMember = await _teamMemberRepository.AddMemberAsync(teamMember);
 
             return Ok(teamMember);
         }

@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TeamsService.Models
 {
     public class Team : BaseModel
@@ -10,9 +12,14 @@ namespace TeamsService.Models
         public int? ChatId { get; set; }
         public int AdminId { get; set; }
 
-        public List<TeamLink> TeamLinks { get; set; } = new List<TeamLink>();
         public List<TeamScope> TeamScopes { get; set; } = new List<TeamScope>();
         public List<TeamMember> TeamMembers { get; set; } = new List<TeamMember>();
+
+        [JsonIgnore]
+        public List<TeamLink> TeamLinks { get; set; } = new List<TeamLink>();
+
+        [JsonIgnore]
+        public List<TeamVacancy> TeamVacancies { get; set; } = new List<TeamVacancy>();
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;

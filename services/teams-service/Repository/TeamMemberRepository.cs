@@ -16,25 +16,21 @@ namespace TeamsService.Repository
             _context = context;
         }
 
-        public async Task<TeamMemberDto> AddMemberAsync(TeamMember teamMember)
+        public async Task<TeamMember> AddMemberAsync(TeamMember teamMember)
         {
             await _context.TeamMembers.AddAsync(teamMember);
             await _context.SaveChangesAsync();
 
-            return teamMember.TeamMemberToDto();
+            return teamMember;
         }
 
-        public async Task<List<TeamMemberDto>> GetByTeamIdAsync(int teamId)
+        public async Task<List<TeamMember>> GetByTeamIdAsync(int teamId)
         {
             List<TeamMember> teamMembers = await _context
                 .TeamMembers.Where(teamMember => teamMember.TeamId == teamId)
                 .ToListAsync();
 
-            List<TeamMemberDto> teamMemberDtos = teamMembers
-                .Select(tm => tm.TeamMemberToDto())
-                .ToList();
-
-            return teamMemberDtos;
+            return teamMembers;
         }
 
         public async Task<bool?> RemoveMemberAsync(
