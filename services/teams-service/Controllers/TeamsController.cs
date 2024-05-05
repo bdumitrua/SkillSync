@@ -23,7 +23,6 @@ namespace TeamsService.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var teams = await _teamRepository.GetAllAsync();
@@ -33,14 +32,12 @@ namespace TeamsService.Controllers
         }
 
         [HttpGet("{teamId}")]
-        [Authorize]
         public ActionResult<Team> GetById([BindTeam] Team team)
         {
             return Ok(team);
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTeamRequestDto teamDto)
         {
             int authorizedUserId = GetAuthorizedUserId();
@@ -53,7 +50,6 @@ namespace TeamsService.Controllers
 
         [HttpPut]
         [Route("{teamId}")]
-        [Authorize]
         public async Task<IActionResult> Update(
             [BindTeam] Team team,
             UpdateTeamRequestDto updateTeamDto
@@ -76,7 +72,6 @@ namespace TeamsService.Controllers
 
         [HttpDelete]
         [Route("{teamId}")]
-        [Authorize]
         public async Task<IActionResult> Delete([BindTeam] Team team)
         {
             await _teamRepository.DeleteAsync(team);

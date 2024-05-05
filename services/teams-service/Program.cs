@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -14,15 +15,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder
     .Services.AddControllers()
-    // .AddJsonOptions(options =>
-    // {
-    //     options.JsonSerializerOptions.ReferenceHandler = System
-    //         .Text
-    //         .Json
-    //         .Serialization
-    //         .ReferenceHandler
-    //         .Preserve;
-    // })
     .AddJsonOptions(options =>
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles
     );
@@ -71,6 +63,10 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
     );
 });
+
+builder
+    .Services.AddAuthorizationBuilder()
+    .SetFallbackPolicy(new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build());
 
 builder
     .Services.AddAuthentication(options =>

@@ -23,7 +23,6 @@ namespace TeamsService.Controllers
         }
 
         [HttpGet("{teamId}")]
-        [Authorize]
         public async Task<ActionResult<List<TeamMember>>> GetById([BindTeam] Team team)
         {
             var teamMember = await _teamMemberRepository.GetByTeamIdAsync(team.Id);
@@ -32,7 +31,6 @@ namespace TeamsService.Controllers
         }
 
         [HttpPost("{teamId}")]
-        [Authorize]
         public async Task<ActionResult<TeamMember>> Add(
             [BindTeam] Team team,
             [FromBody] CreateTeamMemberRequestDto createTeamMemberDto
@@ -45,7 +43,6 @@ namespace TeamsService.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
         public async Task<IActionResult> Remove(
             [FromBody] RemoveTeamMemberRequestDto removeTeamMemberRequestDto
         )
