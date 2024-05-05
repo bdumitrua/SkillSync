@@ -13,7 +13,7 @@ namespace TeamsService.Controllers
 {
     [Route("api/teams")]
     [ApiController]
-    public class TeamsController : ControllerBase
+    public class TeamsController : BaseController
     {
         private readonly ITeamRepository _teamRepository;
 
@@ -43,10 +43,7 @@ namespace TeamsService.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] CreateTeamRequestDto teamDto)
         {
-            string? jwtUserId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (!int.TryParse(jwtUserId, out int authorizedUserId))
-                return StatusCode(500, new { error = "Invalid token data, contact tech support." });
+            int authorizedUserId = GetAuthorizedUserId();
 
             Team? teamModel = teamDto.TeamFromCreateRequestDTO(authorizedUserId);
             await _teamRepository.CreateAsync(teamModel);

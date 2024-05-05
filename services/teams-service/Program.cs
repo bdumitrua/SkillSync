@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -11,9 +12,6 @@ using TeamsService.Repository;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-// builder.Services.AddControllers();
-
 builder
     .Services.AddControllers()
     // .AddJsonOptions(options =>
@@ -114,6 +112,24 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseExceptionHandler(exceptionHandlerApp =>
+{
+    exceptionHandlerApp.Run(async context =>
+    {
+        var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+        if (exceptionHandlerFeature != null)
+        {
+            var exception = exceptionHandlerFeature.Error;
+
+            if (exception is UnauthorizedAccessException)
+            {
+                context.Response.StatusCode = 500;
+                await context.Response.WriteAsJsonAsync(new { error = exception.Message });
+            }
+        }
+    });
+});
 
 app.UseHttpsRedirection();
 
