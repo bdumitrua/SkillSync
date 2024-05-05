@@ -6,7 +6,6 @@ using TeamsService.Data;
 using TeamsService.Intefaces;
 using TeamsService.Intefaces.Repository;
 using TeamsService.Repository;
-using TeamsService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,7 +87,6 @@ builder
 
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
-builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
