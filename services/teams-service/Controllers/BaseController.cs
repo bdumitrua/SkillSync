@@ -22,6 +22,8 @@ namespace TeamsService.Controllers
             return authorizedUserId;
         }
 
+        // TODO
+        // REMOVE USER ID
         protected async Task<bool> AuthorizedUserIsModerator(int teamId, int userId)
         {
             TeamMember? authorizedUserMembership = await TeamMemberRepository.GetMemberByBothIds(
@@ -34,6 +36,18 @@ namespace TeamsService.Controllers
                 return false;
 
             return authorizedUserMembership.IsModerator;
+        }
+
+        // TODO
+        // REMOVE USER ID
+        protected async Task<bool> AuthorizedUserIsMember(int teamId, int userId)
+        {
+            TeamMember? authorizedUserMembership = await TeamMemberRepository.GetMemberByBothIds(
+                teamId,
+                userId
+            );
+
+            return authorizedUserMembership != null;
         }
 
         protected ActionResult Forbidden(object? value = null)
