@@ -14,20 +14,21 @@ namespace TeamsService.Mappers
                 Text = teamApplication.Text,
                 UserId = teamApplication.UserId,
                 VacancyId = teamApplication.VacancyId,
+                TeamId = teamApplication.TeamId,
             };
         }
 
         public static TeamApplication TeamApplicationFromCreateRequestDTO(
             this CreateTeamApplicationRequestDto requestDto,
-            int userId,
-            int vacancyId
+            int userId
         )
         {
             return new TeamApplication
             {
                 Text = requestDto.Text,
+                VacancyId = requestDto.VacancyId,
+                TeamId = requestDto.TeamId,
                 UserId = userId,
-                VacancyId = vacancyId,
             };
         }
     }

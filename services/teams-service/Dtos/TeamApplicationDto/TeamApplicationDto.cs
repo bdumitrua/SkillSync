@@ -9,6 +9,7 @@ namespace TeamsService.Dtos.TeamApplicationDto
         public string? Text { get; set; }
         public int UserId { get; set; }
         public int VacancyId { get; set; }
+        public int TeamId { get; set; }
         public TeamVacancy? TeamVacancy { get; set; }
     }
 }

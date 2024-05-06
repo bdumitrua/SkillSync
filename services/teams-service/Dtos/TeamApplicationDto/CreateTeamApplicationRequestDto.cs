@@ -6,5 +6,11 @@ namespace TeamsService.Dtos.TeamApplicationDto
     {
         [Required]
         public string? Text { get; set; }
+
+        [Required]
+        public int TeamId { get; set; }
+
+        [Required]
+        public int VacancyId { get; set; }
     }
 }

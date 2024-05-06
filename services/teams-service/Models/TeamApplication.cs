@@ -4,6 +4,7 @@ namespace TeamsService.Models
     {
         public int UserId { get; set; }
         public int VacancyId { get; set; }
+        public int TeamId { get; set; }
         public string? Text { get; set; }
         public string Status { get; set; } = "Sent";
         public TeamVacancy? TeamVacancy { get; set; }
