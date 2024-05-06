@@ -15,15 +15,10 @@ namespace TeamsService.Controllers
     [ApiController]
     public class TeamLinksController : BaseController
     {
-        private readonly ApplicationDBContext _context;
         private readonly ITeamLinkRepository _teamLinkRepository;
 
-        public TeamLinksController(
-            ApplicationDBContext context,
-            ITeamLinkRepository teamLinkRepository
-        )
+        public TeamLinksController(ITeamLinkRepository teamLinkRepository)
         {
-            _context = context;
             _teamLinkRepository = teamLinkRepository;
         }
     }

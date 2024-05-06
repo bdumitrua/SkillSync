@@ -16,15 +16,10 @@ namespace TeamsService.Controllers
     [ApiController]
     public class TeamApplicationsController : BaseController
     {
-        private readonly ApplicationDBContext _context;
         private readonly ITeamApplicationRepository _teamApplicationRepository;
 
-        public TeamApplicationsController(
-            ApplicationDBContext context,
-            ITeamApplicationRepository teamApplicationRepository
-        )
+        public TeamApplicationsController(ITeamApplicationRepository teamApplicationRepository)
         {
-            _context = context;
             _teamApplicationRepository = teamApplicationRepository;
         }
 

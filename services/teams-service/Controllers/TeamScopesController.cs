@@ -16,17 +16,10 @@ namespace TeamsService.Controllers
     [ApiController]
     public class TeamScopesController : BaseController
     {
-        // TODO
-        // REMOVE _context
-        private readonly ApplicationDBContext _context;
         private readonly ITeamScopeRepository _teamScopeRepository;
 
-        public TeamScopesController(
-            ApplicationDBContext context,
-            ITeamScopeRepository teamScopeRepository
-        )
+        public TeamScopesController(ITeamScopeRepository teamScopeRepository)
         {
-            _context = context;
             _teamScopeRepository = teamScopeRepository;
         }
 
