@@ -13,7 +13,7 @@ namespace TeamsService.Controllers
 {
     [Route("api/teams/vacancies")]
     [ApiController]
-    public class TeamVacanciesController : ControllerBase
+    public class TeamVacanciesController : BaseController
     {
         private readonly ApplicationDBContext _context;
         private readonly ITeamVacancyRepository _teamVacancyRepository;

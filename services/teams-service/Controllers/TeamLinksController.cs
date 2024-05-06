@@ -13,7 +13,7 @@ namespace TeamsService.Controllers
 {
     [Route("api/teams/links")]
     [ApiController]
-    public class TeamLinksController : ControllerBase
+    public class TeamLinksController : BaseController
     {
         private readonly ApplicationDBContext _context;
         private readonly ITeamLinkRepository _teamLinkRepository;

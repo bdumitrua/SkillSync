@@ -16,8 +16,20 @@ namespace TeamsService.Repository
             _context = context;
         }
 
-        public async Task<TeamMember> AddMemberAsync(TeamMember teamMember)
+        public async Task<TeamMember?> GetMemberByBothIds(int teamId, int userId)
         {
+            return await _context.TeamMembers.FirstOrDefaultAsync(teamMember =>
+                teamMember.UserId == userId && teamMember.TeamId == teamId
+            );
+        }
+
+        public async Task<TeamMember?> AddMemberAsync(TeamMember teamMember)
+        {
+            TeamMember? membership = await GetMemberByBothIds(teamMember.TeamId, teamMember.UserId);
+
+            if (membership != null)
+                return null;
+
             await _context.TeamMembers.AddAsync(teamMember);
             await _context.SaveChangesAsync();
 
@@ -34,12 +46,13 @@ namespace TeamsService.Repository
         }
 
         public async Task<bool?> RemoveMemberAsync(
+            int teamId,
             RemoveTeamMemberRequestDto removeTeamMemberRequestDto
         )
         {
-            TeamMember? teamMember = await _context.TeamMembers.FirstOrDefaultAsync(teamMember =>
-                teamMember.UserId == removeTeamMemberRequestDto.UserId
-                && teamMember.TeamId == removeTeamMemberRequestDto.TeamId
+            TeamMember? teamMember = await GetMemberByBothIds(
+                teamId,
+                removeTeamMemberRequestDto.UserId
             );
 
             if (teamMember == null)

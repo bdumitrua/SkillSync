@@ -13,7 +13,7 @@ namespace TeamsService.Controllers
 {
     [Route("api/teams/scopes")]
     [ApiController]
-    public class TeamScopesController : ControllerBase
+    public class TeamScopesController : BaseController
     {
         private readonly ApplicationDBContext _context;
         private readonly ITeamScopeRepository _teamScopeRepository;

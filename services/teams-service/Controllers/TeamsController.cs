@@ -16,14 +16,19 @@ namespace TeamsService.Controllers
     public class TeamsController : BaseController
     {
         private readonly ITeamRepository _teamRepository;
+        private readonly ITeamMemberRepository _teamMemberRepository;
 
-        public TeamsController(ITeamRepository teamRepository)
+        public TeamsController(
+            ITeamRepository teamRepository,
+            ITeamMemberRepository teamMemberRepository
+        )
         {
             _teamRepository = teamRepository;
+            _teamMemberRepository = teamMemberRepository;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<List<TeamDto>>> GetAll()
         {
             var teams = await _teamRepository.GetAllAsync();
             var teamDto = teams.Select(t => t.TeamToDto());
@@ -45,27 +50,37 @@ namespace TeamsService.Controllers
             Team? teamModel = teamDto.TeamFromCreateRequestDTO(authorizedUserId);
             await _teamRepository.CreateAsync(teamModel);
 
+            TeamMember teamMember = new TeamMember
+            {
+                IsModerator = true,
+                UserId = authorizedUserId,
+                TeamId = teamModel.Id,
+            };
+
+            await _teamMemberRepository.AddMemberAsync(teamMember);
+
             return Ok();
         }
 
         [HttpPut]
         [Route("{teamId}")]
-        public async Task<IActionResult> Update(
+        public async Task<ActionResult<TeamDto>> Update(
             [BindTeam] Team team,
             UpdateTeamRequestDto updateTeamDto
         )
         {
             if (updateTeamDto.IsEmpty())
-            {
                 return BadRequest();
-            }
+
+            if (team.AdminId != GetAuthorizedUserId())
+                return Forbidden(
+                    new { error = "You do not have permission to perform this action." }
+                );
 
             Team? teamModel = await _teamRepository.UpdateAsync(team, updateTeamDto);
 
             if (teamModel == null)
-            {
                 return NotFound();
-            }
 
             return Ok(teamModel.TeamToDto());
         }
@@ -74,6 +89,11 @@ namespace TeamsService.Controllers
         [Route("{teamId}")]
         public async Task<IActionResult> Delete([BindTeam] Team team)
         {
+            if (team.AdminId != GetAuthorizedUserId())
+                return Forbidden(
+                    new { error = "You do not have permission to perform this action." }
+                );
+
             await _teamRepository.DeleteAsync(team);
 
             return NoContent();

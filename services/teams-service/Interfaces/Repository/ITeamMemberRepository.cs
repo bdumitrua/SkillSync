@@ -5,16 +5,20 @@ namespace TeamsService.Intefaces.Repository
 {
     public interface ITeamMemberRepository
     {
-        // add admin
+        // add admin +
         Task<List<TeamMember>> GetByTeamIdAsync(int teamId);
+        Task<TeamMember?> GetMemberByBothIds(int teamId, int userId);
 
-        // check moder rights
-        // Check unique
-        // Check not admin
-        Task<TeamMember> AddMemberAsync(TeamMember teamMember);
+        // check moder rights +
+        // Check unique +
+        Task<TeamMember?> AddMemberAsync(TeamMember teamMember);
 
-        // check moder rights
-        // Check if exists
-        Task<bool?> RemoveMemberAsync(RemoveTeamMemberRequestDto teamMemberRequestDto);
+        // check moder rights +
+        // check if exists +
+        // check if not admin +
+        Task<bool?> RemoveMemberAsync(
+            int teamId,
+            RemoveTeamMemberRequestDto removeTeamMemberRequestDto
+        );
     }
 }

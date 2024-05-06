@@ -7,8 +7,5 @@ namespace TeamsService.Dtos.TeamMemberDto
     {
         [Required]
         public int UserId { get; set; }
-
-        [Required]
-        public int TeamId { get; set; }
     }
 }

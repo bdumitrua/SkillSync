@@ -13,7 +13,7 @@ namespace TeamsService.Controllers
 {
     [Route("api/teams/members")]
     [ApiController]
-    public class TeamMembersController : ControllerBase
+    public class TeamMembersController : BaseController
     {
         private readonly ITeamMemberRepository _teamMemberRepository;
 
@@ -31,32 +31,69 @@ namespace TeamsService.Controllers
         }
 
         [HttpPost("{teamId}")]
-        public async Task<ActionResult<TeamMember>> Add(
-            [BindTeam] Team team,
+        public async Task<ActionResult> Add(
+            int teamId,
             [FromBody] CreateTeamMemberRequestDto createTeamMemberDto
         )
         {
-            TeamMember teamMember = createTeamMemberDto.ToTeamMemberFromRequestDTO(team.Id);
-            teamMember = await _teamMemberRepository.AddMemberAsync(teamMember);
+            bool IsModerator = await AuthorizedUserIsModerator(teamId, GetAuthorizedUserId());
+            if (!IsModerator)
+                return Forbidden(
+                    new { error = "You do not have permission to perform this action." }
+                );
+
+            TeamMember teamMember = createTeamMemberDto.ToTeamMemberFromRequestDTO(teamId);
+            TeamMember? newTeamMember = await _teamMemberRepository.AddMemberAsync(teamMember);
+
+            if (newTeamMember == null)
+                return BadRequest(new { error = "This member already exists" });
 
             return Ok(teamMember);
         }
 
-        [HttpDelete]
+        [HttpDelete("{teamId}")]
         public async Task<IActionResult> Remove(
+            [BindTeam] Team team,
             [FromBody] RemoveTeamMemberRequestDto removeTeamMemberRequestDto
         )
         {
+            if (removeTeamMemberRequestDto.UserId == team.AdminId)
+            {
+                return Forbidden(
+                    new { error = "You do not have permission to perform this action." }
+                );
+            }
+
+            bool IsModerator = await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
+
+            if (!IsModerator)
+                return Forbidden(
+                    new { error = "You do not have permission to perform this action." }
+                );
+
             bool? deletingStatus = await _teamMemberRepository.RemoveMemberAsync(
+                team.Id,
                 removeTeamMemberRequestDto
             );
 
             if (deletingStatus == null)
-            {
                 return NotFound();
-            }
 
             return NoContent();
+        }
+
+        protected async Task<bool> AuthorizedUserIsModerator(int teamId, int userId)
+        {
+            TeamMember? authorizedUserMembership = await _teamMemberRepository.GetMemberByBothIds(
+                teamId,
+                userId
+            );
+
+            // Not a member
+            if (authorizedUserMembership == null)
+                return false;
+
+            return authorizedUserMembership.IsModerator;
         }
     }
 }

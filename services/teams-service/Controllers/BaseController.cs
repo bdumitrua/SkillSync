@@ -16,5 +16,10 @@ namespace TeamsService.Controllers
 
             return authorizedUserId;
         }
+
+        protected ActionResult Forbidden(object? value = null)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, value);
+        }
     }
 }
