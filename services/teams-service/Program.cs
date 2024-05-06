@@ -103,6 +103,7 @@ builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
 builder.Services.AddScoped<ITeamVacancyRepository, TeamVacancyRepository>();
 builder.Services.AddScoped<ITeamApplicationRepository, TeamApplicationRepository>();
 builder.Services.AddScoped<ITeamScopeRepository, TeamScopeRepository>();
+builder.Services.AddScoped<ITeamLinkRepository, TeamLinkRepository>();
 
 var app = builder.Build();
 
@@ -135,12 +136,6 @@ app.UseExceptionHandler(exceptionHandlerApp =>
                 await context.Response.WriteAsJsonAsync(new { error = exception.Message });
                 return;
             }
-
-            context.Response.StatusCode = 500;
-            await context.Response.WriteAsJsonAsync(
-                new { error = "An unexpected error occurred." }
-            );
-            return;
         }
     });
 });

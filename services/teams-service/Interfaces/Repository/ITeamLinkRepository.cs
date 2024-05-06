@@ -6,10 +6,10 @@ namespace TeamsService.Intefaces.Repository
     public interface ITeamLinkRepository
     {
         // filter private
-        Task<List<TeamLink>> GetByTeamIdAsync(int teamId);
+        Task<List<TeamLink>> GetByTeamIdAsync(int teamId, bool isMember);
 
-        // check private
-        Task<TeamLink?> GetByIdAsync(int id);
+        // check isMember
+        Task<TeamLink?> GetByIdAsync(int teamLinkId);
 
         // check moder rights
         Task<TeamLink> CreateAsync(TeamLink teamLinkModel);
