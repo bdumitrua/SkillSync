@@ -40,15 +40,7 @@ namespace TeamsService.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateTeamVacancyRequestDto requestDto)
         {
-            bool IsModerator = await AuthorizedUserIsModerator(
-                requestDto.TeamId,
-                GetAuthorizedUserId()
-            );
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(requestDto.TeamId, GetAuthorizedUserId());
 
             TeamVacancy teamVacancyModel = requestDto.TeamVacancyFromCreateRequestDTO();
             await _teamVacancyRepository.CreateAsync(teamVacancyModel);
@@ -62,15 +54,7 @@ namespace TeamsService.Controllers
             [FromBody] UpdateTeamVacancyRequestDto requestDto
         )
         {
-            bool IsModerator = await AuthorizedUserIsModerator(
-                teamVacancy.TeamId,
-                GetAuthorizedUserId()
-            );
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(teamVacancy.TeamId, GetAuthorizedUserId());
 
             await _teamVacancyRepository.UpdateAsync(teamVacancy, requestDto);
 
@@ -80,15 +64,7 @@ namespace TeamsService.Controllers
         [HttpDelete("{teamVacancyId}")]
         public async Task<ActionResult> Delete([BindTeamVacancy] TeamVacancy teamVacancy)
         {
-            bool IsModerator = await AuthorizedUserIsModerator(
-                teamVacancy.TeamId,
-                GetAuthorizedUserId()
-            );
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(teamVacancy.TeamId, GetAuthorizedUserId());
 
             await _teamVacancyRepository.DeleteAsync(teamVacancy);
 

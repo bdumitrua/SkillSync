@@ -37,14 +37,7 @@ namespace TeamsService.Controllers
             CreateTeamScopeRequestDto requestDto
         )
         {
-            // TODO
-            // throw ex
-            bool IsModerator = await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
 
             TeamScope teamScopeModel = requestDto.TeamScopeFromCreateRequestDTO(team.Id);
             await _teamScopeRepository.CreateAsync(teamScopeModel);
@@ -55,15 +48,7 @@ namespace TeamsService.Controllers
         [HttpDelete("{teamScopeId}")]
         public async Task<ActionResult> Delete([BindTeamScope] TeamScope teamScope)
         {
-            bool IsModerator = await AuthorizedUserIsModerator(
-                teamScope.TeamId,
-                GetAuthorizedUserId()
-            );
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(teamScope.TeamId, GetAuthorizedUserId());
 
             await _teamScopeRepository.DeleteAsync(teamScope);
 

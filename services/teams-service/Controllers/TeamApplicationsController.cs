@@ -26,12 +26,7 @@ namespace TeamsService.Controllers
         [HttpGet("{teamId}")]
         public async Task<ActionResult<List<TeamApplication>>> GetByTeamId([BindTeam] Team team)
         {
-            bool IsModerator = await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
 
             List<TeamApplication> vacancyApplications =
                 await _teamApplicationRepository.GetByTeamIdAsync(team.Id);
@@ -45,15 +40,10 @@ namespace TeamsService.Controllers
         )
         {
             int authorizedUserId = GetAuthorizedUserId();
-            bool IsModerator = await AuthorizedUserIsModerator(
-                teamApplication.TeamId,
-                authorizedUserId
-            );
-
-            if (!IsModerator && teamApplication.UserId != authorizedUserId)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            // If it's not author
+            if (teamApplication.UserId != authorizedUserId)
+                // check if it's an moderator
+                await AuthorizedUserIsModerator(teamApplication.TeamId, authorizedUserId);
 
             return Ok(teamApplication);
         }
@@ -63,15 +53,7 @@ namespace TeamsService.Controllers
             [BindTeamVacancy] TeamVacancy teamVacancy
         )
         {
-            bool IsModerator = await AuthorizedUserIsModerator(
-                teamVacancy.TeamId,
-                GetAuthorizedUserId()
-            );
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(teamVacancy.TeamId, GetAuthorizedUserId());
 
             List<TeamApplication> teamApplications =
                 await _teamApplicationRepository.GetByVacancyIdAsync(teamVacancy.Id);
@@ -119,15 +101,7 @@ namespace TeamsService.Controllers
             [FromBody] UpdateTeamApplicationRequestDto requestDto
         )
         {
-            bool IsModerator = await AuthorizedUserIsModerator(
-                teamApplication.TeamId,
-                GetAuthorizedUserId()
-            );
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(teamApplication.TeamId, GetAuthorizedUserId());
 
             TeamApplication updatedTeamApplication = await _teamApplicationRepository.UpdateAsync(
                 teamApplication,
@@ -142,15 +116,7 @@ namespace TeamsService.Controllers
             [BindTeamApplication] TeamApplication teamApplication
         )
         {
-            bool IsModerator = await AuthorizedUserIsModerator(
-                teamApplication.TeamId,
-                GetAuthorizedUserId()
-            );
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(teamApplication.TeamId, GetAuthorizedUserId());
 
             await _teamApplicationRepository.DeleteAsync(teamApplication);
 

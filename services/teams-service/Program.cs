@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TeamsService.Data;
+using TeamsService.Exceptions;
 using TeamsService.Intefaces;
 using TeamsService.Intefaces.Repository;
 using TeamsService.Repository;
@@ -125,7 +126,21 @@ app.UseExceptionHandler(exceptionHandlerApp =>
             {
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsJsonAsync(new { error = exception.Message });
+                return;
             }
+
+            if (exception is InsufficientRightsException insufficientRightsException)
+            {
+                context.Response.StatusCode = insufficientRightsException.StatusCode;
+                await context.Response.WriteAsJsonAsync(new { error = exception.Message });
+                return;
+            }
+
+            context.Response.StatusCode = 500;
+            await context.Response.WriteAsJsonAsync(
+                new { error = "An unexpected error occurred." }
+            );
+            return;
         }
     });
 });

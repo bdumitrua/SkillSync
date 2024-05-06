@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using TeamsService.Exceptions;
 using TeamsService.Intefaces.Repository;
 using TeamsService.Models;
 
@@ -24,18 +25,16 @@ namespace TeamsService.Controllers
 
         // TODO
         // REMOVE USER ID
-        protected async Task<bool> AuthorizedUserIsModerator(int teamId, int userId)
+        protected async Task AuthorizedUserIsModerator(int teamId, int userId)
         {
             TeamMember? authorizedUserMembership = await TeamMemberRepository.GetMemberByBothIds(
                 teamId,
                 userId
             );
 
-            // Not a member
-            if (authorizedUserMembership == null)
-                return false;
-
-            return authorizedUserMembership.IsModerator;
+            // Not a member or isn't moderator
+            if (authorizedUserMembership == null || authorizedUserMembership.IsModerator == false)
+                throw new InsufficientRightsException();
         }
 
         // TODO

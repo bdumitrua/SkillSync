@@ -36,11 +36,7 @@ namespace TeamsService.Controllers
             [FromBody] CreateTeamMemberRequestDto createTeamMemberDto
         )
         {
-            bool IsModerator = await AuthorizedUserIsModerator(teamId, GetAuthorizedUserId());
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(teamId, GetAuthorizedUserId());
 
             TeamMember teamMember = createTeamMemberDto.ToTeamMemberFromRequestDTO(teamId);
             TeamMember? newTeamMember = await _teamMemberRepository.AddMemberAsync(teamMember);
@@ -64,12 +60,7 @@ namespace TeamsService.Controllers
                 );
             }
 
-            bool IsModerator = await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
-
-            if (!IsModerator)
-                return Forbidden(
-                    new { error = "You do not have permission to perform this action." }
-                );
+            await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
 
             bool? deletingStatus = await _teamMemberRepository.RemoveMemberAsync(
                 team.Id,
