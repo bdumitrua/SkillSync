@@ -101,6 +101,7 @@ builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
 builder.Services.AddScoped<ITeamVacancyRepository, TeamVacancyRepository>();
 builder.Services.AddScoped<ITeamApplicationRepository, TeamApplicationRepository>();
+builder.Services.AddScoped<ITeamScopeRepository, TeamScopeRepository>();
 
 var app = builder.Build();
 

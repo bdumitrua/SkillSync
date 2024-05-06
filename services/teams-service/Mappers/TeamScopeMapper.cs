@@ -18,10 +18,11 @@ namespace TeamsService.Mappers
         }
 
         public static TeamScope TeamScopeFromCreateRequestDTO(
-            this CreateTeamScopeRequestDto requestDto
+            this CreateTeamScopeRequestDto requestDto,
+            int teamId
         )
         {
-            return new TeamScope { Title = requestDto.Title, TeamId = requestDto.TeamId, };
+            return new TeamScope { Title = requestDto.Title, TeamId = teamId, };
         }
     }
 }
