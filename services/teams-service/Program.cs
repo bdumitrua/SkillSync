@@ -99,6 +99,7 @@ builder
 
 builder.Services.AddScoped<ITeamRepository, TeamRepository>();
 builder.Services.AddScoped<ITeamMemberRepository, TeamMemberRepository>();
+builder.Services.AddScoped<ITeamVacancyRepository, TeamVacancyRepository>();
 
 var app = builder.Build();
 

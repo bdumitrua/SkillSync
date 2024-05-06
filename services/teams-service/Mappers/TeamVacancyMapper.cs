@@ -16,15 +16,14 @@ namespace TeamsService.Mappers
         }
 
         public static TeamVacancy TeamVacancyFromCreateRequestDTO(
-            this CreateTeamVacancyRequestDto requestDto,
-            int teamId
+            this CreateTeamVacancyRequestDto requestDto
         )
         {
             return new TeamVacancy
             {
                 Title = requestDto.Title,
                 Description = requestDto.Description,
-                TeamId = teamId,
+                TeamId = requestDto.TeamId,
             };
         }
     }

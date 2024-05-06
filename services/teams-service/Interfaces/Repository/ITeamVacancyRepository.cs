@@ -9,18 +9,18 @@ namespace TeamsService.Intefaces.Repository
         Task<List<TeamVacancy>> GetByTeamIdAsync(int teamId);
 
         // -
-        Task<TeamScope?> GetByIdAsync(int id);
+        Task<TeamVacancy?> GetByIdAsync(int teamVacancyId);
 
-        // check moder rights
-        Task<TeamScope> CreateAsync(TeamScope teamScopeModel);
+        // check moder rights +
+        Task<TeamVacancy> CreateAsync(TeamVacancy teamVacancyModel);
 
-        // check moder rights
-        Task<TeamScope> UpdateAsync(
-            TeamScope teamScope,
+        // check moder rights +
+        Task<TeamVacancy> UpdateAsync(
+            TeamVacancy teamVacancy,
             UpdateTeamVacancyRequestDto updateRequestDto
         );
 
         // check moder rights
-        Task<TeamScope?> DeleteAsync(TeamScope teamScope);
+        Task<TeamVacancy?> DeleteAsync(TeamVacancy teamVacancy);
     }
 }

@@ -5,6 +5,9 @@ namespace TeamsService.Dtos.TeamVacancyDto
     public class CreateTeamVacancyRequestDto : BaseRequestDto
     {
         [Required]
+        public int TeamId { get; set; }
+
+        [Required]
         public string Title { get; set; } = string.Empty;
 
         [Required]

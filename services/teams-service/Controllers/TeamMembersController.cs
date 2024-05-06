@@ -81,19 +81,5 @@ namespace TeamsService.Controllers
 
             return NoContent();
         }
-
-        protected async Task<bool> AuthorizedUserIsModerator(int teamId, int userId)
-        {
-            TeamMember? authorizedUserMembership = await _teamMemberRepository.GetMemberByBothIds(
-                teamId,
-                userId
-            );
-
-            // Not a member
-            if (authorizedUserMembership == null)
-                return false;
-
-            return authorizedUserMembership.IsModerator;
-        }
     }
 }
