@@ -40,7 +40,7 @@ namespace TeamsService.Controllers
         [HttpPost]
         public async Task<ActionResult> Create([FromBody] CreateTeamVacancyRequestDto requestDto)
         {
-            await AuthorizedUserIsModerator(requestDto.TeamId, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(requestDto.TeamId);
 
             TeamVacancy teamVacancyModel = requestDto.TeamVacancyFromCreateRequestDTO();
             await _teamVacancyRepository.CreateAsync(teamVacancyModel);
@@ -54,7 +54,7 @@ namespace TeamsService.Controllers
             [FromBody] UpdateTeamVacancyRequestDto requestDto
         )
         {
-            await AuthorizedUserIsModerator(teamVacancy.TeamId, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(teamVacancy.TeamId);
 
             await _teamVacancyRepository.UpdateAsync(teamVacancy, requestDto);
 
@@ -64,7 +64,7 @@ namespace TeamsService.Controllers
         [HttpDelete("{teamVacancyId}")]
         public async Task<ActionResult> Delete([BindTeamVacancy] TeamVacancy teamVacancy)
         {
-            await AuthorizedUserIsModerator(teamVacancy.TeamId, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(teamVacancy.TeamId);
 
             await _teamVacancyRepository.DeleteAsync(teamVacancy);
 

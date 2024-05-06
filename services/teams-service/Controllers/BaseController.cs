@@ -23,13 +23,11 @@ namespace TeamsService.Controllers
             return authorizedUserId;
         }
 
-        // TODO
-        // REMOVE USER ID
-        protected async Task AuthorizedUserIsModerator(int teamId, int userId)
+        protected async Task AuthorizedUserIsModerator(int teamId)
         {
             TeamMember? authorizedUserMembership = await TeamMemberRepository.GetMemberByBothIds(
                 teamId,
-                userId
+                GetAuthorizedUserId()
             );
 
             // Not a member or isn't moderator
@@ -37,13 +35,11 @@ namespace TeamsService.Controllers
                 throw new InsufficientRightsException();
         }
 
-        // TODO
-        // REMOVE USER ID
-        protected async Task<bool> AuthorizedUserIsMember(int teamId, int userId)
+        protected async Task<bool> AuthorizedUserIsMember(int teamId)
         {
             TeamMember? authorizedUserMembership = await TeamMemberRepository.GetMemberByBothIds(
                 teamId,
-                userId
+                GetAuthorizedUserId()
             );
 
             return authorizedUserMembership != null;

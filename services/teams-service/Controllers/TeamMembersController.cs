@@ -36,7 +36,7 @@ namespace TeamsService.Controllers
             [FromBody] CreateTeamMemberRequestDto createTeamMemberDto
         )
         {
-            await AuthorizedUserIsModerator(teamId, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(teamId);
 
             TeamMember teamMember = createTeamMemberDto.ToTeamMemberFromRequestDTO(teamId);
             TeamMember? newTeamMember = await _teamMemberRepository.AddMemberAsync(teamMember);
@@ -60,7 +60,7 @@ namespace TeamsService.Controllers
                 );
             }
 
-            await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(team.Id);
 
             bool? deletingStatus = await _teamMemberRepository.RemoveMemberAsync(
                 team.Id,

@@ -26,7 +26,7 @@ namespace TeamsService.Controllers
         [HttpGet("{teamId}")]
         public async Task<ActionResult<List<TeamApplication>>> GetByTeamId([BindTeam] Team team)
         {
-            await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(team.Id);
 
             List<TeamApplication> vacancyApplications =
                 await _teamApplicationRepository.GetByTeamIdAsync(team.Id);
@@ -39,11 +39,10 @@ namespace TeamsService.Controllers
             [BindTeamApplication] TeamApplication teamApplication
         )
         {
-            int authorizedUserId = GetAuthorizedUserId();
             // If it's not author
-            if (teamApplication.UserId != authorizedUserId)
+            if (teamApplication.UserId != GetAuthorizedUserId())
                 // check if it's an moderator
-                await AuthorizedUserIsModerator(teamApplication.TeamId, authorizedUserId);
+                await AuthorizedUserIsModerator(teamApplication.TeamId);
 
             return Ok(teamApplication);
         }
@@ -53,7 +52,7 @@ namespace TeamsService.Controllers
             [BindTeamVacancy] TeamVacancy teamVacancy
         )
         {
-            await AuthorizedUserIsModerator(teamVacancy.TeamId, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(teamVacancy.TeamId);
 
             List<TeamApplication> teamApplications =
                 await _teamApplicationRepository.GetByVacancyIdAsync(teamVacancy.Id);
@@ -67,8 +66,7 @@ namespace TeamsService.Controllers
             [FromBody] CreateTeamApplicationRequestDto requestDto
         )
         {
-            int authorizedUserId = GetAuthorizedUserId();
-            bool isMember = await AuthorizedUserIsMember(teamVacancy.TeamId, authorizedUserId);
+            bool isMember = await AuthorizedUserIsMember(teamVacancy.TeamId);
             if (isMember)
             {
                 return BadRequest(
@@ -80,7 +78,7 @@ namespace TeamsService.Controllers
             }
 
             TeamApplication teamApplicationModel = requestDto.TeamApplicationFromCreateRequestDTO(
-                authorizedUserId
+                GetAuthorizedUserId()
             );
 
             TeamApplication? newApplication = await _teamApplicationRepository.CreateAsync(
@@ -101,7 +99,7 @@ namespace TeamsService.Controllers
             [FromBody] UpdateTeamApplicationRequestDto requestDto
         )
         {
-            await AuthorizedUserIsModerator(teamApplication.TeamId, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(teamApplication.TeamId);
 
             TeamApplication updatedTeamApplication = await _teamApplicationRepository.UpdateAsync(
                 teamApplication,
@@ -116,7 +114,7 @@ namespace TeamsService.Controllers
             [BindTeamApplication] TeamApplication teamApplication
         )
         {
-            await AuthorizedUserIsModerator(teamApplication.TeamId, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(teamApplication.TeamId);
 
             await _teamApplicationRepository.DeleteAsync(teamApplication);
 

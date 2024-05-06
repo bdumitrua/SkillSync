@@ -37,7 +37,7 @@ namespace TeamsService.Controllers
             CreateTeamScopeRequestDto requestDto
         )
         {
-            await AuthorizedUserIsModerator(team.Id, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(team.Id);
 
             TeamScope teamScopeModel = requestDto.TeamScopeFromCreateRequestDTO(team.Id);
             await _teamScopeRepository.CreateAsync(teamScopeModel);
@@ -48,7 +48,7 @@ namespace TeamsService.Controllers
         [HttpDelete("{teamScopeId}")]
         public async Task<ActionResult> Delete([BindTeamScope] TeamScope teamScope)
         {
-            await AuthorizedUserIsModerator(teamScope.TeamId, GetAuthorizedUserId());
+            await AuthorizedUserIsModerator(teamScope.TeamId);
 
             await _teamScopeRepository.DeleteAsync(teamScope);
 
