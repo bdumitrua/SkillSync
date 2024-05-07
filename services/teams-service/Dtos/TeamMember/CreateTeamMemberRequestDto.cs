@@ -5,10 +5,11 @@ namespace TeamsService.Dtos.TeamMemberDto
 {
     public class CreateTeamMemberRequestDto : BaseRequestDto
     {
-        [Required]
+        [Required(ErrorMessage = "UserId is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "UserId must be greater than 0.")]
         public int UserId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "IsModerator is required.")]
         public bool IsModerator { get; set; }
     }
 }

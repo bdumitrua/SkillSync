@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using TeamsService.Attributes;
 using TeamsService.Data;
 using TeamsService.Exceptions;
 using TeamsService.Intefaces;
