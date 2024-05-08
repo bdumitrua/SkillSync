@@ -9,7 +9,7 @@ from posts.serializers import PostSerializer
 # Request methods
 
 
-def auth_user_likes(request, user_id):
+def user_likes(request, user_id):
     check_request_method(request, 'GET')
     likes = PostLike.objects.filter(user_id=user_id)
     liked_posts_ids = [like.post_id for like in likes]
@@ -19,7 +19,7 @@ def auth_user_likes(request, user_id):
     return JsonResponse(serializer.data, safe=False)
 
 
-def auth_likes_create(request, id):
+def likes_create(request, id):
     check_request_method(request, 'POST')
 
     user_id = request.user_id
@@ -36,7 +36,7 @@ def auth_likes_create(request, id):
     })
 
 
-def auth_likes_remove(request, id):
+def likes_remove(request, id):
     check_request_method(request, 'DELETE')
 
     post = get_object_or_404(Post, id=id)

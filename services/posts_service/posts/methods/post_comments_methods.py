@@ -9,7 +9,7 @@ from posts.serializers import PostCommentSerializer
 from posts.forms import CreatePostCommentForm
 
 
-def auth_post_comments(request, post_id):
+def post_comments(request, post_id):
     check_request_method(request, 'GET')
 
     post_comments = PostComment.objects.filter(post_id=post_id)
@@ -18,7 +18,7 @@ def auth_post_comments(request, post_id):
     return JsonResponse(serializer.data, safe=False)
 
 
-def auth_comments_create(request, post_id):
+def comments_create(request, post_id):
     check_request_method(request, 'POST')
 
     data = json.loads(request.body)
@@ -35,7 +35,7 @@ def auth_comments_create(request, post_id):
     })
 
 
-def auth_comments_remove(request, comment_id):
+def comments_remove(request, comment_id):
     check_request_method(request, 'DELETE')
 
     comment = get_object_or_404(PostComment, id=comment_id)
@@ -48,7 +48,7 @@ def auth_comments_remove(request, comment_id):
     return JsonResponse({'message': 'Comment deleted successfully', 'comment_id': comment_id})
 
 
-def auth_comments_like(request, comment_id):
+def comments_like(request, comment_id):
     check_request_method(request, 'POST')
     get_object_or_404(PostComment, id=comment_id)
 
@@ -64,7 +64,7 @@ def auth_comments_like(request, comment_id):
     }, status=201)
 
 
-def auth_comments_unlike(request, comment_id):
+def comments_unlike(request, comment_id):
     check_request_method(request, 'DELETE')
     get_object_or_404(PostComment, id=comment_id)
 

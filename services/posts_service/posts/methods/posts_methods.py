@@ -21,7 +21,7 @@ def posts_index(request):
     return JsonResponse(serializer.data, safe=False)
 
 
-def posts_show(request, id):
+def show_post(request, id):
     check_request_method(request, 'GET')
 
     post = get_object_or_404(Post.objects.annotate(
@@ -31,7 +31,25 @@ def posts_show(request, id):
     return JsonResponse(serializer.data)
 
 
-def auth_posts_create(request):
+def user_posts(request, user_id):
+    check_request_method(request, 'GET')
+
+    user_posts = Post.objects.filter(entity_type="user", entity_id=user_id)
+    serializer = PostSerializer(user_posts, many=True)
+
+    return JsonResponse(serializer.data, safe=False)
+
+
+def team_posts(request, team_id):
+    check_request_method(request, 'GET')
+
+    team_posts = Post.objects.filter(entity_type="team", entity_id=team_id)
+    serializer = PostSerializer(team_posts, many=True)
+
+    return JsonResponse(serializer.data, safe=False)
+
+
+def posts_create(request):
     check_request_method(request, 'POST')
 
     data = json.loads(request.body)
@@ -47,7 +65,7 @@ def auth_posts_create(request):
     })
 
 
-def auth_posts_update(request, id):
+def posts_update(request, id):
     check_request_method(request, 'PUT')
 
     data = json.loads(request.body)
@@ -65,7 +83,7 @@ def auth_posts_update(request, id):
     return JsonResponse({'message': 'Post updated successfully', 'post_id': post.id})
 
 
-def auth_posts_delete(request, id):
+def posts_delete(request, id):
     check_request_method(request, 'DELETE')
 
     post = get_object_or_404(Post, id=id)
