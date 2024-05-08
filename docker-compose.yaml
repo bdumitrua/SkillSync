@@ -11,7 +11,7 @@ services:
             - "8001:8000"
         volumes:
             - ./services/users-service:/app
-            - users-vendor:/app/vendor
+            - inspirelink_users-vendor:/app/vendor
         depends_on:
             - users-db
             - redis
@@ -195,7 +195,8 @@ networks:
 
 volumes:
     node_modules:
-    users-vendor:
+    inspirelink_users-vendor:
+        external: true
     messages-node_modules:
     users-data:
     teams-data:
