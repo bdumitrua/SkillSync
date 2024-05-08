@@ -21,3 +21,17 @@ class PostLike(models.Model):
     id = models.AutoField(primary_key=True)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user_id = models.IntegerField()
+
+
+class PostComment(models.Model):
+    id = models.AutoField(primary_key=True)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    user_id = models.IntegerField()
+    text = models.CharField(max_length=200)
+    media_url = models.URLField(blank=True, null=True)
+
+
+class PostCommentLike(models.Model):
+    id = models.AutoField(primary_key=True)
+    post_comment = models.ForeignKey(PostComment, on_delete=models.CASCADE)
+    user_id = models.IntegerField()

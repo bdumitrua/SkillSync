@@ -6,13 +6,19 @@ def validate_entity_type(value):
         raise forms.ValidationError("Entity type must be 'team' or 'user'")
 
 
-class UpdatePostForm(forms.Form):
-    text = forms.CharField(max_length=255)
-    media_url = forms.CharField(required=False)
-
-
 class CreatePostForm(forms.Form):
-    text = forms.CharField(max_length=255)
+    text = forms.CharField(required=True, max_length=255)
     media_url = forms.CharField(required=False)
-    entity_type = forms.CharField(validators=[validate_entity_type])
-    entity_id = forms.IntegerField(min_value=1)
+    entity_type = forms.CharField(
+        required=True, validators=[validate_entity_type])
+    entity_id = forms.IntegerField(required=True, min_value=1)
+
+
+class UpdatePostForm(forms.Form):
+    text = forms.CharField(required=True, max_length=255)
+    media_url = forms.CharField(required=False)
+
+
+class CreatePostCommentForm(forms.Form):
+    text = forms.CharField(required=True, max_length=200)
+    media_url = forms.CharField(required=False)
