@@ -10,6 +10,7 @@ urlpatterns = [
     path("update/<int:id>", auth_posts_update, name="update_post"),
     path("delete/<int:id>", auth_posts_delete, name="delete_post"),
 
+    path("likes/user/<int:user_id>", auth_user_likes, name="get_user_likes"),
     path("likes/create/<int:id>", auth_likes_create, name="like_post"),
     path("likes/remove/<int:id>", auth_likes_remove, name="unlike_post"),
 ]

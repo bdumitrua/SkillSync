@@ -4,8 +4,19 @@ from django.shortcuts import get_object_or_404
 
 from posts.models import Post, PostLike
 from .utils import *
+from posts.serializers import PostSerializer
 
 # Request methods
+
+
+def auth_user_likes(request, user_id):
+    check_request_method(request, 'GET')
+    likes = PostLike.objects.filter(user_id=user_id)
+    liked_posts_ids = [like.post_id for like in likes]
+    posts_data = Post.objects.filter(id__in=liked_posts_ids)
+    serializer = PostSerializer(posts_data, many=True)
+
+    return JsonResponse(serializer.data, safe=False)
 
 
 def auth_likes_create(request, id):
@@ -26,7 +37,7 @@ def auth_likes_create(request, id):
 
 
 def auth_likes_remove(request, id):
-    check_request_method(request, 'POST')
+    check_request_method(request, 'DELETE')
 
     post = get_object_or_404(Post, id=id)
     like = get_object_or_404(PostLike, post_id=post.id,
