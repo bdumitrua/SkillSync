@@ -10,6 +10,8 @@ urlpatterns = [
     path("<int:id>", show_post, name="show_post"),
     path("user/<int:user_id>", user_posts, name="user_posts"),
     path("team/<int:team_id>", team_posts, name="team_posts"),
+    path("feed", posts_feed, name="posts_feed"),
+
 
     path("create", posts_create, name="posts_create"),
     path("update/<int:id>", posts_update, name="posts_update"),

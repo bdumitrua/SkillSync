@@ -9,7 +9,7 @@ class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['id', 'text', 'media_url',
-                  'entity_type', 'entity_id', 'likes_count']
+                  'entity_type', 'entity_id', 'created_at', 'likes_count']
 
 
 class PostCommentSerializer(serializers.ModelSerializer):
@@ -18,4 +18,5 @@ class PostCommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PostComment
-        fields = ['id', 'user_id', 'text', 'media_url', 'likes_count']
+        fields = ['id', 'user_id', 'text',
+                  'media_url', 'created_at', 'likes_count']

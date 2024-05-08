@@ -2,6 +2,7 @@ import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
+from django.db import connection
 
 from posts.models import Post
 from posts.forms import UpdatePostForm, CreatePostForm
@@ -45,6 +46,51 @@ def team_posts(request, team_id):
 
     team_posts = Post.objects.filter(entity_type="team", entity_id=team_id)
     serializer = PostSerializer(team_posts, many=True)
+
+    return JsonResponse(serializer.data, safe=False)
+
+
+def posts_feed(request):
+    check_request_method(request, 'GET')
+
+    # Получаем массивы из GET-параметров
+    teams_str = request.GET.get('teams_id', '[]')
+    users_str = request.GET.get('users_id', '[]')
+
+    try:
+        teams = json.loads(teams_str)
+        users = json.loads(users_str)
+
+        validate_array_of_integers(teams, 'teams_id')
+        validate_array_of_integers(users, 'users_id')
+    except json.JSONDecodeError:
+        return JsonResponse({'error': 'Invalid JSON format.'}, status=400)
+    except ValidationError as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+    if not teams and not users:
+        return JsonResponse({'error': 'Empty team and user IDs.'}, status=400)
+
+    try:
+        with connection.cursor() as cursor:
+            # Подготовка кортежей для SQL IN
+            teams_tuple = tuple(teams) if teams else (-1,)
+            users_tuple = tuple(users) if users else (-1,)
+            query = """
+            SELECT * FROM posts_post 
+            WHERE (entity_type = 'user' AND entity_id IN %s)
+               OR (entity_type = 'team' AND entity_id IN %s)
+            ORDER BY created_at DESC
+            """
+            cursor.execute(query, [users_tuple, teams_tuple])
+
+            rows = cursor.fetchall()
+            columns = [col[0] for col in cursor.description]
+            results = [dict(zip(columns, row)) for row in rows]
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+    serializer = PostSerializer(results, many=True)
 
     return JsonResponse(serializer.data, safe=False)
 

@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Post(models.Model):
@@ -29,6 +30,7 @@ class PostComment(models.Model):
     user_id = models.IntegerField()
     text = models.CharField(max_length=200)
     media_url = models.URLField(blank=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
 
 class PostCommentLike(models.Model):
