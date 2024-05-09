@@ -1,6 +1,7 @@
 import jwt
 from django.conf import settings
 from django.http import JsonResponse
+from .exceptions import ModelNotFoundException, InvalidRequestMethodException
 
 
 class JWTMiddleware:
@@ -30,3 +31,21 @@ class JWTMiddleware:
             return JsonResponse({'error': 'Invalid token'}, status=401)
         except jwt.ExpiredSignatureError:
             return JsonResponse({'error': 'Token has expired'}, status=401)
+
+
+class CustomExceptionHandleMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
+    def process_exception(self, request, exception):
+        if isinstance(exception, ModelNotFoundException):
+            return JsonResponse({'error': exception.message}, status=exception.status)
+
+        if isinstance(exception, InvalidRequestMethodException):
+            return JsonResponse({'error': exception.message}, status=exception.status)
+
+        return None

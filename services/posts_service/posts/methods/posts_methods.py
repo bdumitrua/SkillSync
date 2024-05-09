@@ -1,12 +1,11 @@
 import json
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.db.models import Count
 from django.db import connection
 
 from posts.models import Post
 from posts.forms import UpdatePostForm, CreatePostForm
 from posts.serializers import PostSerializer
+
 from .utils import *
 
 # Request methods
@@ -15,18 +14,16 @@ from .utils import *
 def posts_index(request):
     check_request_method(request, 'GET')
 
-    all_posts = Post.objects.annotate(likes_count=Count('postlike')).all()
-
+    all_posts = Post.objects.all()
     serializer = PostSerializer(all_posts, many=True)
 
     return JsonResponse(serializer.data, safe=False)
 
 
-def show_post(request, id):
+def show_post(request, post_id):
     check_request_method(request, 'GET')
 
-    post = get_object_or_404(Post.objects.annotate(
-        likes_count=Count('postlike')), id=id)
+    post = get_post(post_id)
     serializer = PostSerializer(post)
 
     return JsonResponse(serializer.data)
@@ -111,7 +108,7 @@ def posts_create(request):
     })
 
 
-def posts_update(request, id):
+def posts_update(request, post_id):
     check_request_method(request, 'PUT')
 
     data = json.loads(request.body)
@@ -120,7 +117,7 @@ def posts_update(request, id):
     if not form.is_valid():
         return JsonResponse({'errors': form.errors}, status=422)
 
-    post = get_object_or_404(Post, id=id)
+    post = get_post(post_id)
     if not user_own_post(post, request.user_id):
         return JsonResponse('Insufficient rights', status=403)
 
@@ -129,17 +126,16 @@ def posts_update(request, id):
     return JsonResponse({'message': 'Post updated successfully', 'post_id': post.id})
 
 
-def posts_delete(request, id):
+def posts_delete(request, post_id):
     check_request_method(request, 'DELETE')
 
-    post = get_object_or_404(Post, id=id)
-
+    post = get_post(post_id)
     if not user_own_post(post, request.user_id):
         return JsonResponse({'error': 'Insufficient rights'}, status=403)
 
     post.delete()
 
-    return JsonResponse({'message': 'Post deleted successfully', 'post_id': id})
+    return JsonResponse({'message': 'Post deleted successfully', 'post_id': post_id})
 
 
 # Additional functions

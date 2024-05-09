@@ -48,7 +48,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'posts.middleware.JWTMiddleware'
+    'posts.middleware.JWTMiddleware',
+    'posts.middleware.CustomExceptionHandleMiddleware'
 ]
 
 ROOT_URLCONF = 'posts_service.urls'
