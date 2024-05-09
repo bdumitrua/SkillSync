@@ -15,23 +15,29 @@ const getChatMembers = (req, res) => {
 	res.send(`Chat id ${chatId} members`);
 };
 
-const createNewChat = (req, res) => {
-	const teamId = req.body.teamId;
-	const name = req.body.name;
-	const avatarUrl = req.body.avatarUrl;
-	// const newChatId = +fbGetLastChatId() + 1;
-	const newChatId = 1;
+const createNewChat = (req, res, next) => {
+	try {
+		const teamId = req.body.teamId;
+		const name = req.body.name;
+		const avatarUrl = req.body.avatarUrl;
+		// const newChatId = +fbGetLastChatId() + 1;
+		const newChatId = 3;
 
-	const chatData = {
-		teamId,
-		name,
-		avatarUrl,
-		chatId: newChatId,
-	};
+		const chatData = {
+			teamId,
+			name,
+			avatarUrl,
+			chatId: newChatId,
+		};
 
-	const newChat = fbCreateChat(newChatId, chatData);
+		const newChat = fbCreateChat(newChatId, chatData);
 
-	res.send(`Created chat with data: ${JSON.stringify(newChat)}`);
+		res.json({
+			message: `Created chat with data: ${JSON.stringify(newChat)}`,
+		});
+	} catch (error) {
+		next(error);
+	}
 };
 
 module.exports = {
