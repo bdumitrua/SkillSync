@@ -8,36 +8,89 @@ const firebaseConfig = JSON.parse(fs.readFileSync("./firebase.json"));
 const app = initializeApp(firebaseConfig);
 const database = getDatabase();
 
-function sendMessage(chatId, userId, messageData) {
+function fbSendMessage(chatId, userId, messageData) {
 	set(ref(database, `messages/${chatId}/${userId}`), messageData);
 }
 
-function getChatMessages(chatId, userId) {}
+function fbGetChatMessages(chatId, userId) {}
 
-function createChat(chatId, chatData) {
+function fbCreateChat(chatId, chatData) {
 	set(ref(database, `chats/${chatId}`), chatData);
 }
 
-function getChatData(chatId) {}
+function fbGetChatData(chatId) {}
 
-function addChatMember(chatId, userId, memberData) {}
+function fbAddChatMember(chatId, userId, memberData) {}
 
-function getChatMembers(chatId) {}
+function fbGetChatMembers(chatId) {}
 
-function getLastChatId() {}
+function fbGetLastChatId() {}
 
-function addUserChat(userId, chatId) {}
+function fbAddUserChat(userId, chatId) {}
 
-function getUserChats(userId) {}
+function fbGetUserChats(userId) {}
 
 module.exports = {
-	sendMessage,
-	getChatMessages,
-	createChat,
-	getChatData,
-	addChatMember,
-	getChatMembers,
-	getLastChatId,
-	addUserChat,
-	getUserChats,
+	fbSendMessage,
+	fbGetChatMessages,
+	fbCreateChat,
+	fbGetChatData,
+	fbAddChatMember,
+	fbGetChatMembers,
+	fbGetLastChatId,
+	fbAddUserChat,
+	fbGetUserChats,
 };
+
+// 	"chats": {
+//     "chat_id_1": {
+//       "team_id": "team_id_1",
+//       "name": "Название чата",
+//       "avatar_url": "URL аватара",
+//       "created_at": "2024-05-01T12:00:00Z"
+//     },
+//     "chat_id_2": {
+//       ...
+//     },
+//     ...
+//   },
+// 	"userChats": {
+//     "user_id_1": {
+//       "chat_ids": {
+//         "chat_id_1": true,
+//         "chat_id_2": true,
+//         ...
+//       }
+//     },
+//     "user_id_2": {
+//       ...
+//     },
+//     ...
+//   }
+// 	"messages": {
+//     "chat_id_1": {
+//       "user_id_1": {
+//         "message_id_1": {
+//           "sender_id": "user_id_1",
+//           "text": "Привет!",
+//           "created_at": "2024-05-01T12:00:00Z",
+//           "status": "unread"
+//         },
+//         "message_id_2": {
+//           "sender_id": "user_id_2",
+//           "text": "Привет, как дела?",
+//           "created_at": "2024-05-01T12:01:00Z",
+//           "status": "unread"
+//         },
+//         ...
+//       },
+//       "user_id_2": {
+//         ...
+//       },
+//       ...
+//     },
+//     "chat_id_2": {
+//       ...
+//     },
+//     ...
+//   }

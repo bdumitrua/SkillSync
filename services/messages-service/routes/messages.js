@@ -1,23 +1,14 @@
-var express = require("express");
-var router = express.Router();
-const { v4: uuidv4 } = require("uuid");
+const express = require("express");
+const router = express.Router();
 
-router.get("/send/:chatId", function (req, res, next) {
-	const chatId = req.params.chatId;
+const {
+	sendMessageToChat,
+	deleteMessage,
+	deleteMessageForever,
+} = require("../controllers/messagesController");
 
-	res.send(`Sending message to chatId: ${chatId}`);
-});
-
-router.delete("/delete/:messageUuid", function (req, res, next) {
-	const messageUuid = req.params.messageUuid;
-
-	res.send(`Deleting message with uuid: ${messageUuid}`);
-});
-
-router.delete("/delete/forever/:messageUuid", function (req, res, next) {
-	const messageUuid = req.params.messageUuid;
-
-	res.send(`Deleting forever message with uuid: ${messageUuid}`);
-});
+router.get("/send/:chatId", sendMessageToChat);
+router.delete("/delete/:messageUuid", deleteMessage);
+router.delete("/delete/forever/:messageUuid", deleteMessageForever);
 
 module.exports = router;
