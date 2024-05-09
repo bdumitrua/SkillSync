@@ -6,11 +6,11 @@ const authToken = require("../middleware/authToken");
 const {
 	sendMessageToChat,
 	deleteMessage,
-	deleteMessageForever,
+	readMessage,
 } = require("../controllers/messagesController");
 
 router.post("/send/:chatId", authToken, sendMessageToChat);
-router.delete("/delete/:messageUuid", authToken, deleteMessage);
-router.delete("/delete/forever/:messageUuid", authToken, deleteMessageForever);
+router.post("/read/:chatId/:messageUuid", authToken, readMessage);
+router.delete("/delete/:chatId/:messageUuid", authToken, deleteMessage);
 
 module.exports = router;
