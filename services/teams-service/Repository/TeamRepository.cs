@@ -42,6 +42,11 @@ namespace TeamsService.Repository
             return await _context.Teams.FirstOrDefaultAsync(team => team.Id == id);
         }
 
+        public async Task<List<Team>> GetByIdsAsync(IEnumerable<int> teamIds)
+        {
+            return await _context.Teams.Where(team => teamIds.Contains(team.Id)).ToListAsync();
+        }
+
         public async Task<Team?> UpdateAsync(Team team, UpdateTeamRequestDto updateTeamDto)
         {
             team.UpdateModelFromDto(updateTeamDto);

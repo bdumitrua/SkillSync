@@ -42,6 +42,17 @@ namespace TeamsService.Controllers
             return Ok(team);
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<List<Team>>> GetByUserId(int userId)
+        {
+            List<TeamMember> userMemberships = await _teamMemberRepository.GetByUserIdAsync(userId);
+
+            int[] uniqueTeamIds = userMemberships.Select(team => team.TeamId).Distinct().ToArray();
+            List<Team> userTeams = await _teamRepository.GetByIdsAsync(uniqueTeamIds);
+
+            return Ok(userTeams);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTeamRequestDto teamDto)
         {

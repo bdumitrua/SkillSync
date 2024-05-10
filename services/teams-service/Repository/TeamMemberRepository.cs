@@ -65,5 +65,12 @@ namespace TeamsService.Repository
 
             return true;
         }
+
+        public async Task<List<TeamMember>> GetByUserIdAsync(int userId)
+        {
+            return await _context
+                .TeamMembers.Where(teamMember => teamMember.UserId == userId)
+                .ToListAsync();
+        }
     }
 }

@@ -5,7 +5,8 @@ WORKDIR /app
 # Настройка окружения для разработки
 ENV DOTNET_WATCH_SUPPRESS_MSBUILD_INCREMENTALISM=true \
     DOTNET_USE_POLLING_FILE_WATCHER=true \
-    NUGET_XMLDOC_MODE=skip
+    NUGET_XMLDOC_MODE=skip \
+    DOTNET_WATCH_AUTO_RELOAD=true 
 
 # Копирование csproj и восстановление зависимостей
 COPY *.csproj ./
@@ -16,5 +17,4 @@ COPY . ./
 
 EXPOSE 80
 
-# Запуск приложения через dotnet watch
 ENTRYPOINT ["dotnet", "watch", "run", "--no-launch-profile"]

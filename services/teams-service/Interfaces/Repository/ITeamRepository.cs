@@ -12,6 +12,9 @@ namespace TeamsService.Intefaces.Repository
         Task<Team?> GetByIdAsync(int id);
 
         // -
+        Task<List<Team>> GetByIdsAsync(IEnumerable<int> teamIds);
+
+        // -
         Task<Team> CreateAsync(Team teamModel);
 
         // adminId check +

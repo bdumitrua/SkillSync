@@ -7,6 +7,7 @@ namespace TeamsService.Intefaces.Repository
     {
         // add admin +
         Task<List<TeamMember>> GetByTeamIdAsync(int teamId);
+        Task<List<TeamMember>> GetByUserIdAsync(int userId);
         Task<TeamMember?> GetMemberByBothIds(int teamId, int userId);
 
         // check moder rights +
