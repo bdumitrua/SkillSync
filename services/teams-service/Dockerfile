@@ -1,17 +1,20 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+# Используйте базовый образ SDK для использования dotnet watch
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS base
 WORKDIR /app
 
+# Настройка окружения для разработки
+ENV DOTNET_WATCH_SUPPRESS_MSBUILD_INCREMENTALISM=true \
+    DOTNET_USE_POLLING_FILE_WATCHER=true \
+    NUGET_XMLDOC_MODE=skip
+
+# Копирование csproj и восстановление зависимостей
 COPY *.csproj ./
 RUN dotnet restore
 
+# Копирование остальных файлов проекта
 COPY . ./
-RUN dotnet publish -c Release -o out
 
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
-WORKDIR /app
-COPY --from=build-env /app/out .
+EXPOSE 80
 
-# TODO 
-# Doesn't work :(
-EXPOSE 8080
-ENTRYPOINT ["dotnet", "teams-service.dll"]
+# Запуск приложения через dotnet watch
+ENTRYPOINT ["dotnet", "watch", "run", "--no-launch-profile"]

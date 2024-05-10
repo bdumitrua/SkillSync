@@ -14,6 +14,11 @@ using TeamsService.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.ListenAnyIP(80);
+});
+
 // Add services to the container.
 builder
     .Services.AddControllers()
@@ -141,12 +146,14 @@ app.UseExceptionHandler(exceptionHandlerApp =>
     });
 });
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
 // app.UseDeveloperExceptionPage();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseRouting();
+
+// app.UseAuthentication();
+// app.UseAuthorization();
 
 app.MapControllers();
 
