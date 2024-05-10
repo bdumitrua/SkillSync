@@ -19,6 +19,12 @@ class UserProfileResource extends JsonResource
             'lastName' => $this->last_name,
             'nickName' => $this->nick_name,
             'interests' => $interests,
+            // TODO RESOURCE
+            'teams' => $this->teams,
+            // TODO RESOURCE
+            'posts' => $this->posts,
+            'subscribersCount' => $this->subscribersCount,
+            'subscriptionsCount' => $this->subscriptionsCount,
             'phone' => $this->phone,
             'email' => $this->email,
             'about' => $this->about,

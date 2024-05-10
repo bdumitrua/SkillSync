@@ -12,6 +12,8 @@ use App\Models\User;
 use App\Repository\UserInterestRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserSubscriptionRepository;
+use App\Services\External\PostsService;
+use App\Services\External\TeamsService;
 use App\Traits\CreateDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,16 +25,22 @@ class UserService
 {
     use CreateDTO;
 
+    private TeamsService $teamsService;
+    private PostsService $postsService;
     private UserRepository $userRepository;
     private UserInterestRepository $userInterestRepository;
     private UserSubscriptionRepository $userSubscriptionRepository;
     private ?int $authorizedUserId;
 
     public function __construct(
+        TeamsService $teamsService,
+        PostsService $postsService,
         UserRepository $userRepository,
         UserInterestRepository $userInterestRepository,
         UserSubscriptionRepository $userSubscriptionRepository,
     ) {
+        $this->teamsService = $teamsService;
+        $this->postsService = $postsService;
         $this->userRepository = $userRepository;
         $this->userInterestRepository = $userInterestRepository;
         $this->userSubscriptionRepository = $userSubscriptionRepository;
@@ -64,6 +72,10 @@ class UserService
             && empty($this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id));
 
         $userData->interests = $this->userInterestRepository->getByUserId($userData->id);
+        $userData->subscribersCount = count($this->userSubscriptionRepository->subscribers($userData->id));
+        $userData->subscriptionsCount = count($this->userSubscriptionRepository->subscriptions($userData->id));
+        $userData->teams = $this->teamsService->getTeamsByUserId($userData->id);
+        $userData->posts = $this->postsService->getPostsByUserId($userData->id);
 
         return new UserProfileResource(
             $userData
