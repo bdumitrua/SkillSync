@@ -23,7 +23,6 @@ class CreateTeamVacancyRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'team_id' => ['required', 'integer', 'min:1', Rule::exists('teams', 'id')],
             'title' => 'required|string|max:30',
             'description' => 'required|string|max:500',
         ];
@@ -32,10 +31,6 @@ class CreateTeamVacancyRequest extends FormRequest
     public function messages()
     {
         return [
-            'team_id.required' => 'TeamId is required.',
-            'team_id.integer' => 'TeamId must be an integer.',
-            'team_id.min' => 'TeamId must be greater than 0.',
-            'team_id.exists' => 'The selected team does not exist.',
             'title.required' => 'Title is required.',
             'title.max' => 'Title cannot exceed 30 characters.',
             'description.required' => 'Description is required.',
