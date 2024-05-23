@@ -29,4 +29,23 @@ class CreatePostRequest extends FormRequest
             'entity_id' => 'required|integer|min:1',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'text.required' => 'Text is required.',
+            'text.string' => 'Text must be a string.',
+            'text.max' => 'Text cannot exceed 255 characters.',
+            'media_url.string' => 'Media URL must be a string.',
+            'entity_type.required' => 'Entity type is required.',
+            'entity_id.required' => 'Entity ID is required.',
+            'entity_id.integer' => 'Entity ID must be an integer.',
+            'entity_id.min' => 'Entity ID must be greater than 0.',
+        ];
+    }
 }

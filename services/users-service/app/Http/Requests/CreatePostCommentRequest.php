@@ -26,4 +26,19 @@ class CreatePostCommentRequest extends FormRequest
             'media_url' => 'nullable|string',
         ];
     }
+
+    /**
+     * Get the error messages for the defined validation rules.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'text.required' => 'Text is required.',
+            'text.string' => 'Text must be a string.',
+            'text.max' => 'Text cannot exceed 200 characters.',
+            'media_url.string' => 'Media URL must be a string.',
+        ];
+    }
 }
