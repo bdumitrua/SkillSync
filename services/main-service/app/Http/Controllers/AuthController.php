@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AuthConfirmCodeRequest;
-use App\Http\Requests\CheckEmailRequest;
-use App\Http\Requests\CreateUserRequest;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\PasswordRequest;
+use App\Http\Requests\Auth\AuthConfirmCodeRequest;
+use App\Http\Requests\Auth\CheckEmailRequest;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\PasswordRequest;
+use App\Http\Requests\User\CreateUserRequest;
 use App\Models\AuthReset;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
