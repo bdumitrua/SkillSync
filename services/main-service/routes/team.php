@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\TeamApplicationController;
-use App\Http\Controllers\TeamController;
-use App\Http\Controllers\TeamLinkController;
-use App\Http\Controllers\TeamMemberController;
-use App\Http\Controllers\TeamScopeController;
-use App\Http\Controllers\TeamVacancyController;
+use App\Http\Controllers\Team\TeamApplicationController;
+use App\Http\Controllers\Team\TeamController;
+use App\Http\Controllers\Team\TeamLinkController;
+use App\Http\Controllers\Team\TeamMemberController;
+use App\Http\Controllers\Team\TeamScopeController;
+use App\Http\Controllers\Team\TeamVacancyController;
 use Illuminate\Support\Facades\Route;
 
 // /teams

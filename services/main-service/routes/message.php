@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\ChatController;
-use App\Http\Controllers\MessageController;
+use App\Http\Controllers\Messaging\ChatController;
+use App\Http\Controllers\Messaging\ChatMemberController;
+use App\Http\Controllers\Messaging\MessageController;
 use Illuminate\Support\Facades\Route;
 
 // /messages
@@ -19,7 +20,7 @@ Route::prefix('messages')->middleware(['auth:api'])->group(function () {
         Route::post('/', 'create')->name('messages.chats.create');
 
         // /messages/chats/members
-        Route::prefix('members')->controller(ChatController::class)->group(function () {
+        Route::prefix('members')->controller(ChatMemberController::class)->group(function () {
             Route::get('{chatId}', 'show')->name('messages.chats.members.show');
             Route::post('{chatId}/{userId}', 'add')->name('messages.chats.members.add');
             Route::delete('{chatId}/{userId}', 'remove')->name('messages.chats.members.remove');

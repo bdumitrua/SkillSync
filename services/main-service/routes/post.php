@@ -1,12 +1,9 @@
 <?php
 
-use App\Http\Controllers\PostCommentController;
-use App\Http\Controllers\PostCommentLikeController;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\PostLikeController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\UserInterestController;
-use App\Http\Controllers\UserSubscriptionController;
+use App\Http\Controllers\Post\PostCommentController;
+use App\Http\Controllers\Post\PostCommentLikeController;
+use App\Http\Controllers\Post\PostController;
+use App\Http\Controllers\Post\PostLikeController;
 use Illuminate\Support\Facades\Route;
 
 // TODO MOVE AUTH TO GLOBAL MIDDLEWARE
