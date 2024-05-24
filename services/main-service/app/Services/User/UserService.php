@@ -14,6 +14,7 @@ use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\User\Interfaces\UserSubscriptionRepositoryInterface;
 use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Services\Team\Interfaces\TeamServiceInterface;
+use App\Services\User\Interfaces\UserServiceInterface;
 use App\Traits\CreateDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -21,7 +22,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class UserService
+class UserService implements UserServiceInterface
 {
     use CreateDTO;
 

@@ -21,9 +21,6 @@ use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Repositories\User\Interfaces\UserSubscriptionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\User\Interfaces\UserInterestRepositoryInterface;
-use App\Repositories\UserSubscriptionRepository;
-use App\Repositories\UserRepository;
-use App\Repositories\UserInterestRepository;
 use App\Repositories\Team\TeamVacancyRepository;
 use App\Repositories\Team\TeamScopeRepository;
 use App\Repositories\Team\TeamRepository;
@@ -39,6 +36,33 @@ use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use App\Prometheus\PrometheusServiceProxy;
 use App\Kafka\KafkaProducer;
 use App\Kafka\KafkaConsumer;
+use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostRepositoryInterface;
+use App\Repositories\Post\PostCommentLikeRepository;
+use App\Repositories\Post\PostCommentRepository;
+use App\Repositories\Post\PostLikeRepository;
+use App\Repositories\Post\PostRepository;
+use App\Repositories\User\UserInterestRepository;
+use App\Repositories\User\UserRepository;
+use App\Repositories\User\UserSubscriptionRepository;
+use App\Services\Post\Interfaces\PostCommentLikeServiceInterface;
+use App\Services\Post\Interfaces\PostCommentServiceInterface;
+use App\Services\Post\Interfaces\PostLikeServiceInterface;
+use App\Services\Post\PostCommentLikeService;
+use App\Services\Post\PostCommentService;
+use App\Services\Post\PostLikeService;
+use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
+use App\Services\Team\Interfaces\TeamLinkServiceInterface;
+use App\Services\Team\Interfaces\TeamMemberServiceInterface;
+use App\Services\Team\Interfaces\TeamScopeServiceInterface;
+use App\Services\Team\Interfaces\TeamVacancyServiceInterface;
+use App\Services\Team\TeamApplicationService;
+use App\Services\Team\TeamLinkService;
+use App\Services\Team\TeamMemberService;
+use App\Services\Team\TeamScopeService;
+use App\Services\Team\TeamVacancyService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -63,20 +87,32 @@ class AppServiceProvider extends ServiceProvider
             return new KafkaProducer($connectionFactory);
         });
 
-        // Services
+        /*
+        *   Services
+        */
 
         // Post
+        $this->app->bind(PostCommentLikeServiceInterface::class, PostCommentLikeService::class);
+        $this->app->bind(PostCommentServiceInterface::class, PostCommentService::class);
+        $this->app->bind(PostLikeServiceInterface::class, PostLikeService::class);
         $this->app->bind(PostServiceInterface::class, PostService::class);
 
         // Team
+        $this->app->bind(TeamApplicationServiceInterface::class, TeamApplicationService::class);
+        $this->app->bind(TeamLinkServiceInterface::class, TeamLinkService::class);
+        $this->app->bind(TeamMemberServiceInterface::class, TeamMemberService::class);
+        $this->app->bind(TeamScopeServiceInterface::class, TeamScopeService::class);
         $this->app->bind(TeamServiceInterface::class, TeamService::class);
+        $this->app->bind(TeamVacancyServiceInterface::class, TeamVacancyService::class);
 
-        // user
+        // User
         $this->app->bind(UserServiceInterface::class, UserService::class);
         $this->app->bind(UserInterestServiceInterface::class, UserInterestService::class);
         $this->app->bind(UserSubscriptionServiceInterface::class, UserSubscriptionService::class);
 
-        // Repositories
+        /*
+        *   Repositories 
+        */
 
         // Team
         $this->app->bind(TeamApplicationRepositoryInterface::class, TeamApplicationRepository::class);
@@ -90,6 +126,12 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(UserInterestRepositoryInterface::class, UserInterestRepository::class);
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(UserSubscriptionRepositoryInterface::class, UserSubscriptionRepository::class);
+
+        // Post
+        $this->app->bind(PostCommentLikeRepositoryInterface::class, PostCommentLikeRepository::class);
+        $this->app->bind(PostCommentRepositoryInterface::class, PostCommentRepository::class);
+        $this->app->bind(PostLikeRepositoryInterface::class, PostLikeRepository::class);
+        $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
     }
 
     /**

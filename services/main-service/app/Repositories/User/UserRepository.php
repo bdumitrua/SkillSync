@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\User;
 
 use App\DTO\UpdateUserDTO;
 use App\Helpers\ResponseHelper;
