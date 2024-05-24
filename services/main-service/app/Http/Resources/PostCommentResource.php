@@ -20,7 +20,7 @@ class PostCommentResource extends JsonResource
             'text' => $this->text,
             'media_url' => $this->media_url,
             'created_at' => $this->created_at,
-            'likes_count' => $this->likes_count,
+            'likes_count' => $this->likes_count ?? 0,
         ];
     }
 }

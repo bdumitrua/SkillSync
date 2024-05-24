@@ -75,7 +75,7 @@ class UserService
         $userData->subscribersCount = count($this->userSubscriptionRepository->subscribers($userData->id));
         $userData->subscriptionsCount = count($this->userSubscriptionRepository->subscriptions($userData->id));
         $userData->teams = $this->teamService->getTeamsByUserId($userData->id);
-        $userData->posts = $this->postService->getPostsByUserId($userData->id);
+        $userData->posts = $this->postService->user($userData->id);
 
         return new UserProfileResource(
             $userData

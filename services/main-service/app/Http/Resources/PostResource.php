@@ -21,7 +21,7 @@ class PostResource extends JsonResource
             'entity_type' => $this->entity_type,
             'entity_id' => $this->entity_id,
             'created_at' => $this->created_at,
-            'likes_count' => $this->likes_count,
+            'likes_count' => $this->likes_count ?? 0,
         ];
     }
 }
