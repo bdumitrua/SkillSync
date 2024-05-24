@@ -8,57 +8,75 @@ use App\Http\Controllers\Team\TeamScopeController;
 use App\Http\Controllers\Team\TeamVacancyController;
 use Illuminate\Support\Facades\Route;
 
-// /teams
-Route::prefix('teams')->middleware(['auth:api'])->group(function () {
+Route::prefix('teams')->name('teams.')->group(function () {
+    /*
+    *   url: /teams/
+    *   name: teams.
+    */
     Route::controller(TeamController::class)->group(function () {
-        Route::get('/', 'index')->name('teams.index');
-        Route::get('show/{team}', 'show')->name('teams.show');
-        Route::get('user/{user}', 'user')->name('teams.user');
+        Route::get('/', 'index')->name('index');
+        Route::get('show/{team}', 'show')->name('show');
+        Route::get('user/{user}', 'user')->name('user');
 
-        Route::post('/', 'create')->name('teams.create');
-        Route::put('{team}', 'update')->name('teams.update');
-        Route::delete('{team}', 'delete')->name('teams.delete');
+        Route::post('/', 'create')->name('create');
+        Route::put('{team}', 'update')->name('update');
+        Route::delete('{team}', 'delete')->name('delete');
     });
 
-    // /teams/applications
-    Route::prefix('applications')->controller(TeamApplicationController::class)->group(function () {
-        Route::get('show/{teamApplication}', 'show')->name('teams.applications.show');
-        Route::get('team/{team}', 'team')->name('teams.applications.team');
-        Route::get('vacancy/{teamVacancy}', 'vacancy')->name('teams.applications.vacancy');
+    /*
+    *   url: /teams/applications/
+    *   name: teams.applications.
+    */
+    Route::prefix('applications')->name('applications.')->controller(TeamApplicationController::class)->group(function () {
+        Route::get('show/{teamApplication}', 'show')->name('show');
+        Route::get('team/{team}', 'team')->name('team');
+        Route::get('vacancy/{teamVacancy}', 'vacancy')->name('vacancy');
 
-        Route::post('{teamVacancy}', 'create')->name('teams.applications.create');
-        Route::patch('{teamApplication}', 'update')->name('teams.applications.update');
-        Route::delete('{teamApplication}', 'delete')->name('teams.applications.delete');
+        Route::post('{teamVacancy}', 'create')->name('create');
+        Route::patch('{teamApplication}', 'update')->name('update');
+        Route::delete('{teamApplication}', 'delete')->name('delete');
     });
 
-    // /teams/links
-    Route::prefix('links')->controller(TeamLinkController::class)->group(function () {
-        Route::get('{team}', 'team')->name('teams.links.team');
-        Route::post('{team}', 'create')->name('teams.links.create');
-        Route::put('{teamLink}', 'update')->name('teams.links.update');
-        Route::delete('{teamLink}', 'delete')->name('teams.links.delete');
+    /*
+    *   url: /teams/links/
+    *   name: teams.links.
+    */
+    Route::prefix('links')->name('links.')->controller(TeamLinkController::class)->group(function () {
+        Route::get('{team}', 'team')->name('team');
+        Route::post('{team}', 'create')->name('create');
+        Route::put('{teamLink}', 'update')->name('update');
+        Route::delete('{teamLink}', 'delete')->name('delete');
     });
 
-    // /teams/members
-    Route::prefix('members')->controller(TeamMemberController::class)->group(function () {
-        Route::get('{team}', 'team')->name('teams.members.team');
-        Route::post('{team}', 'create')->name('teams.members.create');
-        Route::delete('{team}', 'delete')->name('teams.members.delete');
+    /*
+    *   url: /teams/members/
+    *   name: teams.members.
+    */
+    Route::prefix('members')->name('members.')->controller(TeamMemberController::class)->group(function () {
+        Route::get('{team}', 'team')->name('team');
+        Route::post('{team}', 'create')->name('create');
+        Route::delete('{team}', 'delete')->name('delete');
     });
 
-    // /teams/scopes
-    Route::prefix('scopes')->controller(TeamScopeController::class)->group(function () {
-        Route::get('{team}', 'team')->name('teams.scopes.team');
-        Route::post('{team}', 'create')->name('teams.scopes.create');
-        Route::delete('{teamScope}', 'delete')->name('teams.scopes.delete');
+    /*
+    *   url: /teams/scopes/
+    *   name: teams.scopes.
+    */
+    Route::prefix('scopes')->name('scopes.')->controller(TeamScopeController::class)->group(function () {
+        Route::get('{team}', 'team')->name('team');
+        Route::post('{team}', 'create')->name('create');
+        Route::delete('{teamScope}', 'delete')->name('delete');
     });
 
-    // /teams/vacancies
-    Route::prefix('vacancies')->controller(TeamVacancyController::class)->group(function () {
-        Route::get('show/{teamVacancy}', 'show')->name('teams.vacancies.show');
-        Route::get('team/{team}', 'team')->name('teams.vacancies.team');
-        Route::post('{team}', 'create')->name('teams.vacancies.create');
-        Route::put('{teamVacancy}', 'update')->name('teams.vacancies.update');
-        Route::delete('{teamVacancy}', 'delete')->name('teams.vacancies.delete');
+    /*
+    *   url: /teams/vacancies/
+    *   name: teams.vacancies.
+    */
+    Route::prefix('vacancies')->name('vacancies.')->controller(TeamVacancyController::class)->group(function () {
+        Route::get('show/{teamVacancy}', 'show')->name('show');
+        Route::get('team/{team}', 'team')->name('team');
+        Route::post('{team}', 'create')->name('create');
+        Route::put('{teamVacancy}', 'update')->name('update');
+        Route::delete('{teamVacancy}', 'delete')->name('delete');
     });
 });

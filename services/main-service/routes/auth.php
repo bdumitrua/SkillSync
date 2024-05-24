@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
-Route::prefix('auth')->controller(AuthController::class)->group(function () {
+Route::prefix('auth')->withoutMiddleware(Authenticate::class . ':api')->controller(AuthController::class)->group(function () {
     Route::post('register', 'register')->name('authRegister');
     Route::post('login', 'login')->name('authLogin');
     Route::get('refresh', 'refresh')->name('authRefresh');
