@@ -13,9 +13,14 @@ class TeamRepository implements TeamRepositoryInterface
         return new Collection();
     }
 
-    public function getById(int $id): ?Team
+    public function getById(int $teamId): ?Team
     {
         return null;
+    }
+
+    public function getByUserId(int $userId): Collection
+    {
+        return new Collection();
     }
 
     public function getByIds(array $teamIds): Collection

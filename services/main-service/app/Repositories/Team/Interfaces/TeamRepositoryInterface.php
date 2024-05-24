@@ -13,11 +13,18 @@ interface TeamRepositoryInterface
     public function getAll(): Collection;
 
     /**
-     * @param int $id
+     * @param int $teamId
      * 
      * @return Team|null
      */
-    public function getById(int $id): ?Team;
+    public function getById(int $teamId): ?Team;
+
+    /**
+     * @param int $userId
+     * 
+     * @return Collection
+     */
+    public function getByUserId(int $userId): Collection;
 
     /**
      * @param array $teamIds

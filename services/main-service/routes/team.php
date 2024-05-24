@@ -12,12 +12,12 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('teams')->middleware(['auth:api'])->group(function () {
     Route::controller(TeamController::class)->group(function () {
         Route::get('/', 'index')->name('teams.index');
-        Route::get('show/{post}', 'show')->name('teams.show');
+        Route::get('show/{team}', 'show')->name('teams.show');
         Route::get('user/{user}', 'user')->name('teams.user');
 
         Route::post('/', 'create')->name('teams.create');
-        Route::put('{post}', 'update')->name('teams.update');
-        Route::delete('{post}', 'delete')->name('teams.delete');
+        Route::put('{team}', 'update')->name('teams.update');
+        Route::delete('{team}', 'delete')->name('teams.delete');
     });
 
     // /teams/applications
