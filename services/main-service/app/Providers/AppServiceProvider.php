@@ -36,6 +36,12 @@ use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use App\Prometheus\PrometheusServiceProxy;
 use App\Kafka\KafkaProducer;
 use App\Kafka\KafkaConsumer;
+use App\Repositories\Message\ChatMemberRepository;
+use App\Repositories\Message\ChatRepository;
+use App\Repositories\Message\Interfaces\ChatMemberRepositoryInterface;
+use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
+use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
+use App\Repositories\Message\MessageRepository;
 use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
@@ -47,6 +53,12 @@ use App\Repositories\Post\PostRepository;
 use App\Repositories\User\UserInterestRepository;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\UserSubscriptionRepository;
+use App\Services\Message\ChatMemberService;
+use App\Services\Message\ChatService;
+use App\Services\Message\Interfaces\ChatMemberServiceInterface;
+use App\Services\Message\Interfaces\ChatServiceInterface;
+use App\Services\Message\Interfaces\MessageServiceInterface;
+use App\Services\Message\MessageService;
 use App\Services\Post\Interfaces\PostCommentLikeServiceInterface;
 use App\Services\Post\Interfaces\PostCommentServiceInterface;
 use App\Services\Post\Interfaces\PostLikeServiceInterface;
@@ -91,11 +103,10 @@ class AppServiceProvider extends ServiceProvider
         *   Services
         */
 
-        // Post
-        $this->app->bind(PostCommentLikeServiceInterface::class, PostCommentLikeService::class);
-        $this->app->bind(PostCommentServiceInterface::class, PostCommentService::class);
-        $this->app->bind(PostLikeServiceInterface::class, PostLikeService::class);
-        $this->app->bind(PostServiceInterface::class, PostService::class);
+        // User
+        $this->app->bind(UserServiceInterface::class, UserService::class);
+        $this->app->bind(UserInterestServiceInterface::class, UserInterestService::class);
+        $this->app->bind(UserSubscriptionServiceInterface::class, UserSubscriptionService::class);
 
         // Team
         $this->app->bind(TeamApplicationServiceInterface::class, TeamApplicationService::class);
@@ -105,14 +116,25 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TeamServiceInterface::class, TeamService::class);
         $this->app->bind(TeamVacancyServiceInterface::class, TeamVacancyService::class);
 
-        // User
-        $this->app->bind(UserServiceInterface::class, UserService::class);
-        $this->app->bind(UserInterestServiceInterface::class, UserInterestService::class);
-        $this->app->bind(UserSubscriptionServiceInterface::class, UserSubscriptionService::class);
+        // Post
+        $this->app->bind(PostCommentLikeServiceInterface::class, PostCommentLikeService::class);
+        $this->app->bind(PostCommentServiceInterface::class, PostCommentService::class);
+        $this->app->bind(PostLikeServiceInterface::class, PostLikeService::class);
+        $this->app->bind(PostServiceInterface::class, PostService::class);
+
+        // Message
+        $this->app->bind(ChatMemberServiceInterface::class, ChatMemberService::class);
+        $this->app->bind(ChatServiceInterface::class, ChatService::class);
+        $this->app->bind(MessageServiceInterface::class, MessageService::class);
 
         /*
         *   Repositories 
         */
+
+        // User
+        $this->app->bind(UserInterestRepositoryInterface::class, UserInterestRepository::class);
+        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
+        $this->app->bind(UserSubscriptionRepositoryInterface::class, UserSubscriptionRepository::class);
 
         // Team
         $this->app->bind(TeamApplicationRepositoryInterface::class, TeamApplicationRepository::class);
@@ -122,16 +144,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TeamScopeRepositoryInterface::class, TeamScopeRepository::class);
         $this->app->bind(TeamVacancyRepositoryInterface::class, TeamVacancyRepository::class);
 
-        // User
-        $this->app->bind(UserInterestRepositoryInterface::class, UserInterestRepository::class);
-        $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-        $this->app->bind(UserSubscriptionRepositoryInterface::class, UserSubscriptionRepository::class);
-
         // Post
         $this->app->bind(PostCommentLikeRepositoryInterface::class, PostCommentLikeRepository::class);
         $this->app->bind(PostCommentRepositoryInterface::class, PostCommentRepository::class);
         $this->app->bind(PostLikeRepositoryInterface::class, PostLikeRepository::class);
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
+
+        // Message
+        $this->app->bind(ChatMemberRepositoryInterface::class, ChatMemberRepository::class);
+        $this->app->bind(ChatRepositoryInterface::class, ChatRepository::class);
+        $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);
     }
 
     /**

@@ -15,7 +15,7 @@ Route::prefix('messages')->middleware(['auth:api'])->group(function () {
 
     // /messages/chats
     Route::prefix('chats')->controller(ChatController::class)->group(function () {
-        Route::get('index', 'index')->name('messages.chats.index');
+        Route::get('/', 'index')->name('messages.chats.index');
         Route::get('show/{chatId}', 'show')->name('messages.chats.show');
         Route::post('/', 'create')->name('messages.chats.create');
 
