@@ -1,19 +1,19 @@
 services:
-    users-service:
+    main-service:
         build:
-            context: ./services/users-service
+            context: ./services/main-service
             dockerfile: Dockerfile
         deploy:
             resources:
                 limits:
                     cpus: "2.0"
         ports:
-            - "8001:8000"
+            - "8000:8000"
         volumes:
-            - ./services/users-service:/app
-            - inspirelink_users-vendor:/app/vendor
+            - ./services/main-service:/app
+            - main-service-vendor:/app/vendor
         depends_on:
-            - users-db
+            - mysql-db
             - redis
             - elasticsearch
             - kafka
@@ -21,103 +21,18 @@ services:
         networks:
             - app
 
-    users-db:
+    mysql-db:
         image: mysql:8.3
         environment:
-            MYSQL_DATABASE: users_db
+            MYSQL_DATABASE: main_db
             MYSQL_USER: user
             MYSQL_PASSWORD: password
             MYSQL_ROOT_PASSWORD: rootpassword
         ports:
-            - "3307:3306"
+            - "3306:3306"
         volumes:
-            - users-data:/var/lib/mysql
+            - sql-data:/var/lib/mysql
         restart: unless-stopped
-        networks:
-            - app
-
-    teams-service:
-        build: ./services/teams-service
-        ports:
-            - "8002:80"
-        volumes:
-            - ./services/teams-service:/app
-        depends_on:
-            - teams-db
-        networks:
-            - app
-
-    teams-db:
-        image: mysql:8.3
-        environment:
-            MYSQL_DATABASE: teams_db
-            MYSQL_USER: user
-            MYSQL_PASSWORD: password
-            MYSQL_ROOT_PASSWORD: rootpassword
-        ports:
-            - "3308:3306"
-        volumes:
-            - teams-data:/var/lib/mysql
-        restart: unless-stopped
-        networks:
-            - app
-
-    posts-service:
-        build:
-            context: ./services/posts_service
-            dockerfile: Dockerfile
-        volumes:
-            - ./services/posts_service:/app
-        ports:
-            - 8003:8000
-        depends_on:
-            - posts-db
-        networks:
-            - app
-
-    posts-db:
-        image: mysql:8.3
-        environment:
-            MYSQL_DATABASE: posts_db
-            MYSQL_USER: user
-            MYSQL_PASSWORD: password
-            MYSQL_ROOT_PASSWORD: rootpassword
-        ports:
-            - "3309:3306"
-        volumes:
-            - posts-data:/var/lib/mysql
-        restart: unless-stopped
-        networks:
-            - app
-
-    messages-service:
-        build:
-            context: ./services/messages-service
-            dockerfile: Dockerfile
-        ports:
-            - "8004:3000"
-        volumes:
-            - ./services/messages-service:/app
-            - messages-node_modules:/app/node_modules
-        networks:
-            - app
-
-    nginx:
-        build:
-            context: ./nginx
-            dockerfile: Dockerfile
-        ports:
-            - "443:443"
-            - "80:80"
-        volumes:
-            - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-            # - /etc/letsencrypt/:/etc/letsencrypt/
-        restart: unless-stopped
-        depends_on:
-            - users-service
-            - teams-service
-            - posts-service
-            - messages-service
         networks:
             - app
 
@@ -192,10 +107,5 @@ networks:
         driver: bridge
 
 volumes:
-    node_modules:
-    inspirelink_users-vendor:
-        external: true
-    messages-node_modules:
-    users-data:
-    teams-data:
-    posts-data:
+    sql-data:
+    main-service-vendor:
