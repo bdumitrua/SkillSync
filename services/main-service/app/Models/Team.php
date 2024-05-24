@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Team extends Model
 {
@@ -59,5 +60,13 @@ class Team extends Model
     public function vacancies(): HasMany
     {
         return $this->hasMany(TeamVacancy::class);
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function posts(): MorphMany
+    {
+        return $this->morphMany(Post::class, 'entity');
     }
 }

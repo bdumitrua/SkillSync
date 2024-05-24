@@ -15,7 +15,7 @@ class PostRepository implements PostRepositoryInterface
 
     public function feed(int $userId): Collection
     {
-        // TODO 
+        // TODO QUERY
         return Post::get();
     }
 

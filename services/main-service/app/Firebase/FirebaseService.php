@@ -161,7 +161,7 @@ class FirebaseService
         return $snapshot->getValue();
     }
 
-    // TODO CHANGE
+    // TODO CHANGE TO REUSE + CACHE
     public function getMultipleChatsData(array $chatIds): array
     {
         $chatDataPromises = array_map(function ($chatId) {

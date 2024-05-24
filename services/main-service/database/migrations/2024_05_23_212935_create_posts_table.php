@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->text('text');
             $table->string('media_url')->nullable();
-            // TODO MORPHO-LINKS
             $table->string('entity_type');
             $table->unsignedBigInteger('entity_id');
             $table->timestamps();
+
+            $table->index(['entity_type', 'entity_id']);
         });
     }
 

@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Post extends Model
 {
@@ -16,6 +17,15 @@ class Post extends Model
         'entity_type',
         'entity_id',
     ];
+
+    /**
+     * @return MorphTo
+     */
+    public function entity(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
 
     /**
      * @return HasMany
