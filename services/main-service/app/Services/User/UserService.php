@@ -9,11 +9,11 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\UserDataResource;
 use App\Http\Resources\UserProfileResource;
 use App\Models\User;
-use App\Repositories\UserInterestRepository;
-use App\Repositories\UserRepository;
-use App\Repositories\UserSubscriptionRepository;
-use App\Services\Post\PostService;
-use App\Services\Team\TeamService;
+use App\Repositories\User\Interfaces\UserInterestRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\User\Interfaces\UserSubscriptionRepositoryInterface;
+use App\Services\Post\Interfaces\PostServiceInterface;
+use App\Services\Team\Interfaces\TeamServiceInterface;
 use App\Traits\CreateDTO;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,19 +25,19 @@ class UserService
 {
     use CreateDTO;
 
-    private TeamService $teamService;
-    private PostService $postService;
-    private UserRepository $userRepository;
-    private UserInterestRepository $userInterestRepository;
-    private UserSubscriptionRepository $userSubscriptionRepository;
+    private $teamService;
+    private $postService;
+    private $userRepository;
+    private $userInterestRepository;
+    private $userSubscriptionRepository;
     private ?int $authorizedUserId;
 
     public function __construct(
-        TeamService $teamService,
-        PostService $postService,
-        UserRepository $userRepository,
-        UserInterestRepository $userInterestRepository,
-        UserSubscriptionRepository $userSubscriptionRepository,
+        TeamServiceInterface $teamService,
+        PostServiceInterface $postService,
+        UserRepositoryInterface $userRepository,
+        UserInterestRepositoryInterface $userInterestRepository,
+        UserSubscriptionRepositoryInterface $userSubscriptionRepository,
     ) {
         $this->teamService = $teamService;
         $this->postService = $postService;

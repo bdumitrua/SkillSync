@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\AddUserInterestRequest;
-use App\Models\UserInterest;
-use App\Services\User\UserInterestService;
 use Illuminate\Http\Request;
+use App\Services\User\Interfaces\UserInterestServiceInterface;
+use App\Models\UserInterest;
+use App\Http\Requests\User\AddUserInterestRequest;
+use App\Http\Controllers\Controller;
 
 class UserInterestController extends Controller
 {
     private $userInterestService;
 
-    public function __construct(UserInterestService $userInterestService)
+    public function __construct(UserInterestServiceInterface $userInterestService)
     {
         $this->userInterestService = $userInterestService;
     }

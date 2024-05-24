@@ -4,14 +4,14 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Services\User\UserSubscriptionService;
+use App\Services\User\Interfaces\UserSubscriptionServiceInterface;
 use Illuminate\Http\Request;
 
 class UserSubscriptionController extends Controller
 {
     private $userSubscriptionService;
 
-    public function __construct(UserSubscriptionService $userSubscriptionService)
+    public function __construct(UserSubscriptionServiceInterface $userSubscriptionService)
     {
         $this->userSubscriptionService = $userSubscriptionService;
     }

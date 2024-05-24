@@ -10,30 +10,21 @@ use Illuminate\Support\Facades\DB;
 
 class UserInterestRepository implements UserInterestRepositoryInterface
 {
-    private UserInterest $userInterest;
-
-    public function __construct(
-        UserInterest $userInterest,
-    ) {
-        $this->userInterest = $userInterest;
-    }
-
     public function getByUserId(int $userId): Collection
     {
-        return $this->userInterest->where('user_id', '=', $userId)->get();
+        return UserInterest::where('user_id', '=', $userId)->get();
     }
 
     public function getByUserAndTitle(int $userId, string $title): ?UserInterest
     {
-        return $this->userInterest
-            ->where('user_id', '=', $userId)
+        return UserInterest::where('user_id', '=', $userId)
             ->where('title', '=', $title)
             ->first();
     }
 
     public function add(int $userId, string $title): void
     {
-        $this->userInterest->create([
+        UserInterest::create([
             'user_id' => $userId,
             'title' => $title
         ]);

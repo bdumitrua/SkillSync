@@ -6,6 +6,7 @@ use App\Exceptions\UnprocessableContentException;
 use App\Helpers\ResponseHelper;
 use App\Http\Requests\User\AddUserInterestRequest;
 use App\Models\UserInterest;
+use App\Repositories\User\Interfaces\UserInterestRepositoryInterface;
 use App\Repositories\UserInterestRepository;
 use App\Services\User\Interfaces\UserInterestServiceInterface;
 use Illuminate\Http\Response;
@@ -14,11 +15,11 @@ use Illuminate\Support\Facades\Log;
 
 class UserInterestService implements UserInterestServiceInterface
 {
-    private UserInterestRepository $userInterestRepository;
+    private $userInterestRepository;
     private ?int $authorizedUserId;
 
     public function __construct(
-        UserInterestRepository $userInterestRepository,
+        UserInterestRepositoryInterface $userInterestRepository,
     ) {
         $this->userInterestRepository = $userInterestRepository;
         $this->authorizedUserId = Auth::id();

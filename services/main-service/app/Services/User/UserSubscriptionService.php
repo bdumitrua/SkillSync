@@ -5,8 +5,8 @@ namespace App\Services\User;
 use App\Helpers\ResponseHelper;
 use App\Http\Resources\UserSubscriptionResoruce;
 use App\Models\User;
-use App\Repositories\UserRepository;
-use App\Repositories\UserSubscriptionRepository;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\User\Interfaces\UserSubscriptionRepositoryInterface;
 use App\Services\User\Interfaces\UserSubscriptionServiceInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -16,13 +16,13 @@ use Illuminate\Support\Facades\Log;
 
 class UserSubscriptionService implements UserSubscriptionServiceInterface
 {
-    private UserSubscriptionRepository $userSubscriptionRepository;
-    private UserRepository $userRepository;
+    private $userSubscriptionRepository;
+    private $userRepository;
     private ?int $authorizedUserId;
 
     public function __construct(
-        UserSubscriptionRepository $userSubscriptionRepository,
-        UserRepository $userRepository,
+        UserSubscriptionRepositoryInterface $userSubscriptionRepository,
+        UserRepositoryInterface $userRepository,
     ) {
         $this->userSubscriptionRepository = $userSubscriptionRepository;
         $this->userRepository = $userRepository;

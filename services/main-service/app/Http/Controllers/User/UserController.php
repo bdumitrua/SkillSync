@@ -5,14 +5,14 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Models\User;
-use App\Services\User\UserService;
+use App\Services\User\Interfaces\UserServiceInterface;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
     private $userService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserServiceInterface $userService)
     {
         $this->userService = $userService;
     }

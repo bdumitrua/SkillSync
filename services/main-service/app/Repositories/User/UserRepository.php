@@ -15,17 +15,9 @@ class UserRepository implements UserRepositoryInterface
 {
     use UpdateFromDTO;
 
-    private User $user;
-
-    public function __construct(User $user)
-    {
-        $this->user = $user;
-    }
-
     protected function queryById($userId): Builder
     {
-        return $this->user->newQuery()
-            ->where('id', '=', $userId);
+        return User::query()->where('id', '=', $userId);
     }
 
     public function getById(int $userId): ?User
@@ -44,7 +36,7 @@ class UserRepository implements UserRepositoryInterface
 
     public function getByEmail(string $email): ?User
     {
-        return $this->user->where('email', '=', $email)->first();
+        return User::where('email', '=', $email)->first();
     }
 
     public function update(int $userId, UpdateUserDTO $dto): bool
