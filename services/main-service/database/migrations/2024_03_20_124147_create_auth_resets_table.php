@@ -13,12 +13,10 @@ return new class extends Migration
     {
         Schema::create('auth_resets', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id')->index();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('code');
             $table->boolean('confirmed')->default(false);
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
