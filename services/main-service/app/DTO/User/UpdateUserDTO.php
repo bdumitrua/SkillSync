@@ -20,15 +20,15 @@ class UpdateUserDTO
     {
         return [
             'first_name' => $this->firstName,
-            'last_name' => $this->firstName,
-            'email' => $this->firstName,
-            'birthdate' => $this->firstName,
-            'phone' => $this->firstName,
-            'nick_name' => $this->firstName,
-            'about' => $this->firstName,
-            'address' => $this->firstName,
-            'avatar' => $this->firstName,
-            'gender' => $this->firstName,
+            'last_name' => $this->lastName,
+            'email' => $this->email,
+            'birthdate' => $this->birthdate,
+            'phone' => $this->phone,
+            'nick_name' => $this->nickName,
+            'about' => $this->about,
+            'address' => $this->address,
+            'avatar' => $this->avatar,
+            'gender' => $this->gender,
         ];
     }
 }
