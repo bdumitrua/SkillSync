@@ -9,9 +9,9 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserDataResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
-use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\User\Interfaces\UserSubscriptionRepositoryInterface;
+use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Services\Team\Interfaces\TeamServiceInterface;
 use App\Services\User\Interfaces\UserServiceInterface;
@@ -28,22 +28,22 @@ class UserService implements UserServiceInterface
 
     private $teamService;
     private $postService;
+    private $tagService;
     private $userRepository;
-    private $tagRepository;
     private $userSubscriptionRepository;
     private ?int $authorizedUserId;
 
     public function __construct(
         TeamServiceInterface $teamService,
         PostServiceInterface $postService,
+        TagServiceInterface $tagService,
         UserRepositoryInterface $userRepository,
-        TagRepositoryInterface $tagRepository,
         UserSubscriptionRepositoryInterface $userSubscriptionRepository,
     ) {
         $this->teamService = $teamService;
         $this->postService = $postService;
+        $this->tagService = $tagService;
         $this->userRepository = $userRepository;
-        $this->tagRepository = $tagRepository;
         $this->userSubscriptionRepository = $userSubscriptionRepository;
         $this->authorizedUserId = Auth::id();
     }
@@ -65,23 +65,17 @@ class UserService implements UserServiceInterface
      */
     public function show(User $user): JsonResource
     {
-        $userData = $this->userRepository->getById($user->id);
-        $userData->canSubscribe =
+        $user = $this->userRepository->getById($user->id);
+        $user->canSubscribe =
             // Не сам пользователь
             $user->id !== $this->authorizedUserId
             // Нет подписки
             && empty($this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id));
 
 
-        $userData->tags = $this->tagRepository->getByUserId($userData->id);
-        $userData->subscribersCount = count($this->userSubscriptionRepository->subscribers($userData->id));
-        $userData->subscriptionsCount = count($this->userSubscriptionRepository->subscriptions($userData->id));
-        $userData->teams = $this->teamService->user($userData->id);
-        $userData->posts = $this->postService->user($userData->id);
+        $user = $this->assembleUserProfile($user);
 
-        return new UserResource(
-            $userData
-        );
+        return new UserResource($user);
     }
 
     /**
@@ -116,5 +110,16 @@ class UserService implements UserServiceInterface
         if (!$emailIsAvailable) {
             throw new UnprocessableContentException("This email is already taken");
         }
+    }
+
+    protected function assembleUserProfile(User $user): User
+    {
+        $user->tags = $this->tagService->user($user->id);
+        $user->teams = $this->teamService->user($user->id);
+        $user->posts = $this->postService->user($user->id);
+        $user->subscribersCount = count($this->userSubscriptionRepository->subscribers($user->id));
+        $user->subscriptionsCount = count($this->userSubscriptionRepository->subscriptions($user->id));
+
+        return $user;
     }
 }

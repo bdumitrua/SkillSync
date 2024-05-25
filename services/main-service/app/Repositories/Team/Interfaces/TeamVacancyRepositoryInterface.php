@@ -22,6 +22,13 @@ interface TeamVacancyRepositoryInterface
     public function getById(int $teamVacancyId): ?TeamVacancy;
 
     /**
+     * @param array $teamVacancyIds
+     * 
+     * @return Collection
+     */
+    public function getByIds(array $teamVacancyIds): Collection;
+
+    /**
      * @param TeamVacancy $teamVacancy
      * 
      * @return TeamVacancy

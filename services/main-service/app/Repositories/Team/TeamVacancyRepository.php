@@ -13,6 +13,11 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
         return new Collection();
     }
 
+    public function getByIds(array $teamVacancyIds): Collection
+    {
+        return new Collection();
+    }
+
     public function getById(int $teamVacancyId): ?TeamVacancy
     {
         return null;

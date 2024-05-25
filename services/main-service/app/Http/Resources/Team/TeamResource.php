@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources\Team;
 
+use App\Http\Resources\Message\ChatResource;
+use App\Http\Resources\User\UserDataResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,6 +16,9 @@ class TeamResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $chatData = (new ChatResource($this->chatData))->resolve();
+        $adminData = (new UserDataResource($this->adminData))->resolve();
+
         return [
             'name' => $this->name,
             'avatar' => $this->avatar,
@@ -21,11 +26,12 @@ class TeamResource extends JsonResource
             'email' => $this->email,
             'site' => $this->site,
             'chatId' => $this->chat_id,
-            // TODO CHAT DATA
-            'chatData' => $this->chatData,
+            'chatData' => $chatData,
             'adminId' => $this->admin_id,
-            // TODO ADMIN DATA
-            'adminData' => $this->adminData,
+            'adminData' => $adminData,
+            'posts' => $this->posts,
+            'tags' => $this->tags,
+            'links' => $this->links,
         ];
     }
 }

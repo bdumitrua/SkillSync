@@ -12,4 +12,11 @@ interface TagRepositoryInterface
      * @return Collection
      */
     public function getByUserId(int $userId): Collection;
+
+    /**
+     * @param int $teamId
+     * 
+     * @return Collection
+     */
+    public function getByTeamId(int $teamId): Collection;
 }

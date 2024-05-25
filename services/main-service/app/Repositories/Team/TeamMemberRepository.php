@@ -10,7 +10,7 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
 {
     public function getByTeamId(int $teamId): Collection
     {
-        return new Collection();
+        return TeamMember::where('team_id', '=', $teamId)->get();
     }
 
     public function getByUserId(int $userId): Collection

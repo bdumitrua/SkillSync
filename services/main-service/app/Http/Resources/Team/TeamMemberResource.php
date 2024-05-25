@@ -6,7 +6,7 @@ use App\Http\Resources\User\UserDataResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TeamApplicationResource extends JsonResource
+class TeamMemberResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,18 +16,13 @@ class TeamApplicationResource extends JsonResource
     public function toArray(Request $request): array
     {
         $userData = (new UserDataResource($this->userData))->resolve();
-        $vacancyData = (new TeamVacancyResource($this->vacancyData))->resolve();
-        $teamData = (new TeamDataResource($this->teamData))->resolve();
 
         return [
-            'text' => $this->text,
-            'status' => $this->status,
+            'teamId' => $this->team_id,
             'userId' => $this->user_id,
             'userData' => $userData,
-            'vacancyId' => $this->vacancy_id,
-            'vacancyData' => $vacancyData,
-            'teamId' => $this->team_id,
-            'teamData' => $teamData,
+            'isModerator' => $this->is_moderator,
+            'about' => $this->about,
         ];
     }
 }

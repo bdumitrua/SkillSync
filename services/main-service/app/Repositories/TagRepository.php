@@ -11,4 +11,9 @@ class TagRepository implements TagRepositoryInterface
     {
         return new Collection();
     }
+
+    public function getByTeamId(int $teamId): Collection
+    {
+        return new Collection();
+    }
 }

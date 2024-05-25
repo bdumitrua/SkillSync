@@ -6,7 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Models\Tag;
 use App\Http\Requests\CreateTagRequest;
+use App\Http\Resources\TagResource;
 use App\Repositories\Interfaces\TagRepositoryInterface;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class TagService implements TagServiceInterface
 {
@@ -18,6 +20,20 @@ class TagService implements TagServiceInterface
     ) {
         $this->tagRepository = $tagRepository;
         $this->authorizedUserId = Auth::id();
+    }
+
+    public function user(int $userId): JsonResource
+    {
+        return TagResource::collection(
+            $this->tagRepository->getByUserId($userId)
+        );
+    }
+
+    public function team(int $teamId): JsonResource
+    {
+        return TagResource::collection(
+            $this->tagRepository->getByTeamId($teamId)
+        );
     }
 
     public function create(CreateTagRequest $request): void

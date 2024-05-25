@@ -14,14 +14,19 @@ class Authenticate extends Middleware
     public function handle($request, Closure $next, ...$guards)
     {
         $this->authenticate($request, $guards);
-        $user = Auth::user();
 
         // Проверка даты инвалидации токена
+        $user = Auth::user();
         if ($user->token_invalid_before && JWTAuth::getPayload(JWTAuth::getToken())->get('iat') < $user->token_invalid_before->timestamp) {
             Auth::logout(true);
             throw new InvalidTokenException();
         }
 
         return $next($request);
+    }
+
+    protected function redirectTo(Request $request)
+    {
+        return 'auth.login';
     }
 }

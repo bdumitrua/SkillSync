@@ -14,12 +14,15 @@ class TeamVacancyResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $teamData = $this->teamData
+            ? (new TeamDataResource($this->teamData))->resolve()
+            : [];
+
         return [
             'title' => $this->title,
             'description' => $this->description,
             'teamId' => $this->team_id,
-            // TODO TEAM DATA
-            'teamData' => $this->teamData,
+            'teamData' => $teamData,
         ];
     }
 }
