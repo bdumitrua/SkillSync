@@ -73,7 +73,7 @@ class UserService implements UserServiceInterface
             && empty($this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id));
 
 
-        $userData->interests = $this->tagRepository->getByUserId($userData->id);
+        $userData->tags = $this->tagRepository->getByUserId($userData->id);
         $userData->subscribersCount = count($this->userSubscriptionRepository->subscribers($userData->id));
         $userData->subscriptionsCount = count($this->userSubscriptionRepository->subscriptions($userData->id));
         $userData->teams = $this->teamService->user($userData->id);
