@@ -2,7 +2,7 @@
 
 namespace App\DTO\Post;
 
-class CreatePostDTO
+class UpdatePostDTO
 {
     public string $text;
 

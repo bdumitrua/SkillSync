@@ -2,7 +2,7 @@
 
 namespace App\DTO\User;
 
-class UpdateUserDTO
+class CreateUserDTO
 {
     public string $firstName;
     public string $lastName;
