@@ -7,7 +7,7 @@ use App\Exceptions\UnprocessableContentException;
 use App\Helpers\ResponseHelper;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserDataResource;
-use App\Http\Resources\User\UserProfileResource;
+use App\Http\Resources\User\UserResource;
 use App\Models\User;
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
@@ -79,7 +79,7 @@ class UserService implements UserServiceInterface
         $userData->teams = $this->teamService->user($userData->id);
         $userData->posts = $this->postService->user($userData->id);
 
-        return new UserProfileResource(
+        return new UserResource(
             $userData
         );
     }
