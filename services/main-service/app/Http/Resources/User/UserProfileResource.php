@@ -3,6 +3,7 @@
 namespace App\Http\Resources\User;
 
 use App\Helpers\TimeHelper;
+use App\Http\Resources\TagResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -11,7 +12,7 @@ class UserProfileResource extends JsonResource
     public function toArray(Request $request): array
     {
         $age = TimeHelper::calculateAge($this->birthdate);
-        $interests = (UserInterestResource::collection($this->interests))->resolve();
+        $interests = (TagResource::collection($this->interests))->resolve();
 
         return [
             'id' => $this->id,

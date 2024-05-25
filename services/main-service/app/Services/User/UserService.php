@@ -9,7 +9,7 @@ use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserDataResource;
 use App\Http\Resources\User\UserProfileResource;
 use App\Models\User;
-use App\Repositories\User\Interfaces\UserInterestRepositoryInterface;
+use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\User\Interfaces\UserSubscriptionRepositoryInterface;
 use App\Services\Post\Interfaces\PostServiceInterface;
@@ -29,7 +29,7 @@ class UserService implements UserServiceInterface
     private $teamService;
     private $postService;
     private $userRepository;
-    private $userInterestRepository;
+    private $tagRepository;
     private $userSubscriptionRepository;
     private ?int $authorizedUserId;
 
@@ -37,13 +37,13 @@ class UserService implements UserServiceInterface
         TeamServiceInterface $teamService,
         PostServiceInterface $postService,
         UserRepositoryInterface $userRepository,
-        UserInterestRepositoryInterface $userInterestRepository,
+        TagRepositoryInterface $tagRepository,
         UserSubscriptionRepositoryInterface $userSubscriptionRepository,
     ) {
         $this->teamService = $teamService;
         $this->postService = $postService;
         $this->userRepository = $userRepository;
-        $this->userInterestRepository = $userInterestRepository;
+        $this->tagRepository = $tagRepository;
         $this->userSubscriptionRepository = $userSubscriptionRepository;
         $this->authorizedUserId = Auth::id();
     }
@@ -72,7 +72,8 @@ class UserService implements UserServiceInterface
             // Нет подписки
             && empty($this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id));
 
-        $userData->interests = $this->userInterestRepository->getByUserId($userData->id);
+
+        $userData->interests = $this->tagRepository->getByUserId($userData->id);
         $userData->subscribersCount = count($this->userSubscriptionRepository->subscribers($userData->id));
         $userData->subscriptionsCount = count($this->userSubscriptionRepository->subscriptions($userData->id));
         $userData->teams = $this->teamService->user($userData->id);

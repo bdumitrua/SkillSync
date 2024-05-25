@@ -4,22 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
-class TeamScope extends Model
+class Tag extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'title',
-        'team_id'
+        'entity_type',
+        'entity_id',
     ];
 
     /**
-     * @return BelongsTo
+     * @return MorphTo
      */
-    public function team(): BelongsTo
+    public function entity(): MorphTo
     {
-        return $this->belongsTo(Team::class);
+        return $this->morphTo();
     }
 }

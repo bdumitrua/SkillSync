@@ -33,14 +33,6 @@ class Team extends Model
     /**
      * @return HasMany
      */
-    public function scopes(): HasMany
-    {
-        return $this->hasMany(TeamScope::class);
-    }
-
-    /**
-     * @return HasMany
-     */
     public function members(): HasMany
     {
         return $this->hasMany(TeamMember::class);
@@ -68,5 +60,13 @@ class Team extends Model
     public function posts(): MorphMany
     {
         return $this->morphMany(Post::class, 'entity');
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function tags(): MorphMany
+    {
+        return $this->morphMany(Tag::class, 'entity');
     }
 }

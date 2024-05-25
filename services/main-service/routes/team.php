@@ -4,7 +4,6 @@ use App\Http\Controllers\Team\TeamApplicationController;
 use App\Http\Controllers\Team\TeamController;
 use App\Http\Controllers\Team\TeamLinkController;
 use App\Http\Controllers\Team\TeamMemberController;
-use App\Http\Controllers\Team\TeamScopeController;
 use App\Http\Controllers\Team\TeamVacancyController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,16 +55,6 @@ Route::prefix('teams')->name('teams.')->group(function () {
         Route::get('{team}', 'team')->name('team');
         Route::post('{team}', 'create')->name('create');
         Route::delete('{team}', 'delete')->name('delete');
-    });
-
-    /*
-    *   url: /teams/scopes/
-    *   name: teams.scopes.
-    */
-    Route::prefix('scopes')->name('scopes.')->controller(TeamScopeController::class)->group(function () {
-        Route::get('{team}', 'team')->name('team');
-        Route::post('{team}', 'create')->name('create');
-        Route::delete('{teamScope}', 'delete')->name('delete');
     });
 
     /*

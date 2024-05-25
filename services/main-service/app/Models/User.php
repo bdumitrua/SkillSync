@@ -111,18 +111,18 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * @return HasMany
-     */
-    public function interests(): HasMany
-    {
-        return $this->hasMany(UserInterest::class, 'user_id', 'id');
-    }
-
-    /**
      * @return MorphMany
      */
     public function posts(): MorphMany
     {
         return $this->morphMany(Post::class, 'entity');
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function tags(): MorphMany
+    {
+        return $this->morphMany(Tag::class, 'entity');
     }
 }

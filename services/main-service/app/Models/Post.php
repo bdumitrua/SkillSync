@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Post extends Model
@@ -26,7 +27,6 @@ class Post extends Model
         return $this->morphTo();
     }
 
-
     /**
      * @return HasMany
      */
@@ -41,5 +41,13 @@ class Post extends Model
     public function comments(): HasMany
     {
         return $this->hasMany(PostComment::class);
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function tags(): MorphMany
+    {
+        return $this->morphMany(Tag::class, 'entity');
     }
 }

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\User\UserInterestController;
 use App\Http\Controllers\User\UserSubscriptionController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,18 +23,6 @@ Route::prefix('users')->name('users.')->group(function () {
         Route::middleware(['prevent.self.action'])->group(function () {
             Route::post('subscribe/{user}', 'subscribe')->name('subscribe');
             Route::delete('unsubscribe/{user}', 'unsubscribe')->name('unsubscribe');
-        });
-    });
-
-    /*
-    *   url: /users/interests/
-    *   name: users.interests.
-    */
-    Route::prefix('interests')->name('interests.')->controller(UserInterestController::class)->group(function () {
-        Route::post('/', 'add')->name('add');
-
-        Route::middleware(['checkRights:userInterest'])->group(function () {
-            Route::delete('/{userInterest}', 'remove')->name('remove');
         });
     });
 });

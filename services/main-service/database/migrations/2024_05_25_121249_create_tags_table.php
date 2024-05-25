@@ -11,11 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_interests', function (Blueprint $table) {
+        Schema::create('tags', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('title')->index();
+            $table->text('title');
+            $table->string('entity_type');
+            $table->unsignedBigInteger('entity_id');
             $table->timestamps();
+
+            $table->index(['entity_type', 'entity_id']);
         });
     }
 
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_interests');
+        Schema::dropIfExists('tags');
     }
 };
