@@ -2,6 +2,8 @@
 
 namespace App\Services\Message\Interfaces;
 
+use App\Http\Requests\Message\CreateChatRequest;
+use App\Http\Requests\Message\UpdateChatRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,9 +22,18 @@ interface ChatServiceInterface
     public function show(int $chatId): JsonResource;
 
     /**
-     * @param Request $request
+     * @param int $teamId
+     * @param CreateChatRequest $request
      * 
      * @return void
      */
-    public function create(Request $request): void;
+    public function create(int $teamId, CreateChatRequest $request): void;
+
+    /**
+     * @param int $chatId
+     * @param UpdateChatRequest $request
+     * 
+     * @return void
+     */
+    public function update(int $chatId, UpdateChatRequest $request): void;
 }

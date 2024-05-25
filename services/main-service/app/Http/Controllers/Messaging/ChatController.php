@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Messaging;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Message\CreateChatRequest;
+use App\Http\Requests\Message\UpdateChatRequest;
+use App\Models\Team;
 use App\Services\Message\Interfaces\ChatServiceInterface;
 use Illuminate\Http\Request;
 
@@ -29,11 +32,17 @@ class ChatController extends Controller
         });
     }
 
-    // TODO REQUEST DATA 
-    public function create(Request $request)
+    public function create(Team $team, CreateChatRequest $request)
     {
-        return $this->handleServiceCall(function () use ($request) {
-            return $this->chatService->create($request);
+        return $this->handleServiceCall(function () use ($team, $request) {
+            return $this->chatService->create($team->id, $request);
+        });
+    }
+
+    public function update(int $chatId, UpdateChatRequest $request)
+    {
+        return $this->handleServiceCall(function () use ($chatId, $request) {
+            return $this->chatService->update($chatId, $request);
         });
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Messaging;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Message\CreateMesssageRequest;
 use App\Services\Message\Interfaces\MessageServiceInterface;
 use Illuminate\Http\Request;
 
@@ -15,10 +16,10 @@ class MessageController extends Controller
         $this->messageService = $messageService;
     }
 
-    public function send(int $chatId)
+    public function send(int $chatId, CreateMesssageRequest $request)
     {
-        return $this->handleServiceCall(function () use ($chatId) {
-            return $this->messageService->send($chatId);
+        return $this->handleServiceCall(function () use ($chatId, $request) {
+            return $this->messageService->send($chatId, $request);
         });
     }
 

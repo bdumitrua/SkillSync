@@ -2,9 +2,10 @@
 
 namespace App\Services\Message;
 
-use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
-use App\Services\Message\Interfaces\MessageServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Message\Interfaces\MessageServiceInterface;
+use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
+use App\Http\Requests\Message\CreateMesssageRequest;
 
 class MessageService implements MessageServiceInterface
 {
@@ -17,7 +18,7 @@ class MessageService implements MessageServiceInterface
         $this->authorizedUserId = Auth::id();
     }
 
-    public function send(int $chatId): void
+    public function send(int $chatId, CreateMesssageRequest $request): void
     {
         // 
     }
