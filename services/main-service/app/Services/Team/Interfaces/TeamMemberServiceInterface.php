@@ -22,8 +22,9 @@ interface TeamMemberServiceInterface
 
     /**
      * @param int $teamId
+     * @param int $userId
      * 
      * @return void
      */
-    public function delete(int $teamId): void;
+    public function delete(int $teamId, int $userId): void;
 }

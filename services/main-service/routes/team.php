@@ -54,7 +54,7 @@ Route::prefix('teams')->name('teams.')->group(function () {
     Route::prefix('members')->name('members.')->controller(TeamMemberController::class)->group(function () {
         Route::get('{team}', 'team')->name('team');
         Route::post('{team}', 'create')->name('create');
-        Route::delete('{team}', 'delete')->name('delete');
+        Route::delete('{team}/{user}', 'delete')->name('delete');
     });
 
     /*

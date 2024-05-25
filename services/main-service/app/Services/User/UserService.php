@@ -2,7 +2,7 @@
 
 namespace App\Services\User;
 
-use App\DTO\UpdateUserDTO;
+use App\DTO\User\UpdateUserDTO;
 use App\Exceptions\UnprocessableContentException;
 use App\Helpers\ResponseHelper;
 use App\Http\Requests\User\UpdateUserRequest;

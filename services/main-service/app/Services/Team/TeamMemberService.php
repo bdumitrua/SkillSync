@@ -37,7 +37,7 @@ class TeamMemberService implements TeamMemberServiceInterface
         // 
     }
 
-    public function delete(int $teamId): void
+    public function delete(int $teamId, int $userId): void
     {
         // 
     }

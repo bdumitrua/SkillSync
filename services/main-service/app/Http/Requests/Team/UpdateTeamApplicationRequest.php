@@ -22,7 +22,7 @@ class UpdateTeamApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'nullable|string|max:20',
+            'status' => 'required|string|max:20',
         ];
     }
 

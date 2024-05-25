@@ -3,7 +3,7 @@
 namespace App\Repositories\User\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
-use App\DTO\UpdateUserDTO;
+use App\DTO\User\UpdateUserDTO;
 use App\Models\User;
 
 interface UserRepositoryInterface

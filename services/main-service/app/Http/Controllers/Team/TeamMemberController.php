@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Team;
 
 use App\Http\Controllers\Controller;
 use App\Models\Team;
+use App\Models\User;
 use App\Services\Team\Interfaces\TeamMemberServiceInterface;
 use Illuminate\Http\Request;
 
@@ -30,10 +31,10 @@ class TeamMemberController extends Controller
         });
     }
 
-    public function delete(Team $team)
+    public function delete(Team $team, User $user)
     {
-        return $this->handleServiceCall(function () use ($team) {
-            return $this->teamMemberService->delete($team->id);
+        return $this->handleServiceCall(function () use ($team, $user) {
+            return $this->teamMemberService->delete($team->id, $user->id);
         });
     }
 }

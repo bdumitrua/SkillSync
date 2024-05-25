@@ -2,7 +2,7 @@
 
 namespace App\Repositories\User;
 
-use App\DTO\UpdateUserDTO;
+use App\DTO\User\UpdateUserDTO;
 use App\Helpers\ResponseHelper;
 use App\Models\User;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
