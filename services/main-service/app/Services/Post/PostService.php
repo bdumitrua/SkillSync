@@ -6,7 +6,7 @@ use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Models\Post;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Requests\Post\CreatePostRequest;
-use App\Http\Resources\PostResource;
+use App\Http\Resources\Post\PostResource;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;

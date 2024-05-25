@@ -2,7 +2,7 @@
 
 namespace App\Services\Post;
 
-use App\Http\Resources\PostCommentResource;
+use App\Http\Resources\Post\PostCommentResource;
 use App\Models\PostComment;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
 use App\Services\Post\Interfaces\PostCommentServiceInterface;

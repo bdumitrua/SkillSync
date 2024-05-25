@@ -3,7 +3,7 @@
 namespace App\Services\User;
 
 use App\Helpers\ResponseHelper;
-use App\Http\Resources\UserSubscriptionResoruce;
+use App\Http\Resources\User\UserSubscriptionResoruce;
 use App\Models\User;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\User\Interfaces\UserSubscriptionRepositoryInterface;

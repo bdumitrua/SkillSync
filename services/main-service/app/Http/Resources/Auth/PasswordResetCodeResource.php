@@ -1,25 +1,28 @@
 <?php
 
-namespace App\Http\Resources;
+namespace App\Http\Resources\Auth;
 
+use App\Http\Resources\ActionsResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
-class RegistrationCodeResource extends JsonResource
+class PasswordResetCodeResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-        $registrationId = $this->resource;
+        $resetId = $this->resource;
+
         $actions = (array) ActionsResource::collection([
             [
                 "ConfirmCode",
-                "confirmRegistration",
-                ['authRegistration' => $registrationId],
+                "confirmPasswordReset",
+                ['authReset' => $resetId],
             ]
         ]);
 
         return [
-            'registrationId' => $registrationId,
+            'resetId' => $resetId,
             'actions' => $actions,
         ];
     }
