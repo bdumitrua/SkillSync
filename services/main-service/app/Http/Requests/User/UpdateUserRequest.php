@@ -3,6 +3,7 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\EmailRule;
 
 class UpdateUserRequest extends FormRequest
 {
@@ -17,7 +18,7 @@ class UpdateUserRequest extends FormRequest
             // Main
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255',
+            'email' => [new EmailRule()],
             'birthdate' => 'required|date|date_format:Y-m-d',
 
             // Additional
@@ -40,10 +41,6 @@ class UpdateUserRequest extends FormRequest
             'lastName.required' => 'Имя является обязательным полем.',
             'lastName.string'   => 'Имя должно быть строкой.',
             'lastName.max'      => 'Имя может быть не длиннее 255 символов.',
-
-            'email.required'    => 'Почта является обязательным полем.',
-            'email.email'   => 'Введена некорректная почта.',
-            'email.max'     => 'Длина почты может быть не более 255 символов.',
 
             'birthdate.required' => 'Дата обязательна к заполнению.',
             'birthdate.date' => 'Некорректный формат даты.',

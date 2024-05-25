@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\User;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\PasswordRule;
+use App\Rules\EmailRule;
 
 class CreateUserRequest extends FormRequest
 {
@@ -16,8 +19,8 @@ class CreateUserRequest extends FormRequest
         return [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'password' => 'required|string|min:8',
-            'email' => 'required|string|email|max:255|unique:users',
+            'password' => [new PasswordRule()],
+            'email' => [new EmailRule(), Rule::unique('users', 'email')],
             'birthdate' => 'required|date|date_format:Y-m-d',
         ];
     }

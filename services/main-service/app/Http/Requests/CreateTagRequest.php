@@ -23,6 +23,7 @@ class CreateTagRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:2|max:20'
+            // TODO VALIDATE ENTITY TYPE AND ID
         ];
     }
 

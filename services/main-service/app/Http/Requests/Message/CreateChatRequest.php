@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Message;
 
+use App\Rules\EntityIdRule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateChatRequest extends FormRequest
@@ -24,7 +25,7 @@ class CreateChatRequest extends FormRequest
         return [
             'name' => 'required|string|max:50',
             'avatarUrl' => 'nullable|string',
-            'chatId' => 'required|integer|min:1',
+            'chatId' => [new EntityIdRule()],
         ];
     }
 
@@ -36,10 +37,6 @@ class CreateChatRequest extends FormRequest
             'name.max' => 'Name cannot exceed 255 characters.',
 
             'avatarUrl.string' => 'Avatar URL must be a string.',
-
-            'chatId.required' => 'Chat ID is required.',
-            'chatId.integer' => 'Chat ID must be an integer.',
-            'chatId.min' => 'Chat ID must be greater than 0.',
         ];
     }
 }
