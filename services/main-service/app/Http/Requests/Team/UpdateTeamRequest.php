@@ -22,7 +22,7 @@ class UpdateTeamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string|max:30',
+            'name' => 'required|string|max:30',
             'avatar' => 'nullable|url',
             'description' => 'nullable|string|max:200',
             'email' => 'nullable|email',
@@ -34,6 +34,7 @@ class UpdateTeamRequest extends FormRequest
     public function messages()
     {
         return [
+            'name.required' => 'Name field is required.',
             'name.max' => 'Name cannot exceed 30 characters.',
             'avatar.url' => 'Invalid URL format for Avatar.',
             'description.max' => 'Description cannot exceed 200 characters.',

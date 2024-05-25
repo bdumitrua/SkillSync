@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Team\Interfaces;
 
+use App\DTO\Team\CreateTeamDTO;
+use App\DTO\Team\UpdateTeamDTO;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -20,13 +22,6 @@ interface TeamRepositoryInterface
     public function getById(int $teamId): ?Team;
 
     /**
-     * @param int $userId
-     * 
-     * @return Collection
-     */
-    public function getByUserId(int $userId): Collection;
-
-    /**
      * @param array $teamIds
      * 
      * @return Collection
@@ -34,24 +29,24 @@ interface TeamRepositoryInterface
     public function getByIds(array $teamIds): Collection;
 
     /**
-     * @param Team $team
+     * @param CreateTeamDTO $dto
      * 
      * @return Team
      */
-    public function create(Team $team): Team;
+    public function create(CreateTeamDTO $dto): Team;
 
     /**
      * @param Team $team
-     * @param array $data
+     * @param UpdateTeamDTO $dto
      * 
-     * @return Team|null
+     * @return void
      */
-    public function update(Team $team, array $data): ?Team;
+    public function update(Team $team, UpdateTeamDTO $dto): void;
 
     /**
      * @param Team $team
      * 
-     * @return Team|null
+     * @return void
      */
-    public function delete(Team $team): ?Team;
+    public function delete(Team $team): void;
 }

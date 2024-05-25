@@ -2,6 +2,7 @@
 
 namespace App\Services\Team;
 
+use App\DTO\Team\CreateTeamApplicationDTO;
 use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
 use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use App\Models\TeamVacancy;
@@ -12,15 +13,20 @@ use App\Http\Resources\Team\TeamApplicationResource;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Traits\CreateDTO;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class TeamApplicationService implements TeamApplicationServiceInterface
 {
+    use CreateDTO;
+
     protected $userRepository;
     protected $teamRepository;
     protected $vacancyRepository;
     protected $teamApplicationRepository;
+    protected ?int $authorizedUserId;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
@@ -32,6 +38,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
         $this->teamRepository = $teamRepository;
         $this->vacancyRepository = $vacancyRepository;
         $this->teamApplicationRepository = $teamApplicationRepository;
+        $this->authorizedUserId = Auth::id();
     }
 
     public function show(int $teamApplicationId): JsonResource
@@ -58,19 +65,32 @@ class TeamApplicationService implements TeamApplicationServiceInterface
         return TeamApplicationResource::collection($teamApplications);
     }
 
-    public function create(TeamVacancy $teamVacancy, CreateTeamApplicationRequest $request): void
+    public function create(CreateTeamApplicationRequest $request): void
     {
-        // 
+        /** @var CreateTeamApplicationDTO */
+        $createApplicationDTO = $this->createDTO($request, CreateTeamApplicationDTO::class);
+        $createApplicationDTO->userId = $this->authorizedUserId;
+
+        $alreadyApplied = $this->teamApplicationRepository->userAppliedToVacancy(
+            $this->authorizedUserId,
+            $createApplicationDTO->vacancyId
+        );
+
+        if ($alreadyApplied) {
+            return;
+        }
+
+        $this->teamApplicationRepository->create($createApplicationDTO);
     }
 
     public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $request): void
     {
-        // 
+        $this->teamApplicationRepository->update($teamApplication, $request->status);
     }
 
     public function delete(TeamApplication $teamApplication): void
     {
-        // 
+        $this->teamApplicationRepository->delete($teamApplication);
     }
 
     protected function assembleApplicationsData(Collection $teamApplications): Collection

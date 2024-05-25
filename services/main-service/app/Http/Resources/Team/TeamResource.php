@@ -16,10 +16,11 @@ class TeamResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $chatData = (new ChatResource($this->chatData))->resolve();
-        $adminData = (new UserDataResource($this->adminData))->resolve();
+        $chatData = $this->chatData ? (new ChatResource($this->chatData))->resolve() : [];
+        $adminData = $this->adminData ? (new UserDataResource($this->adminData))->resolve() : [];
 
         return [
+            'id' => $this->id,
             'name' => $this->name,
             'avatar' => $this->avatar,
             'description' => $this->description,

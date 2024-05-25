@@ -7,10 +7,10 @@ class CreateTeamDTO
     public string $name;
     public int $adminId;
 
-    public ?string $avatar;
-    public ?string $description;
-    public ?string $email;
-    public ?string $site;
+    public ?string $avatar = null;
+    public ?string $description = null;
+    public ?string $email = null;
+    public ?string $site = null;
 
     public function toArray(): array
     {

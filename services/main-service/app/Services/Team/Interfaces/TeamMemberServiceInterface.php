@@ -3,6 +3,7 @@
 namespace App\Services\Team\Interfaces;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Requests\Team\CreateTeamMemberRequest;
 
 interface TeamMemberServiceInterface
 {
@@ -15,10 +16,11 @@ interface TeamMemberServiceInterface
 
     /**
      * @param int $teamId
+     * @param CreateTeamMemberRequest $request
      * 
      * @return void
      */
-    public function create(int $teamId): void;
+    public function create(int $teamId, CreateTeamMemberRequest $request): void;
 
     /**
      * @param int $teamId

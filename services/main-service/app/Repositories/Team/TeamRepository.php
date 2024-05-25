@@ -2,44 +2,48 @@
 
 namespace App\Repositories\Team;
 
+use App\DTO\Team\CreateTeamDTO;
+use App\DTO\Team\UpdateTeamDTO;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Models\Team;
+use App\Traits\UpdateFromDTO;
 use Illuminate\Database\Eloquent\Collection;
 
 class TeamRepository implements TeamRepositoryInterface
 {
+    use UpdateFromDTO;
+
     public function getAll(): Collection
     {
-        return new Collection();
+        return Team::get();
     }
 
     public function getById(int $teamId): ?Team
     {
-        return null;
-    }
-
-    public function getByUserId(int $userId): Collection
-    {
-        return new Collection();
+        return Team::find($teamId);
     }
 
     public function getByIds(array $teamIds): Collection
     {
-        return new Collection();
+        return Team::whereIn('id', $teamIds)->get();
     }
 
-    public function create(Team $team): Team
+    public function create(CreateTeamDTO $dto): Team
     {
-        return new Team();
+        $newTeam = Team::create(
+            $dto->toArray()
+        );
+
+        return $newTeam;
     }
 
-    public function update(Team $team, array $data): ?Team
+    public function update(Team $team, UpdateTeamDTO $dto): void
     {
-        return null;
+        $this->updateFromDto($team, $dto);
     }
 
-    public function delete(Team $team): ?Team
+    public function delete(Team $team): void
     {
-        return null;
+        $team->delete();
     }
 }

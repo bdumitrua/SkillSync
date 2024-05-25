@@ -2,40 +2,53 @@
 
 namespace App\Repositories\Team;
 
-use App\Http\Requests\Team\UpdateTeamApplicationRequest;
-use App\Models\TeamApplication;
-use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
+use App\Models\TeamApplication;
+use App\DTO\Team\CreateTeamApplicationDTO;
 
 class TeamApplicationRepository implements TeamApplicationRepositoryInterface
 {
     public function getByTeamId(int $teamId): Collection
     {
-        return new Collection();
+        return TeamApplication::where('team_id', '=', $teamId)->get();
     }
 
     public function getByVacancyId(int $teamVacancyId): Collection
     {
-        return new Collection();
+        return TeamApplication::where('vacancy_id', '=', $teamVacancyId)->get();
     }
 
     public function getById(int $teamApplicationId): ?TeamApplication
     {
-        return new TeamApplication();
+        return TeamApplication::find($teamApplicationId);
     }
 
-    public function create(TeamApplication $teamApplicationModel): ?TeamApplication
+    public function userAppliedToVacancy(int $userId, int $teamVacancyId): bool
     {
-        return new TeamApplication();
+        return TeamApplication::where('user_id', '=', $userId)
+            ->where('vacancy_id', '=', $teamVacancyId)
+            ->exists();
     }
 
-    public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $updateTeamApplicationDto): TeamApplication
+    public function create(CreateTeamApplicationDTO $dto): TeamApplication
     {
-        return new TeamApplication();
+        $newApplication = TeamApplication::create(
+            $dto->toArray()
+        );
+
+        return $newApplication;
     }
 
-    public function delete(TeamApplication $teamApplication): ?TeamApplication
+    public function update(TeamApplication $teamApplication, string $status): void
     {
-        return null;
+        $teamApplication->update([
+            'status' => $status
+        ]);
+    }
+
+    public function delete(TeamApplication $teamApplication): void
+    {
+        $teamApplication->delete();
     }
 }

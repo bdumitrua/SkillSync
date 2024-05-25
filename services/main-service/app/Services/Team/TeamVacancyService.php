@@ -2,6 +2,8 @@
 
 namespace App\Services\Team;
 
+use App\DTO\Team\CreateTeamVacancyDTO;
+use App\DTO\Team\UpdateTeamVacancyDTO;
 use App\Services\Team\Interfaces\TeamVacancyServiceInterface;
 use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
 use App\Models\TeamVacancy;
@@ -9,11 +11,14 @@ use App\Http\Requests\Team\UpdateTeamVacancyRequest;
 use App\Http\Requests\Team\CreateTeamVacancyRequest;
 use App\Http\Resources\Team\TeamVacancyResource;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
+use App\Traits\CreateDTO;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TeamVacancyService implements TeamVacancyServiceInterface
 {
+    use CreateDTO;
+
     protected $teamVacancyRepository;
     protected $teamRepository;
 
@@ -43,17 +48,23 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function create(int $teamId, CreateTeamVacancyRequest $request): void
     {
-        // 
+        /** @var CreateTeamVacancyDTO */
+        $createTeamVacancyDTO = $this->createDTO($request, CreateTeamVacancyDTO::class);
+        $createTeamVacancyDTO->teamId = $teamId;
+
+        $this->teamVacancyRepository->create($createTeamVacancyDTO);
     }
 
     public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyRequest $request): void
     {
-        // 
+        $updateTeamVacancyDTO = $this->createDTO($request, UpdateTeamVacancyDTO::class);
+
+        $this->teamVacancyRepository->update($teamVacancy, $updateTeamVacancyDTO);
     }
 
     public function delete(TeamVacancy $teamVacancy): void
     {
-        // 
+        $this->teamVacancyRepository->delete($teamVacancy);
     }
 
     protected function assembleVacanciesData(Collection $teamVacancies): Collection

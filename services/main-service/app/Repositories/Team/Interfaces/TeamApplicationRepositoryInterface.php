@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Team\Interfaces;
 
-use App\Http\Requests\Team\UpdateTeamApplicationRequest;
+use App\DTO\Team\CreateTeamApplicationDTO;
 use App\Models\TeamApplication;
 use Illuminate\Support\Collection;
 
@@ -30,24 +30,32 @@ interface TeamApplicationRepositoryInterface
     public function getById(int $teamApplicationId): ?TeamApplication;
 
     /**
-     * @param TeamApplication $teamApplicationModel
+     * @param int $userId
+     * @param int $teamVacancyId
      * 
-     * @return TeamApplication|null
+     * @return bool
      */
-    public function create(TeamApplication $teamApplicationModel): ?TeamApplication;
+    public function userAppliedToVacancy(int $userId, int $teamVacancyId): bool;
 
     /**
-     * @param TeamApplication $teamApplication
-     * @param UpdateTeamApplicationRequest $updateTeamApplicationDto
+     * @param CreateTeamApplicationDTO $dto
      * 
      * @return TeamApplication
      */
-    public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $updateTeamApplicationDto): TeamApplication;
+    public function create(CreateTeamApplicationDTO $dto): TeamApplication;
+
+    /**
+     * @param TeamApplication $teamApplication
+     * @param string $status
+     * 
+     * @return void
+     */
+    public function update(TeamApplication $teamApplication, string $status): void;
 
     /**
      * @param TeamApplication $teamApplication
      * 
-     * @return TeamApplication|null
+     * @return void
      */
-    public function delete(TeamApplication $teamApplication): ?TeamApplication;
+    public function delete(TeamApplication $teamApplication): void;
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Team;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Team\CreateTeamLinkRequest;
+use App\Http\Requests\Team\UpdateTeamLinkRequest;
 use App\Models\Team;
 use App\Models\TeamLink;
 use App\Services\Team\Interfaces\TeamLinkServiceInterface;
@@ -24,17 +26,17 @@ class TeamLinkController extends Controller
         });
     }
 
-    public function create(Team $team)
+    public function create(Team $team, CreateTeamLinkRequest $request)
     {
-        return $this->handleServiceCall(function () use ($team) {
-            return $this->teamLinkService->create($team->id);
+        return $this->handleServiceCall(function () use ($team, $request) {
+            return $this->teamLinkService->create($team->id, $request);
         });
     }
 
-    public function update(TeamLink $teamLink)
+    public function update(TeamLink $teamLink, UpdateTeamLinkRequest $request)
     {
-        return $this->handleServiceCall(function () use ($teamLink) {
-            return $this->teamLinkService->update($teamLink);
+        return $this->handleServiceCall(function () use ($teamLink, $request) {
+            return $this->teamLinkService->update($teamLink, $request);
         });
     }
 

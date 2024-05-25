@@ -2,15 +2,22 @@
 
 namespace App\Services\Team;
 
-use App\Http\Resources\Team\TeamMemberResource;
-use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
-use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Services\Team\Interfaces\TeamMemberServiceInterface;
-use Illuminate\Database\Eloquent\Collection;
+use App\DTO\Team\CreateTeamMemberDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Database\Eloquent\Collection;
+use App\Services\Team\Interfaces\TeamMemberServiceInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Http\Resources\Team\TeamMemberResource;
+use App\Http\Requests\Team\CreateTeamMemberRequest;
+use App\Traits\CreateDTO;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TeamMemberService implements TeamMemberServiceInterface
 {
+    use CreateDTO;
+
     protected $teamMemberRepository;
     protected $userRepository;
 
@@ -32,14 +39,37 @@ class TeamMemberService implements TeamMemberServiceInterface
         );
     }
 
-    public function create(int $teamId): void
+    public function create(int $teamId, CreateTeamMemberRequest $request): void
     {
-        // 
+        /** @var CreateTeamMemberDTO */
+        $createTeamMemberDTO = $this->createDTO($request, CreateTeamMemberDTO::class);
+        $createTeamMemberDTO->teamId = $teamId;
+
+        $isMember = $this->teamMemberRepository->userIsMember(
+            $createTeamMemberDTO->teamId,
+            $createTeamMemberDTO->userId
+        );
+
+        if ($isMember) {
+            return;
+        }
+
+        $this->teamMemberRepository->addMember($createTeamMemberDTO);
     }
 
     public function delete(int $teamId, int $userId): void
     {
-        // 
+        $membership = $this->teamMemberRepository->getMemberByBothIds(
+            $teamId,
+            $userId
+        );
+
+        if (empty($membership)) {
+            // TODO CUSTOM EXCEPTION
+            throw new HttpException(400, "This user is not member of this team");
+        }
+
+        $this->teamMemberRepository->removeMember($membership);
     }
 
     protected function assebmleMembersData(Collection $teamMembers): Collection

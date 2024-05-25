@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Team\Interfaces;
 
+use App\DTO\Team\CreateTeamMemberDTO;
 use App\Models\TeamMember;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -13,12 +14,14 @@ interface TeamMemberRepositoryInterface
      * @return Collection
      */
     public function getByTeamId(int $teamId): Collection;
+
     /**
      * @param int $userId
      * 
      * @return Collection
      */
     public function getByUserId(int $userId): Collection;
+
     /**
      * @param int $teamId
      * @param int $userId
@@ -26,17 +29,26 @@ interface TeamMemberRepositoryInterface
      * @return TeamMember|null
      */
     public function getMemberByBothIds(int $teamId, int $userId): ?TeamMember;
+
+    /**
+     * @param int $teamId
+     * @param int $userId
+     * 
+     * @return bool
+     */
+    public function userIsMember(int $teamId, int $userId): bool;
+
+    /**
+     * @param CreateTeamMemberDTO $dto
+     * 
+     * @return void
+     */
+    public function addMember(CreateTeamMemberDTO $dto): void;
+
     /**
      * @param TeamMember $teamMember
      * 
-     * @return TeamMember|null
+     * @return void
      */
-    public function addMember(TeamMember $teamMember): ?TeamMember;
-    /**
-     * @param int $teamId
-     * @param array $data
-     * 
-     * @return bool|null
-     */
-    public function removeMember(int $teamId, array $data): ?bool;
+    public function removeMember(TeamMember $teamMember): void;
 }

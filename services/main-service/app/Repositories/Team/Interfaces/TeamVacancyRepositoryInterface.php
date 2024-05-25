@@ -2,6 +2,8 @@
 
 namespace App\Repositories\Team\Interfaces;
 
+use App\DTO\Team\CreateTeamVacancyDTO;
+use App\DTO\Team\UpdateTeamVacancyDTO;
 use App\Models\TeamVacancy;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -29,24 +31,24 @@ interface TeamVacancyRepositoryInterface
     public function getByIds(array $teamVacancyIds): Collection;
 
     /**
-     * @param TeamVacancy $teamVacancy
+     * @param CreateTeamVacancyDTO $dto
      * 
      * @return TeamVacancy
      */
-    public function create(TeamVacancy $teamVacancy): TeamVacancy;
+    public function create(CreateTeamVacancyDTO $dto): TeamVacancy;
 
     /**
      * @param TeamVacancy $teamVacancy
-     * @param array $data
+     * @param UpdateTeamVacancyDTO $dto
      * 
-     * @return TeamVacancy
+     * @return void
      */
-    public function update(TeamVacancy $teamVacancy, array $data): TeamVacancy;
+    public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyDTO $dto): void;
 
     /**
      * @param TeamVacancy $teamVacancy
      * 
-     * @return TeamVacancy|null
+     * @return void
      */
-    public function delete(TeamVacancy $teamVacancy): ?TeamVacancy;
+    public function delete(TeamVacancy $teamVacancy): void;
 }

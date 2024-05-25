@@ -32,12 +32,11 @@ interface TeamApplicationServiceInterface
     public function vacancy(int $teamVacancyId): JsonResource;
 
     /**
-     * @param TeamVacancy $teamVacancy
      * @param CreateTeamApplicationRequest $request
      * 
      * @return void
      */
-    public function create(TeamVacancy $teamVacancy, CreateTeamApplicationRequest $request): void;
+    public function create(CreateTeamApplicationRequest $request): void;
 
     /**
      * @param TeamApplication $teamApplication
