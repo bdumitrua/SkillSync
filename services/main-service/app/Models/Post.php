@@ -50,4 +50,20 @@ class Post extends Model
     {
         return $this->morphMany(Tag::class, 'entity');
     }
+
+    /**
+     * @return bool
+     */
+    public function createdByUser(): bool
+    {
+        return $this->entity_type === User::class;
+    }
+
+    /**
+     * @return bool
+     */
+    public function createdByTeam(): bool
+    {
+        return $this->entity_type === Team::class;
+    }
 }

@@ -7,55 +7,74 @@ use App\Models\Post;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Requests\Post\CreatePostRequest;
 use App\Http\Resources\Post\PostResource;
+use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class PostService implements PostServiceInterface
 {
+    protected $tagRepository;
     protected $postRepository;
+    protected $userRepository;
+    protected $teamRepository;
     protected ?int $authorizedUserId;
 
-    public function __construct(PostRepositoryInterface $postRepository)
-    {
+    public function __construct(
+        TagRepositoryInterface $tagRepository,
+        PostRepositoryInterface $postRepository,
+        UserRepositoryInterface $userRepository,
+        TeamRepositoryInterface $teamRepository,
+
+    ) {
+        $this->tagRepository = $tagRepository;
         $this->postRepository = $postRepository;
+        $this->userRepository = $userRepository;
+        $this->teamRepository = $teamRepository;
         $this->authorizedUserId = Auth::id();
     }
 
     public function index(): JsonResource
     {
-        return PostResource::collection(
-            $this->postRepository->getAll()
-        );
+        $posts = $this->postRepository->getAll();
+        $posts = $this->assemblePostsData($posts);
+
+        return PostResource::collection($posts);
     }
 
     public function feed(): JsonResource
     {
-        return PostResource::collection(
-            $this->postRepository->feed($this->authorizedUserId)
-        );
+        $feedPosts = $this->postRepository->feed($this->authorizedUserId);
+        $feedPosts = $this->assemblePostsData($feedPosts);
+
+        return PostResource::collection($feedPosts);
     }
 
     public function show(Post $post): JsonResource
     {
-        return PostResource::collection(
-            $this->postRepository->getById($post->id)
-        );
+        $post = $this->postRepository->getById($post->id);
+        $post = $this->assemblePostsData(new Collection([$post]))->first();
+
+        return new PostResource($post);
     }
 
     public function user(int $userId): JsonResource
     {
-        return PostResource::collection(
-            $this->postRepository->getByUserId($userId)
-        );
+        $userPosts = $this->postRepository->getByUserId($userId);
+        $userPosts = $this->assemblePostsData($userPosts);
+
+        return PostResource::collection($userPosts);
     }
 
     public function team(int $teamId): JsonResource
     {
-        return PostResource::collection(
-            $this->postRepository->getByTeamId($teamId)
-        );
+        $teamPosts = $this->postRepository->getByTeamId($teamId);
+        $teamPosts = $this->assemblePostsData($teamPosts);
+
+        return PostResource::collection($teamPosts);
     }
 
     public function create(CreatePostRequest $request): void
@@ -71,5 +90,51 @@ class PostService implements PostServiceInterface
     public function delete(Post $post): void
     {
         //
+    }
+
+    protected function assemblePostsData(Collection $posts): Collection
+    {
+        $this->setPostsEntityData($posts);
+        $this->setPostsTagsData($posts);
+
+        return $posts;
+    }
+
+    // TODO REFACTOR 
+    protected function setPostsEntityData(Collection &$posts): void
+    {
+        $userIds = [];
+        $teamIds = [];
+
+        /** @var Post */
+        foreach ($posts as $post) {
+            if ($post->createdByUser()) {
+                $userIds[] = $post->entity_id;
+            } elseif ($post->createdByTeam()) {
+                $teamIds[] = $post->entity_id;
+            }
+        }
+
+        $usersData = $this->userRepository->getByIds($userIds);
+        $teamsData = $this->teamRepository->getByIds($teamIds);
+
+        /** @var Post */
+        foreach ($posts as $post) {
+            if ($post->createdByUser()) {
+                $post->entityData = $usersData->where('id', $post->entity_id)->first();
+            } elseif ($post->createdByTeam()) {
+                $post->entityData = $teamsData->where('id', $post->entity_id)->first();
+            }
+        }
+    }
+
+    protected function setPostsTagsData(Collection &$posts): void
+    {
+        $postIds = $posts->pluck('id')->unique()->all();
+        $postsTags = $this->tagRepository->getByPostIds($postIds);
+
+        foreach ($posts as $post) {
+            $post->tagsData = $postsTags->where('entity_id', $post->id)->first();
+        }
     }
 }

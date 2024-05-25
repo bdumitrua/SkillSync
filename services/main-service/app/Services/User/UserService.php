@@ -112,6 +112,7 @@ class UserService implements UserServiceInterface
         }
     }
 
+    // TODO CHANGE RN
     protected function assembleUserProfile(User $user): User
     {
         $user->tags = $this->tagService->user($user->id);

@@ -12,7 +12,7 @@ interface PostCommentServiceInterface
      * 
      * @return JsonResource
      */
-    public function show(int $postId): JsonResource;
+    public function post(int $postId): JsonResource;
 
     /**
      * @param int $postId

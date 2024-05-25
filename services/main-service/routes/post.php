@@ -28,7 +28,7 @@ Route::prefix('posts')->name('posts.')->group(function () {
     *   name: posts.likes.
     */
     Route::prefix('likes')->name('likes.')->controller(PostLikeController::class)->group(function () {
-        Route::get('show/{post}', 'show')->name('show');
+        Route::get('post/{post}', 'post')->name('post');
         Route::get('user/{user}', 'user')->name('user');
         Route::post('{post}', 'create')->name('create');
         Route::delete('{post}', 'delete')->name('delete');
@@ -39,7 +39,7 @@ Route::prefix('posts')->name('posts.')->group(function () {
     *   name: posts.comments.
     */
     Route::prefix('comments')->name('comments.')->controller(PostCommentController::class)->group(function () {
-        Route::get('show/{post}', 'show')->name('show');
+        Route::get('{post}', 'post')->name('post');
         Route::post('{post}', 'create')->name('create');
         Route::delete('{postComment}', 'delete')->name('delete');
 

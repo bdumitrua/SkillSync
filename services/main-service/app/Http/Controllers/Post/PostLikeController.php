@@ -17,10 +17,10 @@ class PostLikeController extends Controller
         $this->postLikeService = $postLikeService;
     }
 
-    public function show(Post $post)
+    public function post(Post $post)
     {
         return $this->handleServiceCall(function () use ($post) {
-            return $this->postLikeService->show($post->id);
+            return $this->postLikeService->post($post->id);
         });
     }
 

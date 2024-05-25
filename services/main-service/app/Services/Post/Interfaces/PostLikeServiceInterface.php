@@ -13,7 +13,7 @@ interface PostLikeServiceInterface
      * 
      * @return JsonResource
      */
-    public function show(int $postId): JsonResource;
+    public function post(int $postId): JsonResource;
 
     /**
      * @param int $userId

@@ -17,10 +17,10 @@ class PostCommentController extends Controller
         $this->postCommentService = $postCommentService;
     }
 
-    public function show(Post $post)
+    public function post(Post $post)
     {
         return $this->handleServiceCall(function () use ($post) {
-            return $this->postCommentService->show($post->id);
+            return $this->postCommentService->post($post->id);
         });
     }
 
