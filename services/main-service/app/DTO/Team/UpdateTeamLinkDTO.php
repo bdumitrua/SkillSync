@@ -8,8 +8,8 @@ class UpdateTeamLinkDTO
     public string $url;
     public bool $isPrivate;
 
-    public ?string $text;
-    public ?string $iconType;
+    public ?string $text = null;
+    public ?string $iconType = null;
 
     public function toArray(): array
     {

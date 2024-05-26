@@ -6,7 +6,7 @@ class UpdateChatDTO
 {
     public string $name;
 
-    public ?string $avatarUrl;
+    public ?string $avatarUrl = null;
 
     public function toArray(): array
     {

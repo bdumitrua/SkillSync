@@ -8,7 +8,7 @@ class CreateTeamMemberDTO
     public string $teamId;
     public bool $isModerator;
 
-    public ?string $about;
+    public ?string $about = null;
 
     public function toArray(): array
     {

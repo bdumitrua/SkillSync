@@ -6,7 +6,7 @@ class UpdatePostDTO
 {
     public string $text;
 
-    public ?string $mediaUrl;
+    public ?string $mediaUrl = null;
 
     public function toArray(): array
     {
