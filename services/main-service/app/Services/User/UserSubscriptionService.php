@@ -47,12 +47,12 @@ class UserSubscriptionService implements UserSubscriptionServiceInterface
 
     public function subscribe(User $user): Response
     {
-        $subscription = $this->userSubscriptionRepository->getByBothIds(
+        $isSubscribed = $this->userSubscriptionRepository->userIsSubscribedToUser(
             $this->authorizedUserId,
             $user->id
         );
 
-        if (!empty($subscription)) {
+        if ($isSubscribed) {
             return ResponseHelper::noContent();
         }
 

@@ -15,6 +15,14 @@ interface UserSubscriptionRepositoryInterface
     function getByBothIds(int $subscriberId, int $subscribedId): ?UserSubscription;
 
     /**
+     * @param int $subscriberId
+     * @param int $subscribedId
+     * 
+     * @return bool
+     */
+    function userIsSubscribedToUser(int $subscriberId, int $subscribedId): bool;
+
+    /**
      * @param int $userId
      * 
      * @return array
