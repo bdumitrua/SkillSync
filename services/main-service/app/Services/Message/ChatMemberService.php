@@ -27,11 +27,13 @@ class ChatMemberService implements ChatMemberServiceInterface
 
     public function add(int $chatId, int $userId): void
     {
+        // TODO GATE: Check if authorized user is moderator
         // 
     }
 
     public function remove(int $chatId): void
     {
+        // TODO GATE: Check if authorized user is moderator
         // 
     }
 }

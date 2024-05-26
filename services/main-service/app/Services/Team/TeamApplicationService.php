@@ -43,6 +43,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function show(int $teamApplicationId): JsonResource
     {
+        // TODO GATE: Check if authorized user is moderator or user who applied
         $teamApplication = $this->teamApplicationRepository->getById($teamApplicationId);
         $teamApplication = $this->assembleApplicationsData(new Collection([$teamApplication]))->first();
 
@@ -51,6 +52,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function team(int $teamId): JsonResource
     {
+        // TODO GATE: Check if authorized user is moderator
         $teamApplications = $this->teamApplicationRepository->getByTeamId($teamId);
         $teamApplications = $this->assembleApplicationsData($teamApplications);
 
@@ -59,6 +61,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function vacancy(int $teamVacancyId): JsonResource
     {
+        // TODO GATE: Check if authorized user is moderator
         $teamApplications = $this->teamApplicationRepository->getByVacancyId($teamVacancyId);
         $teamApplications = $this->assembleApplicationsData($teamApplications);
 
@@ -67,6 +70,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function create(CreateTeamApplicationRequest $request): void
     {
+        // TODO GATE: Check if authorized user is not a member
         /** @var CreateTeamApplicationDTO */
         $createApplicationDTO = $this->createDTO($request, CreateTeamApplicationDTO::class);
         $createApplicationDTO->userId = $this->authorizedUserId;
@@ -85,11 +89,13 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $request): void
     {
+        // TODO GATE: Check if authorized user is moderator
         $this->teamApplicationRepository->update($teamApplication, $request->status);
     }
 
     public function delete(TeamApplication $teamApplication): void
     {
+        // TODO GATE: Check if authorized user is moderator or user who applied
         $this->teamApplicationRepository->delete($teamApplication);
     }
 

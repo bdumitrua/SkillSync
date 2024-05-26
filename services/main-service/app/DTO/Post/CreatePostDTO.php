@@ -12,7 +12,6 @@ class CreatePostDTO
 
     public function toArray(): array
     {
-        // TODO change type to class-name
         return [
             'text' => $this->text,
             'entity_type' => $this->entityType,

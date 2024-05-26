@@ -19,10 +19,7 @@ Route::prefix('users')->name('users.')->group(function () {
         Route::get('subscribers/{user}', 'subscribers')->name('subscribers');
         Route::get('subscriptions/{user}', 'subscriptions')->name('subscriptions');
 
-        // TODO REMOVE middleware
-        Route::middleware(['prevent.self.action'])->group(function () {
-            Route::post('subscribe/{user}', 'subscribe')->name('subscribe');
-            Route::delete('unsubscribe/{user}', 'unsubscribe')->name('unsubscribe');
-        });
+        Route::post('subscribe/{user}', 'subscribe')->name('subscribe');
+        Route::delete('unsubscribe/{user}', 'unsubscribe')->name('unsubscribe');
     });
 });

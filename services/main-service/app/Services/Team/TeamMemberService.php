@@ -41,6 +41,7 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     public function create(int $teamId, CreateTeamMemberRequest $request): void
     {
+        // TODO GATE: Check if authorized user is moderator
         /** @var CreateTeamMemberDTO */
         $createTeamMemberDTO = $this->createDTO($request, CreateTeamMemberDTO::class);
         $createTeamMemberDTO->teamId = $teamId;
@@ -59,6 +60,7 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     public function delete(int $teamId, int $userId): void
     {
+        // TODO GATE: Check if authorized user is moderator
         $membership = $this->teamMemberRepository->getMemberByBothIds(
             $teamId,
             $userId

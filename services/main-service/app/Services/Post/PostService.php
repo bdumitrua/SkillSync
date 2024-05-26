@@ -96,12 +96,14 @@ class PostService implements PostServiceInterface
 
     public function update(Post $post, UpdatePostRequest $request): void
     {
+        // TODO GATE: Check if authorized user is author
         $updatePostDTO = $this->createDTO($request, UpdatePostDTO::class);
         $this->postRepository->update($post, $updatePostDTO);
     }
 
     public function delete(Post $post): void
     {
+        // TODO GATE: Check if authorized user is author
         $this->postRepository->delete($post);
     }
 
@@ -164,7 +166,7 @@ class PostService implements PostServiceInterface
             $request->merge([
                 'entity_type' => Team::class
             ]);
-            // CHECK RIGHTS TO POST IN THIS TEAM
+            // TODO GATE: Check if user is moderator
         }
     }
 }

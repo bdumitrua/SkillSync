@@ -43,6 +43,7 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function create(int $teamId, CreateTeamLinkRequest $request): void
     {
+        // TODO GATE: Check if authorized user is moderator
         /** @var CreateTeamLinkDTO */
         $createTeamLinkDTO = $this->createDTO($request, CreateTeamLinkDTO::class);
         $createTeamLinkDTO->teamId = $teamId;
@@ -52,6 +53,7 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function update(TeamLink $teamLink, UpdateTeamLinkRequest $request): void
     {
+        // TODO GATE: Check if authorized user is moderator
         $updateTeamLinkDTO = $this->createDTO($request, UpdateTeamLinkDTO::class);
 
         $this->teamLinkRepository->update($teamLink, $updateTeamLinkDTO);
@@ -59,6 +61,7 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function delete(TeamLink $teamLink): void
     {
+        // TODO GATE: Check if authorized user is moderator
         $this->teamLinkRepository->delete($teamLink);
     }
 }

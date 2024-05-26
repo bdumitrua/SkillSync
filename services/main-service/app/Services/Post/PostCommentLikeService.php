@@ -19,11 +19,11 @@ class PostCommentLikeService implements PostCommentLikeServiceInterface
 
     public function create(int $postCommentId): void
     {
-        $this->postCommentLikeRepository->create($postCommentId, $this->authorizedUserId);
+        $liked = $this->postCommentLikeRepository->create($postCommentId, $this->authorizedUserId);
     }
 
     public function delete(int $postCommentId): void
     {
-        $this->postCommentLikeRepository->delete($postCommentId, $this->authorizedUserId);
+        $unliked = $this->postCommentLikeRepository->delete($postCommentId, $this->authorizedUserId);
     }
 }

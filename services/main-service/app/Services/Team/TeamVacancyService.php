@@ -48,6 +48,8 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function create(int $teamId, CreateTeamVacancyRequest $request): void
     {
+        // TODO GATE: Check if authorized user is moderator
+
         /** @var CreateTeamVacancyDTO */
         $createTeamVacancyDTO = $this->createDTO($request, CreateTeamVacancyDTO::class);
         $createTeamVacancyDTO->teamId = $teamId;
@@ -57,6 +59,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyRequest $request): void
     {
+        // TODO GATE: Check if authorized user is moderator
         $updateTeamVacancyDTO = $this->createDTO($request, UpdateTeamVacancyDTO::class);
 
         $this->teamVacancyRepository->update($teamVacancy, $updateTeamVacancyDTO);
@@ -64,6 +67,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function delete(TeamVacancy $teamVacancy): void
     {
+        // TODO GATE: Check if authorized user is moderator
         $this->teamVacancyRepository->delete($teamVacancy);
     }
 

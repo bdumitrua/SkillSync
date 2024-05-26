@@ -30,6 +30,7 @@ class ChatService implements ChatServiceInterface
 
     public function show(int $chatId): JsonResource
     {
+        // TODO GATE: Check if authorized user is chat member
         return new JsonResource(
             $this->chatRepository->getById($chatId)
         );
@@ -37,11 +38,13 @@ class ChatService implements ChatServiceInterface
 
     public function create(int $teamId, CreateChatRequest $request): void
     {
+        // TODO GATE: Check if authorized user is admin of team
         // 
     }
 
     public function update(int $chatId, UpdateChatRequest $request): void
     {
+        // TODO GATE: Check if authorized user is moderator
         // 
     }
 }

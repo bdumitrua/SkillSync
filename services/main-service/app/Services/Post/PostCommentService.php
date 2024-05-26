@@ -51,6 +51,7 @@ class PostCommentService implements PostCommentServiceInterface
 
     public function delete(PostComment $postComment): void
     {
+        // TODO GATE: Check if authorized user is author
         $this->postCommentRepository->delete($postComment);
     }
 

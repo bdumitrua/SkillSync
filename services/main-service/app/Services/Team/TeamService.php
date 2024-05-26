@@ -72,6 +72,7 @@ class TeamService implements TeamServiceInterface
         /** @var CreateTeamDTO */
         $createTeamDTO = $this->createDTO($request, CreateTeamDTO::class);
         $createTeamDTO->adminId = $this->authorizedUserId;
+        // TODO GATE: Check if doesn't exist team with this name
         $newTeam = $this->teamRepository->create($createTeamDTO);
 
         $createTeamMemberDTO = new CreateTeamMemberDTO($this->authorizedUserId, $newTeam->id, isModerator: true);
@@ -81,11 +82,13 @@ class TeamService implements TeamServiceInterface
     public function update(Team $team, UpdateTeamRequest $request): void
     {
         $updateTeamDTO = $this->createDTO($request, UpdateTeamDTO::class);
+        // TODO GATE: Check if authorized user is moderator
         $this->teamRepository->update($team, $updateTeamDTO);
     }
 
     public function delete(Team $team): void
     {
+        // TODO GATE: Check if authorized user is admin
         $this->teamRepository->delete($team);
     }
 

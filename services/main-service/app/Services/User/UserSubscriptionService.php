@@ -47,6 +47,7 @@ class UserSubscriptionService implements UserSubscriptionServiceInterface
 
     public function subscribe(User $user): Response
     {
+        // TODO GATE: Check if it's not user itself
         $isSubscribed = $this->userSubscriptionRepository->userIsSubscribedToUser(
             $this->authorizedUserId,
             $user->id
@@ -62,6 +63,7 @@ class UserSubscriptionService implements UserSubscriptionServiceInterface
 
     public function unsubscribe(User $user): Response
     {
+        // TODO GATE: Check if it's not user itself
         $subscription = $this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id);
         if (empty($subscription)) {
             return ResponseHelper::badRequest();

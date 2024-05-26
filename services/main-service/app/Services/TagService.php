@@ -38,11 +38,17 @@ class TagService implements TagServiceInterface
 
     public function create(CreateTagRequest $request): void
     {
-        // 
+        // TODO GATE: Check if: 
+        // is authorized user itself
+        // is moderator of team
+        // is moderator of team who posted
     }
 
     public function delete(Tag $tag): void
     {
-        // 
+        // TODO GATE: Check if: 
+        // is authorized user itself
+        // is moderator of team
+        // is moderator of team who posted
     }
 }
