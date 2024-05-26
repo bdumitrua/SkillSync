@@ -81,19 +81,14 @@ class UserService implements UserServiceInterface
     /**
      * @param UpdateUserRequest $request
      * 
-     * @return Response
+     * @return void
      */
-    public function update(UpdateUserRequest $request): Response
+    public function update(UpdateUserRequest $request): void
     {
         $this->validateRequestEmail($request->email, $this->authorizedUserId);
         $updateUserDTO = $this->createDTO($request, UpdateUserDTO::class);
 
         $updatedSuccessfully = $this->userRepository->update($this->authorizedUserId, $updateUserDTO);
-        if (!$updatedSuccessfully) {
-            return ResponseHelper::internalError();
-        }
-
-        return ResponseHelper::ok();
     }
 
     /**

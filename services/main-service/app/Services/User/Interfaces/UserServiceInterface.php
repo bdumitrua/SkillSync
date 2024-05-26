@@ -24,7 +24,7 @@ interface UserServiceInterface
     /**
      * @param UpdateUserRequest $request
      * 
-     * @return Response
+     * @return void
      */
-    public function update(UpdateUserRequest $request): Response;
+    public function update(UpdateUserRequest $request): void;
 }
