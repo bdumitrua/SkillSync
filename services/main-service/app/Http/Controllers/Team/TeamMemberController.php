@@ -35,7 +35,7 @@ class TeamMemberController extends Controller
     public function delete(Team $team, User $user)
     {
         return $this->handleServiceCall(function () use ($team, $user) {
-            return $this->teamMemberService->delete($team->id, $user->id);
+            return $this->teamMemberService->delete($team, $user->id);
         });
     }
 }

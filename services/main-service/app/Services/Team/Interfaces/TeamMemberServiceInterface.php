@@ -3,6 +3,7 @@
 namespace App\Services\Team\Interfaces;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Team;
 use App\Http\Requests\Team\CreateTeamMemberRequest;
 
 interface TeamMemberServiceInterface
@@ -23,10 +24,10 @@ interface TeamMemberServiceInterface
     public function create(int $teamId, CreateTeamMemberRequest $request): void;
 
     /**
-     * @param int $teamId
+     * @param Team $team
      * @param int $userId
      * 
      * @return void
      */
-    public function delete(int $teamId, int $userId): void;
+    public function delete(Team $team, int $userId): void;
 }

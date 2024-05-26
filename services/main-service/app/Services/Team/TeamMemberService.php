@@ -61,18 +61,22 @@ class TeamMemberService implements TeamMemberServiceInterface
         $this->teamMemberRepository->addMember($createTeamMemberDTO);
     }
 
-    public function delete(int $teamId, int $userId): void
+    public function delete(Team $team, int $userId): void
     {
-        Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
+        Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $team->id]);
 
         $membership = $this->teamMemberRepository->getMemberByBothIds(
-            $teamId,
+            $team->id,
             $userId
         );
 
         if (empty($membership)) {
             // TODO CUSTOM EXCEPTION
             throw new HttpException(400, "This user is not member of this team");
+        }
+
+        if ($team->admin_id === $userId) {
+            return;
         }
 
         $this->teamMemberRepository->removeMember($membership);

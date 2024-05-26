@@ -40,7 +40,7 @@ class TeamPolicy
      */
     public function updateTeam(User $user, int $teamId): bool
     {
-        return $this->moderator($user, $teamId);
+        return $this->admin($user, $teamId);
     }
 
     /**
@@ -115,24 +115,30 @@ class TeamPolicy
 
     /**
      * Determine if the user is member of this team.
+     * 
+     * It's public, but prefer to not use outside this policy
      */
-    private function member(User $user, int $teamId): bool
+    public function member(User $user, int $teamId): bool
     {
         return $this->teamMemberRepository->userIsMember($teamId, $user->id);
     }
 
     /**
      * Determine if the user is moderator of this team.
+     * 
+     * It's public, but prefer to not use outside this policy
      */
-    private function moderator(User $user, int $teamId): bool
+    public function moderator(User $user, int $teamId): bool
     {
         return $this->teamMemberRepository->userIsModerator($teamId, $user->id);
     }
 
     /**
      * Determine if the user is admin of this team.
+     * 
+     * It's public, but prefer to not use outside this policy
      */
-    private function admin(User $user, int $teamId): bool
+    public function admin(User $user, int $teamId): bool
     {
         $team = $this->teamRepository->getById($teamId);
 
