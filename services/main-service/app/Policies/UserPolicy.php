@@ -18,6 +18,8 @@ class UserPolicy
 
     /**
      * Determine whether the user can subscribe to other user.
+     * 
+     * @see SUBSCRIBE_ON_USER_GATE
      */
     public function subscribeOnUser(User $user, int $secondUserId): bool
     {
@@ -30,6 +32,8 @@ class UserPolicy
 
     /**
      * Determine whether the user can unsubscribe from other user.
+     * 
+     * @see UNSUBSCRIBE_FROM_USER_GATE
      */
     public function unsubscribeFromUser(User $user, int $secondUserId): bool
     {

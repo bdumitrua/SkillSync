@@ -10,6 +10,8 @@ class PostCommentPolicy
 {
     /**
      * Determine whether the user can delete the model.
+     * 
+     * @see DELETE_POST_COMMENT_GATE
      */
     public function deletePostComment(User $user, PostComment $postComment): bool
     {

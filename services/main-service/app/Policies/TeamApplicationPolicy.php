@@ -24,6 +24,8 @@ class TeamApplicationPolicy
 
     /**
      * Determine whether the user can view the application.
+     * 
+     * @see VIEW_TEAM_APPLICATIONS_GATE
      */
     public function viewTeamApplication(User $user, TeamApplication $teamApplication): bool
     {
@@ -40,10 +42,12 @@ class TeamApplicationPolicy
 
     /**
      * Determine whether the user can apply to the vacancy.
+     * 
+     * @see APPLY_TO_VACANCY_GATE
      */
     public function applyToVacancy(User $user, int $teamId, int $vacancyId): bool
     {
-        if (Gate::allows('member', $teamId)) {
+        if ($this->teamMemberRepository->userIsMember($teamId, $user->id)) {
             return Response::denyWithStatus(403);
         }
 
@@ -61,6 +65,8 @@ class TeamApplicationPolicy
 
     /**
      * Determine whether the user can update the application.
+     * 
+     * @see UPDATE_TEAM_APPLICATION_GATE
      */
     public function updateTeamApplication(User $user, TeamApplication $teamApplication): bool
     {
@@ -69,6 +75,8 @@ class TeamApplicationPolicy
 
     /**
      * Determine whether the user can delete the application.
+     * 
+     * @see DELETE_TEAM_APPLICATION_GATE
      */
     public function deleteTeamApplication(User $user, TeamApplication $teamApplication): bool
     {

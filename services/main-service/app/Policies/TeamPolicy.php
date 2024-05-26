@@ -24,6 +24,8 @@ class TeamPolicy
 
     /**
      * Determine whether the user can create a team.
+     * 
+     * @see CREATE_TEAM_GATE
      */
     public function createTeam(User $user, CreateTeamDTO $dto): bool
     {
@@ -33,6 +35,8 @@ class TeamPolicy
 
     /**
      * Determine whether the user can update the team.
+     * 
+     * @see UPDATE_TEAM_GATE
      */
     public function updateTeam(User $user, int $teamId): bool
     {
@@ -41,6 +45,8 @@ class TeamPolicy
 
     /**
      * Determine whether the user can delete the team.
+     * 
+     * @see DELETE_TEAM_GATE
      */
     public function deleteTeam(User $user, int $teamId): bool
     {
@@ -49,6 +55,8 @@ class TeamPolicy
 
     /**
      * Determine whether the user can monitor (view/update) team applications.
+     * 
+     * @see MONITOR_TEAM_APPLICATIONS_GATE
      */
     public function monitorTeamApplications(User $user, int $teamId): bool
     {
@@ -57,6 +65,8 @@ class TeamPolicy
 
     /**
      * Determine whether the user can work with team vacancies (create, update, delete).
+     * 
+     * @see TOUCH_TEAM_VACANCIES_GATE
      */
     public function touchTeamVacancies(User $user, int $teamId): bool
     {
@@ -65,6 +75,8 @@ class TeamPolicy
 
     /**
      * Determine whether the user can work with team posts (create, update, delete).
+     * 
+     * @see TOUCH_TEAM_POSTS_GATE
      */
     public function touchTeamPosts(User $user, int $teamId): bool
     {
@@ -73,6 +85,8 @@ class TeamPolicy
 
     /**
      * Determine whether the user can work with team tags (create, delete).
+     * 
+     * @see TOUCH_TEAM_TAGS_GATE
      */
     public function touchTeamTags(User $user, int $teamId): bool
     {
@@ -81,6 +95,8 @@ class TeamPolicy
 
     /**
      * Determine whether the user can work with team links (create, update, delete).
+     * 
+     * @see TOUCH_TEAM_LINKS_GATE
      */
     public function touchTeamLinks(User $user, int $teamId): bool
     {
@@ -89,6 +105,8 @@ class TeamPolicy
 
     /**
      * Determine whether the user can work with team members (add, remove).
+     * 
+     * @see TOUCH_TEAM_MEMBERS_GATE
      */
     public function touchTeamMembers(User $user, int $teamId): bool
     {
@@ -98,7 +116,7 @@ class TeamPolicy
     /**
      * Determine if the user is member of this team.
      */
-    public function member(User $user, int $teamId): bool
+    private function member(User $user, int $teamId): bool
     {
         return $this->teamMemberRepository->userIsMember($teamId, $user->id);
     }
@@ -106,8 +124,7 @@ class TeamPolicy
     /**
      * Determine if the user is moderator of this team.
      */
-    // TODO Move to global var
-    public function moderator(User $user, int $teamId): bool
+    private function moderator(User $user, int $teamId): bool
     {
         return $this->teamMemberRepository->userIsModerator($teamId, $user->id);
     }
@@ -115,7 +132,7 @@ class TeamPolicy
     /**
      * Determine if the user is admin of this team.
      */
-    public function admin(User $user, int $teamId): bool
+    private function admin(User $user, int $teamId): bool
     {
         $team = $this->teamRepository->getById($teamId);
 

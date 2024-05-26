@@ -48,14 +48,14 @@ class UserSubscriptionService implements UserSubscriptionServiceInterface
 
     public function subscribe(User $user): void
     {
-        Gate::authorize('subscribeOnUser', $user->id);
+        Gate::authorize(SUBSCRIBE_ON_USER_GATE, $user->id);
 
         $this->userSubscriptionRepository->subscribe($this->authorizedUserId, $user->id);
     }
 
     public function unsubscribe(User $user): void
     {
-        Gate::authorize('unsubscribeFromUser', $user->id);
+        Gate::authorize(UNSUBSCRIBE_FROM_USER_GATE, $user->id);
 
         $this->userSubscriptionRepository->unsubscribe($this->authorizedUserId, $user->id);
     }

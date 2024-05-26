@@ -49,7 +49,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function create(int $teamId, CreateTeamVacancyRequest $request): void
     {
-        Gate::authorize('touchTeamVacancies', $teamId);
+        Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, $teamId);
 
         /** @var CreateTeamVacancyDTO */
         $createTeamVacancyDTO = $this->createDTO($request, CreateTeamVacancyDTO::class);
@@ -60,7 +60,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyRequest $request): void
     {
-        Gate::authorize('touchTeamVacancies', $teamVacancy->team_id);
+        Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, $teamVacancy->team_id);
 
         $updateTeamVacancyDTO = $this->createDTO($request, UpdateTeamVacancyDTO::class);
 
@@ -69,7 +69,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function delete(TeamVacancy $teamVacancy): void
     {
-        Gate::authorize('touchTeamVacancies', $teamVacancy->team_id);
+        Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, $teamVacancy->team_id);
 
         $this->teamVacancyRepository->delete($teamVacancy);
     }

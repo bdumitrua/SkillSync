@@ -11,6 +11,8 @@ class TagPolicy
 {
     /**
      * Determine whether the user can create models.
+     * 
+     * @see CREATE_TAG_GATE
      */
     public function createTag(User $user, string $entityType, int $entityId): bool
     {
@@ -19,6 +21,8 @@ class TagPolicy
 
     /**
      * Determine whether the user can delete the model.
+     * 
+     * @see DELETE_TAG_GATE
      */
     public function deleteTag(User $user, Tag $tag): bool
     {
@@ -32,11 +36,11 @@ class TagPolicy
         }
 
         if ($entityType === config('entities.team')) {
-            return Gate::allows('touchTeamTags', $entityId);
+            return Gate::allows(TOUCH_TEAM_TAGS_GATE, $entityId);
         }
 
         if ($entityType === config('entities.post')) {
-            return Gate::allows('createPost', $entityType, $entityId);
+            return Gate::allows(CREATE_POST_GATE, $entityType, $entityId);
         }
 
         return false;

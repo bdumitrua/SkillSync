@@ -33,23 +33,11 @@ class ChatMemberService implements ChatMemberServiceInterface
 
     public function add(int $chatId, int $userId): void
     {
-        $this->authorizeModerator($chatId);
         // 
     }
 
     public function remove(int $chatId): void
     {
-        $this->authorizeModerator($chatId);
         // 
-    }
-
-    // TODO move somewhere
-    protected function authorizeModerator(int $chatId): void
-    {
-        if (empty($team = $this->teamRepository->getByChatId($chatId))) {
-            return;
-        }
-
-        Gate::authorize('moderator', $team->id);
     }
 }

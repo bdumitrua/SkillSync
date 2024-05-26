@@ -46,7 +46,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
     {
         $teamApplication = $this->teamApplicationRepository->getById($teamApplicationId);
 
-        if (Gate::denies('viewTeamApplication', $teamApplication)) {
+        if (Gate::denies(VIEW_TEAM_APPLICATIONS_GATE, $teamApplication)) {
             return new JsonResource([]);
         }
 
@@ -57,7 +57,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function team(int $teamId): JsonResource
     {
-        if (Gate::denies('monitorTeamApplications', $teamId)) {
+        if (Gate::denies(MONITOR_TEAM_APPLICATIONS_GATE, $teamId)) {
             return new JsonResource([]);
         }
 
@@ -69,7 +69,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function vacancy(TeamVacancy $teamVacancy): JsonResource
     {
-        if (Gate::denies('monitorTeamApplications', $teamVacancy->team_id)) {
+        if (Gate::denies(MONITOR_TEAM_APPLICATIONS_GATE, $teamVacancy->team_id)) {
             return new JsonResource([]);
         }
 
@@ -86,7 +86,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
         $createApplicationDTO->userId = $this->authorizedUserId;
 
         Gate::authorize(
-            'applicateToVacancy',
+            APPLY_TO_VACANCY_GATE,
             $createApplicationDTO->teamId,
             $createApplicationDTO->vacancyId
         );
@@ -96,14 +96,14 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $request): void
     {
-        Gate::authorize('updateTeamApplication', $teamApplication->team_id);
+        Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, $teamApplication->team_id);
 
         $this->teamApplicationRepository->update($teamApplication, $request->status);
     }
 
     public function delete(TeamApplication $teamApplication): void
     {
-        Gate::authorize('deleteTeamApplication', $teamApplication);
+        Gate::authorize(DELETE_TEAM_APPLICATION_GATE, $teamApplication);
 
         $this->teamApplicationRepository->delete($teamApplication);
     }

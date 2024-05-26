@@ -44,17 +44,11 @@ class ChatService implements ChatServiceInterface
 
     public function create(int $teamId, CreateChatRequest $request): void
     {
-        Gate::authorize('admin', $teamId);
         // 
     }
 
     public function update(int $chatId, UpdateChatRequest $request): void
     {
-        if (empty($team = $this->teamRepository->getByChatId($chatId))) {
-            return;
-        }
-
-        Gate::authorize('moderator', $team->id);
         // 
     }
 }

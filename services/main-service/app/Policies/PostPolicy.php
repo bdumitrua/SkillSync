@@ -20,6 +20,8 @@ class PostPolicy
 
     /**
      * Determine whether the user can create the post.
+     * 
+     * @see CREATE_POST_GATE
      */
     public function createPost(User $user, string $entityType, int $entityId): bool
     {
@@ -28,6 +30,8 @@ class PostPolicy
 
     /**
      * Determine whether the user can update the post.
+     * 
+     * @see UPDATE_POST_GATE
      */
     public function updatePost(User $user, Post $post): bool
     {
@@ -36,6 +40,8 @@ class PostPolicy
 
     /**
      * Determine whether the user can delete the post.
+     * 
+     * @see DELETE_POST_GATE
      */
     public function deletePost(User $user, Post $post): bool
     {
@@ -49,7 +55,7 @@ class PostPolicy
         }
 
         if ($entityType === config('entities.team')) {
-            return Gate::allows('touchTeamPosts', $entityId);
+            return Gate::allows(TOUCH_TEAM_POSTS_GATE, $entityId);
         }
 
         return false;

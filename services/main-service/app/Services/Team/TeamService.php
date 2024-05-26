@@ -74,7 +74,7 @@ class TeamService implements TeamServiceInterface
         $createTeamDTO = $this->createDTO($request, CreateTeamDTO::class);
         $createTeamDTO->adminId = $this->authorizedUserId;
 
-        Gate::authorize('createTeam', $createTeamDTO);
+        Gate::authorize(CREATE_TEAM_GATE, $createTeamDTO);
         $newTeam = $this->teamRepository->create($createTeamDTO);
 
         $createTeamMemberDTO = new CreateTeamMemberDTO($this->authorizedUserId, $newTeam->id, isModerator: true);
@@ -85,13 +85,13 @@ class TeamService implements TeamServiceInterface
     {
         $updateTeamDTO = $this->createDTO($request, UpdateTeamDTO::class);
 
-        Gate::authorize('updateTeam', $team->id);
+        Gate::authorize(UPDATE_TEAM_GATE, $team->id);
         $this->teamRepository->update($team, $updateTeamDTO);
     }
 
     public function delete(Team $team): void
     {
-        Gate::authorize('deleteTeam', $team->id);
+        Gate::authorize(DELETE_TEAM_GATE, $team->id);
         $this->teamRepository->delete($team);
     }
 
