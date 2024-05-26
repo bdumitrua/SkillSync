@@ -2,7 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Post;
 use App\Models\Tag;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
@@ -36,11 +38,11 @@ class TagPolicy
         }
 
         if ($entityType === config('entities.team')) {
-            return Gate::allows(TOUCH_TEAM_TAGS_GATE, $entityId);
+            return Gate::allows(TOUCH_TEAM_TAGS_GATE, [Team::class, $entityId]);
         }
 
         if ($entityType === config('entities.post')) {
-            return Gate::allows(CREATE_POST_GATE, $entityType, $entityId);
+            return Gate::allows(CREATE_POST_GATE, [Post::class, $entityType, $entityId]);
         }
 
         return false;

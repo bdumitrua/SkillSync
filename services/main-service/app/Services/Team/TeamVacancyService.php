@@ -10,6 +10,7 @@ use App\Models\TeamVacancy;
 use App\Http\Requests\Team\UpdateTeamVacancyRequest;
 use App\Http\Requests\Team\CreateTeamVacancyRequest;
 use App\Http\Resources\Team\TeamVacancyResource;
+use App\Models\Team;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Traits\CreateDTO;
 use Illuminate\Database\Eloquent\Collection;
@@ -49,7 +50,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function create(int $teamId, CreateTeamVacancyRequest $request): void
     {
-        Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, $teamId);
+        Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, [Team::class, $teamId]);
 
         /** @var CreateTeamVacancyDTO */
         $createTeamVacancyDTO = $this->createDTO($request, CreateTeamVacancyDTO::class);
@@ -60,7 +61,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyRequest $request): void
     {
-        Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, $teamVacancy->team_id);
+        Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, [Team::class, $teamVacancy->team_id]);
 
         $updateTeamVacancyDTO = $this->createDTO($request, UpdateTeamVacancyDTO::class);
 
@@ -69,7 +70,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function delete(TeamVacancy $teamVacancy): void
     {
-        Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, $teamVacancy->team_id);
+        Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, [Team::class, $teamVacancy->team_id]);
 
         $this->teamVacancyRepository->delete($teamVacancy);
     }

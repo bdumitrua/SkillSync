@@ -88,7 +88,7 @@ class PostService implements PostServiceInterface
     public function create(CreatePostRequest $request): void
     {
         $this->patchCreatePostRequestData($request);
-        Gate::authorize(CREATE_POST_GATE, $request->entity_type, $request->entity_id);
+        Gate::authorize(CREATE_POST_GATE, [Post::class, $request->entity_type, $request->entity_id]);
 
         /** @var  CreatePostDTO */
         $createPostDTO = $this->createDTO($request, CreatePostDTO::class);
@@ -98,7 +98,7 @@ class PostService implements PostServiceInterface
 
     public function update(Post $post, UpdatePostRequest $request): void
     {
-        Gate::authorize(UPDATE_POST_GATE, $post);
+        Gate::authorize(UPDATE_POST_GATE, [Post::class, $post]);
 
         $updatePostDTO = $this->createDTO($request, UpdatePostDTO::class);
         $this->postRepository->update($post, $updatePostDTO);
@@ -106,7 +106,7 @@ class PostService implements PostServiceInterface
 
     public function delete(Post $post): void
     {
-        Gate::authorize(DELETE_POST_GATE, $post);
+        Gate::authorize(DELETE_POST_GATE, [Post::class, $post]);
 
         $this->postRepository->delete($post);
     }

@@ -10,6 +10,7 @@ use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Http\Resources\Team\TeamMemberResource;
 use App\Http\Requests\Team\CreateTeamMemberRequest;
+use App\Models\Team;
 use App\Traits\CreateDTO;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -42,7 +43,7 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     public function create(int $teamId, CreateTeamMemberRequest $request): void
     {
-        Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, $teamId);
+        Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
 
         /** @var CreateTeamMemberDTO */
         $createTeamMemberDTO = $this->createDTO($request, CreateTeamMemberDTO::class);
@@ -62,7 +63,7 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     public function delete(int $teamId, int $userId): void
     {
-        Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, $teamId);
+        Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
 
         $membership = $this->teamMemberRepository->getMemberByBothIds(
             $teamId,

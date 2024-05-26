@@ -71,6 +71,7 @@ use App\Services\Team\TeamApplicationService;
 use App\Services\Team\TeamLinkService;
 use App\Services\Team\TeamMemberService;
 use App\Services\Team\TeamVacancyService;
+use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -159,15 +160,24 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        DB::listen(function ($query) {
-            /** @var PrometheusServiceProxy */
-            $prometheusService = app(PrometheusServiceProxy::class);
-            $source = optional(request()->route())->getActionName() ?? 'unknown';
-            $executionTimeInSeconds = floatval($query->time) / 1000;
+        if ($this->app->environment('local')) {
+            DB::listen(function ($query) {
+                Log::info('Query Time: ' . $query->time . 'ms', [
+                    'sql' => $query->sql,
+                    'bindings' => $query->bindings,
+                ]);
+            });
+        }
 
-            $prometheusService->incrementDatabaseQueryCount($source);
-            $prometheusService->addDatabaseQueryTimeHistogram($executionTimeInSeconds, $source);
-        });
+        // DB::listen(function ($query) {
+        //     /** @var PrometheusServiceProxy */
+        //     $prometheusService = app(PrometheusServiceProxy::class);
+        //     $source = optional(request()->route())->getActionName() ?? 'unknown';
+        //     $executionTimeInSeconds = floatval($query->time) / 1000;
+
+        //     $prometheusService->incrementDatabaseQueryCount($source);
+        //     $prometheusService->addDatabaseQueryTimeHistogram($executionTimeInSeconds, $source);
+        // });
 
         if (!app()->environment('testing')) {
             $this->defineCacheKeysConstants();

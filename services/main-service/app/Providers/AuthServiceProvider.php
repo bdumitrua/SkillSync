@@ -4,6 +4,18 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Policies\UserPolicy;
+use App\Policies\TeamPolicy;
+use App\Policies\TeamApplicationPolicy;
+use App\Policies\TagPolicy;
+use App\Policies\PostPolicy;
+use App\Policies\PostCommentPolicy;
+use App\Models\User;
+use App\Models\TeamApplication;
+use App\Models\Team;
+use App\Models\Tag;
+use App\Models\PostComment;
+use App\Models\Post;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -13,7 +25,12 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        // Team::class => TeamPolicy::class,
+        // TeamApplication::class => TeamApplicationPolicy::class,
+        // Tag::class => TagPolicy::class,
+        // User::class => UserPolicy::class,
+        // Post::class => PostPolicy::class,
+        // PostComment::class => PostCommentPolicy::class,
     ];
 
     /**

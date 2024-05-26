@@ -10,6 +10,7 @@ use App\Models\TeamApplication;
 use App\Http\Requests\Team\UpdateTeamApplicationRequest;
 use App\Http\Requests\Team\CreateTeamApplicationRequest;
 use App\Http\Resources\Team\TeamApplicationResource;
+use App\Models\Team;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
@@ -46,7 +47,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
     {
         $teamApplication = $this->teamApplicationRepository->getById($teamApplicationId);
 
-        if (Gate::denies(VIEW_TEAM_APPLICATIONS_GATE, $teamApplication)) {
+        if (Gate::denies(VIEW_TEAM_APPLICATIONS_GATE, [TeamApplication::class, $teamApplication])) {
             return new JsonResource([]);
         }
 
@@ -57,7 +58,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function team(int $teamId): JsonResource
     {
-        if (Gate::denies(MONITOR_TEAM_APPLICATIONS_GATE, $teamId)) {
+        if (Gate::denies(MONITOR_TEAM_APPLICATIONS_GATE, [Team::class, $teamId])) {
             return new JsonResource([]);
         }
 
@@ -69,7 +70,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function vacancy(TeamVacancy $teamVacancy): JsonResource
     {
-        if (Gate::denies(MONITOR_TEAM_APPLICATIONS_GATE, $teamVacancy->team_id)) {
+        if (Gate::denies(MONITOR_TEAM_APPLICATIONS_GATE, [Team::class, $teamVacancy->team_id])) {
             return new JsonResource([]);
         }
 
@@ -85,25 +86,25 @@ class TeamApplicationService implements TeamApplicationServiceInterface
         $createApplicationDTO = $this->createDTO($request, CreateTeamApplicationDTO::class);
         $createApplicationDTO->userId = $this->authorizedUserId;
 
-        Gate::authorize(
-            APPLY_TO_VACANCY_GATE,
+        Gate::authorize(APPLY_TO_VACANCY_GATE, [
+            TeamApplication::class,
             $createApplicationDTO->teamId,
             $createApplicationDTO->vacancyId
-        );
+        ]);
 
         $this->teamApplicationRepository->create($createApplicationDTO);
     }
 
     public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $request): void
     {
-        Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, $teamApplication->team_id);
+        Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication->team_id]);
 
         $this->teamApplicationRepository->update($teamApplication, $request->status);
     }
 
     public function delete(TeamApplication $teamApplication): void
     {
-        Gate::authorize(DELETE_TEAM_APPLICATION_GATE, $teamApplication);
+        Gate::authorize(DELETE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication]);
 
         $this->teamApplicationRepository->delete($teamApplication);
     }

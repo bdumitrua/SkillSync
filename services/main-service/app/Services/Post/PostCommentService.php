@@ -52,7 +52,7 @@ class PostCommentService implements PostCommentServiceInterface
 
     public function delete(PostComment $postComment): void
     {
-        Gate::authorize(DELETE_POST_COMMENT_GATE, $postComment);
+        Gate::authorize(DELETE_POST_COMMENT_GATE, [PostComment::class, $postComment]);
 
         $this->postCommentRepository->delete($postComment);
     }

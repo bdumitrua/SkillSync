@@ -44,7 +44,7 @@ class TagService implements TagServiceInterface
     public function create(CreateTagRequest $request): void
     {
         $this->patchCreateTagRequest($request);
-        Gate::authorize(CREATE_TAG_GATE, $request->entity_type, $request->entity_id);
+        Gate::authorize(CREATE_TAG_GATE, [Tag::class, $request->entity_type, $request->entity_id]);
 
         $createTagDTO = $this->createDTO($request, CreateTagDTO::class);
         $this->tagRepository->create($createTagDTO);
@@ -52,7 +52,7 @@ class TagService implements TagServiceInterface
 
     public function delete(Tag $tag): void
     {
-        Gate::authorize(DELETE_TAG_GATE, $tag);
+        Gate::authorize(DELETE_TAG_GATE, [Tag::class, $tag]);
 
         $this->tagRepository->delete($tag);
     }

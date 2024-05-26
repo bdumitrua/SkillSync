@@ -13,6 +13,7 @@ use App\Models\TeamLink;
 use App\Http\Resources\Team\TeamLinkResource;
 use App\Http\Requests\Team\UpdateTeamLinkRequest;
 use App\Http\Requests\Team\CreateTeamLinkRequest;
+use App\Models\Team;
 use App\Traits\CreateDTO;
 use Illuminate\Support\Facades\Gate;
 
@@ -44,7 +45,7 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function create(int $teamId, CreateTeamLinkRequest $request): void
     {
-        Gate::authorize(TOUCH_TEAM_LINKS_GATE, $teamId);
+        Gate::authorize(TOUCH_TEAM_LINKS_GATE, [Team::class, $teamId]);
 
         /** @var CreateTeamLinkDTO */
         $createTeamLinkDTO = $this->createDTO($request, CreateTeamLinkDTO::class);
@@ -55,7 +56,7 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function update(TeamLink $teamLink, UpdateTeamLinkRequest $request): void
     {
-        Gate::authorize(TOUCH_TEAM_LINKS_GATE, $teamLink->team_id);
+        Gate::authorize(TOUCH_TEAM_LINKS_GATE, [Team::class, $teamLink->team_id]);
 
         $updateTeamLinkDTO = $this->createDTO($request, UpdateTeamLinkDTO::class);
 
@@ -64,7 +65,7 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function delete(TeamLink $teamLink): void
     {
-        Gate::authorize(TOUCH_TEAM_LINKS_GATE, $teamLink->team_id);
+        Gate::authorize(TOUCH_TEAM_LINKS_GATE, [Team::class, $teamLink->team_id]);
 
         $this->teamLinkRepository->delete($teamLink);
     }

@@ -12,6 +12,7 @@ use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Http\Requests\Team\CreateTeamRequest;
 use App\Http\Resources\Team\TeamDataResource;
 use App\Http\Resources\Team\TeamResource;
+use App\Policies\TeamPolicy;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Team\Interfaces\TeamLinkServiceInterface;
@@ -19,6 +20,7 @@ use App\Traits\CreateDTO;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class TeamService implements TeamServiceInterface
 {
@@ -74,7 +76,8 @@ class TeamService implements TeamServiceInterface
         $createTeamDTO = $this->createDTO($request, CreateTeamDTO::class);
         $createTeamDTO->adminId = $this->authorizedUserId;
 
-        Gate::authorize(CREATE_TEAM_GATE, $createTeamDTO);
+        Gate::authorize(CREATE_TEAM_GATE, [Team::class, $createTeamDTO]);
+
         $newTeam = $this->teamRepository->create($createTeamDTO);
 
         $createTeamMemberDTO = new CreateTeamMemberDTO($this->authorizedUserId, $newTeam->id, isModerator: true);
@@ -85,13 +88,14 @@ class TeamService implements TeamServiceInterface
     {
         $updateTeamDTO = $this->createDTO($request, UpdateTeamDTO::class);
 
-        Gate::authorize(UPDATE_TEAM_GATE, $team->id);
+        Gate::authorize(UPDATE_TEAM_GATE, [Team::class, $team->id]);
+
         $this->teamRepository->update($team, $updateTeamDTO);
     }
 
     public function delete(Team $team): void
     {
-        Gate::authorize(DELETE_TEAM_GATE, $team->id);
+        Gate::authorize(DELETE_TEAM_GATE, [Team::class, $team->id]);
         $this->teamRepository->delete($team);
     }
 

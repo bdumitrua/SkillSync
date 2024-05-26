@@ -3,6 +3,7 @@
 namespace App\Policies;
 
 use App\Models\Post;
+use App\Models\Team;
 use App\Models\User;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use Illuminate\Auth\Access\Response;
@@ -55,7 +56,7 @@ class PostPolicy
         }
 
         if ($entityType === config('entities.team')) {
-            return Gate::allows(TOUCH_TEAM_POSTS_GATE, $entityId);
+            return Gate::allows(TOUCH_TEAM_POSTS_GATE, [Team::class, $entityId]);
         }
 
         return false;
