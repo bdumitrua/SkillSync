@@ -57,7 +57,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function team(int $teamId): JsonResource
     {
-        if (Gate::denies('moderator', $teamId)) {
+        if (Gate::denies('monitorTeamApplications', $teamId)) {
             return new JsonResource([]);
         }
 
@@ -69,7 +69,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function vacancy(TeamVacancy $teamVacancy): JsonResource
     {
-        if (!Gate::allows('moderator', $teamVacancy->team_id)) {
+        if (Gate::denies('monitorTeamApplications', $teamVacancy->team_id)) {
             return new JsonResource([]);
         }
 
@@ -85,25 +85,18 @@ class TeamApplicationService implements TeamApplicationServiceInterface
         $createApplicationDTO = $this->createDTO($request, CreateTeamApplicationDTO::class);
         $createApplicationDTO->userId = $this->authorizedUserId;
 
-        if (Gate::allows('member', $createApplicationDTO->userId)) {
-            return;
-        }
-
-        $alreadyApplied = $this->teamApplicationRepository->userAppliedToVacancy(
-            $this->authorizedUserId,
+        Gate::authorize(
+            'applicateToVacancy',
+            $createApplicationDTO->teamId,
             $createApplicationDTO->vacancyId
         );
-
-        if ($alreadyApplied) {
-            return;
-        }
 
         $this->teamApplicationRepository->create($createApplicationDTO);
     }
 
     public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $request): void
     {
-        Gate::authorize('moderator', $teamApplication->team_id);
+        Gate::authorize('updateTeamApplication', $teamApplication->team_id);
 
         $this->teamApplicationRepository->update($teamApplication, $request->status);
     }

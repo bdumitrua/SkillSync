@@ -49,7 +49,7 @@ class PostPolicy
         }
 
         if ($entityType === config('entities.team')) {
-            return Gate::allows('moderator', $entityId);
+            return Gate::allows('touchTeamPosts', $entityId);
         }
 
         return false;

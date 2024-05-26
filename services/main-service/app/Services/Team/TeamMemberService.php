@@ -42,7 +42,7 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     public function create(int $teamId, CreateTeamMemberRequest $request): void
     {
-        Gate::authorize('moderator', $teamId);
+        Gate::authorize('touchTeamMembers', $teamId);
 
         /** @var CreateTeamMemberDTO */
         $createTeamMemberDTO = $this->createDTO($request, CreateTeamMemberDTO::class);
@@ -62,7 +62,7 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     public function delete(int $teamId, int $userId): void
     {
-        Gate::authorize('moderator', $teamId);
+        Gate::authorize('touchTeamMembers', $teamId);
 
         $membership = $this->teamMemberRepository->getMemberByBothIds(
             $teamId,

@@ -88,6 +88,7 @@ class PostService implements PostServiceInterface
     public function create(CreatePostRequest $request): void
     {
         $this->patchCreatePostRequestData($request);
+        Gate::authorize('createPost', $request->entity_type, $request->entity_id);
 
         /** @var  CreatePostDTO */
         $createPostDTO = $this->createDTO($request, CreatePostDTO::class);
@@ -163,13 +164,5 @@ class PostService implements PostServiceInterface
         $request->merge([
             'entity_type' => $entitiesPath[$request->entity_type]
         ]);
-
-        if ($request->entity_type == 'user') {
-            $request->merge([
-                'entity_id' => $this->authorizedUserId
-            ]);
-        } elseif ($request->entity_type == 'team') {
-            Gate::authorize('moderator', $request->entity_id);
-        }
     }
 }

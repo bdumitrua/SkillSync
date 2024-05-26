@@ -32,7 +32,7 @@ class TagPolicy
         }
 
         if ($entityType === config('entities.team')) {
-            return Gate::allows('moderator', $entityId);
+            return Gate::allows('touchTeamTags', $entityId);
         }
 
         if ($entityType === config('entities.post')) {

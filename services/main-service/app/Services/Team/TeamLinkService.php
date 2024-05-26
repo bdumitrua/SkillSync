@@ -44,7 +44,7 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function create(int $teamId, CreateTeamLinkRequest $request): void
     {
-        Gate::authorize('moderator', $teamId);
+        Gate::authorize('touchTeamLinks', $teamId);
 
         /** @var CreateTeamLinkDTO */
         $createTeamLinkDTO = $this->createDTO($request, CreateTeamLinkDTO::class);
@@ -55,7 +55,7 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function update(TeamLink $teamLink, UpdateTeamLinkRequest $request): void
     {
-        Gate::authorize('moderator', $teamLink->team_id);
+        Gate::authorize('touchTeamLinks', $teamLink->team_id);
 
         $updateTeamLinkDTO = $this->createDTO($request, UpdateTeamLinkDTO::class);
 
@@ -64,7 +64,7 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function delete(TeamLink $teamLink): void
     {
-        Gate::authorize('moderator', $teamLink->team_id);
+        Gate::authorize('touchTeamLinks', $teamLink->team_id);
 
         $this->teamLinkRepository->delete($teamLink);
     }

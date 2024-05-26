@@ -48,6 +48,54 @@ class TeamPolicy
     }
 
     /**
+     * Determine whether the user can monitor (view/update) team applications.
+     */
+    public function monitorTeamApplications(User $user, int $teamId): bool
+    {
+        return $this->moderator($user, $teamId);
+    }
+
+    /**
+     * Determine whether the user can work with team vacancies (create, update, delete).
+     */
+    public function touchTeamVacancies(User $user, int $teamId): bool
+    {
+        return $this->moderator($user, $teamId);
+    }
+
+    /**
+     * Determine whether the user can work with team posts (create, update, delete).
+     */
+    public function touchTeamPosts(User $user, int $teamId): bool
+    {
+        return $this->moderator($user, $teamId);
+    }
+
+    /**
+     * Determine whether the user can work with team tags (create, delete).
+     */
+    public function touchTeamTags(User $user, int $teamId): bool
+    {
+        return $this->moderator($user, $teamId);
+    }
+
+    /**
+     * Determine whether the user can work with team links (create, update, delete).
+     */
+    public function touchTeamLinks(User $user, int $teamId): bool
+    {
+        return $this->moderator($user, $teamId);
+    }
+
+    /**
+     * Determine whether the user can work with team members (add, remove).
+     */
+    public function touchTeamMembers(User $user, int $teamId): bool
+    {
+        return $this->moderator($user, $teamId);
+    }
+
+    /**
      * Determine if the user is member of this team.
      */
     public function member(User $user, int $teamId): bool
