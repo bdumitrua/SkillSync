@@ -5,6 +5,7 @@ namespace App\Services\Team;
 use App\DTO\Team\CreateTeamDTO;
 use App\DTO\Team\CreateTeamMemberDTO;
 use App\DTO\Team\UpdateTeamDTO;
+use App\Exceptions\UnprocessableContentException;
 use App\Services\Team\Interfaces\TeamServiceInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Models\Team;
@@ -17,6 +18,7 @@ use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Team\Interfaces\TeamLinkServiceInterface;
 use App\Traits\CreateDTO;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -75,9 +77,6 @@ class TeamService implements TeamServiceInterface
         /** @var CreateTeamDTO */
         $createTeamDTO = $this->createDTO($request, CreateTeamDTO::class);
         $createTeamDTO->adminId = $this->authorizedUserId;
-
-        Gate::authorize(CREATE_TEAM_GATE, [Team::class, $createTeamDTO]);
-
         $newTeam = $this->teamRepository->create($createTeamDTO);
 
         $createTeamMemberDTO = new CreateTeamMemberDTO($this->authorizedUserId, $newTeam->id, isModerator: true);
@@ -88,7 +87,14 @@ class TeamService implements TeamServiceInterface
     {
         $updateTeamDTO = $this->createDTO($request, UpdateTeamDTO::class);
 
-        Gate::authorize(UPDATE_TEAM_GATE, [Team::class, $team->id]);
+        try {
+            Gate::authorize(UPDATE_TEAM_GATE, [Team::class, $team->id]);
+            // } catch (\Exception $e) {
+        } catch (AuthorizationException $e) {
+            // die(var_dump(get_class($e)));
+            // die(var_dump($e->status()));
+            throw $e;
+        }
 
         $this->teamRepository->update($team, $updateTeamDTO);
     }
@@ -96,6 +102,7 @@ class TeamService implements TeamServiceInterface
     public function delete(Team $team): void
     {
         Gate::authorize(DELETE_TEAM_GATE, [Team::class, $team->id]);
+
         $this->teamRepository->delete($team);
     }
 

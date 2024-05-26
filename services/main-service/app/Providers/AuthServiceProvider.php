@@ -24,14 +24,7 @@ class AuthServiceProvider extends ServiceProvider
      *
      * @var array<class-string, class-string>
      */
-    protected $policies = [
-        // Team::class => TeamPolicy::class,
-        // TeamApplication::class => TeamApplicationPolicy::class,
-        // Tag::class => TagPolicy::class,
-        // User::class => UserPolicy::class,
-        // Post::class => PostPolicy::class,
-        // PostComment::class => PostCommentPolicy::class,
-    ];
+    protected $policies = [];
 
     /**
      * Register any authentication / authorization services.

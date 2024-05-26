@@ -16,7 +16,7 @@ class TagPolicy
      * 
      * @see CREATE_TAG_GATE
      */
-    public function createTag(User $user, string $entityType, int $entityId): bool
+    public function createTag(User $user, string $entityType, int $entityId): Response
     {
         return $this->getRights($user, $entityType, $entityId);
     }
@@ -26,15 +26,17 @@ class TagPolicy
      * 
      * @see DELETE_TAG_GATE
      */
-    public function deleteTag(User $user, Tag $tag): bool
+    public function deleteTag(User $user, Tag $tag): Response
     {
         return $this->getRights($user, $tag->entity_type, $tag->entity_id);
     }
 
-    private function getRights(User $user, string $entityType, int $entityId): bool
+    private function getRights(User $user, string $entityType, int $entityId): Response
     {
         if ($entityType === config('entities.user')) {
-            return $user->id === $entityId;
+            return $user->id === $entityId
+                ? Response::allow()
+                : Response::deny("You can't modify other users' tags");
         }
 
         if ($entityType === config('entities.team')) {
@@ -45,6 +47,6 @@ class TagPolicy
             return Gate::allows(CREATE_POST_GATE, [Post::class, $entityType, $entityId]);
         }
 
-        return false;
+        return Response::deny("Unauthorized action.");
     }
 }

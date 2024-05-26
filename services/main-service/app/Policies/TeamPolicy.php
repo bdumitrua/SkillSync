@@ -23,22 +23,11 @@ class TeamPolicy
     }
 
     /**
-     * Determine whether the user can create a team.
-     * 
-     * @see CREATE_TEAM_GATE
-     */
-    public function createTeam(User $user, CreateTeamDTO $dto): bool
-    {
-        // Return true, if team with that name doesn't exist
-        return $user->id === $dto->adminId && empty($this->teamRepository->getByName($dto->name));
-    }
-
-    /**
      * Determine whether the user can update the team.
      * 
      * @see UPDATE_TEAM_GATE
      */
-    public function updateTeam(User $user, int $teamId): bool
+    public function updateTeam(User $user, int $teamId): Response
     {
         return $this->admin($user, $teamId);
     }
@@ -48,7 +37,7 @@ class TeamPolicy
      * 
      * @see DELETE_TEAM_GATE
      */
-    public function deleteTeam(User $user, int $teamId): bool
+    public function deleteTeam(User $user, int $teamId): Response
     {
         return $this->admin($user, $teamId);
     }
@@ -58,7 +47,7 @@ class TeamPolicy
      * 
      * @see MONITOR_TEAM_APPLICATIONS_GATE
      */
-    public function monitorTeamApplications(User $user, int $teamId): bool
+    public function monitorTeamApplications(User $user, int $teamId): Response
     {
         return $this->moderator($user, $teamId);
     }
@@ -68,7 +57,7 @@ class TeamPolicy
      * 
      * @see TOUCH_TEAM_VACANCIES_GATE
      */
-    public function touchTeamVacancies(User $user, int $teamId): bool
+    public function touchTeamVacancies(User $user, int $teamId): Response
     {
         return $this->moderator($user, $teamId);
     }
@@ -78,7 +67,7 @@ class TeamPolicy
      * 
      * @see TOUCH_TEAM_POSTS_GATE
      */
-    public function touchTeamPosts(User $user, int $teamId): bool
+    public function touchTeamPosts(User $user, int $teamId): Response
     {
         return $this->moderator($user, $teamId);
     }
@@ -88,7 +77,7 @@ class TeamPolicy
      * 
      * @see TOUCH_TEAM_TAGS_GATE
      */
-    public function touchTeamTags(User $user, int $teamId): bool
+    public function touchTeamTags(User $user, int $teamId): Response
     {
         return $this->moderator($user, $teamId);
     }
@@ -98,7 +87,7 @@ class TeamPolicy
      * 
      * @see TOUCH_TEAM_LINKS_GATE
      */
-    public function touchTeamLinks(User $user, int $teamId): bool
+    public function touchTeamLinks(User $user, int $teamId): Response
     {
         return $this->moderator($user, $teamId);
     }
@@ -108,7 +97,7 @@ class TeamPolicy
      * 
      * @see TOUCH_TEAM_MEMBERS_GATE
      */
-    public function touchTeamMembers(User $user, int $teamId): bool
+    public function touchTeamMembers(User $user, int $teamId): Response
     {
         return $this->moderator($user, $teamId);
     }
@@ -118,9 +107,11 @@ class TeamPolicy
      * 
      * It's public, but prefer to not use outside this policy
      */
-    public function member(User $user, int $teamId): bool
+    public function member(User $user, int $teamId): Response
     {
-        return $this->teamMemberRepository->userIsMember($teamId, $user->id);
+        return $this->teamMemberRepository->userIsMember($teamId, $user->id)
+            ? Response::allow()
+            : Response::deny("You're not member of this team.");
     }
 
     /**
@@ -128,9 +119,11 @@ class TeamPolicy
      * 
      * It's public, but prefer to not use outside this policy
      */
-    public function moderator(User $user, int $teamId): bool
+    public function moderator(User $user, int $teamId): Response
     {
-        return $this->teamMemberRepository->userIsModerator($teamId, $user->id);
+        return $this->teamMemberRepository->userIsModerator($teamId, $user->id)
+            ? Response::allow()
+            : Response::deny("You have insufficient rigths.");
     }
 
     /**
@@ -138,10 +131,14 @@ class TeamPolicy
      * 
      * It's public, but prefer to not use outside this policy
      */
-    public function admin(User $user, int $teamId): bool
+    public function admin(User $user, int $teamId): Response
     {
         $team = $this->teamRepository->getById($teamId);
 
-        return $user->id === $team?->admin_id;
+        $isAdmin = $user->id === $team?->admin_id;
+
+        return $isAdmin
+            ? Response::allow()
+            : Response::deny("You have insufficient rigths.");
     }
 }

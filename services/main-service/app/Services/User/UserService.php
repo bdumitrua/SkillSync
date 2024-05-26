@@ -48,9 +48,6 @@ class UserService implements UserServiceInterface
         $this->authorizedUserId = Auth::id();
     }
 
-    /**
-     * @return JsonResource
-     */
     public function index(): JsonResource
     {
         return new UserDataResource(
@@ -58,11 +55,6 @@ class UserService implements UserServiceInterface
         );
     }
 
-    /**
-     * @param User $user
-     * 
-     * @return JsonResource
-     */
     public function show(User $user): JsonResource
     {
         $user = $this->userRepository->getById($user->id);
@@ -78,25 +70,14 @@ class UserService implements UserServiceInterface
         return new UserResource($user);
     }
 
-    /**
-     * @param UpdateUserRequest $request
-     * 
-     * @return void
-     */
     public function update(UpdateUserRequest $request): void
     {
         $this->validateRequestEmail($request->email, $this->authorizedUserId);
         $updateUserDTO = $this->createDTO($request, UpdateUserDTO::class);
 
-        $updatedSuccessfully = $this->userRepository->update($this->authorizedUserId, $updateUserDTO);
+        $this->userRepository->update($this->authorizedUserId, $updateUserDTO);
     }
 
-    /**
-     * @param string $email
-     * @param int $authorizedUserId
-     * 
-     * @return void
-     */
     protected function validateRequestEmail(string $email, int $authorizedUserId): void
     {
         $userByEmail = $this->userRepository->getByEmail($email);

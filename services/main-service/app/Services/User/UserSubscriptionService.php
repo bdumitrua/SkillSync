@@ -2,6 +2,7 @@
 
 namespace App\Services\User;
 
+use App\Exceptions\SubscriptionException;
 use App\Helpers\ResponseHelper;
 use App\Http\Resources\User\UserSubscriptionResoruce;
 use App\Models\User;
@@ -46,25 +47,32 @@ class UserSubscriptionService implements UserSubscriptionServiceInterface
         return UserSubscriptionResoruce::collection($subscribedsData);
     }
 
+    /**
+     * @throws SubscriptionException
+     */
     public function subscribe(User $user): void
     {
         Gate::authorize(SUBSCRIBE_ON_USER_GATE, [User::class, $user->id]);
 
-        $this->userSubscriptionRepository->subscribe($this->authorizedUserId, $user->id);
+        $subscribed = $this->userSubscriptionRepository->subscribe($this->authorizedUserId, $user->id);
+        if (!$subscribed) {
+            throw new SubscriptionException("You're already subscribed to this user.");
+        }
     }
 
+    /**
+     * @throws SubscriptionException
+     */
     public function unsubscribe(User $user): void
     {
         Gate::authorize(UNSUBSCRIBE_FROM_USER_GATE, [User::class, $user->id]);
 
-        $this->userSubscriptionRepository->unsubscribe($this->authorizedUserId, $user->id);
+        $unsubscribed = $this->userSubscriptionRepository->unsubscribe($this->authorizedUserId, $user->id);
+        if (!$unsubscribed) {
+            throw new SubscriptionException("You're not subscribed to this user.");
+        }
     }
 
-    /**
-     * @param array $usersIds
-     * 
-     * @return Collection
-     */
     protected function assemblyUsersData(array $usersIds): Collection
     {
         $usersData = $this->userRepository->getByIds($usersIds);

@@ -21,13 +21,13 @@ class UserPolicy
      * 
      * @see SUBSCRIBE_ON_USER_GATE
      */
-    public function subscribeOnUser(User $user, int $secondUserId): bool
+    public function subscribeOnUser(User $user, int $secondUserId): Response
     {
         if ($user->id === $secondUserId) {
             return Response::denyWithStatus(400, "You can't subscribe to yourself");
         }
 
-        return true;
+        return Response::allow();
     }
 
     /**
@@ -35,12 +35,12 @@ class UserPolicy
      * 
      * @see UNSUBSCRIBE_FROM_USER_GATE
      */
-    public function unsubscribeFromUser(User $user, int $secondUserId): bool
+    public function unsubscribeFromUser(User $user, int $secondUserId): Response
     {
         if ($user->id === $secondUserId) {
             return Response::denyWithStatus(400, "You can't unsubscribe from yourself");
         }
 
-        return true;
+        return Response::allow();
     }
 }

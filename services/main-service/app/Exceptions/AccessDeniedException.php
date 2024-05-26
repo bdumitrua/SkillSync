@@ -9,10 +9,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class AccessDeniedException extends HttpException
 {
     protected $code = Response::HTTP_FORBIDDEN;
-    protected $message = "Access denied";
 
-    public function __construct()
+    public function __construct(string $message = "Access denied")
     {
-        parent::__construct($this->code, $this->message);
+        parent::__construct($this->code, $message);
     }
 }

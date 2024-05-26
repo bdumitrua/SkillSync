@@ -3,10 +3,12 @@
 namespace App\Services;
 
 use App\Enums\MessageStatus;
+use App\Exceptions\AccessDeniedException;
+use App\Exceptions\NotFoundException;
+use App\Exceptions\UnprocessableContentException;
 use Kreait\Firebase\Database;
 use Ramsey\Uuid\Uuid;
 
-// TODO Change base \Exception with custom classes
 class FirebaseService
 {
     protected Database $database;
@@ -35,7 +37,7 @@ class FirebaseService
 
         $snapshot = $chatRef->getSnapshot();
         if ($snapshot->exists()) {
-            throw new \Exception("Chat with ID {$chatId} already exists.", 400);
+            throw new UnprocessableContentException("Chat with ID {$chatId} already exists.");
         }
 
         $chatRef->set($chatData);
@@ -101,7 +103,7 @@ class FirebaseService
         $snapshot = $messageRef->getSnapshot();
 
         if (!$snapshot->exists()) {
-            throw new \Exception("Message with UUID {$messageUuid} not found in chat {$chatId}.", 404);
+            throw new NotFoundException("Message");
         }
 
         $messageData = $snapshot->getValue();
@@ -116,12 +118,12 @@ class FirebaseService
         $snapshot = $messageRef->getSnapshot();
 
         if (!$snapshot->exists()) {
-            throw new \Exception("Message with UUID {$messageUuid} not found in chat {$chatId}.", 404);
+            throw new NotFoundException("Message");
         }
 
         $messageData = $snapshot->getValue();
         if ($messageData['senderId'] !== $userId) {
-            throw new \Exception("You can't delete other member's messages.", 403);
+            throw new AccessDeniedException("You can't delete other member's messages.");
         }
 
         $messageRef->remove();
@@ -148,7 +150,7 @@ class FirebaseService
         $snapshot = $chatMembersRef->getSnapshot();
 
         if (!$snapshot->exists()) {
-            throw new \Exception("No members found for chat with ID {$chatId}");
+            throw new NotFoundException("Chat members");
         }
 
         return $snapshot->getValue();

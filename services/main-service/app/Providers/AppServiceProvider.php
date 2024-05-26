@@ -195,8 +195,6 @@ class AppServiceProvider extends ServiceProvider
         define('UNSUBSCRIBE_FROM_USER_GATE', 'unsubscribeFromUser');
 
         // Team
-        define('ADMIN_TEAM_GATE', 'admin');
-        define('CREATE_TEAM_GATE', 'createTeam');
         define('UPDATE_TEAM_GATE', 'updateTeam');
         define('DELETE_TEAM_GATE', 'deleteTeam');
         define('MONITOR_TEAM_APPLICATIONS_GATE', 'monitorTeamApplications');

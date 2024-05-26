@@ -3,6 +3,8 @@
 namespace App\Services\Team;
 
 use App\DTO\Team\CreateTeamMemberDTO;
+use App\Exceptions\AccessDeniedException;
+use App\Exceptions\MembershipException;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Collection;
 use App\Services\Team\Interfaces\TeamMemberServiceInterface;
@@ -41,6 +43,9 @@ class TeamMemberService implements TeamMemberServiceInterface
         );
     }
 
+    /**
+     * @throws MembershipException
+     */
     public function create(int $teamId, CreateTeamMemberRequest $request): void
     {
         Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
@@ -55,12 +60,16 @@ class TeamMemberService implements TeamMemberServiceInterface
         );
 
         if ($isMember) {
-            return;
+            throw new MembershipException("User is already member of this team.");
         }
 
         $this->teamMemberRepository->addMember($createTeamMemberDTO);
     }
 
+    /**
+     * @throws MembershipException
+     * @throws AccessDeniedException
+     */
     public function delete(Team $team, int $userId): void
     {
         Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $team->id]);
@@ -71,12 +80,11 @@ class TeamMemberService implements TeamMemberServiceInterface
         );
 
         if (empty($membership)) {
-            // TODO CUSTOM EXCEPTION
-            throw new HttpException(400, "This user is not member of this team");
+            throw new MembershipException("User is not member of this team");
         }
 
         if ($team->admin_id === $userId) {
-            return;
+            throw new AccessDeniedException();
         }
 
         $this->teamMemberRepository->removeMember($membership);

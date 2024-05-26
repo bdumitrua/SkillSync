@@ -2,6 +2,7 @@
 
 namespace App\Services\Post;
 
+use App\Exceptions\LikeException;
 use App\Models\Post;
 use App\Models\User;
 use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
@@ -41,14 +42,28 @@ class PostLikeService implements PostLikeServiceInterface
         );
     }
 
+    /**
+     * @throws LikeException
+     */
     public function create(Post $post): void
     {
         $liked = $this->postLikeRepository->create($post->id, $this->authorizedUserId);
+
+        if (!$liked) {
+            throw new LikeException("You already liked this post.");
+        }
     }
 
+    /**
+     * @throws LikeException
+     */
     public function delete(Post $post): void
     {
-        $deleted = $this->postLikeRepository->delete($post->id, $this->authorizedUserId);
+        $unliked = $this->postLikeRepository->delete($post->id, $this->authorizedUserId);
+
+        if (!$unliked) {
+            throw new LikeException("You haven't liked this post.");
+        }
     }
 
     protected function assembleLikesData(Collection $postLikes): Collection

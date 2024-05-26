@@ -22,7 +22,7 @@ class CreateTeamRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:30',
+            'name' => 'required|string|max:30|unique:teams,name',
             'avatar' => 'nullable|url',
             'description' => 'nullable|string|max:200',
             'email' => 'nullable|email',

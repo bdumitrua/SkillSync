@@ -13,8 +13,10 @@ class PostCommentPolicy
      * 
      * @see DELETE_POST_COMMENT_GATE
      */
-    public function deletePostComment(User $user, PostComment $postComment): bool
+    public function deletePostComment(User $user, PostComment $postComment): Response
     {
-        return $user->id === $postComment->user_id;
+        return $user->id === $postComment->user_id
+            ? Response::allow()
+            : Response::deny("Access denied.");
     }
 }

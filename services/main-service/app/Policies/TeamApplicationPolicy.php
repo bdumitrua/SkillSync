@@ -27,17 +27,17 @@ class TeamApplicationPolicy
      * 
      * @see VIEW_TEAM_APPLICATIONS_GATE
      */
-    public function viewTeamApplication(User $user, TeamApplication $teamApplication): bool
+    public function viewTeamApplication(User $user, TeamApplication $teamApplication): Response
     {
         if ($user->id === $teamApplication->user_id) {
-            return true;
+            return Response::allow();
         }
 
         if ($this->teamMemberRepository->userIsModerator($teamApplication->team_id, $user->id)) {
-            return true;
+            return Response::allow();
         }
 
-        return false;
+        return Response::deny("Access denied.");
     }
 
     /**
@@ -45,10 +45,10 @@ class TeamApplicationPolicy
      * 
      * @see APPLY_TO_VACANCY_GATE
      */
-    public function applyToVacancy(User $user, int $teamId, int $vacancyId): bool
+    public function applyToVacancy(User $user, int $teamId, int $vacancyId): Response
     {
         if ($this->teamMemberRepository->userIsMember($teamId, $user->id)) {
-            return Response::denyWithStatus(403);
+            return Response::deny("You can't apply for this vacancy, because you're a member of this team.");
         }
 
         $alreadyApplied = $this->teamApplicationRepository->userAppliedToVacancy(
@@ -57,10 +57,10 @@ class TeamApplicationPolicy
         );
 
         if ($alreadyApplied) {
-            return Response::denyWithStatus(400);
+            return Response::denyWithStatus(409, "You already applied to this vacancy.");
         }
 
-        return true;
+        return Response::allow();
     }
 
     /**
@@ -68,9 +68,11 @@ class TeamApplicationPolicy
      * 
      * @see UPDATE_TEAM_APPLICATION_GATE
      */
-    public function updateTeamApplication(User $user, TeamApplication $teamApplication): bool
+    public function updateTeamApplication(User $user, TeamApplication $teamApplication): Response
     {
-        return $this->teamMemberRepository->userIsModerator($teamApplication->team_id, $user->id);
+        return $this->teamMemberRepository->userIsModerator($teamApplication->team_id, $user->id)
+            ? Response::allow()
+            : Response::deny("You have insufficient rigths.");
     }
 
     /**
@@ -78,8 +80,10 @@ class TeamApplicationPolicy
      * 
      * @see DELETE_TEAM_APPLICATION_GATE
      */
-    public function deleteTeamApplication(User $user, TeamApplication $teamApplication): bool
+    public function deleteTeamApplication(User $user, TeamApplication $teamApplication): Response
     {
-        return $user->id === $teamApplication->user_id;
+        return $user->id === $teamApplication->user_id
+            ? Response::allow()
+            : Response::deny("Access denied.");
     }
 }
