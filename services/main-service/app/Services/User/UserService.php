@@ -70,7 +70,7 @@ class UserService implements UserServiceInterface
             // Не сам пользователь
             $user->id !== $this->authorizedUserId
             // Нет подписки
-            && empty($this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id));
+            && !$this->userSubscriptionRepository->userIsSubscribedToUser($this->authorizedUserId, $user->id);
 
 
         $user = $this->assembleUserProfile($user);
