@@ -41,10 +41,10 @@ class TeamApplicationController extends Controller
         });
     }
 
-    public function create(TeamVacancy $teamVacancy, CreateTeamApplicationRequest $request)
+    public function create(CreateTeamApplicationRequest $request)
     {
-        return $this->handleServiceCall(function () use ($teamVacancy, $request) {
-            return $this->teamApplicationService->create($teamVacancy, $request);
+        return $this->handleServiceCall(function () use ($request) {
+            return $this->teamApplicationService->create($request);
         });
     }
 

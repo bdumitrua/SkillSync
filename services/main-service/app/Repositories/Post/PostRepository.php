@@ -2,12 +2,17 @@
 
 namespace App\Repositories\Post;
 
-use App\Models\Post;
-use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Post\Interfaces\PostRepositoryInterface;
+use App\Models\Post;
+use App\DTO\Team\UpdateTeamDTO;
+use App\DTO\Post\CreatePostDTO;
+use App\Traits\UpdateFromDTO;
 
 class PostRepository implements PostRepositoryInterface
 {
+    use UpdateFromDTO;
+
     public function getAll(): Collection
     {
         return Post::get();
@@ -37,5 +42,24 @@ class PostRepository implements PostRepositoryInterface
     public function getByTeamId(int $teamId): Collection
     {
         return Post::where('entity_type', '=', 'team')->where('entity_id', '=', $teamId)->get();
+    }
+
+    public function create(CreatePostDTO $dto): Post
+    {
+        $newPost = Post::create(
+            $dto->toArray()
+        );
+
+        return $newPost;
+    }
+
+    public function update(Post $post, UpdateTeamDTO $dto): void
+    {
+        $this->updateFromDto($post, $dto);
+    }
+
+    public function delete(Post $post): void
+    {
+        $post->delete();
     }
 }

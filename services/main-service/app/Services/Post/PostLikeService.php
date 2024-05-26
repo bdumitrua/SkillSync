@@ -43,12 +43,12 @@ class PostLikeService implements PostLikeServiceInterface
 
     public function create(Post $post): void
     {
-        //
+        $liked = $this->postLikeRepository->create($post->id, $this->authorizedUserId);
     }
 
     public function delete(Post $post): void
     {
-        //
+        $deleted = $this->postLikeRepository->delete($post->id, $this->authorizedUserId);
     }
 
     protected function assembleLikesData(Collection $postLikes): Collection

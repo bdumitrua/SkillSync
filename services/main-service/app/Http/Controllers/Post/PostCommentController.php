@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Post\CreatePostCommentRequest;
 use App\Models\Post;
 use App\Models\PostComment;
 use App\Services\Post\Interfaces\PostCommentServiceInterface;
@@ -24,10 +25,10 @@ class PostCommentController extends Controller
         });
     }
 
-    public function create(Post $post)
+    public function create(Post $post, CreatePostCommentRequest $request)
     {
-        return $this->handleServiceCall(function () use ($post) {
-            return $this->postCommentService->create($post->id);
+        return $this->handleServiceCall(function () use ($post, $request) {
+            return $this->postCommentService->create($post->id, $request);
         });
     }
 

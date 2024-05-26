@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Post;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ValidatePostEntityType;
+use App\Rules\EntityIdRule;
 
 class CreatePostRequest extends FormRequest
 {
@@ -24,6 +26,8 @@ class CreatePostRequest extends FormRequest
         return [
             'text' => 'required|string|max:255',
             'media_url' => 'nullable|string',
+            'entity_type' => 'required|in:user,team',
+            'entity_id' => [new EntityIdRule()],
         ];
     }
 
@@ -38,8 +42,9 @@ class CreatePostRequest extends FormRequest
             'text.required' => 'Text is required.',
             'text.string' => 'Text must be a string.',
             'text.max' => 'Text cannot exceed 255 characters.',
-
             'media_url.string' => 'Media URL must be a string.',
+            'entity_type.required' => 'Entity type is required.',
+            'entity_type.int' => 'Entity type can be user or team.',
         ];
     }
 }
