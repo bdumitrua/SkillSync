@@ -155,17 +155,17 @@ class PostService implements PostServiceInterface
 
     protected function patchCreatePostRequestData(CreatePostRequest &$request): void
     {
+        $entitiesPath = config('entities');
+
+        $request->merge([
+            'entity_type' => $entitiesPath[$request->entity_type]
+        ]);
+
         if ($request->entity_type == 'user') {
-            $request->merge([
-                'entity_type' => User::class
-            ]);
             $request->merge([
                 'entity_id' => $this->authorizedUserId
             ]);
         } elseif ($request->entity_type == 'team') {
-            $request->merge([
-                'entity_type' => Team::class
-            ]);
             // TODO GATE: Check if user is moderator
         }
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\EntityIdRule;
 
 class CreateTagRequest extends FormRequest
 {
@@ -22,8 +23,9 @@ class CreateTagRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|min:2|max:20'
-            // TODO VALIDATE ENTITY TYPE AND ID
+            'title' => 'required|string|min:2|max:20',
+            'entity_type' => 'required|in:user,team,post',
+            'entity_id' => [new EntityIdRule()],
         ];
     }
 
