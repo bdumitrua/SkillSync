@@ -2,12 +2,14 @@
 
 namespace App\DTO\Message;
 
+use App\Enums\MessageStatus;
+
 class CreateMesssageDTO
 {
     public string $text;
     public int $chatId;
     public int $senderId;
-    public string $status = "unread";
+    public string $status = MessageStatus::Sended;
 
     public function toArray(): array
     {

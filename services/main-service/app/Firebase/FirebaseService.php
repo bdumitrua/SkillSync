@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\MessageStatus;
 use Kreait\Firebase\Database;
 use Ramsey\Uuid\Uuid;
 
@@ -104,8 +105,8 @@ class FirebaseService
         }
 
         $messageData = $snapshot->getValue();
-        if ($messageData['status'] === 'unread') {
-            $messageRef->update(['status' => 'readed']);
+        if ($messageData['status'] === MessageStatus::Sended) {
+            $messageRef->update(['status' => MessageStatus::Readed]);
         }
     }
 
