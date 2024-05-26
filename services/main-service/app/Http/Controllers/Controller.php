@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\Access\Response as AccessResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -21,41 +22,22 @@ class Controller extends BaseController
      */
     private function responseToJSON($response): JsonResponse
     {
-        try {
-            if (empty($response)) {
-                return response()->json(null, 200);
-            }
-
-
-            if ($response instanceof JsonResource) {
-                return response()->json($response);
-            }
-
-            if ($response instanceof Response) {
-                $code = $response->getStatusCode();
-                $content = empty($response->getContent()) ? null : $response->getContent();
-
-                return response()->json($content, $code);
-            }
-
+        if (empty($response)) {
             return response()->json(null, 200);
-        } catch (\Exception $error) {
-            return $this->responseToError($error->getMessage(), Response::HTTP_BAD_GATEWAY);
         }
-    }
 
-    /**
-     * @param string $message
-     * @param int $code
-     * 
-     * @return JsonResponse
-     */
-    private function responseToError(string $message, int $code): JsonResponse
-    {
-        return response()->json(
-            ['error' => $message],
-            empty($code) ? Response::HTTP_BAD_REQUEST : $code
-        );
+        if ($response instanceof JsonResource) {
+            return response()->json($response);
+        }
+
+        if ($response instanceof Response) {
+            $code = $response->getStatusCode();
+            $content = empty($response->getContent()) ? null : $response->getContent();
+
+            return response()->json($content, $code);
+        }
+
+        return response()->json(null, 200);
     }
 
     /**
@@ -65,24 +47,7 @@ class Controller extends BaseController
      */
     protected function handleServiceCall(callable $serviceFunction): JsonResponse
     {
-        try {
-            $response = $serviceFunction();
-            return $this->responseToJSON($response);
-        } catch (HttpException $exception) {
-            return $this->responseToError(
-                $exception->getMessage(),
-                $exception->getStatusCode()
-            );
-        } catch (\Exception $exception) {
-            return $this->responseToError(
-                $exception->getMessage(),
-                418
-            );
-        } catch (\Throwable $exception) {
-            return $this->responseToError(
-                $exception->getMessage(),
-                Response::HTTP_BAD_GATEWAY
-            );
-        }
+        $response = $serviceFunction();
+        return $this->responseToJSON($response);
     }
 }

@@ -25,14 +25,14 @@ interface UserSubscriptionServiceInterface
     /**
      * @param User $user
      * 
-     * @return Response
+     * @return void
      */
-    public function subscribe(User $user): Response;
+    public function subscribe(User $user): void;
 
     /**
      * @param User $user
      * 
-     * @return Response
+     * @return void
      */
-    public function unsubscribe(User $user): Response;
+    public function unsubscribe(User $user): void;
 }

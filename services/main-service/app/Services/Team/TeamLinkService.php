@@ -14,6 +14,7 @@ use App\Http\Resources\Team\TeamLinkResource;
 use App\Http\Requests\Team\UpdateTeamLinkRequest;
 use App\Http\Requests\Team\CreateTeamLinkRequest;
 use App\Traits\CreateDTO;
+use Illuminate\Support\Facades\Gate;
 
 class TeamLinkService implements TeamLinkServiceInterface
 {
@@ -43,7 +44,8 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function create(int $teamId, CreateTeamLinkRequest $request): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        Gate::authorize('moderator', $teamId);
+
         /** @var CreateTeamLinkDTO */
         $createTeamLinkDTO = $this->createDTO($request, CreateTeamLinkDTO::class);
         $createTeamLinkDTO->teamId = $teamId;
@@ -53,7 +55,8 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function update(TeamLink $teamLink, UpdateTeamLinkRequest $request): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        Gate::authorize('moderator', $teamLink->team_id);
+
         $updateTeamLinkDTO = $this->createDTO($request, UpdateTeamLinkDTO::class);
 
         $this->teamLinkRepository->update($teamLink, $updateTeamLinkDTO);
@@ -61,7 +64,8 @@ class TeamLinkService implements TeamLinkServiceInterface
 
     public function delete(TeamLink $teamLink): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        Gate::authorize('moderator', $teamLink->team_id);
+
         $this->teamLinkRepository->delete($teamLink);
     }
 }

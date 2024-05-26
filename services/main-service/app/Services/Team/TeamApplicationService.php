@@ -17,6 +17,7 @@ use App\Traits\CreateDTO;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class TeamApplicationService implements TeamApplicationServiceInterface
 {
@@ -43,8 +44,12 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function show(int $teamApplicationId): JsonResource
     {
-        // TODO GATE: Check if authorized user is moderator or user who applied
         $teamApplication = $this->teamApplicationRepository->getById($teamApplicationId);
+
+        if (Gate::denies('viewTeamApplication', $teamApplication)) {
+            return new JsonResource([]);
+        }
+
         $teamApplication = $this->assembleApplicationsData(new Collection([$teamApplication]))->first();
 
         return new TeamApplicationResource($teamApplication);
@@ -52,17 +57,23 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function team(int $teamId): JsonResource
     {
-        // TODO GATE: Check if authorized user is moderator
+        if (Gate::denies('moderator', $teamId)) {
+            return new JsonResource([]);
+        }
+
         $teamApplications = $this->teamApplicationRepository->getByTeamId($teamId);
         $teamApplications = $this->assembleApplicationsData($teamApplications);
 
         return TeamApplicationResource::collection($teamApplications);
     }
 
-    public function vacancy(int $teamVacancyId): JsonResource
+    public function vacancy(TeamVacancy $teamVacancy): JsonResource
     {
-        // TODO GATE: Check if authorized user is moderator
-        $teamApplications = $this->teamApplicationRepository->getByVacancyId($teamVacancyId);
+        if (!Gate::allows('moderator', $teamVacancy->team_id)) {
+            return new JsonResource([]);
+        }
+
+        $teamApplications = $this->teamApplicationRepository->getByVacancyId($teamVacancy->id);
         $teamApplications = $this->assembleApplicationsData($teamApplications);
 
         return TeamApplicationResource::collection($teamApplications);
@@ -70,10 +81,13 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function create(CreateTeamApplicationRequest $request): void
     {
-        // TODO GATE: Check if authorized user is not a member
         /** @var CreateTeamApplicationDTO */
         $createApplicationDTO = $this->createDTO($request, CreateTeamApplicationDTO::class);
         $createApplicationDTO->userId = $this->authorizedUserId;
+
+        if (Gate::allows('member', $createApplicationDTO->userId)) {
+            return;
+        }
 
         $alreadyApplied = $this->teamApplicationRepository->userAppliedToVacancy(
             $this->authorizedUserId,
@@ -89,13 +103,15 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $request): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        Gate::authorize('moderator', $teamApplication->team_id);
+
         $this->teamApplicationRepository->update($teamApplication, $request->status);
     }
 
     public function delete(TeamApplication $teamApplication): void
     {
-        // TODO GATE: Check if authorized user is moderator or user who applied
+        Gate::authorize('deleteTeamApplication', $teamApplication);
+
         $this->teamApplicationRepository->delete($teamApplication);
     }
 

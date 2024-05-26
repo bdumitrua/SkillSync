@@ -29,6 +29,20 @@ interface TeamRepositoryInterface
     public function getByIds(array $teamIds): Collection;
 
     /**
+     * @param string $teamName
+     * 
+     * @return Team|null
+     */
+    public function getByName(string $teamName): ?Team;
+
+    /**
+     * @param int $chatId
+     * 
+     * @return Team|null
+     */
+    public function getByChatId(int $chatId): ?Team;
+
+    /**
      * @param CreateTeamDTO $dto
      * 
      * @return Team

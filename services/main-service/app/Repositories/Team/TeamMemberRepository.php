@@ -37,6 +37,17 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
         return $this->queryByBothIds($teamId, $userId)->exists();
     }
 
+    public function userIsModerator(int $teamId, int $userId): bool
+    {
+        $membership = $this->getMemberByBothIds($teamId, $userId);
+
+        if (empty($membership)) {
+            return false;
+        }
+
+        return $membership->is_moderator;
+    }
+
     public function addMember(CreateTeamMemberDTO $dto): void
     {
         TeamMember::create(

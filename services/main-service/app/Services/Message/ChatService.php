@@ -7,17 +7,23 @@ use App\Http\Requests\Message\UpdateChatRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Message\Interfaces\ChatServiceInterface;
 use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 class ChatService implements ChatServiceInterface
 {
     protected $chatRepository;
+    protected $teamRepository;
     protected ?int $authorizedUserId;
 
-    public function __construct(ChatRepositoryInterface $chatRepository)
-    {
+    public function __construct(
+        ChatRepositoryInterface $chatRepository,
+        TeamRepositoryInterface $teamRepository,
+    ) {
         $this->chatRepository = $chatRepository;
+        $this->teamRepository = $teamRepository;
         $this->authorizedUserId = Auth::id();
     }
 
@@ -30,7 +36,7 @@ class ChatService implements ChatServiceInterface
 
     public function show(int $chatId): JsonResource
     {
-        // TODO GATE: Check if authorized user is chat member
+        // TODO check if authorized user is chat member
         return new JsonResource(
             $this->chatRepository->getById($chatId)
         );
@@ -38,13 +44,17 @@ class ChatService implements ChatServiceInterface
 
     public function create(int $teamId, CreateChatRequest $request): void
     {
-        // TODO GATE: Check if authorized user is admin of team
+        Gate::authorize('admin', $teamId);
         // 
     }
 
     public function update(int $chatId, UpdateChatRequest $request): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        if (empty($team = $this->teamRepository->getByChatId($chatId))) {
+            return;
+        }
+
+        Gate::authorize('moderator', $team->id);
         // 
     }
 }

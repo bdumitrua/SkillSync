@@ -39,6 +39,14 @@ interface TeamMemberRepositoryInterface
     public function userIsMember(int $teamId, int $userId): bool;
 
     /**
+     * @param int $teamId
+     * @param int $userId
+     * 
+     * @return bool
+     */
+    public function userIsModerator(int $teamId, int $userId): bool;
+
+    /**
      * @param CreateTeamMemberDTO $dto
      * 
      * @return void

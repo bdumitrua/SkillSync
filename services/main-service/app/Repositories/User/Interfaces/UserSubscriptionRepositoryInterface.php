@@ -40,14 +40,15 @@ interface UserSubscriptionRepositoryInterface
      * @param int $subscriberId
      * @param int $subscribedId
      * 
-     * @return void
+     * @return bool
      */
-    function subscribe(int $subscriberId, int $subscribedId): void;
+    function subscribe(int $subscriberId, int $subscribedId): bool;
 
     /**
-     * @param UserSubscription $userSubscription
+     * @param int $subscriberId
+     * @param int $subscribedId
      * 
-     * @return void
+     * @return bool
      */
-    function unsubscribe(UserSubscription $userSubscription): void;
+    function unsubscribe(int $subscriberId, int $subscribedId): bool;
 }

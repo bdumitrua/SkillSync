@@ -13,6 +13,7 @@ use App\Http\Resources\Post\PostCommentResource;
 use App\Http\Requests\Post\CreatePostCommentRequest;
 use App\Traits\CreateDTO;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PostCommentService implements PostCommentServiceInterface
 {
@@ -51,7 +52,8 @@ class PostCommentService implements PostCommentServiceInterface
 
     public function delete(PostComment $postComment): void
     {
-        // TODO GATE: Check if authorized user is author
+        Gate::authorize('deletePostComment', $postComment);
+
         $this->postCommentRepository->delete($postComment);
     }
 

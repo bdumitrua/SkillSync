@@ -19,6 +19,7 @@ use App\Traits\CreateDTO;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PostService implements PostServiceInterface
 {
@@ -96,14 +97,16 @@ class PostService implements PostServiceInterface
 
     public function update(Post $post, UpdatePostRequest $request): void
     {
-        // TODO GATE: Check if authorized user is author
+        Gate::authorize('updatePost', $post);
+
         $updatePostDTO = $this->createDTO($request, UpdatePostDTO::class);
         $this->postRepository->update($post, $updatePostDTO);
     }
 
     public function delete(Post $post): void
     {
-        // TODO GATE: Check if authorized user is author
+        Gate::authorize('deletePost', $post);
+
         $this->postRepository->delete($post);
     }
 
@@ -166,7 +169,7 @@ class PostService implements PostServiceInterface
                 'entity_id' => $this->authorizedUserId
             ]);
         } elseif ($request->entity_type == 'team') {
-            // TODO GATE: Check if user is moderator
+            Gate::authorize('moderator', $request->entity_id);
         }
     }
 }

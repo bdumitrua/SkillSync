@@ -37,7 +37,7 @@ class TeamApplicationController extends Controller
     public function vacancy(TeamVacancy $teamVacancy)
     {
         return $this->handleServiceCall(function () use ($teamVacancy) {
-            return $this->teamApplicationService->vacancy($teamVacancy->id);
+            return $this->teamApplicationService->vacancy($teamVacancy);
         });
     }
 

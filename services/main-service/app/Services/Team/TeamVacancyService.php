@@ -14,6 +14,7 @@ use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Traits\CreateDTO;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 class TeamVacancyService implements TeamVacancyServiceInterface
 {
@@ -48,7 +49,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function create(int $teamId, CreateTeamVacancyRequest $request): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        Gate::authorize('moderator', $teamId);
 
         /** @var CreateTeamVacancyDTO */
         $createTeamVacancyDTO = $this->createDTO($request, CreateTeamVacancyDTO::class);
@@ -59,7 +60,8 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyRequest $request): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        Gate::authorize('moderator', $teamVacancy->team_id);
+
         $updateTeamVacancyDTO = $this->createDTO($request, UpdateTeamVacancyDTO::class);
 
         $this->teamVacancyRepository->update($teamVacancy, $updateTeamVacancyDTO);
@@ -67,7 +69,8 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     public function delete(TeamVacancy $teamVacancy): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        Gate::authorize('moderator', $teamVacancy->team_id);
+
         $this->teamVacancyRepository->delete($teamVacancy);
     }
 

@@ -46,16 +46,30 @@ class UserSubscriptionRepository implements UserSubscriptionRepositoryInterface
             ->toArray();
     }
 
-    public function subscribe(int $subscriberId, int $subscribedId): void
+    public function subscribe(int $subscriberId, int $subscribedId): bool
     {
+        $isSubscribed = $this->userIsSubscribedToUser($subscriberId, $subscribedId);
+
+        if ($isSubscribed) {
+            return false;
+        }
+
         UserSubscription::create([
             'subscriber_id' => $subscriberId,
             'subscribed_id' => $subscribedId,
         ]);
+
+        return true;
     }
 
-    public function unsubscribe(UserSubscription $userSubscription): void
+    function unsubscribe(int $subscriberId, int $subscribedId): bool
     {
-        $userSubscription->delete();
+        $userSubscription = $this->getByBothIds($subscriberId, $subscribedId);
+
+        if (empty($userSubscription)) {
+            return false;
+        }
+
+        return $userSubscription->delete();
     }
 }

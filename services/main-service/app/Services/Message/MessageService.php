@@ -20,19 +20,19 @@ class MessageService implements MessageServiceInterface
 
     public function send(int $chatId, CreateMesssageRequest $request): void
     {
-        // TODO GATE: Check if authorized user is chat member
+        // TODO check if authorized user is chat member
         // 
     }
 
     public function read(int $chatId, string $messageUuid): void
     {
+        // TODO check if authorized user is chat member
         // 
-        // TODO GATE: Check if authorized user is chat member
     }
 
     public function delete(int $chatId, string $messageUuid): void
     {
+        // TODO check if authorized user is author
         // 
-        // TODO GATE: Check if authorized user is author
     }
 }

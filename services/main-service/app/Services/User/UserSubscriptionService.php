@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 
 class UserSubscriptionService implements UserSubscriptionServiceInterface
@@ -45,32 +46,18 @@ class UserSubscriptionService implements UserSubscriptionServiceInterface
         return UserSubscriptionResoruce::collection($subscribedsData);
     }
 
-    public function subscribe(User $user): Response
+    public function subscribe(User $user): void
     {
-        // TODO GATE: Check if it's not user itself
-        $isSubscribed = $this->userSubscriptionRepository->userIsSubscribedToUser(
-            $this->authorizedUserId,
-            $user->id
-        );
-
-        if ($isSubscribed) {
-            return ResponseHelper::noContent();
-        }
+        Gate::authorize('subscribeOnUser', $user->id);
 
         $this->userSubscriptionRepository->subscribe($this->authorizedUserId, $user->id);
-        return ResponseHelper::created();
     }
 
-    public function unsubscribe(User $user): Response
+    public function unsubscribe(User $user): void
     {
-        // TODO GATE: Check if it's not user itself
-        $subscription = $this->userSubscriptionRepository->getByBothIds($this->authorizedUserId, $user->id);
-        if (empty($subscription)) {
-            return ResponseHelper::badRequest();
-        }
+        Gate::authorize('unsubscribeFromUser', $user->id);
 
-        $this->userSubscriptionRepository->unsubscribe($subscription);
-        return ResponseHelper::ok();
+        $this->userSubscriptionRepository->unsubscribe($this->authorizedUserId, $user->id);
     }
 
     /**

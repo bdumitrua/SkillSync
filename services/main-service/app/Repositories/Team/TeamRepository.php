@@ -28,6 +28,16 @@ class TeamRepository implements TeamRepositoryInterface
         return Team::whereIn('id', $teamIds)->get();
     }
 
+    public function getByName(string $teamName): ?Team
+    {
+        return Team::where('name', '=', $teamName)->first();
+    }
+
+    public function getByChatId(int $chatId): ?Team
+    {
+        return Team::where('chat_id', '=', $chatId)->first();
+    }
+
     public function create(CreateTeamDTO $dto): Team
     {
         $newTeam = Team::create(

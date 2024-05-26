@@ -11,6 +11,7 @@ use App\Http\Resources\TagResource;
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Traits\CreateDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Gate;
 
 class TagService implements TagServiceInterface
 {
@@ -50,10 +51,8 @@ class TagService implements TagServiceInterface
 
     public function delete(Tag $tag): void
     {
-        // TODO GATE: Check if: 
-        // is authorized user itself
-        // is moderator of team
-        // is moderator of team who posted
+        Gate::authorize('deleteTag', $tag);
+
         $this->tagRepository->delete($tag);
     }
 
@@ -65,14 +64,6 @@ class TagService implements TagServiceInterface
             'entity_type' => $entitiesPath[$request->entity_type]
         ]);
 
-        if ($request->entity_type == 'user') {
-            $request->merge([
-                'entity_id' => $this->authorizedUserId
-            ]);
-        } elseif ($request->entity_type == 'team') {
-            // TODO GATE: Check if user is moderator
-        } elseif ($request->entity_type == 'post') {
-            // TODO GATE: Check if is author or moderator of team who posted
-        }
+        Gate::authorize('createTag', $request->entity_type, $request->entity_id);
     }
 }

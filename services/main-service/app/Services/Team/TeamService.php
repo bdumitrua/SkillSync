@@ -16,6 +16,7 @@ use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Team\Interfaces\TeamLinkServiceInterface;
 use App\Traits\CreateDTO;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
@@ -72,7 +73,8 @@ class TeamService implements TeamServiceInterface
         /** @var CreateTeamDTO */
         $createTeamDTO = $this->createDTO($request, CreateTeamDTO::class);
         $createTeamDTO->adminId = $this->authorizedUserId;
-        // TODO GATE: Check if doesn't exist team with this name
+
+        Gate::authorize('createTeam', $createTeamDTO);
         $newTeam = $this->teamRepository->create($createTeamDTO);
 
         $createTeamMemberDTO = new CreateTeamMemberDTO($this->authorizedUserId, $newTeam->id, isModerator: true);
@@ -82,13 +84,14 @@ class TeamService implements TeamServiceInterface
     public function update(Team $team, UpdateTeamRequest $request): void
     {
         $updateTeamDTO = $this->createDTO($request, UpdateTeamDTO::class);
-        // TODO GATE: Check if authorized user is moderator
+
+        Gate::authorize('updateTeam', $team->id);
         $this->teamRepository->update($team, $updateTeamDTO);
     }
 
     public function delete(Team $team): void
     {
-        // TODO GATE: Check if authorized user is admin
+        Gate::authorize('deleteTeam', $team->id);
         $this->teamRepository->delete($team);
     }
 

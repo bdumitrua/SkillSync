@@ -18,11 +18,6 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\ForceJsonResponse::class,
             \App\Http\Middleware\Authenticate::class . ':api',
         ]);
-
-        $middleware->alias([
-            'prevent.self.action' => \App\Http\Middleware\PreventSelfAction::class,
-            'checkRights' => \App\Http\Middleware\CheckEntityRights::class,
-        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->render(function (NotFoundHttpException $e) {

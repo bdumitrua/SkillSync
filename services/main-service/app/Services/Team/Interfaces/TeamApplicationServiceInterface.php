@@ -25,11 +25,11 @@ interface TeamApplicationServiceInterface
     public function team(int $teamId): JsonResource;
 
     /**
-     * @param int $teamVacancyId
+     * @param TeamVacancy $teamVacancy
      * 
      * @return JsonResource
      */
-    public function vacancy(int $teamVacancyId): JsonResource;
+    public function vacancy(TeamVacancy $teamVacancy): JsonResource;
 
     /**
      * @param CreateTeamApplicationRequest $request

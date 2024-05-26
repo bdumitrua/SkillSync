@@ -11,6 +11,7 @@ use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Http\Resources\Team\TeamMemberResource;
 use App\Http\Requests\Team\CreateTeamMemberRequest;
 use App\Traits\CreateDTO;
+use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -41,7 +42,8 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     public function create(int $teamId, CreateTeamMemberRequest $request): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        Gate::authorize('moderator', $teamId);
+
         /** @var CreateTeamMemberDTO */
         $createTeamMemberDTO = $this->createDTO($request, CreateTeamMemberDTO::class);
         $createTeamMemberDTO->teamId = $teamId;
@@ -60,7 +62,8 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     public function delete(int $teamId, int $userId): void
     {
-        // TODO GATE: Check if authorized user is moderator
+        Gate::authorize('moderator', $teamId);
+
         $membership = $this->teamMemberRepository->getMemberByBothIds(
             $teamId,
             $userId
