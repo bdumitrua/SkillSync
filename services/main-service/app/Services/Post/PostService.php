@@ -119,7 +119,6 @@ class PostService implements PostServiceInterface
         return $posts;
     }
 
-    // TODO REFACTOR 
     protected function setPostsEntityData(Collection &$posts): void
     {
         $userIds = [];
