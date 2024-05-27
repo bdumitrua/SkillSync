@@ -27,7 +27,7 @@ class UpdateTeamRequest extends FormRequest
             'description' => 'nullable|string|max:200',
             'email' => 'nullable|email',
             'site' => 'nullable|url',
-            'chat_id' => 'nullable|integer|min:1',
+            'chatId' => 'nullable|integer|min:1',
         ];
     }
 
@@ -40,8 +40,8 @@ class UpdateTeamRequest extends FormRequest
             'description.max' => 'Description cannot exceed 200 characters.',
             'email.email' => 'Invalid Email format.',
             'site.url' => 'Invalid URL format for Site.',
-            'chat_id.integer' => 'ChatId must be an integer.',
-            'chat_id.min' => 'ChatId must be greater than 0.',
+            'chatId.integer' => 'ChatId must be an integer.',
+            'chatId.min' => 'ChatId must be greater than 0.',
         ];
     }
 }

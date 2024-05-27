@@ -23,7 +23,7 @@ class UpdatePostRequest extends FormRequest
     {
         return [
             'text' => 'required|string|max:255',
-            'media_url' => 'nullable|string',
+            'mediaUrl' => 'nullable|string',
         ];
     }
 
@@ -38,7 +38,7 @@ class UpdatePostRequest extends FormRequest
             'text.required' => 'Text is required.',
             'text.string' => 'Text must be a string.',
             'text.max' => 'Text cannot exceed 255 characters.',
-            'media_url.string' => 'Media URL must be a string.',
+            'mediaUrl.string' => 'Media URL must be a string.',
         ];
     }
 }

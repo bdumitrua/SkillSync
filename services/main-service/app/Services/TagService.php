@@ -44,7 +44,7 @@ class TagService implements TagServiceInterface
     public function create(CreateTagRequest $request): void
     {
         $this->patchCreateTagRequest($request);
-        Gate::authorize(CREATE_TAG_GATE, [Tag::class, $request->entity_type, $request->entity_id]);
+        Gate::authorize(CREATE_TAG_GATE, [Tag::class, $request->entityType, $request->entityId]);
 
         $createTagDTO = $this->createDTO($request, CreateTagDTO::class);
         $this->tagRepository->create($createTagDTO);
@@ -62,7 +62,7 @@ class TagService implements TagServiceInterface
         $entitiesPath = config('entities');
 
         $request->merge([
-            'entity_type' => $entitiesPath[$request->entity_type]
+            'entityType' => $entitiesPath[$request->entityType]
         ]);
     }
 }

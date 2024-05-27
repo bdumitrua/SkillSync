@@ -88,7 +88,7 @@ class PostService implements PostServiceInterface
     public function create(CreatePostRequest $request): void
     {
         $this->patchCreatePostRequestData($request);
-        Gate::authorize(CREATE_POST_GATE, [Post::class, $request->entity_type, $request->entity_id]);
+        Gate::authorize(CREATE_POST_GATE, [Post::class, $request->entityType, $request->entityId]);
 
         /** @var  CreatePostDTO */
         $createPostDTO = $this->createDTO($request, CreatePostDTO::class);
@@ -161,7 +161,7 @@ class PostService implements PostServiceInterface
         $entitiesPath = config('entities');
 
         $request->merge([
-            'entity_type' => $entitiesPath[$request->entity_type]
+            'entityType' => $entitiesPath[$request->entityType]
         ]);
     }
 }

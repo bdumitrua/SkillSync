@@ -4,7 +4,6 @@ namespace App\Repositories\Team\Interfaces;
 
 use App\DTO\Team\CreateTeamLinkDTO;
 use App\DTO\Team\UpdateTeamLinkDTO;
-use App\Http\Requests\Team\UpdateTeamLinkRequest;
 use App\Models\TeamLink;
 use Illuminate\Database\Eloquent\Collection;
 

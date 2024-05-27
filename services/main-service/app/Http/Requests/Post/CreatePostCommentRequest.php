@@ -23,7 +23,7 @@ class CreatePostCommentRequest extends FormRequest
     {
         return [
             'text' => 'required|string|max:200',
-            'media_url' => 'nullable|string',
+            'mediaUrl' => 'nullable|string',
         ];
     }
 
@@ -38,7 +38,7 @@ class CreatePostCommentRequest extends FormRequest
             'text.required' => 'Text is required.',
             'text.string' => 'Text must be a string.',
             'text.max' => 'Text cannot exceed 200 characters.',
-            'media_url.string' => 'Media URL must be a string.',
+            'mediaUrl.string' => 'Media URL must be a string.',
         ];
     }
 }

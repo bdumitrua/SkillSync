@@ -25,8 +25,8 @@ class CreateTeamApplicationRequest extends FormRequest
     {
         return [
             'text' => 'nullable|string|max:200',
-            'team_id' => [new EntityIdRule(), Rule::exists('teams', 'id')],
-            'vacancy_id' => [new EntityIdRule(), Rule::exists('team_vacancies', 'id')],
+            'teamId' => [new EntityIdRule(), Rule::exists('teams', 'id')],
+            'vacancyId' => [new EntityIdRule(), Rule::exists('team_vacancies', 'id')],
         ];
     }
 
@@ -36,9 +36,8 @@ class CreateTeamApplicationRequest extends FormRequest
             'text.string' => 'The text should be string.',
             'text.max' => 'The text cannot be longer than 200 characters.',
 
-            'team_id.exists' => 'The selected team does not exist.',
-
-            'vacancy_id.exists' => 'The selected vacancy does not exist.',
+            'teamId.exists' => 'The selected team does not exist.',
+            'vacancyId.exists' => 'The selected vacancy does not exist.',
         ];
     }
 }

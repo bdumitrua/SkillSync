@@ -24,9 +24,9 @@ class UpdateTeamMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => [new EntityIdRule(), Rule::exists('users', 'id')],
-            'is_moderator' => 'required|boolean',
-            'team_id' => [new EntityIdRule(), Rule::exists('teams', 'id')],
+            'userId' => [new EntityIdRule(), Rule::exists('users', 'id')],
+            'teamId' => [new EntityIdRule(), Rule::exists('teams', 'id')],
+            'isModerator' => 'required|boolean',
             'about' => 'nullable|string|max:80',
         ];
     }
@@ -34,9 +34,9 @@ class UpdateTeamMemberRequest extends FormRequest
     public function messages()
     {
         return [
-            'user_id.exists' => 'The selected user does not exist.',
-            'is_moderator.required' => 'IsModerator is required.',
-            'team_id.exists' => 'The selected team does not exist.',
+            'userId.exists' => 'The selected user does not exist.',
+            'teamId.exists' => 'The selected team does not exist.',
+            'isModerator.required' => 'IsModerator is required.',
             'about.max' => 'About cannot exceed 80 characters.',
         ];
     }

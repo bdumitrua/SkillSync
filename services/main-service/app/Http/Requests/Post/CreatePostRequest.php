@@ -25,9 +25,9 @@ class CreatePostRequest extends FormRequest
     {
         return [
             'text' => 'required|string|max:255',
-            'media_url' => 'nullable|string',
-            'entity_type' => 'required|in:user,team',
-            'entity_id' => [new EntityIdRule()],
+            'mediaUrl' => 'nullable|string',
+            'entityType' => 'required|in:user,team',
+            'entityId' => [new EntityIdRule()],
         ];
     }
 
@@ -42,9 +42,9 @@ class CreatePostRequest extends FormRequest
             'text.required' => 'Text is required.',
             'text.string' => 'Text must be a string.',
             'text.max' => 'Text cannot exceed 255 characters.',
-            'media_url.string' => 'Media URL must be a string.',
-            'entity_type.required' => 'Entity type is required.',
-            'entity_type.int' => 'Entity type can be user or team.',
+            'mediaUrl.string' => 'Media URL must be a string.',
+            'entityType.required' => 'Entity type is required.',
+            'entityType.int' => 'Entity type can be user or team.',
         ];
     }
 }

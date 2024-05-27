@@ -24,16 +24,16 @@ class CreateTeamMemberRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => [new EntityIdRule(), Rule::exists('users', 'id')],
-            'is_moderator' => 'required|boolean',
+            'userId' => [new EntityIdRule(), Rule::exists('users', 'id')],
+            'isModerator' => 'required|boolean',
         ];
     }
 
     public function messages()
     {
         return [
-            'user_id.exists' => 'The selected user does not exist.',
-            'is_moderator.required' => 'IsModerator is required.',
+            'userId.exists' => 'The selected user does not exist.',
+            'isModerator.required' => 'IsModerator is required.',
         ];
     }
 }

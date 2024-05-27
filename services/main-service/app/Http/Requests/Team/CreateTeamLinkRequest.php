@@ -24,9 +24,9 @@ class CreateTeamLinkRequest extends FormRequest
         return [
             'name' => 'required|string|max:30',
             'url' => 'required|url',
-            'is_private' => 'required|boolean',
+            'isPrivate' => 'required|boolean',
             'text' => 'nullable|string|max:30',
-            'icon_type' => 'nullable|string|max:30',
+            'iconType' => 'nullable|string|max:30',
         ];
     }
 
@@ -37,9 +37,9 @@ class CreateTeamLinkRequest extends FormRequest
             'name.max' => 'Name cannot exceed 30 characters.',
             'url.required' => 'URL is required.',
             'url.url' => 'Invalid URL format.',
-            'is_private.required' => 'IsPrivate is required.',
+            'isPrivate.required' => 'IsPrivate is required.',
             'text.max' => 'Text cannot exceed 30 characters.',
-            'icon_type.max' => 'IconType cannot exceed 30 characters.',
+            'iconType.max' => 'IconType cannot exceed 30 characters.',
         ];
     }
 }
