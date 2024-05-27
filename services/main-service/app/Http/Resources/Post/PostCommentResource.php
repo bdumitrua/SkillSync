@@ -19,12 +19,12 @@ class PostCommentResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'user_id' => $this->user_id,
+            'userId' => $this->user_id,
             'userData' => $userData,
             'text' => $this->text,
-            'media_url' => $this->media_url,
+            'mediaUrl' => $this->media_url,
+            'likesCount' => $this->likes_count ?? 0,
             'created_at' => $this->created_at,
-            'likes_count' => $this->likes_count ?? 0,
         ];
     }
 }

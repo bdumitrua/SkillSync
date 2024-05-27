@@ -31,13 +31,13 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'text' => $this->text,
-            'media_url' => $this->media_url,
-            'created_at' => $this->created_at,
-            'entity_id' => $this->entity_id,
-            'entity_type' => $this->entity_type,
+            'mediaUrl' => $this->media_url,
+            'createdAt' => $this->created_at,
+            'entityId' => $this->entity_id,
+            'entityType' => $this->entity_type,
             'entityData' => $entityData,
             'tags' => $tags,
-            'likes_count' => $this->likes_count ?? 0,
+            'likesCount' => $this->likes_count ?? 0,
         ];
     }
 }
