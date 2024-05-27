@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\User\UserSubscriptionController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\UserSubscriptionController;
+use App\Http\Controllers\User\UserController;
 
 Route::prefix('users')->name('users.')->group(function () {
     /*

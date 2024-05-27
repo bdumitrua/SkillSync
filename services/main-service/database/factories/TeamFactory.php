@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,16 @@ class TeamFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::all()->random();
+
         return [
-            //
+            'admin_id' => $user->id,
+            'name' => $this->faker->words(2, true),
+            'avatar' => $this->faker->url(),
+            'description' => $this->faker->words(10, true),
+            'email' => $this->faker->email(),
+            'site' => $this->faker->url(),
+            'chat_id' => null,
         ];
     }
 }

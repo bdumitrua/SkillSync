@@ -17,7 +17,6 @@ class TeamResource extends JsonResource
     public function toArray(Request $request): array
     {
         $chatData = $this->chatData ? (new ChatResource($this->chatData))->resolve() : [];
-        $adminData = $this->adminData ? (new UserDataResource($this->adminData))->resolve() : [];
 
         return [
             'id' => $this->id,
@@ -29,7 +28,6 @@ class TeamResource extends JsonResource
             'chatId' => $this->chat_id,
             'chatData' => $chatData,
             'adminId' => $this->admin_id,
-            'adminData' => $adminData,
             'posts' => $this->posts,
             'tags' => $this->tags,
             'links' => $this->links,

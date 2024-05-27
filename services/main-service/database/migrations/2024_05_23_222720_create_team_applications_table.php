@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TeamApplicationStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -17,7 +18,7 @@ return new class extends Migration
             $table->foreignId('team_id')->constrained()->onDelete('cascade');
             $table->unsignedBigInteger('vacancy_id');
             $table->text('text')->nullable();
-            $table->string('status')->default('Sent');
+            $table->string('status');
             $table->timestamps();
 
             $table->foreign('vacancy_id')->references('id')->on('team_vacancies')->onDelete('cascade');

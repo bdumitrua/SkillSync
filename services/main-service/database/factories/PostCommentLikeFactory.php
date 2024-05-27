@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\PostComment;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,12 @@ class PostCommentLikeFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::all()->random();
+        $postComment = PostComment::all()->random();
+
         return [
-            //
+            'user_id' => $user->id,
+            'post_comment_id' => $postComment->id,
         ];
     }
 }

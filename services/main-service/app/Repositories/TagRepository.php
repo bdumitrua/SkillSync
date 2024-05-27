@@ -32,10 +32,7 @@ class TagRepository implements TagRepositoryInterface
 
     public function getByUserIds(array $userIds): Collection
     {
-        return $this->queryByUser()
-            ->whereIn('entity_id', $userIds)
-            ->groupBy('entity_id')
-            ->get();
+        return $this->queryByUser()->whereIn('entity_id', $userIds)->get();
     }
 
     public function getByTeamId(int $teamId): Collection
@@ -45,10 +42,7 @@ class TagRepository implements TagRepositoryInterface
 
     public function getByTeamIds(array $teamIds): Collection
     {
-        return $this->queryByTeam()
-            ->whereIn('entity_id', $teamIds)
-            ->groupBy('entity_id')
-            ->get();
+        return $this->queryByTeam()->whereIn('entity_id', $teamIds)->get();
     }
 
     public function getByPostId(int $postId): Collection
@@ -58,10 +52,7 @@ class TagRepository implements TagRepositoryInterface
 
     public function getByPostIds(array $postIds): Collection
     {
-        return $this->queryByPost()
-            ->whereIn('entity_id', $postIds)
-            ->groupBy('entity_id')
-            ->get();
+        return $this->queryByPost()->whereIn('entity_id', $postIds)->get();
     }
 
     public function create(CreateTagDTO $dto): Tag

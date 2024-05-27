@@ -3,6 +3,7 @@
 namespace App\Services\Team;
 
 use App\DTO\Team\CreateTeamApplicationDTO;
+use App\Enums\TeamApplicationStatus;
 use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
 use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use App\Models\TeamVacancy;
@@ -86,6 +87,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
         /** @var CreateTeamApplicationDTO */
         $createApplicationDTO = $this->createDTO($request, CreateTeamApplicationDTO::class);
         $createApplicationDTO->userId = $this->authorizedUserId;
+        $createApplicationDTO->status = TeamApplicationStatus::Sended;
 
         Gate::authorize(APPLY_TO_VACANCY_GATE, [
             TeamApplication::class,

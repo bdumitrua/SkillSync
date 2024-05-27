@@ -2,17 +2,18 @@
 
 namespace Database\Seeders;
 
-use App\Models\TeamApplication;
+use App\Models\TeamVacancy;
+use App\Models\UserSubscription;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TeamApplicationSeeder extends Seeder
+class UserSubscriptionSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        TeamApplication::factory(10)->create();
+        UserSubscription::factory(15)->create();
     }
 }
