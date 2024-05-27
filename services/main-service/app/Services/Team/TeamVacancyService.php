@@ -13,13 +13,14 @@ use App\Http\Resources\Team\TeamVacancyResource;
 use App\Models\Team;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Traits\CreateDTO;
+use App\Traits\SetAdditionalData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 
 class TeamVacancyService implements TeamVacancyServiceInterface
 {
-    use CreateDTO;
+    use CreateDTO, SetAdditionalData;
 
     protected $teamVacancyRepository;
     protected $teamRepository;
@@ -77,12 +78,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     protected function assembleVacanciesData(Collection $teamVacancies): Collection
     {
-        $teamIds = $teamVacancies->pluck('team_id')->unique()->all();
-        $teamsData = $this->teamRepository->getByIds($teamIds);
-
-        foreach ($teamVacancies as $vacancy) {
-            $vacancy->teamData = $teamsData->where('id', $vacancy->team_id)->first();
-        }
+        $this->setCollectionEntityData($teamVacancies, 'team_id', 'teamData', $this->teamRepository);
 
         return $teamVacancies;
     }

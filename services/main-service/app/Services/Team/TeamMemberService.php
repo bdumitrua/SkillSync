@@ -14,13 +14,14 @@ use App\Http\Resources\Team\TeamMemberResource;
 use App\Http\Requests\Team\CreateTeamMemberRequest;
 use App\Models\Team;
 use App\Traits\CreateDTO;
+use App\Traits\SetAdditionalData;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TeamMemberService implements TeamMemberServiceInterface
 {
-    use CreateDTO;
+    use CreateDTO, SetAdditionalData;
 
     protected $teamMemberRepository;
     protected $userRepository;
@@ -92,12 +93,7 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     protected function assebmleMembersData(Collection $teamMembers): Collection
     {
-        $userIds = $teamMembers->pluck('user_id')->unique()->all();
-        $usersData = $this->userRepository->getByIds($userIds);
-
-        foreach ($teamMembers as $member) {
-            $member->userData = $usersData->where('id', $member->user_id)->first();
-        }
+        $this->setCollectionEntityData($teamMembers, 'user_id', 'userData', $this->userRepository);
 
         return $teamMembers;
     }

@@ -87,14 +87,7 @@ class TeamService implements TeamServiceInterface
     {
         $updateTeamDTO = $this->createDTO($request, UpdateTeamDTO::class);
 
-        try {
-            Gate::authorize(UPDATE_TEAM_GATE, [Team::class, $team->id]);
-            // } catch (\Exception $e) {
-        } catch (AuthorizationException $e) {
-            // die(var_dump(get_class($e)));
-            // die(var_dump($e->status()));
-            throw $e;
-        }
+        Gate::authorize(UPDATE_TEAM_GATE, [Team::class, $team->id]);
 
         $this->teamRepository->update($team, $updateTeamDTO);
     }

@@ -15,6 +15,7 @@ use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Traits\CreateDTO;
+use App\Traits\SetAdditionalData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ use Illuminate\Support\Facades\Gate;
 
 class TeamApplicationService implements TeamApplicationServiceInterface
 {
-    use CreateDTO;
+    use CreateDTO, SetAdditionalData;
 
     protected $userRepository;
     protected $teamRepository;
@@ -111,40 +112,9 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     protected function assembleApplicationsData(Collection $teamApplications): Collection
     {
-        $this->setApplicationsUserData($teamApplications);
-        $this->setApplicationsVacancyData($teamApplications);
+        $this->setCollectionEntityData($teamApplications, 'user_id', 'userData', $this->userRepository);
+        $this->setCollectionEntityData($teamApplications, 'vacancy_id', 'vacancyData', $this->vacancyRepository);
 
         return $teamApplications;
-    }
-
-    // TODO REFACTOR
-    protected function setApplicationsUserData(Collection &$teamApplications): void
-    {
-        $userIds = $teamApplications->pluck('user_id')->unique()->all();
-        $usersData = $this->userRepository->getByIds($userIds);
-
-        foreach ($teamApplications as $application) {
-            $application->userData = $usersData->where('id', $application->user_id)->first();
-        }
-    }
-
-    protected function setApplicationsVacancyData(Collection &$teamApplications): void
-    {
-        $vacancyIds = $teamApplications->pluck('vacancy_id')->unique()->all();
-        $vacanciesData = $this->vacancyRepository->getByIds($vacancyIds);
-
-        foreach ($teamApplications as $application) {
-            $application->vacancyData = $vacanciesData->where('id', $application->vacancy_id)->first();
-        }
-    }
-
-    protected function setApplicationsTeamData(Collection &$teamApplications): void
-    {
-        $teamIds = $teamApplications->pluck('team_id')->unique()->all();
-        $teamsData = $this->teamRepository->getByIds($teamIds);
-
-        foreach ($teamApplications as $application) {
-            $application->teamData = $teamsData->where('id', $application->team_id)->first();
-        }
     }
 }

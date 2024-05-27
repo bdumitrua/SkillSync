@@ -12,12 +12,13 @@ use App\Models\PostComment;
 use App\Http\Resources\Post\PostCommentResource;
 use App\Http\Requests\Post\CreatePostCommentRequest;
 use App\Traits\CreateDTO;
+use App\Traits\SetAdditionalData;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class PostCommentService implements PostCommentServiceInterface
 {
-    use CreateDTO;
+    use CreateDTO, SetAdditionalData;
 
     protected $userRepository;
     protected $postCommentRepository;
@@ -59,12 +60,7 @@ class PostCommentService implements PostCommentServiceInterface
 
     protected function assembleCommentsData(Collection $postComments): Collection
     {
-        $userIds = $postComments->pluck('user_id')->unique()->all();
-        $usersData = $this->userRepository->getByIds($userIds);
-
-        foreach ($postComments as $comment) {
-            $comment->userData = $usersData->where('id', $comment->user_id)->first();
-        }
+        $this->setCollectionEntityData($postComments, 'user_id', 'userData', $this->userRepository);
 
         return $postComments;
     }

@@ -8,12 +8,15 @@ use App\Models\User;
 use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\Post\Interfaces\PostLikeServiceInterface;
+use App\Traits\SetAdditionalData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 
 class PostLikeService implements PostLikeServiceInterface
 {
+    use SetAdditionalData;
+
     protected $userRepository;
     protected $postLikeRepository;
     protected ?int $authorizedUserId;
@@ -68,12 +71,7 @@ class PostLikeService implements PostLikeServiceInterface
 
     protected function assembleLikesData(Collection $postLikes): Collection
     {
-        $userIds = $postLikes->pluck('user_id')->unique()->all();
-        $usersData = $this->userRepository->getByIds($userIds);
-
-        foreach ($postLikes as $like) {
-            $like->userData = $usersData->where('id', $like->user_id)->first();
-        }
+        $this->setCollectionEntityData($postLikes, 'user_id', 'userData', $this->userRepository);
 
         return $postLikes;
     }
