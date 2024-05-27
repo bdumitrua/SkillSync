@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Team;
+use App\Models\TeamMember;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -28,5 +30,21 @@ class TeamFactory extends Factory
             'site' => $this->faker->url(),
             'chat_id' => null,
         ];
+    }
+
+    /**
+     * Configure the factory.
+     *
+     * @return $this
+     */
+    public function configure()
+    {
+        return $this->afterCreating(function (Team $team) {
+            TeamMember::factory()->create([
+                'team_id' => $team->id,
+                'user_id' => $team->admin_id,
+                'is_moderator' => true
+            ]);
+        });
     }
 }

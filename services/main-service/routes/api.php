@@ -1,8 +1,8 @@
 <?php
 
-include_once __DIR__ . "/auth.php";
-include_once __DIR__ . "/message.php";
-include_once __DIR__ . "/post.php";
-include_once __DIR__ . "/team.php";
-include_once __DIR__ . "/user.php";
-include_once __DIR__ . "/tag.php";
+include __DIR__ . "/auth.php";
+include __DIR__ . "/message.php";
+include __DIR__ . "/post.php";
+include __DIR__ . "/team.php";
+include __DIR__ . "/user.php";
+include __DIR__ . "/tag.php";

@@ -17,7 +17,7 @@ class UserFactory extends Factory
             'last_name' => $this->faker->lastName(),
             'email' => $this->faker->email(),
             'password' => Hash::make('password'),
-            'birthdate' => $this->faker->dateTimeBetween('-40 years', '-18 years'),
+            'birthdate' => $this->faker->dateTimeBetween('-40 years', '-18 years')->format('Y-m-d'),
         ];
     }
 }

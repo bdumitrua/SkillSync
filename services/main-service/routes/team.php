@@ -23,17 +23,13 @@ Route::prefix('teams')->name('teams.')->group(function () {
     });
 
     /*
-    *   url: /teams/applications/
-    *   name: teams.applications.
+    *   url: /teams/members/
+    *   name: teams.members.
     */
-    Route::prefix('applications')->name('applications.')->controller(TeamApplicationController::class)->group(function () {
-        Route::get('show/{teamApplication}', 'show')->name('show');
-        Route::get('team/{team}', 'team')->name('team');
-        Route::get('vacancy/{teamVacancy}', 'vacancy')->name('vacancy');
-
-        Route::post('{teamVacancy}', 'create')->name('create');
-        Route::patch('{teamApplication}', 'update')->name('update');
-        Route::delete('{teamApplication}', 'delete')->name('delete');
+    Route::prefix('members')->name('members.')->controller(TeamMemberController::class)->group(function () {
+        Route::get('{team}', 'team')->name('team');
+        Route::post('{team}', 'create')->name('create');
+        Route::delete('{team}/{user}', 'delete')->name('delete');
     });
 
     /*
@@ -48,16 +44,6 @@ Route::prefix('teams')->name('teams.')->group(function () {
     });
 
     /*
-    *   url: /teams/members/
-    *   name: teams.members.
-    */
-    Route::prefix('members')->name('members.')->controller(TeamMemberController::class)->group(function () {
-        Route::get('{team}', 'team')->name('team');
-        Route::post('{team}', 'create')->name('create');
-        Route::delete('{team}/{user}', 'delete')->name('delete');
-    });
-
-    /*
     *   url: /teams/vacancies/
     *   name: teams.vacancies.
     */
@@ -67,5 +53,19 @@ Route::prefix('teams')->name('teams.')->group(function () {
         Route::post('{team}', 'create')->name('create');
         Route::put('{teamVacancy}', 'update')->name('update');
         Route::delete('{teamVacancy}', 'delete')->name('delete');
+    });
+
+    /*
+    *   url: /teams/applications/
+    *   name: teams.applications.
+    */
+    Route::prefix('applications')->name('applications.')->controller(TeamApplicationController::class)->group(function () {
+        Route::get('show/{teamApplication}', 'show')->name('show');
+        Route::get('team/{team}', 'team')->name('team');
+        Route::get('vacancy/{teamVacancy}', 'vacancy')->name('vacancy');
+
+        Route::post('{teamVacancy}', 'create')->name('create');
+        Route::patch('{teamApplication}', 'update')->name('update');
+        Route::delete('{teamApplication}', 'delete')->name('delete');
     });
 });
