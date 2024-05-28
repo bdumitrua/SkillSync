@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Team;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\CreateTeamMemberRequest;
+use App\Http\Requests\Team\UpdateTeamMemberRequest;
 use App\Models\Team;
 use App\Models\User;
 use App\Services\Team\Interfaces\TeamMemberServiceInterface;
@@ -29,6 +30,13 @@ class TeamMemberController extends Controller
     {
         return $this->handleServiceCall(function () use ($team, $request) {
             return $this->teamMemberService->create($team->id, $request);
+        });
+    }
+
+    public function update(Team $team, User $user, UpdateTeamMemberRequest $request)
+    {
+        return $this->handleServiceCall(function () use ($team, $user, $request) {
+            return $this->teamMemberService->update($team->id, $user->id, $request);
         });
     }
 

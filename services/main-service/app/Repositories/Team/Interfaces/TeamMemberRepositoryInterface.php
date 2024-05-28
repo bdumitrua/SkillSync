@@ -3,6 +3,7 @@
 namespace App\Repositories\Team\Interfaces;
 
 use App\DTO\Team\CreateTeamMemberDTO;
+use App\DTO\Team\UpdateTeamMemberDTO;
 use App\Models\TeamMember;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -52,6 +53,14 @@ interface TeamMemberRepositoryInterface
      * @return void
      */
     public function addMember(CreateTeamMemberDTO $dto): void;
+
+    /**
+     * @param TeamMember $teamMember
+     * @param UpdateTeamMemberDTO $dto
+     * 
+     * @return void
+     */
+    public function updateMember(TeamMember $teamMember, UpdateTeamMemberDTO $dto): void;
 
     /**
      * @param TeamMember $teamMember

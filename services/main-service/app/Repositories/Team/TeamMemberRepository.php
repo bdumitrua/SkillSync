@@ -2,14 +2,18 @@
 
 namespace App\Repositories\Team;
 
-use App\DTO\Team\CreateTeamMemberDTO;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use App\Traits\UpdateFromDTO;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Models\TeamMember;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
+use App\DTO\Team\UpdateTeamMemberDTO;
+use App\DTO\Team\CreateTeamMemberDTO;
 
 class TeamMemberRepository implements TeamMemberRepositoryInterface
 {
+    use UpdateFromDTO;
+
     protected function queryByBothIds(int $teamId, int $userId): Builder
     {
         return TeamMember::query()
@@ -53,6 +57,11 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
         TeamMember::create(
             $dto->toArray()
         );
+    }
+
+    public function updateMember(TeamMember $teamMember, UpdateTeamMemberDTO $dto): void
+    {
+        $this->updateFromDto($teamMember, $dto);
     }
 
     public function removeMember(TeamMember $teamMember): void

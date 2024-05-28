@@ -3,6 +3,7 @@
 namespace App\Services\Team;
 
 use App\DTO\Team\CreateTeamMemberDTO;
+use App\DTO\Team\UpdateTeamMemberDTO;
 use App\Exceptions\AccessDeniedException;
 use App\Exceptions\MembershipException;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -12,6 +13,7 @@ use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Http\Resources\Team\TeamMemberResource;
 use App\Http\Requests\Team\CreateTeamMemberRequest;
+use App\Http\Requests\Team\UpdateTeamMemberRequest;
 use App\Models\Team;
 use App\Traits\CreateDTO;
 use App\Traits\SetAdditionalData;
@@ -67,7 +69,22 @@ class TeamMemberService implements TeamMemberServiceInterface
         $this->teamMemberRepository->addMember($createTeamMemberDTO);
     }
 
-    // TODO ADD UPDATE LOL
+    public function update(int $teamId, int $userId, UpdateTeamMemberRequest $request): void
+    {
+        Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
+
+        $membership = $this->teamMemberRepository->getMemberByBothIds(
+            $teamId,
+            $userId
+        );
+
+        if (empty($membership)) {
+            throw new MembershipException("User is not member of this team");
+        }
+
+        $updateTeamMemberDTO = $this->createDTO($request, UpdateTeamMemberDTO::class);
+        $this->teamMemberRepository->updateMember($membership, $updateTeamMemberDTO);
+    }
 
     /**
      * @throws MembershipException

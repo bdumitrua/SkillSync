@@ -11,6 +11,7 @@ class UserDataResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
+        // TODO: ADD CAN_SUBSCRIBE
         $age = TimeHelper::calculateAge($this->birthdate);
 
         return [
