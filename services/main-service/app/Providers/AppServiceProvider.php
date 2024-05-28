@@ -180,11 +180,54 @@ class AppServiceProvider extends ServiceProvider
         // });
 
         if (!app()->environment('testing')) {
+            $this->defineCacheTimeConstants();
             $this->defineCacheKeysConstants();
+            $this->defineGateMethodsConstants();
         }
     }
 
+    private function defineCacheTimeConstants(): void
+    {
+        /*
+        *   Cache time
+        */
+
+        $hour = 60 * 60;
+
+        define('CACHE_TIME_USER_DATA', 3 * $hour);
+
+        define('CACHE_TIME_TEAM_DATA', 24 * $hour);
+        define('CACHE_TIME_TEAM_LINKS_DATA', 24 * $hour);
+        define('CACHE_TIME_TEAM_VACANCY_DATA', 1 * $hour);
+
+        define('CACHE_TIME_POST_DATA', 1 * $hour);
+
+        define('CACHE_TIME_TEAM_TAGS_DATA', 24 * $hour);
+        define('CACHE_TIME_USER_TAGS_DATA', 3 * $hour);
+        define('CACHE_TIME_POST_TAGS_DATA', 1 * $hour);
+    }
+
     private function defineCacheKeysConstants(): void
+    {
+        /*
+        *   Cache keys
+        */
+
+        define('CACHE_KEY_USER_DATA', 'user_data:');
+
+        define('CACHE_KEY_TEAM_DATA', 'team_data:');
+        // :teamId:true/false 
+        define('CACHE_KEY_TEAM_LINKS_DATA', 'team_links_data:');
+        define('CACHE_KEY_TEAM_VACANCY_DATA', 'team_vacancy_data:');
+
+        define('CACHE_KEY_POST_DATA', 'post_data:');
+
+        define('CACHE_KEY_TEAM_TAGS_DATA', 'team_tags_data:');
+        define('CACHE_KEY_USER_TAGS_DATA', 'user_tags_data:');
+        define('CACHE_KEY_POST_TAGS_DATA', 'post_tags_data:');
+    }
+
+    private function defineGateMethodsConstants(): void
     {
         /*
         *   Policies

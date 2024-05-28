@@ -7,11 +7,12 @@ use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
 use App\DTO\Team\UpdateTeamDTO;
 use App\DTO\Post\CreatePostDTO;
+use App\Traits\GetCachedData;
 use App\Traits\UpdateFromDTO;
 
 class PostRepository implements PostRepositoryInterface
 {
-    use UpdateFromDTO;
+    use UpdateFromDTO, GetCachedData;
 
     public function getAll(): Collection
     {
@@ -26,12 +27,17 @@ class PostRepository implements PostRepositoryInterface
 
     public function getById(int $postId): ?Post
     {
-        return Post::where('id', '=', $postId)->first();
+        $cacheKey = $this->getPostCacheKey($postId);
+        return $this->getCachedData($cacheKey, CACHE_TIME_POST_DATA, function () use ($postId) {
+            return Post::where('id', '=', $postId)->first();
+        });
     }
 
     public function getByIds(array $postIds): Collection
     {
-        return Post::whereIn('id', $postIds)->get();
+        return $this->getCachedCollection($postIds, function ($postId) {
+            return $this->getById($postId);
+        });
     }
 
     public function getByUserId(int $userId): Collection
@@ -56,10 +62,24 @@ class PostRepository implements PostRepositoryInterface
     public function update(Post $post, UpdateTeamDTO $dto): void
     {
         $this->updateFromDto($post, $dto);
+        $this->clearPostCache($post->id);
     }
 
     public function delete(Post $post): void
     {
+        $postId = $post->id;
+
         $post->delete();
+        $this->clearPostCache($postId);
+    }
+
+    protected function getPostCacheKey(int $postId): string
+    {
+        return CACHE_KEY_POST_DATA . $postId;
+    }
+
+    protected function clearPostCache(int $postId): void
+    {
+        $this->clearCache($this->getPostCacheKey($postId));
     }
 }

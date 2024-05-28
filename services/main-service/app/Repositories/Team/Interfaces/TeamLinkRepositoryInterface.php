@@ -18,13 +18,6 @@ interface TeamLinkRepositoryInterface
     public function getByTeamId(int $teamId, bool $isMember): Collection;
 
     /**
-     * @param int $teamLinkId
-     * 
-     * @return TeamLink|null
-     */
-    public function getById(int $teamLinkId): ?TeamLink;
-
-    /**
      * @param CreateTeamLinkDTO $dto
      * 
      * @return TeamLink

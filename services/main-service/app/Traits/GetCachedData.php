@@ -4,6 +4,7 @@ namespace App\Traits;
 
 use App\Helpers\TimeHelper;
 use App\Prometheus\PrometheusServiceProxy;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
 trait GetCachedData
@@ -34,6 +35,21 @@ trait GetCachedData
 
         $prometheusService->incrementCacheHit($cacheKeyForMetrics);
         return Cache::get($cacheKey);
+    }
+
+    /**
+     * @param array $modelIds
+     * @param \Closure $callback
+     * 
+     * @return Collection
+     */
+    public function getCachedCollection(array $modelIds, \Closure $callback): Collection
+    {
+        return new Collection(array_map(function ($modelId) use ($callback) {
+            if (!empty($model = $callback($modelId))) {
+                return $model;
+            }
+        }, $modelIds));
     }
 
     /**
