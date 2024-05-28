@@ -16,6 +16,7 @@ Route::prefix('teams')->name('teams.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('show/{team}', 'show')->name('show');
         Route::get('user/{user}', 'user')->name('user');
+        Route::get('subscribers/{team}', 'subscribers')->name('subscribers');
 
         Route::post('/', 'create')->name('create');
         Route::put('{team}', 'update')->name('update');

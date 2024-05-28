@@ -22,6 +22,13 @@ interface UserServiceInterface
     public function show(User $user): JsonResource;
 
     /**
+     * @param User $user
+     * 
+     * @return JsonResource
+     */
+    public function subscribers(User $user): JsonResource;
+
+    /**
      * @param UpdateUserRequest $request
      * 
      * @return void

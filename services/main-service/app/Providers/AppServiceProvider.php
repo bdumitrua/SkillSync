@@ -3,20 +3,42 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
 use Enqueue\RdKafka\RdKafkaConnectionFactory;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Client;
-use App\Services\User\UserSubscriptionService;
 use App\Services\User\UserService;
-use App\Services\User\Interfaces\UserSubscriptionServiceInterface;
 use App\Services\User\Interfaces\UserServiceInterface;
+use App\Services\Team\TeamVacancyService;
 use App\Services\Team\TeamService;
+use App\Services\Team\TeamMemberService;
+use App\Services\Team\TeamLinkService;
+use App\Services\Team\TeamApplicationService;
+use App\Services\Team\Interfaces\TeamVacancyServiceInterface;
 use App\Services\Team\Interfaces\TeamServiceInterface;
+use App\Services\Team\Interfaces\TeamMemberServiceInterface;
+use App\Services\Team\Interfaces\TeamLinkServiceInterface;
+use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
+use App\Services\TagService;
+use App\Services\SubscriptionService;
 use App\Services\Post\PostService;
+use App\Services\Post\PostLikeService;
+use App\Services\Post\PostCommentService;
+use App\Services\Post\PostCommentLikeService;
 use App\Services\Post\Interfaces\PostServiceInterface;
-use App\Repositories\User\Interfaces\UserSubscriptionRepositoryInterface;
+use App\Services\Post\Interfaces\PostLikeServiceInterface;
+use App\Services\Post\Interfaces\PostCommentServiceInterface;
+use App\Services\Post\Interfaces\PostCommentLikeServiceInterface;
+use App\Services\Message\MessageService;
+use App\Services\Message\Interfaces\MessageServiceInterface;
+use App\Services\Message\Interfaces\ChatServiceInterface;
+use App\Services\Message\Interfaces\ChatMemberServiceInterface;
+use App\Services\Message\ChatService;
+use App\Services\Message\ChatMemberService;
+use App\Services\Interfaces\TagServiceInterface;
+use App\Services\Interfaces\SubscriptionServiceInterface;
+use App\Repositories\User\UserRepository;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\TeamVacancyRepository;
 use App\Repositories\Team\TeamRepository;
@@ -28,50 +50,27 @@ use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamLinkRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
+use App\Repositories\TagRepository;
+use App\Repositories\SubscriptionRepository;
+use App\Repositories\Post\PostRepository;
+use App\Repositories\Post\PostLikeRepository;
+use App\Repositories\Post\PostCommentRepository;
+use App\Repositories\Post\PostCommentLikeRepository;
+use App\Repositories\Post\Interfaces\PostRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
+use App\Repositories\Message\MessageRepository;
+use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
+use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
+use App\Repositories\Message\Interfaces\ChatMemberRepositoryInterface;
+use App\Repositories\Message\ChatRepository;
+use App\Repositories\Message\ChatMemberRepository;
+use App\Repositories\Interfaces\TagRepositoryInterface;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Prometheus\PrometheusServiceProxy;
 use App\Kafka\KafkaProducer;
 use App\Kafka\KafkaConsumer;
-use App\Repositories\Interfaces\TagRepositoryInterface;
-use App\Repositories\Message\ChatMemberRepository;
-use App\Repositories\Message\ChatRepository;
-use App\Repositories\Message\Interfaces\ChatMemberRepositoryInterface;
-use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
-use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
-use App\Repositories\Message\MessageRepository;
-use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
-use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
-use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
-use App\Repositories\Post\Interfaces\PostRepositoryInterface;
-use App\Repositories\Post\PostCommentLikeRepository;
-use App\Repositories\Post\PostCommentRepository;
-use App\Repositories\Post\PostLikeRepository;
-use App\Repositories\Post\PostRepository;
-use App\Repositories\TagRepository;
-use App\Repositories\User\UserRepository;
-use App\Repositories\User\UserSubscriptionRepository;
-use App\Services\Interfaces\TagServiceInterface;
-use App\Services\Message\ChatMemberService;
-use App\Services\Message\ChatService;
-use App\Services\Message\Interfaces\ChatMemberServiceInterface;
-use App\Services\Message\Interfaces\ChatServiceInterface;
-use App\Services\Message\Interfaces\MessageServiceInterface;
-use App\Services\Message\MessageService;
-use App\Services\Post\Interfaces\PostCommentLikeServiceInterface;
-use App\Services\Post\Interfaces\PostCommentServiceInterface;
-use App\Services\Post\Interfaces\PostLikeServiceInterface;
-use App\Services\Post\PostCommentLikeService;
-use App\Services\Post\PostCommentService;
-use App\Services\Post\PostLikeService;
-use App\Services\TagService;
-use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
-use App\Services\Team\Interfaces\TeamLinkServiceInterface;
-use App\Services\Team\Interfaces\TeamMemberServiceInterface;
-use App\Services\Team\Interfaces\TeamVacancyServiceInterface;
-use App\Services\Team\TeamApplicationService;
-use App\Services\Team\TeamLinkService;
-use App\Services\Team\TeamMemberService;
-use App\Services\Team\TeamVacancyService;
-use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -102,7 +101,6 @@ class AppServiceProvider extends ServiceProvider
 
         // User
         $this->app->bind(UserServiceInterface::class, UserService::class);
-        $this->app->bind(UserSubscriptionServiceInterface::class, UserSubscriptionService::class);
 
         // Team
         $this->app->bind(TeamApplicationServiceInterface::class, TeamApplicationService::class);
@@ -125,13 +123,15 @@ class AppServiceProvider extends ServiceProvider
         // Tag
         $this->app->bind(TagServiceInterface::class, TagService::class);
 
+        // Subscription
+        $this->app->bind(SubscriptionServiceInterface::class, SubscriptionService::class);
+
         /*
         *   Repositories 
         */
 
         // User
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
-        $this->app->bind(UserSubscriptionRepositoryInterface::class, UserSubscriptionRepository::class);
 
         // Team
         $this->app->bind(TeamApplicationRepositoryInterface::class, TeamApplicationRepository::class);
@@ -153,6 +153,9 @@ class AppServiceProvider extends ServiceProvider
 
         // Tag
         $this->app->bind(TagRepositoryInterface::class, TagRepository::class);
+
+        // Subscription
+        $this->app->bind(SubscriptionRepositoryInterface::class, SubscriptionRepository::class);
     }
 
     /**
@@ -179,10 +182,12 @@ class AppServiceProvider extends ServiceProvider
         //     $prometheusService->addDatabaseQueryTimeHistogram($executionTimeInSeconds, $source);
         // });
 
-        if (!app()->environment('testing')) {
+        if (!defined('CONSTANTS_DEFINED')) {
             $this->defineCacheTimeConstants();
             $this->defineCacheKeysConstants();
             $this->defineGateMethodsConstants();
+
+            define('CONSTANTS_DEFINED', true);
         }
     }
 
@@ -233,10 +238,6 @@ class AppServiceProvider extends ServiceProvider
         *   Policies
         */
 
-        // User
-        define('SUBSCRIBE_ON_USER_GATE', 'subscribeOnUser');
-        define('UNSUBSCRIBE_FROM_USER_GATE', 'unsubscribeFromUser');
-
         // Team
         define('UPDATE_TEAM_GATE', 'updateTeam');
         define('DELETE_TEAM_GATE', 'deleteTeam');
@@ -262,5 +263,9 @@ class AppServiceProvider extends ServiceProvider
         // TAG
         define('CREATE_TAG_GATE', 'createTag');
         define('DELETE_TAG_GATE', 'deleteTag');
+
+        // Subscription
+        define('SUBSCRIBE_TO_ENTITY_GATE', 'subscribeToEntity');
+        define('UNSUBSCRIBE_FROM_ENTITY_GATE', 'unsubscribeFromEntity');
     }
 }

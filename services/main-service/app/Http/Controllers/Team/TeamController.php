@@ -40,6 +40,13 @@ class TeamController extends Controller
         });
     }
 
+    public function subscribers(Team $team)
+    {
+        return $this->handleServiceCall(function () use ($team) {
+            return $this->teamService->subscribers($team->id);
+        });
+    }
+
     public function create(CreateTeamRequest $request)
     {
         return $this->handleServiceCall(function () use ($request) {

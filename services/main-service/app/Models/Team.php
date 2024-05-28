@@ -69,4 +69,12 @@ class Team extends Model
     {
         return $this->morphMany(Tag::class, 'entity');
     }
+
+    /**
+     * @return MorphMany
+     */
+    public function subscribers(): MorphMany
+    {
+        return $this->morphMany(Subscription::class, 'entity');
+    }
 }

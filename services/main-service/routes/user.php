@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\UserSubscriptionController;
 use App\Http\Controllers\User\UserController;
 
 Route::prefix('users')->name('users.')->group(function () {
@@ -12,14 +11,7 @@ Route::prefix('users')->name('users.')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('show/{user}', 'show')->name('show');
-        Route::put('/', 'update')->name('update');
-    });
-
-    Route::controller(UserSubscriptionController::class)->group(function () {
         Route::get('subscribers/{user}', 'subscribers')->name('subscribers');
-        Route::get('subscriptions/{user}', 'subscriptions')->name('subscriptions');
-
-        Route::post('subscribe/{user}', 'subscribe')->name('subscribe');
-        Route::delete('unsubscribe/{user}', 'unsubscribe')->name('unsubscribe');
+        Route::put('/', 'update')->name('update');
     });
 });

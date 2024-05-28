@@ -31,6 +31,13 @@ class UserController extends Controller
         });
     }
 
+    public function subscribers(User $user)
+    {
+        return $this->handleServiceCall(function () use ($user) {
+            return $this->userService->subscribers($user);
+        });
+    }
+
     public function update(UpdateUserRequest $request)
     {
         return $this->handleServiceCall(function () use ($request) {

@@ -6,11 +6,12 @@ use App\DTO\User\UpdateUserDTO;
 use App\Exceptions\UnprocessableContentException;
 use App\Helpers\ResponseHelper;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Resources\User\SubscriptionResoruce;
 use App\Http\Resources\User\UserDataResource;
 use App\Http\Resources\User\UserResource;
 use App\Models\User;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Repositories\User\Interfaces\UserSubscriptionRepositoryInterface;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Services\Team\Interfaces\TeamServiceInterface;
@@ -30,7 +31,7 @@ class UserService implements UserServiceInterface
     private $postService;
     private $tagService;
     private $userRepository;
-    private $userSubscriptionRepository;
+    private $subscriptionRepository;
     private ?int $authorizedUserId;
 
     public function __construct(
@@ -38,13 +39,13 @@ class UserService implements UserServiceInterface
         PostServiceInterface $postService,
         TagServiceInterface $tagService,
         UserRepositoryInterface $userRepository,
-        UserSubscriptionRepositoryInterface $userSubscriptionRepository,
+        SubscriptionRepositoryInterface $subscriptionRepository,
     ) {
         $this->teamService = $teamService;
         $this->postService = $postService;
         $this->tagService = $tagService;
         $this->userRepository = $userRepository;
-        $this->userSubscriptionRepository = $userSubscriptionRepository;
+        $this->subscriptionRepository = $subscriptionRepository;
         $this->authorizedUserId = Auth::id();
     }
 
@@ -62,12 +63,21 @@ class UserService implements UserServiceInterface
             // Не сам пользователь
             $user->id !== $this->authorizedUserId
             // Нет подписки
-            && !$this->userSubscriptionRepository->userIsSubscribedToUser($this->authorizedUserId, $user->id);
+            && !$this->subscriptionRepository->isSubscribedToUser($this->authorizedUserId, $user->id);
 
 
         $user = $this->assembleUserProfile($user);
 
         return new UserResource($user);
+    }
+
+    public function subscribers(User $user): JsonResource
+    {
+        $subscribersIds = $this->subscriptionRepository->getUserSubscribers($user->id)
+            ->pluck('user_id')->toArray();
+        $usersData = $this->userRepository->getByIds($subscribersIds);
+
+        return UserDataResource::collection($usersData);
     }
 
     public function update(UpdateUserRequest $request): void
@@ -93,8 +103,8 @@ class UserService implements UserServiceInterface
         $user->tags = $this->tagService->user($user->id);
         $user->teams = $this->teamService->user($user->id);
         $user->posts = $this->postService->user($user->id);
-        $user->subscribersCount = count($this->userSubscriptionRepository->subscribers($user->id));
-        $user->subscriptionsCount = count($this->userSubscriptionRepository->subscriptions($user->id));
+        $user->subscribersCount = count($this->subscriptionRepository->getUserSubscribers($user->id));
+        $user->subscriptionsCount = count($this->subscriptionRepository->getUserSubscriptions($user->id));
 
         return $user;
     }

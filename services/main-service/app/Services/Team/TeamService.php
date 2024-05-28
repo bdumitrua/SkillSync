@@ -13,8 +13,11 @@ use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Http\Requests\Team\CreateTeamRequest;
 use App\Http\Resources\Team\TeamDataResource;
 use App\Http\Resources\Team\TeamResource;
+use App\Http\Resources\User\UserDataResource;
 use App\Policies\TeamPolicy;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Team\Interfaces\TeamLinkServiceInterface;
 use App\Traits\CreateDTO;
@@ -30,20 +33,26 @@ class TeamService implements TeamServiceInterface
 
     protected $tagService;
     protected $teamLinkService;
+    protected $userRepository;
     protected $teamRepository;
     protected $teamMemberRepository;
+    protected $subscriptionRepository;
     protected ?int $authorizedUserId;
 
     public function __construct(
         TagServiceInterface $tagService,
         TeamLinkServiceInterface $teamLinkService,
+        UserRepositoryInterface $userRepository,
         TeamRepositoryInterface $teamRepository,
         TeamMemberRepositoryInterface $teamMemberRepository,
+        SubscriptionRepositoryInterface $subscriptionRepository,
     ) {
         $this->tagService = $tagService;
         $this->teamLinkService = $teamLinkService;
+        $this->userRepository = $userRepository;
         $this->teamRepository = $teamRepository;
         $this->teamMemberRepository = $teamMemberRepository;
+        $this->subscriptionRepository = $subscriptionRepository;
         $this->authorizedUserId = Auth::id();
     }
 
@@ -70,6 +79,15 @@ class TeamService implements TeamServiceInterface
         return TeamDataResource::collection(
             $this->teamRepository->getByIds($userTeamsIds)
         );
+    }
+
+    public function subscribers(int $teamId): JsonResource
+    {
+        $subscribersIds = $this->subscriptionRepository->getTeamSubscribers($teamId)
+            ->pluck('user_id')->toArray();
+        $usersData = $this->userRepository->getByIds($subscribersIds);
+
+        return UserDataResource::collection($usersData);
     }
 
     public function create(CreateTeamRequest $request): void

@@ -95,19 +95,19 @@ class User extends Authenticatable implements JWTSubject
     }
 
     /**
-     * @return HasMany
+     * @return MorphMany
      */
-    public function subscribers(): HasMany
+    public function subscribers(): MorphMany
     {
-        return $this->hasMany(UserSubscription::class, 'subscribed_id', 'id');
+        return $this->morphMany(Subscription::class, 'entity');
     }
 
     /**
-     * @return HasMany
+     * @return hasMany
      */
-    public function subscriptions(): HasMany
+    public function subscriptions(): hasMany
     {
-        return $this->hasMany(UserSubscription::class, 'subscriber_id', 'id');
+        return $this->hasMany(Subscription::class, 'user_id', 'id');
     }
 
     /**

@@ -12,12 +12,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             UserTableSeeder::class,
-            UserSubscriptionSeeder::class,
             TeamSeeder::class,
             TeamMemberSeeder::class,
             TeamLinkSeeder::class,
             TeamVacancySeeder::class,
             TeamApplicationSeeder::class,
+            SubscriptionSeeder::class,
             PostSeeder::class,
             PostLikeSeeder::class,
             PostCommentSeeder::class,

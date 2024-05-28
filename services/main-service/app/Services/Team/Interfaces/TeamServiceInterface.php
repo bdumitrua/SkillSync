@@ -30,6 +30,13 @@ interface TeamServiceInterface
     public function user(int $userId): JsonResource;
 
     /**
+     * @param int $teamId
+     * 
+     * @return JsonResource
+     */
+    public function subscribers(int $teamId): JsonResource;
+
+    /**
      * @param CreateTeamRequest $request
      * 
      * @return void
