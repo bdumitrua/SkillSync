@@ -5,6 +5,7 @@ namespace App\Repositories\Post;
 use App\Models\PostCommentLike;
 use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class PostCommentLikeRepository implements PostCommentLikeRepositoryInterface
 {
@@ -17,11 +18,21 @@ class PostCommentLikeRepository implements PostCommentLikeRepositoryInterface
 
     public function getByBothIds(int $postCommentId, int $userId): ?PostCommentLike
     {
+        Log::debug("Getting postComment like by both ids", [
+            'postCommentId' => $postCommentId,
+            'userId' => $userId
+        ]);
+
         return $this->queryByBothIds($postCommentId, $userId)->first();
     }
 
     public function userLikedComment(int $userId, int $postCommentId): bool
     {
+        Log::debug("Checking if user liked comment", [
+            'userId' => $userId,
+            'postCommentId' => $postCommentId
+        ]);
+
         return $this->queryByBothIds($postCommentId, $userId)->exists();
     }
 

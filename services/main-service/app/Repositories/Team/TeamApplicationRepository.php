@@ -74,6 +74,7 @@ class TeamApplicationRepository implements TeamApplicationRepositoryInterface
             'teamApplication id' => $teamApplication->id,
             'current status' => $teamApplication->status
         ]);
+
         $teamApplication->update([
             'status' => $status
         ]);

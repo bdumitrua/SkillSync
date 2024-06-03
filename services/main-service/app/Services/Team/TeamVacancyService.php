@@ -73,10 +73,6 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     protected function assembleVacanciesData(Collection $teamVacancies): Collection
     {
-        Log::debug('Assemling vacancies data', [
-            'teamVacancies' => $teamVacancies->toArray()
-        ]);
-
         $this->setCollectionEntityData($teamVacancies, 'team_id', 'teamData', $this->teamRepository);
 
         return $teamVacancies;

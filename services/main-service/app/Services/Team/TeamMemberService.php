@@ -108,10 +108,6 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     protected function assebmleMembersData(Collection $teamMembers): Collection
     {
-        Log::debug('Assemling team members data', [
-            'teamMembers' => $teamMembers->toArray()
-        ]);
-
         $this->setCollectionEntityData($teamMembers, 'user_id', 'userData', $this->userRepository);
 
         return $teamMembers;

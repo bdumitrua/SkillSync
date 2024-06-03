@@ -6,20 +6,16 @@ use App\DTO\Post\CreatePostDTO;
 use App\DTO\Post\UpdatePostDTO;
 use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Models\Post;
-use App\Http\Requests\Post\UpdatePostRequest;
-use App\Http\Requests\Post\CreatePostRequest;
 use App\Http\Resources\Post\PostResource;
-use App\Models\Team;
-use App\Models\User;
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Traits\CreateDTO;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class PostService implements PostServiceInterface
 {
@@ -114,6 +110,10 @@ class PostService implements PostServiceInterface
 
     protected function setPostsEntityData(Collection &$posts): void
     {
+        Log::debug("Setting posts entity data", [
+            'posts' => $posts->toArray(),
+        ]);
+
         $userIds = [];
         $teamIds = [];
 
@@ -137,15 +137,27 @@ class PostService implements PostServiceInterface
                 $post->entityData = $teamsData->where('id', $post->entity_id)->first();
             }
         }
+
+        Log::debug("Succesfully setted posts entity data", [
+            'posts' => $posts->toArray(),
+        ]);
     }
 
     protected function setPostsTagsData(Collection &$posts): void
     {
+        Log::debug("Setting posts tags data", [
+            'posts' => $posts->toArray(),
+        ]);
+
         $postIds = $posts->pluck('id')->unique()->all();
         $postsTags = $this->tagRepository->getByPostIds($postIds);
 
         foreach ($posts as $post) {
             $post->tagsData = $postsTags->where('entity_id', $post->id)->first();
         }
+
+        Log::debug("Succesfully setted posts tags data", [
+            'posts' => $posts->toArray(),
+        ]);
     }
 }

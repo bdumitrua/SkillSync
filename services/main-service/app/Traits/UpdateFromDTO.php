@@ -29,8 +29,14 @@ trait UpdateFromDTO
             $entity->$property = $value;
         }
 
-        Log::debug('Succesfully updated model from DTO');
+        $saved = $entity->save();
 
-        return $entity->save();
+        if (!$saved) {
+            Log::debug("Couldn't update model from DTO");
+            return $saved;
+        }
+
+        Log::debug('Succesfully updated model from DTO');
+        return $saved;
     }
 }

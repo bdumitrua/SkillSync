@@ -77,6 +77,10 @@ trait GetCachedData
      */
     protected function clearCache(string $cacheKey): void
     {
+        Log::debug('Clearing cache by key', [
+            'cacheKey' => $cacheKey
+        ]);
+
         Cache::forget($cacheKey);
     }
 }

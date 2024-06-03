@@ -109,16 +109,8 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     protected function assembleApplicationsData(Collection $teamApplications): Collection
     {
-        Log::debug("Assembling teamApplications data", [
-            'teamApplications ids' => $teamApplications->pluck('id')->toArray(),
-        ]);
-
         $this->setCollectionEntityData($teamApplications, 'user_id', 'userData', $this->userRepository);
         $this->setCollectionEntityData($teamApplications, 'vacancy_id', 'vacancyData', $this->vacancyRepository);
-
-        Log::debug("Succesfully assembled teamApplications data", [
-            'teamApplications ids' => $teamApplications->pluck('id')->toArray(),
-        ]);
 
         return $teamApplications;
     }
