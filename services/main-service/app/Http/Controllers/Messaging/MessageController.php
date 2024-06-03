@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Messaging;
 
+use App\DTO\Message\CreateMesssageDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\CreateMesssageRequest;
 use App\Services\Message\Interfaces\MessageServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MessageController extends Controller
 {
@@ -18,8 +20,12 @@ class MessageController extends Controller
 
     public function send(int $chatId, CreateMesssageRequest $request)
     {
-        return $this->handleServiceCall(function () use ($chatId, $request) {
-            return $this->messageService->send($chatId, $request);
+        /** @var CreateMesssageDTO */
+        $createMessageDTO = $request->createDTO();
+        $createMessageDTO->setSenderId(Auth::id())->setChatId($chatId);
+
+        return $this->handleServiceCall(function () use ($chatId, $createMessageDTO) {
+            return $this->messageService->send($chatId, $createMessageDTO);
         });
     }
 

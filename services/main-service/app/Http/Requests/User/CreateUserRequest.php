@@ -2,13 +2,19 @@
 
 namespace App\Http\Requests\User;
 
+use App\DTO\User\CreateUserDTO;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\PasswordRule;
 use App\Rules\EmailRule;
+use App\Traits\CreateDTO;
 
 class CreateUserRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = CreateUserDTO::class;
+
     public function authorize(): bool
     {
         return true;

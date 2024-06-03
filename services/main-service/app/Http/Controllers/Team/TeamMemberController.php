@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Team;
 
+use App\DTO\Team\CreateTeamMemberDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\CreateTeamMemberRequest;
 use App\Http\Requests\Team\UpdateTeamMemberRequest;
@@ -28,15 +29,21 @@ class TeamMemberController extends Controller
 
     public function create(Team $team, CreateTeamMemberRequest $request)
     {
-        return $this->handleServiceCall(function () use ($team, $request) {
-            return $this->teamMemberService->create($team->id, $request);
+        /** @var CreateTeamMemberDTO */
+        $createTeamMemberDTO = $request->createDTO();
+        $createTeamMemberDTO->setTeamId($team->id);
+
+        return $this->handleServiceCall(function () use ($team, $createTeamMemberDTO) {
+            return $this->teamMemberService->create($team->id, $createTeamMemberDTO);
         });
     }
 
     public function update(Team $team, User $user, UpdateTeamMemberRequest $request)
     {
-        return $this->handleServiceCall(function () use ($team, $user, $request) {
-            return $this->teamMemberService->update($team->id, $user->id, $request);
+        $updateTeamMemberDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($team, $user, $updateTeamMemberDTO) {
+            return $this->teamMemberService->update($team->id, $user->id, $updateTeamMemberDTO);
         });
     }
 

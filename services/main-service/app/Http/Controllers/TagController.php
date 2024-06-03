@@ -19,8 +19,12 @@ class TagController extends Controller
 
     public function create(CreateTagRequest $request)
     {
-        return $this->handleServiceCall(function () use ($request) {
-            return $this->tagService->create($request);
+        $this->patchRequestEntityType($request);
+
+        $createTagDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($createTagDTO) {
+            return $this->tagService->create($createTagDTO);
         });
     }
 

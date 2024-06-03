@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Team;
 
+use App\DTO\Team\CreateTeamApplicationDTO;
+use App\Enums\TeamApplicationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\CreateTeamApplicationRequest;
 use App\Http\Requests\Team\UpdateTeamApplicationRequest;
@@ -10,6 +12,7 @@ use App\Models\TeamApplication;
 use App\Models\TeamVacancy;
 use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeamApplicationController extends Controller
 {
@@ -43,15 +46,21 @@ class TeamApplicationController extends Controller
 
     public function create(CreateTeamApplicationRequest $request)
     {
-        return $this->handleServiceCall(function () use ($request) {
-            return $this->teamApplicationService->create($request);
+        /** @var CreateTeamApplicationDTO */
+        $createTeamApplicationDTO = $request->createDTO();
+        $createTeamApplicationDTO->setUserId(Auth::id());
+
+        return $this->handleServiceCall(function () use ($createTeamApplicationDTO) {
+            return $this->teamApplicationService->create($createTeamApplicationDTO);
         });
     }
 
     public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $request)
     {
-        return $this->handleServiceCall(function () use ($teamApplication, $request) {
-            return $this->teamApplicationService->update($teamApplication, $request);
+        $newStatus = $request->status;
+
+        return $this->handleServiceCall(function () use ($teamApplication, $newStatus) {
+            return $this->teamApplicationService->update($teamApplication, $newStatus);
         });
     }
 

@@ -2,10 +2,16 @@
 
 namespace App\Http\Requests\Post;
 
+use App\DTO\Post\CreatePostCommentDTO;
+use App\Traits\CreateDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePostCommentRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = CreatePostCommentDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

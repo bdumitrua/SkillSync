@@ -23,4 +23,9 @@ class CreateTeamMemberDTO
             'is_moderator' => $this->isModerator,
         ];
     }
+
+    public function setTeamId(int $teamId): void
+    {
+        $this->teamId = $teamId;
+    }
 }

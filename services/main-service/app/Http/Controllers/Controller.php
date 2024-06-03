@@ -7,8 +7,10 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Controller extends BaseController
@@ -49,5 +51,21 @@ class Controller extends BaseController
     {
         $response = $serviceFunction();
         return $this->responseToJSON($response);
+    }
+
+    /**
+     * @param Request $request
+     * 
+     * @return void
+     */
+    protected function patchRequestEntityType(Request &$request): void
+    {
+        Log::debug('Patching request entityType', ['request' => $request->toArray()]);
+        $entitiesPath = config('entities');
+
+        $request->merge([
+            'entityType' => $entitiesPath[$request->entityType]
+        ]);
+        Log::debug('Patched request entityType', ['request' => $request->toArray()]);
     }
 }

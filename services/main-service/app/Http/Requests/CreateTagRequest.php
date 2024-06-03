@@ -2,11 +2,17 @@
 
 namespace App\Http\Requests;
 
+use App\DTO\User\CreateTagDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\EntityIdRule;
+use App\Traits\CreateDTO;
 
 class CreateTagRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = CreateTagDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

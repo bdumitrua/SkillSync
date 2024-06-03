@@ -23,4 +23,10 @@ class CreateTeamDTO
             'site' => $this->site,
         ];
     }
+
+    public function setAdminId(int $adminId): self
+    {
+        $this->adminId = $adminId;
+        return $this;
+    }
 }

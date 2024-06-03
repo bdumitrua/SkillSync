@@ -18,4 +18,16 @@ class CreatePostCommentDTO
             'media_url' => $this->mediaUrl,
         ];
     }
+
+    public function setUserId(int $userId): self
+    {
+        $this->userId = $userId;
+        return $this;
+    }
+
+    public function setPostId(int $postId): self
+    {
+        $this->postId = $postId;
+        return $this;
+    }
 }

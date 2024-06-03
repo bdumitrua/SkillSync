@@ -2,17 +2,18 @@
 
 namespace App\Services\Message\Interfaces;
 
+use App\DTO\Message\CreateMesssageDTO;
 use App\Http\Requests\Message\CreateMesssageRequest;
 
 interface MessageServiceInterface
 {
     /**
      * @param int $chatId
-     * @param CreateMesssageRequest $request
+     * @param CreateMesssageDTO $createMesssageDTO
      * 
      * @return void
      */
-    public function send(int $chatId, CreateMesssageRequest $request): void;
+    public function send(int $chatId, CreateMesssageDTO $createMesssageDTO): void;
 
     /**
      * @param int $chatId

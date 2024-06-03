@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\User\CreateSubscriptionDTO;
 use App\Http\Requests\CreateSubscriptionRequest;
 use App\Models\Subscription;
 use App\Models\User;
 use App\Services\Interfaces\SubscriptionServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class SubscriptionController extends Controller
 {
@@ -33,8 +35,14 @@ class SubscriptionController extends Controller
 
     public function create(CreateSubscriptionRequest $request)
     {
-        return $this->handleServiceCall(function () use ($request) {
-            return $this->subscriptionService->create($request);
+        $this->patchRequestEntityType($request);
+
+        /** @var CreateSubscriptionDTO */
+        $createSubscriptionDTO = $request->createDTO();
+        $createSubscriptionDTO->setUserId(Auth::id());
+
+        return $this->handleServiceCall(function () use ($createSubscriptionDTO) {
+            return $this->subscriptionService->create($createSubscriptionDTO);
         });
     }
 

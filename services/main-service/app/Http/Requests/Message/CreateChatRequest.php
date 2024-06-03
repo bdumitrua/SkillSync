@@ -2,11 +2,17 @@
 
 namespace App\Http\Requests\Message;
 
+use App\DTO\Message\CreateChatDTO;
 use App\Rules\EntityIdRule;
+use App\Traits\CreateDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateChatRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = CreateChatDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

@@ -2,10 +2,16 @@
 
 namespace App\Http\Requests\Message;
 
+use App\DTO\Message\UpdateChatDTO;
+use App\Traits\CreateDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateChatRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = UpdateChatDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

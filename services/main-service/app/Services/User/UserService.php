@@ -24,8 +24,6 @@ use Illuminate\Support\Facades\Log;
 
 class UserService implements UserServiceInterface
 {
-    use CreateDTO;
-
     private $teamService;
     private $postService;
     private $tagService;
@@ -90,14 +88,21 @@ class UserService implements UserServiceInterface
         return UserDataResource::collection($usersData);
     }
 
-    public function update(UpdateUserRequest $request): void
+    public function update(UpdateUserDTO $updateUserDTO): void
     {
-        $this->validateRequestEmail($request->email, $this->authorizedUserId);
-        $updateUserDTO = $this->createDTO($request, UpdateUserDTO::class);
+        $this->validateRequestEmail($updateUserDTO->email, $this->authorizedUserId);
 
         $this->userRepository->update($this->authorizedUserId, $updateUserDTO);
     }
 
+    /**
+     * @param string $email
+     * @param int $authorizedUserId
+     * 
+     * @return void
+     * 
+     * @throws UnprocessableContentException
+     */
     protected function validateRequestEmail(string $email, int $authorizedUserId): void
     {
         $userByEmail = $this->userRepository->getByEmail($email);

@@ -20,6 +20,7 @@ use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Team\Interfaces\TeamLinkServiceInterface;
+use App\Services\Team\Interfaces\TeamMemberServiceInterface;
 use App\Traits\CreateDTO;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Support\Facades\Gate;
@@ -29,8 +30,6 @@ use Illuminate\Support\Facades\Log;
 
 class TeamService implements TeamServiceInterface
 {
-    use CreateDTO;
-
     protected $tagService;
     protected $teamLinkService;
     protected $userRepository;
@@ -90,21 +89,21 @@ class TeamService implements TeamServiceInterface
         return UserDataResource::collection($usersData);
     }
 
-    public function create(CreateTeamRequest $request): void
+    public function create(CreateTeamDTO $createTeamDTO): void
     {
-        /** @var CreateTeamDTO */
-        $createTeamDTO = $this->createDTO($request, CreateTeamDTO::class);
-        $createTeamDTO->adminId = $this->authorizedUserId;
         $newTeam = $this->teamRepository->create($createTeamDTO);
 
-        $createTeamMemberDTO = new CreateTeamMemberDTO($this->authorizedUserId, $newTeam->id, isModerator: true);
+        $createTeamMemberDTO = new CreateTeamMemberDTO(
+            $this->authorizedUserId,
+            $newTeam->id,
+            isModerator: true
+        );
+
         $this->teamMemberRepository->addMember($createTeamMemberDTO);
     }
 
-    public function update(Team $team, UpdateTeamRequest $request): void
+    public function update(Team $team, UpdateTeamDTO $updateTeamDTO): void
     {
-        $updateTeamDTO = $this->createDTO($request, UpdateTeamDTO::class);
-
         Gate::authorize(UPDATE_TEAM_GATE, [Team::class, $team->id]);
 
         $this->teamRepository->update($team, $updateTeamDTO);

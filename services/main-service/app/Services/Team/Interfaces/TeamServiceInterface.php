@@ -2,6 +2,8 @@
 
 namespace App\Services\Team\Interfaces;
 
+use App\DTO\Team\CreateTeamDTO;
+use App\DTO\Team\UpdateTeamDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\User;
 use App\Models\Team;
@@ -37,19 +39,19 @@ interface TeamServiceInterface
     public function subscribers(int $teamId): JsonResource;
 
     /**
-     * @param CreateTeamRequest $request
+     * @param CreateTeamDTO $createTeamDTO
      * 
      * @return void
      */
-    public function create(CreateTeamRequest $request): void;
+    public function create(CreateTeamDTO $createTeamDTO): void;
 
     /**
      * @param Team $team
-     * @param UpdateTeamRequest $request
+     * @param UpdateTeamDTO $updateTeamDTO
      * 
      * @return void
      */
-    public function update(Team $team, UpdateTeamRequest $request): void;
+    public function update(Team $team, UpdateTeamDTO $updateTeamDTO): void;
 
     /**
      * @param Team $team

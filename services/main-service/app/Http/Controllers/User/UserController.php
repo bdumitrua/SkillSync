@@ -40,8 +40,10 @@ class UserController extends Controller
 
     public function update(UpdateUserRequest $request)
     {
-        return $this->handleServiceCall(function () use ($request) {
-            return $this->userService->update($request);
+        $updateUserDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($updateUserDTO) {
+            return $this->userService->update($updateUserDTO);
         });
     }
 }

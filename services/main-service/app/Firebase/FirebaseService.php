@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\Message\CreateMesssageDTO;
 use App\Enums\MessageStatus;
 use App\Exceptions\AccessDeniedException;
 use App\Exceptions\NotFoundException;
@@ -88,13 +89,12 @@ class FirebaseService
         }
     }
 
-    // TODO DTO
-    public function sendMessage(string $chatId, array $messageData): void
+    public function sendMessage(string $chatId, CreateMesssageDTO $messageData): void
     {
         $newMessageUuid = Uuid::uuid4()->toString();
         $newMessageRef = $this->database->getReference($this->getMessagePath($chatId, $newMessageUuid));
 
-        $newMessageRef->set($messageData);
+        $newMessageRef->set($messageData->toArray());
     }
 
     public function readMessage(string $chatId, string $messageUuid): void

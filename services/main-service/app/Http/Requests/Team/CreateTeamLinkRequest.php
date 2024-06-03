@@ -2,10 +2,16 @@
 
 namespace App\Http\Requests\Team;
 
+use App\DTO\Team\CreateTeamLinkDTO;
+use App\Traits\CreateDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateTeamLinkRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = CreateTeamLinkDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

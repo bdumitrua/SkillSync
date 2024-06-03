@@ -2,6 +2,7 @@
 
 namespace App\Services\Interfaces;
 
+use App\DTO\User\CreateTagDTO;
 use App\Models\Tag;
 use App\Http\Requests\CreateTagRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,11 +24,11 @@ interface TagServiceInterface
     public function team(int $teamId): JsonResource;
 
     /**
-     * @param CreateTagRequest $request
+     * @param CreateTagDTO $createTagDTO
      * 
      * @return void
      */
-    public function create(CreateTagRequest $request): void;
+    public function create(CreateTagDTO $createTagDTO): void;
 
     /**
      * @param Tag $tag

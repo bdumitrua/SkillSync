@@ -16,4 +16,9 @@ class CreateTeamVacancyDTO
             'description' => $this->description,
         ];
     }
+
+    public function setTeamId(int $teamId): void
+    {
+        $this->teamId = $teamId;
+    }
 }

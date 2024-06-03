@@ -3,7 +3,7 @@
 namespace App\Repositories\Post\Interfaces;
 
 use App\DTO\Post\CreatePostDTO;
-use App\DTO\Team\UpdateTeamDTO;
+use App\DTO\Post\UpdatePostDTO;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -58,11 +58,11 @@ interface PostRepositoryInterface
 
     /**
      * @param Post $post
-     * @param UpdateTeamDTO $dto
+     * @param UpdatePostDTO $dto
      * 
      * @return void
      */
-    public function update(Post $post, UpdateTeamDTO $dto): void;
+    public function update(Post $post, UpdatePostDTO $dto): void;
 
     /**
      * @param Post $post

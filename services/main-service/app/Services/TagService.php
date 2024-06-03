@@ -16,10 +16,8 @@ use Illuminate\Support\Facades\Log;
 
 class TagService implements TagServiceInterface
 {
-    use CreateDTO;
-
-    private $tagRepository;
-    private ?int $authorizedUserId;
+    protected $tagRepository;
+    protected ?int $authorizedUserId;
 
     public function __construct(
         TagRepositoryInterface $tagRepository,
@@ -42,13 +40,10 @@ class TagService implements TagServiceInterface
         );
     }
 
-    public function create(CreateTagRequest $request): void
+    public function create(CreateTagDTO $createTagDTO): void
     {
-        $this->patchCreateTagRequest($request);
+        Gate::authorize(CREATE_TAG_GATE, [Tag::class, $createTagDTO->entityType, $createTagDTO->entityId]);
 
-        Gate::authorize(CREATE_TAG_GATE, [Tag::class, $request->entityType, $request->entityId]);
-
-        $createTagDTO = $this->createDTO($request, CreateTagDTO::class);
         $this->tagRepository->create($createTagDTO);
     }
 
@@ -57,16 +52,5 @@ class TagService implements TagServiceInterface
         Gate::authorize(DELETE_TAG_GATE, [Tag::class, $tag]);
 
         $this->tagRepository->delete($tag);
-    }
-
-    protected function patchCreateTagRequest(CreateTagRequest &$request): void
-    {
-        Log::debug('Patching CreateTagRequest', ['request' => $request->toArray()]);
-        $entitiesPath = config('entities');
-
-        $request->merge([
-            'entityType' => $entitiesPath[$request->entityType]
-        ]);
-        Log::debug('Patched CreateTagRequest', ['request' => $request->toArray()]);
     }
 }

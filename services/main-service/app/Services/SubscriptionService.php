@@ -20,12 +20,10 @@ use Illuminate\Support\Facades\Log;
 
 class SubscriptionService implements SubscriptionServiceInterface
 {
-    use CreateDTO;
-
-    private $teamRepository;
-    private $userRepository;
-    private $subscriptionRepository;
-    private ?int $authorizedUserId;
+    protected $teamRepository;
+    protected $userRepository;
+    protected $subscriptionRepository;
+    protected ?int $authorizedUserId;
 
     public function __construct(
         TeamRepositoryInterface $teamRepository,
@@ -64,20 +62,18 @@ class SubscriptionService implements SubscriptionServiceInterface
         return TeamDataResource::collection($teamsData);
     }
 
-    public function create(CreateSubscriptionRequest $request): void
+    public function create(CreateSubscriptionDTO $createSubscriptionDTO): void
     {
-        $this->patchCreateSubscriptionRequest($request);
         Gate::authorize(
             SUBSCRIBE_TO_ENTITY_GATE,
-            [Subscription::class, $request->entityType, $request->entityId]
+            [
+                Subscription::class,
+                $createSubscriptionDTO->entityType,
+                $createSubscriptionDTO->entityId
+            ]
         );
 
-        /** @var CreateSubscriptionDTO */
-        $createSubscriptionDTO = $this->createDTO($request, CreateSubscriptionDTO::class);
-        $createSubscriptionDTO->userId = $this->authorizedUserId;
-
         $subscribed = $this->subscriptionRepository->create($createSubscriptionDTO);
-
         if (!$subscribed) {
             throw new SubscriptionException("You're already subscribed.");
         }
@@ -91,17 +87,5 @@ class SubscriptionService implements SubscriptionServiceInterface
         );
 
         $this->subscriptionRepository->delete($subscription);
-    }
-
-    // TODO REFACTOR MOVE 
-    protected function patchCreateSubscriptionRequest(CreateSubscriptionRequest &$request): void
-    {
-        Log::debug('Patching CreateSubscriptionRequest', ['request' => $request->toArray()]);
-        $entitiesPath = config('entities');
-
-        $request->merge([
-            'entityType' => $entitiesPath[$request->entityType]
-        ]);
-        Log::debug('Patched CreateSubscriptionRequest', ['request' => $request->toArray()]);
     }
 }

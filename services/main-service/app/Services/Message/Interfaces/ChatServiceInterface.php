@@ -2,6 +2,8 @@
 
 namespace App\Services\Message\Interfaces;
 
+use App\DTO\Message\CreateChatDTO;
+use App\DTO\Message\UpdateChatDTO;
 use App\Http\Requests\Message\CreateChatRequest;
 use App\Http\Requests\Message\UpdateChatRequest;
 use Illuminate\Http\Request;
@@ -23,17 +25,17 @@ interface ChatServiceInterface
 
     /**
      * @param int $teamId
-     * @param CreateChatRequest $request
+     * @param CreateChatDTO $createChatDTO
      * 
      * @return void
      */
-    public function create(int $teamId, CreateChatRequest $request): void;
+    public function create(int $teamId, CreateChatDTO $createChatDTO): void;
 
     /**
      * @param int $chatId
-     * @param UpdateChatRequest $request
+     * @param UpdateChatDTO $updateChatDTO
      * 
      * @return void
      */
-    public function update(int $chatId, UpdateChatRequest $request): void;
+    public function update(int $chatId, UpdateChatDTO $updateChatDTO): void;
 }

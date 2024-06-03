@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Log;
 
 class TeamVacancyService implements TeamVacancyServiceInterface
 {
-    use CreateDTO, SetAdditionalData;
+    use SetAdditionalData;
 
     protected $teamVacancyRepository;
     protected $teamRepository;
@@ -50,22 +50,16 @@ class TeamVacancyService implements TeamVacancyServiceInterface
         return JsonResource::collection($teamVacancies);
     }
 
-    public function create(int $teamId, CreateTeamVacancyRequest $request): void
+    public function create(int $teamId, CreateTeamVacancyDTO $createTeamVacancyDTO): void
     {
         Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, [Team::class, $teamId]);
-
-        /** @var CreateTeamVacancyDTO */
-        $createTeamVacancyDTO = $this->createDTO($request, CreateTeamVacancyDTO::class);
-        $createTeamVacancyDTO->teamId = $teamId;
 
         $this->teamVacancyRepository->create($createTeamVacancyDTO);
     }
 
-    public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyRequest $request): void
+    public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyDTO $updateTeamVacancyDTO): void
     {
         Gate::authorize(TOUCH_TEAM_VACANCIES_GATE, [Team::class, $teamVacancy->team_id]);
-
-        $updateTeamVacancyDTO = $this->createDTO($request, UpdateTeamVacancyDTO::class);
 
         $this->teamVacancyRepository->update($teamVacancy, $updateTeamVacancyDTO);
     }

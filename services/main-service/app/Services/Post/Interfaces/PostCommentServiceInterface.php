@@ -2,6 +2,7 @@
 
 namespace App\Services\Post\Interfaces;
 
+use App\DTO\Post\CreatePostCommentDTO;
 use App\Http\Requests\Post\CreatePostCommentRequest;
 use App\Models\PostComment;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -17,11 +18,11 @@ interface PostCommentServiceInterface
 
     /**
      * @param int $postId
-     * @param CreatePostCommentRequest $request
+     * @param CreatePostCommentDTO $createPostCommentDTO
      * 
      * @return void
      */
-    public function create(int $postId, CreatePostCommentRequest $request): void;
+    public function create(int $postId, CreatePostCommentDTO $createPostCommentDTO): void;
 
     /**
      * @param PostComment $postComment

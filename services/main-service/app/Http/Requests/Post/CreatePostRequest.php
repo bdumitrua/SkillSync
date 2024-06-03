@@ -2,12 +2,18 @@
 
 namespace App\Http\Requests\Post;
 
+use App\DTO\Post\CreatePostDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\ValidatePostEntityType;
 use App\Rules\EntityIdRule;
+use App\Traits\CreateDTO;
 
 class CreatePostRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = CreatePostDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

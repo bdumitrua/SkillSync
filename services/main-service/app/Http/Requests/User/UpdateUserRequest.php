@@ -2,11 +2,17 @@
 
 namespace App\Http\Requests\User;
 
+use App\DTO\User\UpdateUserDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\EmailRule;
+use App\Traits\CreateDTO;
 
 class UpdateUserRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = UpdateUserDTO::class;
+
     public function authorize(): bool
     {
         return true;

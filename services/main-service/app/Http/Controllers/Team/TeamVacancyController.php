@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Team;
 
+use App\DTO\Team\CreateTeamVacancyDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\CreateTeamVacancyRequest;
 use App\Http\Requests\Team\UpdateTeamVacancyRequest;
@@ -35,15 +36,21 @@ class TeamVacancyController extends Controller
 
     public function create(Team $team, CreateTeamVacancyRequest $request)
     {
-        return $this->handleServiceCall(function () use ($team, $request) {
-            return $this->teamVacancyService->create($team->id, $request);
+        /** @var CreateTeamVacancyDTO */
+        $createTeamVacancyDTO = $request->createDTO();
+        $createTeamVacancyDTO->setTeamId($team->id);
+
+        return $this->handleServiceCall(function () use ($team, $createTeamVacancyDTO) {
+            return $this->teamVacancyService->create($team->id, $createTeamVacancyDTO);
         });
     }
 
     public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyRequest $request)
     {
-        return $this->handleServiceCall(function () use ($teamVacancy, $request) {
-            return $this->teamVacancyService->update($teamVacancy, $request);
+        $updateTeamVacancyDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($teamVacancy, $updateTeamVacancyDTO) {
+            return $this->teamVacancyService->update($teamVacancy, $updateTeamVacancyDTO);
         });
     }
 

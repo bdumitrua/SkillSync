@@ -2,11 +2,17 @@
 
 namespace App\Http\Requests\Team;
 
+use App\DTO\Team\CreateTeamVacancyDTO;
+use App\Traits\CreateDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class CreateTeamVacancyRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = CreateTeamVacancyDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

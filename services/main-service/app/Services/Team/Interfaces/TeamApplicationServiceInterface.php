@@ -2,6 +2,7 @@
 
 namespace App\Services\Team\Interfaces;
 
+use App\DTO\Team\CreateTeamApplicationDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\TeamVacancy;
 use App\Models\TeamApplication;
@@ -32,19 +33,19 @@ interface TeamApplicationServiceInterface
     public function vacancy(TeamVacancy $teamVacancy): JsonResource;
 
     /**
-     * @param CreateTeamApplicationRequest $request
+     * @param CreateTeamApplicationDTO $createTeamApplicationDTO
      * 
      * @return void
      */
-    public function create(CreateTeamApplicationRequest $request): void;
+    public function create(CreateTeamApplicationDTO $createTeamApplicationDTO): void;
 
     /**
      * @param TeamApplication $teamApplication
-     * @param UpdateTeamApplicationRequest $request
+     * @param string $newStatus
      * 
      * @return void
      */
-    public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $request): void;
+    public function update(TeamApplication $teamApplication, string $newStatus): void;
 
     /**
      * @param TeamApplication $teamApplication

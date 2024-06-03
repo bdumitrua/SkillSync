@@ -2,12 +2,14 @@
 
 namespace App\DTO\Team;
 
+use App\Enums\TeamApplicationStatus;
+
 class CreateTeamApplicationDTO
 {
     public int $teamId;
     public int $userId;
     public int $vacancyId;
-    public string $status;
+    public string $status = TeamApplicationStatus::Sended;
 
     public ?string $text;
 
@@ -20,5 +22,11 @@ class CreateTeamApplicationDTO
             'status' => $this->status,
             'text' => $this->text,
         ];
+    }
+
+    public function setUserId(int $userId): self
+    {
+        $this->userId = $userId;
+        return $this;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\Interfaces;
 
+use App\DTO\User\CreateSubscriptionDTO;
 use App\Models\Subscription;
 use App\Http\Requests\CreateSubscriptionRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -23,11 +24,11 @@ interface SubscriptionServiceInterface
     public function teams(int $userId): JsonResource;
 
     /**
-     * @param CreateSubscriptionRequest $request
+     * @param CreateSubscriptionDTO $createSubscriptionDTO
      * 
      * @return void
      */
-    public function create(CreateSubscriptionRequest $request): void;
+    public function create(CreateSubscriptionDTO $createSubscriptionDTO): void;
 
     /**
      * @param Subscription $subscription

@@ -57,15 +57,21 @@ class PostController extends Controller
 
     public function create(CreatePostRequest $request)
     {
-        return $this->handleServiceCall(function () use ($request) {
-            return $this->postService->create($request);
+        $this->patchRequestEntityType($request);
+
+        $createPostDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($createPostDTO) {
+            return $this->postService->create($createPostDTO);
         });
     }
 
     public function update(Post $post, UpdatePostRequest $request)
     {
-        return $this->handleServiceCall(function () use ($post, $request) {
-            return $this->postService->update($post, $request);
+        $updatePostDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($post, $updatePostDTO) {
+            return $this->postService->update($post, $updatePostDTO);
         });
     }
 

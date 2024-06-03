@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Services\Message\Interfaces\MessageServiceInterface;
 use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
 use App\Http\Requests\Message\CreateMesssageRequest;
+use App\DTO\Message\CreateMesssageDTO;
 
 class MessageService implements MessageServiceInterface
 {
@@ -18,7 +19,7 @@ class MessageService implements MessageServiceInterface
         $this->authorizedUserId = Auth::id();
     }
 
-    public function send(int $chatId, CreateMesssageRequest $request): void
+    public function send(int $chatId, CreateMesssageDTO $createMesssageDTO): void
     {
         // TODO check if authorized user is chat member
         // 

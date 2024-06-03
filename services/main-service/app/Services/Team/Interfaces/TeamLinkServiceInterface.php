@@ -2,6 +2,8 @@
 
 namespace App\Services\Team\Interfaces;
 
+use App\DTO\Team\CreateTeamLinkDTO;
+use App\DTO\Team\UpdateTeamLinkDTO;
 use App\Http\Requests\Team\CreateTeamLinkRequest;
 use App\Http\Requests\Team\UpdateTeamLinkRequest;
 use App\Models\TeamLink;
@@ -18,19 +20,19 @@ interface TeamLinkServiceInterface
 
     /**
      * @param int $teamId
-     * @param CreateTeamLinkRequest $request
+     * @param CreateTeamLinkDTO $createTeamLinkDTO
      * 
      * @return void
      */
-    public function create(int $teamId, CreateTeamLinkRequest $request): void;
+    public function create(int $teamId, CreateTeamLinkDTO $createTeamLinkDTO): void;
 
     /**
      * @param TeamLink $teamLink
-     * @param UpdateTeamLinkRequest $request
+     * @param UpdateTeamLinkDTO $updateTeamLinkDTO
      * 
      * @return void
      */
-    public function update(TeamLink $teamLink, UpdateTeamLinkRequest $request): void;
+    public function update(TeamLink $teamLink, UpdateTeamLinkDTO $updateTeamLinkDTO): void;
 
     /**
      * @param TeamLink $teamLink

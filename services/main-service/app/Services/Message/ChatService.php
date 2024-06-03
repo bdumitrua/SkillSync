@@ -2,6 +2,8 @@
 
 namespace App\Services\Message;
 
+use App\DTO\Message\CreateChatDTO;
+use App\DTO\Message\UpdateChatDTO;
 use App\Http\Requests\Message\CreateChatRequest;
 use App\Http\Requests\Message\UpdateChatRequest;
 use Illuminate\Support\Facades\Auth;
@@ -42,12 +44,12 @@ class ChatService implements ChatServiceInterface
         );
     }
 
-    public function create(int $teamId, CreateChatRequest $request): void
+    public function create(int $teamId, CreateChatDTO $createChatDTO): void
     {
         // 
     }
 
-    public function update(int $chatId, UpdateChatRequest $request): void
+    public function update(int $chatId, UpdateChatDTO $updateChatDTO): void
     {
         // 
     }

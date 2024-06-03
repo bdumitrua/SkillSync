@@ -2,11 +2,17 @@
 
 namespace App\Http\Requests;
 
+use App\DTO\User\CreateSubscriptionDTO;
 use App\Rules\EntityIdRule;
+use App\Traits\CreateDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateSubscriptionRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = CreateSubscriptionDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

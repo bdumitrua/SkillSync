@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Team;
 
+use App\DTO\Team\CreateTeamDTO;
+use App\DTO\Team\UpdateTeamDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\CreateTeamRequest;
 use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Models\Team;
 use App\Models\User;
 use App\Services\Team\Interfaces\TeamServiceInterface;
+use App\Traits\CreateDTO;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TeamController extends Controller
 {
@@ -49,15 +53,21 @@ class TeamController extends Controller
 
     public function create(CreateTeamRequest $request)
     {
-        return $this->handleServiceCall(function () use ($request) {
-            return $this->teamService->create($request);
+        /** @var CreateTeamDTO */
+        $createTeamDTO = $request->createDTO();
+        $createTeamDTO->setAdminId(Auth::id());
+
+        return $this->handleServiceCall(function () use ($createTeamDTO) {
+            return $this->teamService->create($createTeamDTO);
         });
     }
 
     public function update(Team $team, UpdateTeamRequest $request)
     {
-        return $this->handleServiceCall(function () use ($team, $request) {
-            return $this->teamService->update($team, $request);
+        $updateTeamDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($team, $updateTeamDTO) {
+            return $this->teamService->update($team, $updateTeamDTO);
         });
     }
 

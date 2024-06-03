@@ -24,7 +24,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class TeamMemberService implements TeamMemberServiceInterface
 {
-    use CreateDTO, SetAdditionalData;
+    use SetAdditionalData;
 
     protected $teamMemberRepository;
     protected $userRepository;
@@ -50,13 +50,9 @@ class TeamMemberService implements TeamMemberServiceInterface
     /**
      * @throws MembershipException
      */
-    public function create(int $teamId, CreateTeamMemberRequest $request): void
+    public function create(int $teamId, CreateTeamMemberDTO $createTeamMemberDTO): void
     {
         Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
-
-        /** @var CreateTeamMemberDTO */
-        $createTeamMemberDTO = $this->createDTO($request, CreateTeamMemberDTO::class);
-        $createTeamMemberDTO->teamId = $teamId;
 
         $isMember = $this->teamMemberRepository->userIsMember(
             $createTeamMemberDTO->teamId,
@@ -70,7 +66,7 @@ class TeamMemberService implements TeamMemberServiceInterface
         $this->teamMemberRepository->addMember($createTeamMemberDTO);
     }
 
-    public function update(int $teamId, int $userId, UpdateTeamMemberRequest $request): void
+    public function update(int $teamId, int $userId, UpdateTeamMemberDTO $updateTeamMemberDTO): void
     {
         Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
 
@@ -83,7 +79,6 @@ class TeamMemberService implements TeamMemberServiceInterface
             throw new MembershipException("User is not member of this team");
         }
 
-        $updateTeamMemberDTO = $this->createDTO($request, UpdateTeamMemberDTO::class);
         $this->teamMemberRepository->updateMember($membership, $updateTeamMemberDTO);
     }
 

@@ -3,9 +3,15 @@
 namespace App\Http\Requests\Team;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\DTO\Team\UpdateTeamDTO;
+use App\Traits\CreateDTO;
 
 class UpdateTeamRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = UpdateTeamDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

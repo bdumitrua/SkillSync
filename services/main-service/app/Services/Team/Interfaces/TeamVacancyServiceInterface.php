@@ -6,6 +6,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\TeamVacancy;
 use App\Http\Requests\Team\UpdateTeamVacancyRequest;
 use App\Http\Requests\Team\CreateTeamVacancyRequest;
+use App\DTO\Team\UpdateTeamVacancyDTO;
+use App\DTO\Team\CreateTeamVacancyDTO;
 
 interface TeamVacancyServiceInterface
 {
@@ -25,19 +27,19 @@ interface TeamVacancyServiceInterface
 
     /**
      * @param int $teamId
-     * @param CreateTeamVacancyRequest $request
+     * @param CreateTeamVacancyDTO $createTeamVacancyDTO
      * 
      * @return void
      */
-    public function create(int $teamId, CreateTeamVacancyRequest $request): void;
+    public function create(int $teamId, CreateTeamVacancyDTO $createTeamVacancyDTO): void;
 
     /**
      * @param TeamVacancy $teamVacancy
-     * @param UpdateTeamVacancyRequest $request
+     * @param UpdateTeamVacancyDTO $updateTeamVacancyDTO
      * 
      * @return void
      */
-    public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyRequest $request): void;
+    public function update(TeamVacancy $teamVacancy, UpdateTeamVacancyDTO $updateTeamVacancyDTO): void;
 
     /**
      * @param TeamVacancy $teamVacancy

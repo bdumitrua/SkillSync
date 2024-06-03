@@ -2,10 +2,16 @@
 
 namespace App\Http\Requests\Post;
 
+use App\DTO\Post\UpdatePostDTO;
+use App\Traits\CreateDTO;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePostRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = UpdatePostDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

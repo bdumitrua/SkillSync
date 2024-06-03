@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Team;
 
+use App\DTO\Team\CreateTeamLinkDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\CreateTeamLinkRequest;
 use App\Http\Requests\Team\UpdateTeamLinkRequest;
@@ -28,15 +29,21 @@ class TeamLinkController extends Controller
 
     public function create(Team $team, CreateTeamLinkRequest $request)
     {
-        return $this->handleServiceCall(function () use ($team, $request) {
-            return $this->teamLinkService->create($team->id, $request);
+        /** @var CreateTeamLinkDTO */
+        $createTeamLinkDTO = $request->createDTO();
+        $createTeamLinkDTO->setTeamId($team->id);
+
+        return $this->handleServiceCall(function () use ($team, $createTeamLinkDTO) {
+            return $this->teamLinkService->create($team->id, $createTeamLinkDTO);
         });
     }
 
     public function update(TeamLink $teamLink, UpdateTeamLinkRequest $request)
     {
-        return $this->handleServiceCall(function () use ($teamLink, $request) {
-            return $this->teamLinkService->update($teamLink, $request);
+        $updateTeamLinkDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($teamLink, $updateTeamLinkDTO) {
+            return $this->teamLinkService->update($teamLink, $updateTeamLinkDTO);
         });
     }
 

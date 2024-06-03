@@ -2,6 +2,8 @@
 
 namespace App\Services\Post\Interfaces;
 
+use App\DTO\Post\CreatePostDTO;
+use App\DTO\Post\UpdatePostDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\User;
@@ -44,19 +46,19 @@ interface PostServiceInterface
     public function team(int $teamId): JsonResource;
 
     /**
-     * @param CreatePostRequest $request
+     * @param CreatePostDTO $createPostDTO
      * 
      * @return void
      */
-    public function create(CreatePostRequest $request): void;
+    public function create(CreatePostDTO $createPostDTO): void;
 
     /**
      * @param Post $post
-     * @param UpdatePostRequest $request
+     * @param UpdatePostDTO $updatePostDTO
      * 
      * @return void
      */
-    public function update(Post $post, UpdatePostRequest $request): void;
+    public function update(Post $post, UpdatePostDTO $updatePostDTO): void;
 
     /**
      * @param Post $post

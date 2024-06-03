@@ -19,8 +19,6 @@ use Illuminate\Support\Facades\Gate;
 
 class TeamLinkService implements TeamLinkServiceInterface
 {
-    use CreateDTO;
-
     protected $teamLinkRepository;
     protected $teamMemberRepository;
     protected ?int $authorizedUserId;
@@ -43,22 +41,16 @@ class TeamLinkService implements TeamLinkServiceInterface
         );
     }
 
-    public function create(int $teamId, CreateTeamLinkRequest $request): void
+    public function create(int $teamId, CreateTeamLinkDTO $createTeamLinkDTO): void
     {
         Gate::authorize(TOUCH_TEAM_LINKS_GATE, [Team::class, $teamId]);
-
-        /** @var CreateTeamLinkDTO */
-        $createTeamLinkDTO = $this->createDTO($request, CreateTeamLinkDTO::class);
-        $createTeamLinkDTO->teamId = $teamId;
 
         $this->teamLinkRepository->create($createTeamLinkDTO);
     }
 
-    public function update(TeamLink $teamLink, UpdateTeamLinkRequest $request): void
+    public function update(TeamLink $teamLink, UpdateTeamLinkDTO $updateTeamLinkDTO): void
     {
         Gate::authorize(TOUCH_TEAM_LINKS_GATE, [Team::class, $teamLink->team_id]);
-
-        $updateTeamLinkDTO = $this->createDTO($request, UpdateTeamLinkDTO::class);
 
         $this->teamLinkRepository->update($teamLink, $updateTeamLinkDTO);
     }

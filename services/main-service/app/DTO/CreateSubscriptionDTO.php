@@ -16,4 +16,10 @@ class CreateSubscriptionDTO
             'entity_id' => $this->entityId,
         ];
     }
+
+    public function setUserId(int $userId): self
+    {
+        $this->userId = $userId;
+        return $this;
+    }
 }

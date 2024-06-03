@@ -15,7 +15,6 @@ use App\Models\Team;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Traits\CreateDTO;
 use App\Traits\SetAdditionalData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -25,7 +24,7 @@ use Illuminate\Support\Facades\Log;
 
 class TeamApplicationService implements TeamApplicationServiceInterface
 {
-    use CreateDTO, SetAdditionalData;
+    use SetAdditionalData;
 
     protected $userRepository;
     protected $teamRepository;
@@ -83,27 +82,22 @@ class TeamApplicationService implements TeamApplicationServiceInterface
         return TeamApplicationResource::collection($teamApplications);
     }
 
-    public function create(CreateTeamApplicationRequest $request): void
+    public function create(CreateTeamApplicationDTO $createTeamApplicationDTO): void
     {
-        /** @var CreateTeamApplicationDTO */
-        $createApplicationDTO = $this->createDTO($request, CreateTeamApplicationDTO::class);
-        $createApplicationDTO->userId = $this->authorizedUserId;
-        $createApplicationDTO->status = TeamApplicationStatus::Sended;
-
         Gate::authorize(APPLY_TO_VACANCY_GATE, [
             TeamApplication::class,
-            $createApplicationDTO->teamId,
-            $createApplicationDTO->vacancyId
+            $createTeamApplicationDTO->teamId,
+            $createTeamApplicationDTO->vacancyId
         ]);
 
-        $this->teamApplicationRepository->create($createApplicationDTO);
+        $this->teamApplicationRepository->create($createTeamApplicationDTO);
     }
 
-    public function update(TeamApplication $teamApplication, UpdateTeamApplicationRequest $request): void
+    public function update(TeamApplication $teamApplication, string $newStatus): void
     {
         Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication->team_id]);
 
-        $this->teamApplicationRepository->update($teamApplication, $request->status);
+        $this->teamApplicationRepository->update($teamApplication, $newStatus);
     }
 
     public function delete(TeamApplication $teamApplication): void

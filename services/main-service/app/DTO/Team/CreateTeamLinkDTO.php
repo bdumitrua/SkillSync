@@ -23,4 +23,10 @@ class CreateTeamLinkDTO
             'icon_type' => $this->iconType,
         ];
     }
+
+    public function setTeamId(int $teamId): self
+    {
+        $this->teamId = $teamId;
+        return $this;
+    }
 }

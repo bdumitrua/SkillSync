@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Gate;
 
 class PostCommentService implements PostCommentServiceInterface
 {
-    use CreateDTO, SetAdditionalData;
+    use SetAdditionalData;
 
     protected $userRepository;
     protected $postCommentRepository;
@@ -41,13 +41,8 @@ class PostCommentService implements PostCommentServiceInterface
         return PostCommentResource::collection($postComments);
     }
 
-    public function create(int $postId, CreatePostCommentRequest $request): void
+    public function create(int $postId, CreatePostCommentDTO $createPostCommentDTO): void
     {
-        /** @var CreatePostCommentDTO */
-        $createPostCommentDTO = $this->createDTO($request, CreatePostCommentDTO::class);
-        $createPostCommentDTO->postId = $postId;
-        $createPostCommentDTO->userId = $this->authorizedUserId;
-
         $this->postCommentRepository->create($createPostCommentDTO);
     }
 

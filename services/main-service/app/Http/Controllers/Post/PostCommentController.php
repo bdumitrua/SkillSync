@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Post;
 
+use App\DTO\Post\CreatePostCommentDTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Post\CreatePostCommentRequest;
 use App\Models\Post;
 use App\Models\PostComment;
 use App\Services\Post\Interfaces\PostCommentServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostCommentController extends Controller
 {
@@ -27,8 +29,12 @@ class PostCommentController extends Controller
 
     public function create(Post $post, CreatePostCommentRequest $request)
     {
-        return $this->handleServiceCall(function () use ($post, $request) {
-            return $this->postCommentService->create($post->id, $request);
+        /** @var CreatePostCommentDTO */
+        $createPostCommentDTO = $request->createDTO();
+        $createPostCommentDTO->setPostId($post->id)->setUserId(Auth::id());
+
+        return $this->handleServiceCall(function () use ($post, $createPostCommentDTO) {
+            return $this->postCommentService->create($post->id, $createPostCommentDTO);
         });
     }
 

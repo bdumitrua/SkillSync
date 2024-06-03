@@ -5,8 +5,8 @@ namespace App\Repositories\Post;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
-use App\DTO\Team\UpdateTeamDTO;
 use App\DTO\Post\CreatePostDTO;
+use App\DTO\Post\UpdatePostDTO;
 use App\Traits\GetCachedData;
 use App\Traits\UpdateFromDTO;
 
@@ -59,7 +59,7 @@ class PostRepository implements PostRepositoryInterface
         return $newPost;
     }
 
-    public function update(Post $post, UpdateTeamDTO $dto): void
+    public function update(Post $post, UpdatePostDTO $dto): void
     {
         $this->updateFromDto($post, $dto);
         $this->clearPostCache($post->id);

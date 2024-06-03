@@ -20,4 +20,16 @@ class CreateMesssageDTO
             'status' => $this->status,
         ];
     }
+
+    public function setChatId(int $chatId): self
+    {
+        $this->chatId = $chatId;
+        return $this;
+    }
+
+    public function setSenderId(int $senderId): self
+    {
+        $this->senderId = $senderId;
+        return $this;
+    }
 }

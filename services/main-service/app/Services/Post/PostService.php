@@ -23,8 +23,6 @@ use Illuminate\Support\Facades\Gate;
 
 class PostService implements PostServiceInterface
 {
-    use CreateDTO;
-
     protected $tagRepository;
     protected $postRepository;
     protected $userRepository;
@@ -85,22 +83,17 @@ class PostService implements PostServiceInterface
         return PostResource::collection($teamPosts);
     }
 
-    public function create(CreatePostRequest $request): void
+    public function create(CreatePostDTO $createPostDTO): void
     {
-        $this->patchCreatePostRequestData($request);
-        Gate::authorize(CREATE_POST_GATE, [Post::class, $request->entityType, $request->entityId]);
-
-        /** @var  CreatePostDTO */
-        $createPostDTO = $this->createDTO($request, CreatePostDTO::class);
+        Gate::authorize(CREATE_POST_GATE, [Post::class, $createPostDTO->entityType, $createPostDTO->entityId]);
 
         $this->postRepository->create($createPostDTO);
     }
 
-    public function update(Post $post, UpdatePostRequest $request): void
+    public function update(Post $post, UpdatePostDTO $updatePostDTO): void
     {
         Gate::authorize(UPDATE_POST_GATE, [Post::class, $post]);
 
-        $updatePostDTO = $this->createDTO($request, UpdatePostDTO::class);
         $this->postRepository->update($post, $updatePostDTO);
     }
 
@@ -154,14 +147,5 @@ class PostService implements PostServiceInterface
         foreach ($posts as $post) {
             $post->tagsData = $postsTags->where('entity_id', $post->id)->first();
         }
-    }
-
-    protected function patchCreatePostRequestData(CreatePostRequest &$request): void
-    {
-        $entitiesPath = config('entities');
-
-        $request->merge([
-            'entityType' => $entitiesPath[$request->entityType]
-        ]);
     }
 }

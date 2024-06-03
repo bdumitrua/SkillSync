@@ -2,12 +2,18 @@
 
 namespace App\Http\Requests\Team;
 
+use App\DTO\Team\CreateTeamMemberDTO;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\EntityIdRule;
+use App\Traits\CreateDTO;
 
 class CreateTeamMemberRequest extends FormRequest
 {
+    use CreateDTO;
+
+    protected string $dtoClass = CreateTeamMemberDTO::class;
+
     /**
      * Determine if the user is authorized to make this request.
      */

@@ -2,6 +2,7 @@
 
 namespace App\Services\User\Interfaces;
 
+use App\DTO\User\UpdateUserDTO;
 use App\Models\User;
 use App\Http\Requests\User\UpdateUserRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -29,9 +30,9 @@ interface UserServiceInterface
     public function subscribers(User $user): JsonResource;
 
     /**
-     * @param UpdateUserRequest $request
+     * @param UpdateUserDTO $updateUserDTO
      * 
      * @return void
      */
-    public function update(UpdateUserRequest $request): void;
+    public function update(UpdateUserDTO $updateUserDTO): void;
 }
