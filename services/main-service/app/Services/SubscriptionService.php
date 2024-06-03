@@ -16,6 +16,7 @@ use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Traits\CreateDTO;
+use Illuminate\Support\Facades\Log;
 
 class SubscriptionService implements SubscriptionServiceInterface
 {
@@ -39,6 +40,10 @@ class SubscriptionService implements SubscriptionServiceInterface
 
     public function users(int $userId): JsonResource
     {
+        Log::debug('Started getting user subscriptions to other users', [
+            'userId' => $userId
+        ]);
+
         $userIds = $this->subscriptionRepository->getUsersByUserId($userId)
             ->pluck('entity_id')->toArray();
         $usersData = $this->userRepository->getByIds($userIds);
@@ -48,6 +53,10 @@ class SubscriptionService implements SubscriptionServiceInterface
 
     public function teams(int $userId): JsonResource
     {
+        Log::debug('Started getting user subscriptions to teams', [
+            'userId' => $userId
+        ]);
+
         $teamIds = $this->subscriptionRepository->getTeamsByUserId($userId)
             ->pluck('entity_id')->toArray();
         $teamsData = $this->teamRepository->getByIds($teamIds);
@@ -84,12 +93,15 @@ class SubscriptionService implements SubscriptionServiceInterface
         $this->subscriptionRepository->delete($subscription);
     }
 
+    // TODO REFACTOR MOVE 
     protected function patchCreateSubscriptionRequest(CreateSubscriptionRequest &$request): void
     {
+        Log::debug('Patching CreateSubscriptionRequest', ['request' => $request->toArray()]);
         $entitiesPath = config('entities');
 
         $request->merge([
             'entityType' => $entitiesPath[$request->entityType]
         ]);
+        Log::debug('Patched CreateSubscriptionRequest', ['request' => $request->toArray()]);
     }
 }

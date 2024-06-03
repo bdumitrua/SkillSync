@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class TeamApplicationService implements TeamApplicationServiceInterface
 {
@@ -114,8 +115,16 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     protected function assembleApplicationsData(Collection $teamApplications): Collection
     {
+        Log::debug("Assembling teamApplications data", [
+            'teamApplications ids' => $teamApplications->pluck('id')->toArray(),
+        ]);
+
         $this->setCollectionEntityData($teamApplications, 'user_id', 'userData', $this->userRepository);
         $this->setCollectionEntityData($teamApplications, 'vacancy_id', 'vacancyData', $this->vacancyRepository);
+
+        Log::debug("Succesfully assembled teamApplications data", [
+            'teamApplications ids' => $teamApplications->pluck('id')->toArray(),
+        ]);
 
         return $teamApplications;
     }

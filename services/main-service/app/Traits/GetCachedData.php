@@ -6,6 +6,7 @@ use App\Helpers\TimeHelper;
 use App\Prometheus\PrometheusServiceProxy;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 trait GetCachedData
 {
@@ -19,10 +20,18 @@ trait GetCachedData
      */
     protected function getCachedData(string $cacheKey, ?int $seconds, \Closure $callback, bool $updateCache = false)
     {
+        Log::debug("Trying to get data from cache", [
+            'cacheKey' => $cacheKey,
+        ]);
+
         $prometheusService = app(PrometheusServiceProxy::class);
         $cacheKeyForMetrics = explode(':', $cacheKey)[0];
 
         if ($updateCache || !Cache::has($cacheKey)) {
+            Log::debug("Cache not found, getting data", [
+                'cacheKey' => $cacheKey,
+            ]);
+
             $data = $callback();
 
             $seconds
@@ -30,8 +39,17 @@ trait GetCachedData
                 : Cache::forever($cacheKey, $data);
 
             $prometheusService->incrementCacheMiss($cacheKeyForMetrics);
+
+            Log::debug("Succesfully got data and updated cacheKey data", [
+                'cacheKey' => $cacheKey,
+            ]);
+
             return $data;
         }
+
+        Log::debug("Cache found, returning data from cache", [
+            'cacheKey' => $cacheKey,
+        ]);
 
         $prometheusService->incrementCacheHit($cacheKeyForMetrics);
         return Cache::get($cacheKey);

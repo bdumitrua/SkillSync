@@ -17,6 +17,7 @@ use App\Http\Resources\Auth\PasswordResetCodeResource;
 use App\Http\Resources\Auth\PasswordResetConfirmedResource;
 use App\Models\AuthReset;
 use App\Models\User;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -33,12 +34,16 @@ class AuthService
      */
     public function register(CreateUserRequest $request): JsonResource
     {
-        User::create([
+        $newUser = User::create([
             'first_name' => $request->firstName,
             'last_name' => $request->lastName,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'birthdate' => $request->birthdate,
+        ]);
+
+        Log::debug('Registered new user', [
+            'id' => $newUser->id,
         ]);
 
         $token = auth()->attempt([

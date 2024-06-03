@@ -47,22 +47,6 @@ interface SubscriptionRepositoryInterface
      * @param int $subscriberId
      * @param int $targetUserId
      * 
-     * @return Subscription|null
-     */
-    public function subscriptionToUser(int $subscriberId, int $targetUserId): ?Subscription;
-
-    /**
-     * @param int $userId
-     * @param int $teamId
-     * 
-     * @return Subscription|null
-     */
-    public function subscriptionToTeam(int $userId, int $teamId): ?Subscription;
-
-    /**
-     * @param int $subscriberId
-     * @param int $targetUserId
-     * 
      * @return bool
      */
     public function isSubscribedToUser(int $subscriberId, int $targetUserId): bool;

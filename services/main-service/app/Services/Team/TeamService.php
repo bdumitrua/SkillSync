@@ -119,6 +119,10 @@ class TeamService implements TeamServiceInterface
 
     protected function assembleTeam(Team $team): Team
     {
+        Log::debug('Assemling team data', [
+            'team' => $team->toArray()
+        ]);
+
         $team->links = $this->teamLinkService->team($team->id);
         $team->tags = $this->tagService->team($team->id);
 

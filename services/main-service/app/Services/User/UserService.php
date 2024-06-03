@@ -50,13 +50,20 @@ class UserService implements UserServiceInterface
 
     public function index(): JsonResource
     {
-        return new UserDataResource(
-            Auth::user()
-        );
+        $authorizedUser = Auth::user();
+        Log::debug('Getting authorized user data', [
+            'userId' => $authorizedUser->id
+        ]);
+
+        return new UserDataResource($authorizedUser);
     }
 
     public function show(User $user): JsonResource
     {
+        Log::debug('Stated getting user profile data', [
+            'userId' => $user->id
+        ]);
+
         $user = $this->userRepository->getById($user->id);
         $user->canSubscribe =
             // Не сам пользователь
@@ -66,6 +73,10 @@ class UserService implements UserServiceInterface
 
 
         $user = $this->assembleUserProfile($user);
+
+        Log::debug('Got user profile data', [
+            'userId' => $user->id
+        ]);
 
         return new UserResource($user);
     }
@@ -92,6 +103,12 @@ class UserService implements UserServiceInterface
         $userByEmail = $this->userRepository->getByEmail($email);
         $emailIsAvailable = $userByEmail === null || $userByEmail->id == $authorizedUserId;
 
+        Log::debug('Checking if email is available for updating user profile', [
+            'email' => $email,
+            'userId' => $authorizedUserId,
+            'isAvailable' => $emailIsAvailable
+        ]);
+
         if (!$emailIsAvailable) {
             throw new UnprocessableContentException("This email is already taken");
         }
@@ -99,11 +116,21 @@ class UserService implements UserServiceInterface
 
     protected function assembleUserProfile(User $user): User
     {
+        Log::debug('Assembling user profile data', [
+            'userId' => $user->id
+        ]);
+
         $user->tags = $this->tagService->user($user->id);
         $user->teams = $this->teamService->user($user->id);
         $user->posts = $this->postService->user($user->id);
+
+        Log::debug('Counting user subscribers and subscriptions number');
         $user->subscribersCount = count($this->subscriptionRepository->getUserSubscribers($user->id));
         $user->subscriptionsCount = count($this->subscriptionRepository->getUserSubscriptions($user->id));
+
+        Log::debug('Ended assembling user profile data', [
+            'userId' => $user->id
+        ]);
 
         return $user;
     }

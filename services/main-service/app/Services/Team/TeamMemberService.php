@@ -18,6 +18,7 @@ use App\Models\Team;
 use App\Traits\CreateDTO;
 use App\Traits\SetAdditionalData;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -112,6 +113,10 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     protected function assebmleMembersData(Collection $teamMembers): Collection
     {
+        Log::debug('Assemling team members data', [
+            'teamMembers' => $teamMembers->toArray()
+        ]);
+
         $this->setCollectionEntityData($teamMembers, 'user_id', 'userData', $this->userRepository);
 
         return $teamMembers;

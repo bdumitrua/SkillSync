@@ -7,6 +7,7 @@ use App\Models\Subscription;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 
 class SubscriptionRepository implements SubscriptionRepositoryInterface
 {
@@ -28,6 +29,10 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
 
     public function getUserSubscriptions(int $userId): Collection
     {
+        Log::debug('Getting user subscriptions', [
+            'userId' => $userId
+        ]);
+
         return Subscription::where('user_id', '=', $userId)
             ->groupBy('entity_type')
             ->get();
@@ -35,6 +40,10 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
 
     public function getUserSubscribers(int $userId): Collection
     {
+        Log::debug('Getting user subscribers', [
+            'userId' => $userId
+        ]);
+
         return Subscription::where('entity_type', '=', config('entities.user'))
             ->where('entity_id', '=', $userId)
             ->get();
@@ -42,6 +51,10 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
 
     public function getTeamSubscribers(int $teamId): Collection
     {
+        Log::debug('Getting team subscribers', [
+            'teamId' => $teamId
+        ]);
+
         return Subscription::where('entity_type', '=', config('entities.team'))
             ->where('entity_id', '=', $teamId)
             ->get();
@@ -49,6 +62,10 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
 
     public function getUsersByUserId(int $userId): Collection
     {
+        Log::debug('Getting user subscribtions to other users', [
+            'userId' => $userId
+        ]);
+
         return Subscription::where('user_id', '=', $userId)
             ->where('entity_type', '=', config('entities.user'))
             ->get();
@@ -56,34 +73,42 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
 
     public function getTeamsByUserId(int $userId): Collection
     {
+        Log::debug('Getting user subscribtions to teams', [
+            'userId' => $userId
+        ]);
+
         return Subscription::where('user_id', '=', $userId)
             ->where('entity_type', '=', config('entities.team'))
             ->get();
     }
 
-    public function subscriptionToUser(int $subscriberId, int $targetUserId): ?Subscription
-    {
-        return $this->querySubscriptionToUser($subscriberId, $targetUserId)->first();
-    }
-
-    public function subscriptionToTeam(int $userId, int $teamId): ?Subscription
-    {
-        return $this->querySubscriptionToTeam($userId, $teamId)->first();
-    }
-
     public function isSubscribedToUser(int $subscriberId, int $targetUserId): bool
     {
+        Log::debug('Checking if user is subscribed to other user', [
+            'subscriberId' => $subscriberId,
+            'targetUserId' => $targetUserId
+        ]);
+
         return $this->querySubscriptionToUser($subscriberId, $targetUserId)->exists();
     }
 
     public function isSubscribedToTeam(int $userId, int $teamId): bool
     {
+        Log::debug('Checking if user is subscribed to team', [
+            'userId' => $userId,
+            'teamId' => $teamId
+        ]);
+
         return $this->querySubscriptionToTeam($userId, $teamId)->exists();
     }
 
 
     public function create(CreateSubscriptionDTO $dto): bool
     {
+        Log::debug('Start creating new subscription', [
+            'dto' => $dto->toArray()
+        ]);
+
         $isSubscribed = false;
 
         if ($dto->entityType == config('entities.user')) {
@@ -96,15 +121,33 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
             return false;
         }
 
-        Subscription::create(
+        Log::debug('Creating new subscription', [
+            'dto' => $dto->toArray()
+        ]);
+
+        $newSubscription = Subscription::create(
             $dto->toArray()
         );
+
+        Log::debug('New subscription created succesfully', [
+            'newSubscription' => $newSubscription->toArray()
+        ]);
 
         return true;
     }
 
     public function delete(Subscription $subscription): void
     {
+        $subscriptionData = $subscription->toArray();
+
+        Log::debug('Deleting subscription', [
+            'subscription' => $subscriptionData
+        ]);
+
         $subscription->delete();
+
+        Log::debug('Subscription deleted succesfully', [
+            'subscription' => $subscriptionData
+        ]);
     }
 }

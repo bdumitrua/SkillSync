@@ -8,6 +8,7 @@ use App\Models\Tag;
 use App\DTO\User\CreateTagDTO;
 use App\Traits\GetCachedData;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Log;
 
 class TagRepository implements TagRepositoryInterface
 {
@@ -23,7 +24,6 @@ class TagRepository implements TagRepositoryInterface
             config('entities.post') => CACHE_KEY_POST_TAGS_DATA,
         ];
     }
-
 
     protected function queryByUser(): Builder
     {
@@ -42,6 +42,10 @@ class TagRepository implements TagRepositoryInterface
 
     public function getByUserId(int $userId): Collection
     {
+        Log::debug('Getting tags by userId', [
+            'userId' => $userId
+        ]);
+
         $cacheKey = $this->getTagsCacheKey(config('entities.user'), $userId);
         return $this->getCachedData($cacheKey, CACHE_TIME_USER_TAGS_DATA, function () use ($userId) {
             return $this->queryByUser()->where('entity_id', '=', $userId)->get();
@@ -50,6 +54,10 @@ class TagRepository implements TagRepositoryInterface
 
     public function getByUserIds(array $userIds): Collection
     {
+        Log::debug('Getting tags by userIds', [
+            'userIds' => $userIds
+        ]);
+
         return $this->getCachedCollection($userIds, function ($userId) {
             return $this->getByUserId($userId);
         });
@@ -57,6 +65,10 @@ class TagRepository implements TagRepositoryInterface
 
     public function getByTeamId(int $teamId): Collection
     {
+        Log::debug('Getting tags by teamId', [
+            'teamId' => $teamId
+        ]);
+
         $cacheKey = $this->getTagsCacheKey(config('entities.team'), $teamId);
         return $this->getCachedData($cacheKey, CACHE_TIME_TEAM_TAGS_DATA, function () use ($teamId) {
             return $this->queryByTeam()->where('entity_id', '=', $teamId)->get();
@@ -65,6 +77,10 @@ class TagRepository implements TagRepositoryInterface
 
     public function getByTeamIds(array $teamIds): Collection
     {
+        Log::debug('Getting tags by teamIds', [
+            'teamIds' => $teamIds
+        ]);
+
         return $this->getCachedCollection($teamIds, function ($teamId) {
             return $this->getByTeamId($teamId);
         });
@@ -72,6 +88,10 @@ class TagRepository implements TagRepositoryInterface
 
     public function getByPostId(int $postId): Collection
     {
+        Log::debug('Getting tags by postId', [
+            'postId' => $postId
+        ]);
+
         $cacheKey = $this->getTagsCacheKey(config('entities.post'), $postId);
         return $this->getCachedData($cacheKey, CACHE_TIME_POST_TAGS_DATA, function () use ($postId) {
             return $this->queryByPost()->where('entity_id', '=', $postId)->get();
@@ -80,6 +100,10 @@ class TagRepository implements TagRepositoryInterface
 
     public function getByPostIds(array $postIds): Collection
     {
+        Log::debug('Getting tags by postIds', [
+            'postIds' => $postIds
+        ]);
+
         return $this->getCachedCollection($postIds, function ($postId) {
             return $this->getByPostId($postId);
         });
@@ -87,20 +111,37 @@ class TagRepository implements TagRepositoryInterface
 
     public function create(CreateTagDTO $dto): Tag
     {
+        Log::debug('Start create new tag', [
+            'dto' => $dto->toArray()
+        ]);
+
         $newTag = Tag::create(
             $dto->toArray()
         );
+
+        Log::debug('Created new tag', [
+            'tag' => $newTag->toArray()
+        ]);
 
         return $newTag;
     }
 
     public function delete(Tag $tag): void
     {
+        Log::debug('Start delete tag', [
+            'tag' => $tag->toArray()
+        ]);
+
+        $tagId = $tag->id;
         $entityType = $tag->entity_type;
         $entityId = $tag->entity_id;
 
         $tag->delete();
         $this->clearTagsCache($entityType, $entityId);
+
+        Log::debug('Deleted tag', [
+            'tag' => ['id' => $tagId]
+        ]);
     }
 
     protected function getTagsCacheKey(string $entityType, int $entityId): string

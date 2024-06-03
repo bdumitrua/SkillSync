@@ -12,6 +12,7 @@ use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Traits\CreateDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Log;
 
 class TagService implements TagServiceInterface
 {
@@ -44,6 +45,7 @@ class TagService implements TagServiceInterface
     public function create(CreateTagRequest $request): void
     {
         $this->patchCreateTagRequest($request);
+
         Gate::authorize(CREATE_TAG_GATE, [Tag::class, $request->entityType, $request->entityId]);
 
         $createTagDTO = $this->createDTO($request, CreateTagDTO::class);
@@ -59,10 +61,12 @@ class TagService implements TagServiceInterface
 
     protected function patchCreateTagRequest(CreateTagRequest &$request): void
     {
+        Log::debug('Patching CreateTagRequest', ['request' => $request->toArray()]);
         $entitiesPath = config('entities');
 
         $request->merge([
             'entityType' => $entitiesPath[$request->entityType]
         ]);
+        Log::debug('Patched CreateTagRequest', ['request' => $request->toArray()]);
     }
 }
