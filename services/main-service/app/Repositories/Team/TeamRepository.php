@@ -44,7 +44,6 @@ class TeamRepository implements TeamRepositoryInterface
         });
     }
 
-    // TODO CACHE AFTER MESSAGING
     public function getByChatId(int $chatId): ?Team
     {
         Log::debug('Getting team by chatId', [

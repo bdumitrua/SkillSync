@@ -46,6 +46,8 @@ class TeamLinkRepository implements TeamLinkRepositoryInterface
             $dto->toArray()
         );
 
+        $this->clearTeamLinksCache($newTeamLink->team_id);
+
         Log::debug('Succesfully created teamLink from dto', [
             'dto' => $dto->toArray(),
             'newTeamLink' => $newTeamLink->toArray()

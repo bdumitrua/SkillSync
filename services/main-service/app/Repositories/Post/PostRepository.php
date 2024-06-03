@@ -53,27 +53,30 @@ class PostRepository implements PostRepositoryInterface
         });
     }
 
-    // TODO CACHE
     public function getByUserId(int $userId): Collection
     {
         Log::debug("Getting posts by userId", [
             'userId' => $userId
         ]);
 
-        return Post::where('entity_type', '=', 'user')->where('entity_id', '=', $userId)->get();
+        $cacheKey = $this->getUserPostsCacheKey($userId);
+        return $this->getCachedData($cacheKey, CACHE_TIME_USER_POST_DATA, function () use ($userId) {
+            return Post::where('entity_type', '=', 'user')->where('entity_id', '=', $userId)->get();
+        });
     }
 
-    // TODO CACHE
     public function getByTeamId(int $teamId): Collection
     {
         Log::debug("Getting posts by teamId", [
             'teamId' => $teamId
         ]);
 
-        return Post::where('entity_type', '=', 'team')->where('entity_id', '=', $teamId)->get();
+        $cacheKey = $this->getTeamPostsCacheKey($teamId);
+        return $this->getCachedData($cacheKey, CACHE_TIME_TEAM_POST_DATA, function () use ($teamId) {
+            return Post::where('entity_type', '=', 'team')->where('entity_id', '=', $teamId)->get();
+        });
     }
 
-    // TODO RE-CACHE
     public function create(CreatePostDTO $dto): Post
     {
         Log::debug('Creating post from dto', [
@@ -83,6 +86,8 @@ class PostRepository implements PostRepositoryInterface
         $newPost = Post::create(
             $dto->toArray()
         );
+
+        $this->clearEntityPostsCache($newPost->entity_type, $newPost->entity_id);
 
         Log::debug('Succesfully created post from dto', [
             'dto' => $dto->toArray(),
@@ -100,6 +105,7 @@ class PostRepository implements PostRepositoryInterface
 
         $this->updateFromDto($post, $dto);
         $this->clearPostCache($post->id);
+        $this->clearEntityPostsCache($post->entity_type, $post->entity_id);
     }
 
     public function delete(Post $post): void
@@ -113,15 +119,35 @@ class PostRepository implements PostRepositoryInterface
 
         $post->delete();
         $this->clearPostCache($postId);
+        $this->clearEntityPostsCache($postData['entity_type'], $postData['entity_id']);
 
         Log::debug('Succesfully deleted post', [
             'postData' => $postData,
         ]);
     }
 
+    protected function getUserPostsCacheKey(int $userId): string
+    {
+        return CACHE_KEY_USER_POST_DATA . $userId;
+    }
+
+    protected function getTeamPostsCacheKey(int $teamId): string
+    {
+        return CACHE_KEY_TEAM_POST_DATA . $teamId;
+    }
+
     protected function getPostCacheKey(int $postId): string
     {
         return CACHE_KEY_POST_DATA . $postId;
+    }
+
+    protected function clearEntityPostsCache(string $entityType, int $entityId): void
+    {
+        if ($entityType === config('entities.user')) {
+            $this->clearCache($this->getUserPostsCacheKey($entityId));
+        } elseif ($entityType === config('entities.team')) {
+            $this->clearCache($this->getTeamPostsCacheKey($entityId));
+        }
     }
 
     protected function clearPostCache(int $postId): void

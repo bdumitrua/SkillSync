@@ -22,10 +22,10 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
             'teamId' => $teamId
         ]);
 
-        $teamVacancyIds = TeamVacancy::where('team_id', '=', $teamId)->get()
-            ->pluck('id')->toArray();
-
-        return $this->getByIds($teamVacancyIds);
+        $cacheKey = $this->getTeamVacanciesCacheKey($teamId);
+        return $this->getCachedData($cacheKey, CACHE_TIME_TEAM_VACANCIES_DATA, function () use ($teamId) {
+            return TeamVacancy::where('team_id', '=', $teamId)->get();
+        });
     }
 
     public function getByIds(array $teamVacancyIds): Collection
@@ -49,7 +49,7 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
 
         $cacheKey = $this->getVacancyCacheKey($teamVacancyId);
         return $this->getCachedData($cacheKey, CACHE_TIME_TEAM_VACANCY_DATA, function () use ($teamVacancyId) {
-            return  TeamVacancy::find($teamVacancyId);
+            return TeamVacancy::find($teamVacancyId);
         });
     }
 
@@ -62,6 +62,8 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
         $newVacancy = TeamVacancy::create(
             $dto->toArray()
         );
+
+        $this->clearTeamVacanciesCache($newVacancy->team_id);
 
         Log::debug('Succesfully created teamVacancy from dto', [
             'dto' => $dto->toArray(),
@@ -80,6 +82,7 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
 
         $this->updateFromDto($teamVacancy, $dto);
         $this->clearVacancyCache($teamVacancy->id);
+        $this->clearTeamVacanciesCache($teamVacancy->team_id);
 
         Log::debug('Succesfully updated teamVacancy from dto', [
             'teamVacancy id' => $teamVacancy->id,
@@ -98,6 +101,7 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
 
         $teamVacancy->delete();
         $this->clearVacancyCache($teamVacancyId);
+        $this->clearTeamVacanciesCache($teamVacancyData['team_id']);
 
         Log::debug('Succesfully deleted teamVacancy', [
             'teamVacancyData' => $teamVacancyData,
@@ -109,8 +113,18 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
         return CACHE_KEY_TEAM_VACANCY_DATA . $teamVacancyId;
     }
 
+    protected function getTeamVacanciesCacheKey(int $teamId): string
+    {
+        return CACHE_KEY_TEAM_VACANCIES_DATA . $teamId;
+    }
+
     protected function clearVacancyCache(int $teamVacancyId): void
     {
         $this->clearCache($this->getVacancyCacheKey($teamVacancyId));
+    }
+
+    protected function clearTeamVacanciesCache(int $teamId): void
+    {
+        $this->clearCache($this->getTeamVacanciesCacheKey($teamId));
     }
 }

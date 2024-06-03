@@ -119,6 +119,8 @@ class TagRepository implements TagRepositoryInterface
             $dto->toArray()
         );
 
+        $this->clearTagsCache($newTag->entity_type, $newTag->entity_id);
+
         Log::debug('Created new tag', [
             'tag' => $newTag->toArray()
         ]);
