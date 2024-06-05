@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Team;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,6 +25,8 @@ return new class extends Migration
 
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
         });
+
+        Team::createElasticsearchIndex();
     }
 
     /**
@@ -32,5 +35,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('teams');
+
+        Team::deleteElasticsearchIndex();
     }
 };

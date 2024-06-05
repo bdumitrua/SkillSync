@@ -44,6 +44,11 @@ class TeamRepository implements TeamRepositoryInterface
         });
     }
 
+    public function search(string $query): Collection
+    {
+        return Team::search($query);
+    }
+
     public function getByChatId(int $chatId): ?Team
     {
         Log::debug('Getting team by chatId', [

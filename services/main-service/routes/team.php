@@ -15,6 +15,7 @@ Route::prefix('teams')->name('teams.')->group(function () {
     Route::controller(TeamController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('show/{team}', 'show')->name('show');
+        Route::get('search', 'search')->name('search');
         Route::get('user/{user}', 'user')->name('user');
         Route::get('subscribers/{team}', 'subscribers')->name('subscribers');
 

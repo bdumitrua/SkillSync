@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\Team;
 use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Http\Requests\Team\CreateTeamRequest;
+use Illuminate\Http\Request;
 
 interface TeamServiceInterface
 {
@@ -23,6 +24,13 @@ interface TeamServiceInterface
      * @return JsonResource
      */
     public function show(int $teamId): JsonResource;
+
+    /**
+     * @param Request $request
+     * 
+     * @return JsonResource
+     */
+    public function search(Request $request): JsonResource;
 
     /**
      * @param int $userId

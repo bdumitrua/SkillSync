@@ -23,6 +23,7 @@ use App\Services\Team\Interfaces\TeamLinkServiceInterface;
 use App\Services\Team\Interfaces\TeamMemberServiceInterface;
 use App\Traits\CreateDTO;
 use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -68,6 +69,13 @@ class TeamService implements TeamServiceInterface
         $team = $this->assembleTeam($team);
 
         return new TeamResource($team);
+    }
+
+    public function search(Request $request): JsonResource
+    {
+        $teams = $this->teamRepository->search($request->input('query'));
+
+        return TeamDataResource::collection($teams);
     }
 
     public function user(int $userId): JsonResource
