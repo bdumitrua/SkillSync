@@ -1,11 +1,13 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 return [
     'default' => env('ELASTIC_CONNECTION', 'default'),
     'connections' => [
         'default' => [
             'hosts' => [
-                env('ELASTIC_HOST', 'localhost:9200'),
+                env('ELASTIC_HOST', 'elasticsearch:9200'),
             ],
         ],
     ],

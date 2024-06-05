@@ -11,6 +11,7 @@ Route::prefix('users')->name('users.')->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('show/{user}', 'show')->name('show');
+        Route::get('search', 'search')->name('search');
         Route::get('subscribers/{user}', 'subscribers')->name('subscribers');
         Route::put('/', 'update')->name('update');
     });

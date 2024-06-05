@@ -5,6 +5,7 @@ namespace App\Repositories\User\Interfaces;
 use Illuminate\Database\Eloquent\Collection;
 use App\DTO\User\UpdateUserDTO;
 use App\Models\User;
+use Illuminate\Support\Collection as SupportCollection;
 
 interface UserRepositoryInterface
 {
@@ -28,6 +29,13 @@ interface UserRepositoryInterface
      * @return User|null
      */
     function getByEmail(string $email): ?User;
+
+    /**
+     * @param string $query
+     * 
+     * @return SupportCollection
+     */
+    function search(string $query): SupportCollection;
 
     /**
      * @param int $userId

@@ -25,7 +25,7 @@ return [
     // Supported engines: "algolia"
     'identify' => env('SCOUT_IDENTIFY', false),
 
-    'elasticsearch' => [
-        'hosts' => env('ELASTICSEARCH_HOST', 'http://elasticsearch:9200'),
-    ],
+    // 'elasticsearch' => [
+    //     'hosts' => env('ELASTICSEARCH_HOST', 'http://elasticsearch:9200'),
+    // ],
 ];

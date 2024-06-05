@@ -14,9 +14,12 @@ return new class extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
             $table->text('title');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('subscriber_id');
+            $table->string('entity_type');
             $table->unsignedBigInteger('entity_id');
             $table->timestamps();
+
+            $table->foreign('subscriber_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->index(['entity_type', 'entity_id']);
         });

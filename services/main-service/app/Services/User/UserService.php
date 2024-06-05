@@ -16,6 +16,7 @@ use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Services\Team\Interfaces\TeamServiceInterface;
 use App\Services\User\Interfaces\UserServiceInterface;
 use App\Traits\CreateDTO;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
@@ -77,6 +78,13 @@ class UserService implements UserServiceInterface
         ]);
 
         return new UserResource($user);
+    }
+
+    public function search(Request $request): JsonResource
+    {
+        $users = $this->userRepository->search($request->input('query'));
+
+        return UserDataResource::collection($users);
     }
 
     public function subscribers(User $user): JsonResource

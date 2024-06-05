@@ -54,6 +54,11 @@ class UserRepository implements UserRepositoryInterface
         return User::where('email', '=', $email)->first();
     }
 
+    function search(string $query): Collection
+    {
+        return User::search($query);
+    }
+
     public function update(int $userId, UpdateUserDTO $dto): bool
     {
         Log::debug('Started update user data', [
