@@ -8,7 +8,7 @@ class CreatePostDTO
     public string $entityType;
     public int $entityId;
 
-    public ?string $mediaUrl;
+    public ?string $mediaUrl = null;
 
     public function toArray(): array
     {

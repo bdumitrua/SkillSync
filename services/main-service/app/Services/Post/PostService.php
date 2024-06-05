@@ -12,6 +12,7 @@ use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
@@ -61,6 +62,14 @@ class PostService implements PostServiceInterface
         $post = $this->assemblePostsData(new Collection([$post]))->first();
 
         return new PostResource($post);
+    }
+
+    public function search(Request $request): JsonResource
+    {
+        $queryPosts = $this->postRepository->search($this->authorizedUserId);
+        $queryPosts = $this->assemblePostsData($queryPosts);
+
+        return PostResource::collection($queryPosts);
     }
 
     public function user(int $userId): JsonResource

@@ -15,6 +15,7 @@ Route::prefix('posts')->name('posts.')->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('feed', 'feed')->name('feed');
         Route::get('show/{post}', 'show')->name('show');
+        Route::get('search', 'search')->name('search');
         Route::get('user/{user}', 'user')->name('user');
         Route::get('team/{team}', 'team')->name('team');
 

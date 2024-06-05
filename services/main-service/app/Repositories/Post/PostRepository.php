@@ -7,6 +7,7 @@ use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
 use App\DTO\Post\CreatePostDTO;
 use App\DTO\Post\UpdatePostDTO;
+use App\Models\Team;
 use App\Traits\GetCachedData;
 use App\Traits\UpdateFromDTO;
 use Illuminate\Support\Facades\Log;
@@ -51,6 +52,11 @@ class PostRepository implements PostRepositoryInterface
         return $this->getCachedCollection($postIds, function ($postId) {
             return $this->getById($postId);
         });
+    }
+
+    public function search(string $query): Collection
+    {
+        return Post::search($query);
     }
 
     public function getByUserId(int $userId): Collection

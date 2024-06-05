@@ -36,6 +36,13 @@ interface PostRepositoryInterface
     public function getByIds(array $postIds): Collection;
 
     /**
+     * @param string $query
+     * 
+     * @return Collection
+     */
+    public function search(string $query): Collection;
+
+    /**
      * @param int $userId
      * 
      * @return Collection

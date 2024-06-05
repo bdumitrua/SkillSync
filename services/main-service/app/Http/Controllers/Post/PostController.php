@@ -41,6 +41,13 @@ class PostController extends Controller
         });
     }
 
+    public function search(Request $request)
+    {
+        return $this->handleServiceCall(function () use ($request) {
+            return $this->postService->search($request);
+        });
+    }
+
     public function user(User $user)
     {
         return $this->handleServiceCall(function () use ($user) {

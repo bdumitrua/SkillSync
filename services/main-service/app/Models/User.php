@@ -167,7 +167,10 @@ class User extends Authenticatable implements JWTSubject
 
         $results = [];
         foreach ($hits as $hit) {
-            $results[] = new User($hit['_source']);
+            $user = new User($hit['_source']);
+            $user->id = $hit['_source']['id'];
+
+            $results[] = $user;
         }
 
         return new Collection($results);

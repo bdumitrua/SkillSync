@@ -124,7 +124,10 @@ class Team extends Model
 
         $results = [];
         foreach ($hits as $hit) {
-            $results[] = new Team($hit['_source']);
+            $team = new Team($hit['_source']);
+            $team->id = $hit['_source']['id'];
+
+            $results[] = $team;
         }
 
         return new Collection($results);

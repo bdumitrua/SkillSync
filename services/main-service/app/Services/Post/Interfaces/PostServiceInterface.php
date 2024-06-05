@@ -11,6 +11,7 @@ use App\Models\Team;
 use App\Models\Post;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Requests\Post\CreatePostRequest;
+use Illuminate\Http\Request;
 
 interface PostServiceInterface
 {
@@ -30,6 +31,13 @@ interface PostServiceInterface
      * @return JsonResource
      */
     public function show(Post $post): JsonResource;
+
+    /**
+     * @param Request $request
+     * 
+     * @return JsonResource
+     */
+    public function search(Request $request): JsonResource;
 
     /**
      * @param int $userId
