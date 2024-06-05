@@ -3,7 +3,6 @@
 namespace App\Kafka;
 
 use App\Exceptions\KafkaProducerException;
-use App\Helpers\AppEnvironmentHelper;
 use Enqueue\RdKafka\RdKafkaConnectionFactory;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
@@ -32,7 +31,7 @@ class KafkaProducer
      */
     public function produce(string $topicName, $messageData): void
     {
-        if (AppEnvironmentHelper::isTesting()) {
+        if (app()->environment('testing')) {
             return;
         }
 

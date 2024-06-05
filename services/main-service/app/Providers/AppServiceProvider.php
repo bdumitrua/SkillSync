@@ -71,6 +71,8 @@ use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Prometheus\PrometheusServiceProxy;
 use App\Kafka\KafkaProducer;
 use App\Kafka\KafkaConsumer;
+use App\Models\PostLike;
+use App\Observers\PostLikeObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -163,6 +165,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        PostLike::observe(PostLikeObserver::class);
+
         if ($this->app->environment('local')) {
             DB::listen(function ($query) {
                 Log::info('Query Time: ' . $query->time . 'ms', [

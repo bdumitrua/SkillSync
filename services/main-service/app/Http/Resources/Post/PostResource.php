@@ -21,12 +21,12 @@ class PostResource extends JsonResource
     {
         $entityData = [];
         if ($this->entity_type === User::class) {
-            $entityData = (new UserDataResource($entityData))->resolve();
+            $entityData = (new UserDataResource($this->entityData))->resolve();
         } elseif ($this->entity_type === Team::class) {
-            $entityData = (new TeamDataResource($entityData))->resolve();
+            $entityData = (new TeamDataResource($this->entityData))->resolve();
         }
 
-        $tags = (TagResource::collection($this->tagsData))->resolve();
+        $tags = $this->tagsData ? (TagResource::collection($this->tagsData))->resolve() : [];
 
         return [
             'id' => $this->id,

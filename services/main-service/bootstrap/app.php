@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\LikeException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -24,6 +25,12 @@ return Application::configure(basePath: dirname(__DIR__))
             return response()->json([
                 'error: ' . $e->getMessage(),
             ], 404);
+        });
+
+        $exceptions->render(function (LikeException $e) {
+            return response()->json([
+                'error: ' . $e->getMessage(),
+            ], 409);
         });
 
         $exceptions->render(function (HttpException $e) {
