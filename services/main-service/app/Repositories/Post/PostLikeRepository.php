@@ -43,6 +43,16 @@ class PostLikeRepository implements PostLikeRepositoryInterface
         return $this->queryByBothIds($postId, $userId)->first();
     }
 
+    public function getByUserAndPostsIds(int $userId, array $postsIds): Collection
+    {
+        Log::debug("Getting posts likes by userId and postsIds", [
+            'userId' => $userId,
+            'postsIds' => $postsIds,
+        ]);
+
+        return PostLike::where('user_id', '=', $userId)->whereIn('post_id', $postsIds)->get();
+    }
+
     public function userLikedPost(int $userId, int $postId): bool
     {
         Log::debug("Checking if user liked post", [

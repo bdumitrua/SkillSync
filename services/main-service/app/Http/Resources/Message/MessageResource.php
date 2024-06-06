@@ -17,7 +17,6 @@ class MessageResource extends JsonResource
         return [
             'text' => $this->text,
             'senderId' => $this->senderId,
-            // TODO SENDER DATA
             'senderData' => [],
             'created_at' => $this->created_at,
         ];

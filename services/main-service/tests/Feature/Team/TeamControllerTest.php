@@ -119,7 +119,6 @@ class TeamControllerTest extends TestCase
         )->assertStatus(Response::HTTP_OK);
     }
 
-    // TODO TEST: PRIVATE LINKS
     public function testShowRouteEmpty(): void
     {
         $response = $this->getJson(route("teams.show", ['team' => 100]));

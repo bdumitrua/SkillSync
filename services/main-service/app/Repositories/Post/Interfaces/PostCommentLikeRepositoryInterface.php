@@ -3,6 +3,7 @@
 namespace App\Repositories\Post\Interfaces;
 
 use App\Models\PostCommentLike;
+use Illuminate\Database\Eloquent\Collection;
 
 interface PostCommentLikeRepositoryInterface
 {
@@ -13,6 +14,22 @@ interface PostCommentLikeRepositoryInterface
      * @return PostCommentLike|null
      */
     public function getByBothIds(int $postCommentId, int $userId): ?PostCommentLike;
+
+    /**
+     * @param int $userId
+     * @param array $postCommentsIds
+     * 
+     * @return Collection
+     */
+    public function getByUserAndCommentsIds(int $userId, array $postCommentsIds): Collection;
+
+    /**
+     * @param int $userId
+     * @param int $postCommentId
+     * 
+     * @return bool
+     */
+    public function userLikedComment(int $userId, int $postCommentId): bool;
 
     /**
      * @param int $postCommentId

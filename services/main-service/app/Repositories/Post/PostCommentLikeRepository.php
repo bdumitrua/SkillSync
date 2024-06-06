@@ -5,6 +5,7 @@ namespace App\Repositories\Post;
 use App\Models\PostCommentLike;
 use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
 
 class PostCommentLikeRepository implements PostCommentLikeRepositoryInterface
@@ -24,6 +25,11 @@ class PostCommentLikeRepository implements PostCommentLikeRepositoryInterface
         ]);
 
         return $this->queryByBothIds($postCommentId, $userId)->first();
+    }
+
+    public function getByUserAndCommentsIds(int $userId, array $postCommentsIds): Collection
+    {
+        return PostCommentLike::where('user_id', '=', $userId)->whereIn('post_comment_id', $postCommentsIds)->get();
     }
 
     public function userLikedComment(int $userId, int $postCommentId): bool

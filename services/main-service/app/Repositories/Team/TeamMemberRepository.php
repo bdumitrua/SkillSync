@@ -63,6 +63,7 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
 
     public function userIsModerator(int $teamId, int $userId): bool
     {
+        // TODO ADD CACHE
         Log::debug('Checking if user is moderator in team', [
             'teamId' => $teamId,
             'userId' => $userId,

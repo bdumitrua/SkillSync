@@ -31,6 +31,14 @@ interface PostLikeRepositoryInterface
 
     /**
      * @param int $userId
+     * @param array $postsIds
+     * 
+     * @return Collection
+     */
+    public function getByUserAndPostsIds(int $userId, array $postsIds): Collection;
+
+    /**
+     * @param int $userId
      * @param int $postId
      * 
      * @return bool

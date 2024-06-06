@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Support\Facades\Log;
 use Laravel\Scout\Searchable;
 
 class Post extends Model
@@ -128,6 +129,10 @@ class Post extends Model
      */
     public function likes(): HasMany
     {
+        Log::debug('Getting post likes', [
+            'postId' => $this->id
+        ]);
+
         return $this->hasMany(PostLike::class);
     }
 

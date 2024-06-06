@@ -8,6 +8,7 @@ use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Models\Post;
 use App\Http\Resources\Post\PostResource;
 use App\Repositories\Interfaces\TagRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
@@ -24,6 +25,7 @@ class PostService implements PostServiceInterface
     protected $postRepository;
     protected $userRepository;
     protected $teamRepository;
+    protected $postLikeRepository;
     protected ?int $authorizedUserId;
 
     public function __construct(
@@ -31,12 +33,14 @@ class PostService implements PostServiceInterface
         PostRepositoryInterface $postRepository,
         UserRepositoryInterface $userRepository,
         TeamRepositoryInterface $teamRepository,
+        PostLikeRepositoryInterface $postLikeRepository,
 
     ) {
         $this->tagRepository = $tagRepository;
         $this->postRepository = $postRepository;
         $this->userRepository = $userRepository;
         $this->teamRepository = $teamRepository;
+        $this->postLikeRepository = $postLikeRepository;
         $this->authorizedUserId = Auth::id();
     }
 
@@ -113,6 +117,9 @@ class PostService implements PostServiceInterface
     {
         $this->setPostsEntityData($posts);
         $this->setPostsTagsData($posts);
+        $this->setPostsRights($posts);
+        $this->setLikesCount($posts);
+        $this->setLikeAbility($posts);
 
         return $posts;
     }
@@ -134,6 +141,9 @@ class PostService implements PostServiceInterface
                 $teamIds[] = $post->entity_id;
             }
         }
+
+        $userIds = array_unique($userIds);
+        $teamIds = array_unique($teamIds);
 
         $usersData = $this->userRepository->getByIds($userIds);
         $teamsData = $this->teamRepository->getByIds($teamIds);
@@ -168,5 +178,33 @@ class PostService implements PostServiceInterface
         Log::debug("Succesfully setted posts tags data", [
             'posts' => $posts->toArray(),
         ]);
+    }
+
+    protected function setPostsRights(Collection &$posts): void
+    {
+        foreach ($posts as $post) {
+            $post->canUpdate = Gate::allows(UPDATE_POST_GATE, [Post::class, $post]);
+            $post->canDelete = Gate::allows(DELETE_POST_GATE, [Post::class, $post]);
+        }
+    }
+
+    protected function setLikesCount(Collection &$posts): void
+    {
+        /** @var Post */
+        foreach ($posts as $post) {
+            $post->likesCount = $post->likes()->count();
+        }
+    }
+
+    protected function setLikeAbility(Collection &$posts): void
+    {
+        $postsIds = $posts->pluck('id')->toArray();
+        $postsLikes = $this->postLikeRepository->getByUserAndPostsIds($this->authorizedUserId, $postsIds);
+
+        $postsLikesKeyedByPostId = $postsLikes->keyBy('post_id');
+
+        foreach ($posts as $post) {
+            $post->isLiked = isset($postsLikesKeyedByPostId[$post->id]);
+        }
     }
 }

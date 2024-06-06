@@ -17,6 +17,7 @@ use App\Http\Requests\Team\UpdateTeamMemberRequest;
 use App\Models\Team;
 use App\Traits\CreateDTO;
 use App\Traits\SetAdditionalData;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -109,7 +110,17 @@ class TeamMemberService implements TeamMemberServiceInterface
     protected function assebmleMembersData(Collection $teamMembers): Collection
     {
         $this->setCollectionEntityData($teamMembers, 'user_id', 'userData', $this->userRepository);
+        $this->setMembershipRights($teamMembers);
 
         return $teamMembers;
+    }
+
+    protected function setMembershipRights(Collection &$teamMembers): void
+    {
+        $canChange = Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamMembers->first()?->team_id]);
+
+        foreach ($teamMembers as $teamMember) {
+            $teamMember->canChange = $canChange || Auth::id() === $teamMember->user_id;
+        }
     }
 }

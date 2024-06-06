@@ -47,7 +47,7 @@ class TeamVacancyService implements TeamVacancyServiceInterface
         $teamVacancies = $this->teamVacancyRepository->getByTeamId($teamId);
         $teamVacancies = $this->assembleVacanciesData($teamVacancies);
 
-        return JsonResource::collection($teamVacancies);
+        return TeamVacancyResource::collection($teamVacancies);
     }
 
     public function create(int $teamId, CreateTeamVacancyDTO $createTeamVacancyDTO): void
@@ -74,7 +74,18 @@ class TeamVacancyService implements TeamVacancyServiceInterface
     protected function assembleVacanciesData(Collection $teamVacancies): Collection
     {
         $this->setCollectionEntityData($teamVacancies, 'team_id', 'teamData', $this->teamRepository);
+        $this->assembleVacanciesRights($teamVacancies);
 
         return $teamVacancies;
+    }
+
+    protected function assembleVacanciesRights(Collection &$teamVacancies): void
+    {
+        // All vacancies should be from one team
+        $canTouchTeamVacancies = Gate::allows(TOUCH_TEAM_VACANCIES_GATE, [Team::class, $teamVacancies->first()?->team_id]);
+
+        foreach ($teamVacancies as $vacancy) {
+            $vacancy->canChange = $canTouchTeamVacancies;
+        }
     }
 }

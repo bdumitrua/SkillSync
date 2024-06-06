@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources\Post;
 
-use App\Http\Resources\User\UserDataResource;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use App\Http\Resources\User\UserDataResource;
+use App\Http\Resources\ActionsResource;
 
 class PostCommentResource extends JsonResource
 {
@@ -17,6 +18,8 @@ class PostCommentResource extends JsonResource
     {
         $userData = (new UserDataResource($this->userData))->resolve();
 
+        $actions = $this->prepareActions();
+
         return [
             'id' => $this->id,
             'userId' => $this->user_id,
@@ -25,6 +28,36 @@ class PostCommentResource extends JsonResource
             'mediaUrl' => $this->media_url,
             'likesCount' => $this->likes_count ?? 0,
             'created_at' => $this->created_at,
+            'isLiked' => $this->isLiked
         ];
+    }
+
+    private function prepareActions(): array
+    {
+        $actions = [];
+
+        if ($this->isLiked) {
+            $actions[] = [
+                'UnlikePostComment',
+                'posts.comments.likes.delete',
+                ['postComment' => $this->id]
+            ];
+        } else {
+            $actions[] = [
+                'LikePostComment',
+                'posts.comments.likes.create',
+                ['postComment' => $this->id]
+            ];
+        }
+
+        if ($this->canDelete) {
+            $actions[] = [
+                'DeletePostComment',
+                'posts.comments.delete',
+                ['postComment' => $this->id]
+            ];
+        }
+
+        return (array) ActionsResource::collection($actions);
     }
 }

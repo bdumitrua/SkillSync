@@ -2,8 +2,8 @@
 
 namespace App\Http\Resources\Team;
 
+use App\Http\Resources\ActionsResource;
 use App\Http\Resources\Message\ChatResource;
-use App\Http\Resources\User\UserDataResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,6 +18,8 @@ class TeamResource extends JsonResource
     {
         $chatData = $this->chatData ? (new ChatResource($this->chatData))->resolve() : [];
 
+        $actions = $this->prepareActions();
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -31,6 +33,35 @@ class TeamResource extends JsonResource
             'posts' => $this->posts,
             'tags' => $this->tags,
             'links' => $this->links,
+            'actions' => $actions
         ];
+    }
+
+    private function prepareActions(): array
+    {
+        $actions = [
+            [
+                "GetTeamMembers",
+                "teams.members.team",
+                ["team" => $this->id]
+            ],
+            [
+                "GetTeamSubscribers",
+                "teams.subscribers",
+                ["team" => $this->id]
+            ],
+            [
+                "GetTeamVacancies",
+                "teams.vacancies.team",
+                ["team" => $this->id]
+            ],
+            [
+                "GetTeamPosts",
+                "posts.team",
+                ["team" => $this->id]
+            ],
+        ];
+
+        return (array) ActionsResource::collection($actions);
     }
 }

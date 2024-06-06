@@ -12,18 +12,14 @@ class AuthTokenResource extends JsonResource
     public function toArray(Request $request): array
     {
         $actions = (array) ActionsResource::collection([
-            // [
-            //     "GetAuthorizedUserData",
-            //     "getAuthorizedUserData"
-            // ],
-            // [
-            //     "Logout",
-            //     "authLogout"
-            // ],
-            // [
-            //     "RefreshToken",
-            //     "authRefreshToken"
-            // ],
+            [
+                "GetAuthorizedUserData",
+                "users.index"
+            ],
+            [
+                "Logout",
+                "auth.logout"
+            ],
         ]);
 
         return [

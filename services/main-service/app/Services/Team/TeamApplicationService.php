@@ -8,8 +8,6 @@ use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
 use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use App\Models\TeamVacancy;
 use App\Models\TeamApplication;
-use App\Http\Requests\Team\UpdateTeamApplicationRequest;
-use App\Http\Requests\Team\CreateTeamApplicationRequest;
 use App\Http\Resources\Team\TeamApplicationResource;
 use App\Models\Team;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
@@ -54,6 +52,8 @@ class TeamApplicationService implements TeamApplicationServiceInterface
         }
 
         $teamApplication = $this->assembleApplicationsData(new Collection([$teamApplication]))->first();
+        $teamApplication->canUpdate = Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication->team_id]);
+        $teamApplication->canDelete = Gate::authorize(DELETE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication]);
 
         return new TeamApplicationResource($teamApplication);
     }
@@ -66,6 +66,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
         $teamApplications = $this->teamApplicationRepository->getByTeamId($teamId);
         $teamApplications = $this->assembleApplicationsData($teamApplications);
+        $teamApplications = $this->setApplicationsRights($teamApplications);
 
         return TeamApplicationResource::collection($teamApplications);
     }
@@ -78,6 +79,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
         $teamApplications = $this->teamApplicationRepository->getByVacancyId($teamVacancy->id);
         $teamApplications = $this->assembleApplicationsData($teamApplications);
+        $teamApplications = $this->setApplicationsRights($teamApplications);
 
         return TeamApplicationResource::collection($teamApplications);
     }
@@ -111,6 +113,19 @@ class TeamApplicationService implements TeamApplicationServiceInterface
     {
         $this->setCollectionEntityData($teamApplications, 'user_id', 'userData', $this->userRepository);
         $this->setCollectionEntityData($teamApplications, 'vacancy_id', 'vacancyData', $this->vacancyRepository);
+
+        return $teamApplications;
+    }
+
+    protected function setApplicationsRights(Collection $teamApplications): Collection
+    {
+        $canUpdate = Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplications->first()?->team_id]);
+        $canDelete = false; // If you're watching a list of applications - you're a member = you can't apply = you can't delete
+
+        foreach ($teamApplications as $teamApplication) {
+            $teamApplication->canUpdate = $canUpdate;
+            $teamApplication->canDelete = $canDelete;
+        }
 
         return $teamApplications;
     }
