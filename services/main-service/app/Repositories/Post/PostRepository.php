@@ -29,16 +29,25 @@ class PostRepository implements PostRepositoryInterface
             'teamsIds' => $teamsIds,
         ]);
 
-        return Post::where(function ($query) use ($usersIds) {
-            $query->where('entity_type', '=', config('entities.user'))
-                ->whereIn('entity_id', $usersIds);
-        })->orWhere(function ($query) use ($teamsIds) {
-            $query->where('entity_type', '=', config('entities.team'))
-                ->whereIn('entity_id', $teamsIds);
-        })
-            ->latest()
-            ->take(20)
-            ->get();
+        $query = Post::query();
+
+        if (!empty($usersIds)) {
+            $query->orWhere(function ($query) use ($usersIds) {
+                $query->where('entity_type', '=', config('entities.user'))
+                    ->whereIn('entity_id', $usersIds);
+            });
+        }
+
+        if (!empty($teamsIds)) {
+            $query->orWhere(function ($query) use ($teamsIds) {
+                $query->where('entity_type', '=', config('entities.team'))
+                    ->whereIn('entity_id', $teamsIds);
+            });
+        }
+
+        // If user haven't subscribed to anyone - he will get 20 last posts
+        // Not a but, but a feature
+        return $query->latest()->take(20)->get();
     }
 
     public function getById(int $postId): ?Post
