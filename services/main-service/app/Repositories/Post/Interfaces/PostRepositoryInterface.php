@@ -16,10 +16,12 @@ interface PostRepositoryInterface
 
     /**
      * @param int $userId
+     * @param array $usersIds
+     * @param array $teamsIds
      * 
      * @return Collection
      */
-    public function feed(int $userId): Collection;
+    public function feed(int $userId, array $usersIds, array $teamsIds): Collection;
 
     /**
      * @param int $postId

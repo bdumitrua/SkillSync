@@ -7,6 +7,7 @@ use App\DTO\Post\UpdatePostDTO;
 use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Models\Post;
 use App\Http\Resources\Post\PostResource;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
@@ -26,6 +27,7 @@ class PostService implements PostServiceInterface
     protected $userRepository;
     protected $teamRepository;
     protected $postLikeRepository;
+    protected $subscriptionRepository;
     protected ?int $authorizedUserId;
 
     public function __construct(
@@ -34,6 +36,7 @@ class PostService implements PostServiceInterface
         UserRepositoryInterface $userRepository,
         TeamRepositoryInterface $teamRepository,
         PostLikeRepositoryInterface $postLikeRepository,
+        SubscriptionRepositoryInterface $subscriptionRepository,
 
     ) {
         $this->tagRepository = $tagRepository;
@@ -41,6 +44,7 @@ class PostService implements PostServiceInterface
         $this->userRepository = $userRepository;
         $this->teamRepository = $teamRepository;
         $this->postLikeRepository = $postLikeRepository;
+        $this->subscriptionRepository = $subscriptionRepository;
         $this->authorizedUserId = Auth::id();
     }
 
@@ -54,7 +58,15 @@ class PostService implements PostServiceInterface
 
     public function feed(): JsonResource
     {
-        $feedPosts = $this->postRepository->feed($this->authorizedUserId);
+        $subscriptionsToUsers = $this->subscriptionRepository->getUsersByUserId($this->authorizedUserId);
+        $subscriptionsToTeams = $this->subscriptionRepository->getTeamsByUserId($this->authorizedUserId);
+
+        $feedPosts = $this->postRepository->feed(
+            $this->authorizedUserId,
+            $subscriptionsToUsers->pluck('entity_id')->toArray(),
+            $subscriptionsToTeams->pluck('entity_id')->toArray()
+        );
+
         $feedPosts = $this->assemblePostsData($feedPosts);
 
         return PostResource::collection($feedPosts);

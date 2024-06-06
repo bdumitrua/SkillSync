@@ -14,7 +14,7 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
     protected function querySubscriptionToUser(int $subscriberId, int $targetUserId): Builder
     {
         return Subscription::query()
-            ->where('user_id', '=', $subscriberId)
+            ->where('subscriber_id', '=', $subscriberId)
             ->where('entity_type', '=', config('entities.user'))
             ->where('entity_id', '=', $targetUserId);
     }
@@ -22,7 +22,7 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
     protected function querySubscriptionToTeam(int $userId, int $teamId): Builder
     {
         return Subscription::query()
-            ->where('user_id', '=', $userId)
+            ->where('subscriber_id', '=', $userId)
             ->where('entity_type', '=', config('entities.team'))
             ->where('entity_id', '=', $teamId);
     }
@@ -33,7 +33,7 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
             'userId' => $userId
         ]);
 
-        return Subscription::where('user_id', '=', $userId)
+        return Subscription::where('subscriber_id', '=', $userId)
             ->groupBy('entity_type')
             ->get();
     }
@@ -66,7 +66,7 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
             'userId' => $userId
         ]);
 
-        return Subscription::where('user_id', '=', $userId)
+        return Subscription::where('subscriber_id', '=', $userId)
             ->where('entity_type', '=', config('entities.user'))
             ->get();
     }
@@ -77,7 +77,7 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
             'userId' => $userId
         ]);
 
-        return Subscription::where('user_id', '=', $userId)
+        return Subscription::where('subscriber_id', '=', $userId)
             ->where('entity_type', '=', config('entities.team'))
             ->get();
     }

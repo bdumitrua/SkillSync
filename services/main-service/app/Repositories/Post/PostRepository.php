@@ -21,14 +21,24 @@ class PostRepository implements PostRepositoryInterface
         return Post::get();
     }
 
-    public function feed(int $userId): Collection
+    public function feed(int $userId, array $usersIds, array $teamsIds): Collection
     {
         Log::debug("Getting user feed", [
-            'userId' => $userId
+            'userId' => $userId,
+            'usersIds' => $usersIds,
+            'teamsIds' => $teamsIds,
         ]);
 
-        // TODO QUERY
-        return Post::get();
+        return Post::where(function ($query) use ($usersIds) {
+            $query->where('entity_type', '=', config('entities.user'))
+                ->whereIn('entity_id', $usersIds);
+        })->orWhere(function ($query) use ($teamsIds) {
+            $query->where('entity_type', '=', config('entities.team'))
+                ->whereIn('entity_id', $teamsIds);
+        })
+            ->latest()
+            ->take(20)
+            ->get();
     }
 
     public function getById(int $postId): ?Post
