@@ -9,12 +9,13 @@ use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Models\TeamMember;
 use App\DTO\Team\UpdateTeamMemberDTO;
 use App\DTO\Team\CreateTeamMemberDTO;
+use App\Traits\GetCachedData;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class TeamMemberRepository implements TeamMemberRepositoryInterface
 {
-    use UpdateFromDTO;
+    use GetCachedData, UpdateFromDTO;
 
     protected function queryByBothIds(int $teamId, int $userId): Builder
     {
@@ -63,19 +64,21 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
 
     public function userIsModerator(int $teamId, int $userId): bool
     {
-        // TODO ADD CACHE
         Log::debug('Checking if user is moderator in team', [
             'teamId' => $teamId,
             'userId' => $userId,
         ]);
 
-        $membership = $this->getMemberByBothIds($teamId, $userId);
+        $cacheKey = $this->getTeamUserModeratorCacheKey($teamId, $userId);
+        return $this->getCachedData($cacheKey, CACHE_TIME_TEAM_USER_MODERATOR, function () use ($teamId, $userId) {
+            $membership = $this->getMemberByBothIds($teamId, $userId);
 
-        if (empty($membership)) {
-            return false;
-        }
+            if (empty($membership)) {
+                return false;
+            }
 
-        return $membership->is_moderator;
+            return $membership->is_moderator;
+        });
     }
 
     public function addMember(CreateTeamMemberDTO $dto): void
@@ -84,9 +87,11 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
             'dto' => $dto
         ]);
 
-        TeamMember::create(
+        $newTeamMember = TeamMember::create(
             $dto->toArray()
         );
+
+        $this->clearTeamUserModeratorCache($newTeamMember->team_id, $newTeamMember->user_id);
     }
 
     public function updateMember(TeamMember $teamMember, UpdateTeamMemberDTO $dto): void
@@ -96,6 +101,7 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
         ]);
 
         $this->updateFromDto($teamMember, $dto);
+        $this->clearTeamUserModeratorCache($teamMember->team_id, $teamMember->user_id);
     }
 
     public function removeMember(TeamMember $teamMember): void
@@ -104,6 +110,18 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
             'teamMember' => $teamMember->toArray(),
             'authorizedUserId' => Auth::id()
         ]);
+
+        $this->clearTeamUserModeratorCache($teamMember->team_id, $teamMember->user_id);
         $teamMember->delete();
+    }
+
+    protected function getTeamUserModeratorCacheKey(int $teamId, int $userId): string
+    {
+        return CACHE_KEY_TEAM_USER_MODERATOR . $teamId . ':' . $userId;
+    }
+
+    protected function clearTeamUserModeratorCache(int $teamId, int $userId): void
+    {
+        $this->clearCache($this->getTeamUserModeratorCacheKey($teamId, $userId));
     }
 }
