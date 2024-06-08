@@ -4,6 +4,6 @@ namespace App\Enums;
 
 enum NotificationStatus: string
 {
-    case Unseed = 'unseen';
+    case Unseen = 'unseen';
     case Seen = 'seen';
 }

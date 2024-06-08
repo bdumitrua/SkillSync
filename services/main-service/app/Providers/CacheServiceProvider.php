@@ -34,8 +34,10 @@ class CacheServiceProvider extends ServiceProvider
         */
 
         $hour = 60 * 60;
+        $minute = 60;
 
         define('CACHE_TIME_USER_DATA', 3 * $hour);
+        define('CACHE_TIME_USER_NOTIFICATIONS_DATA', 15 * $minute);
 
         define('CACHE_TIME_TEAM_DATA', 24 * $hour);
         define('CACHE_TIME_TEAM_USER_MODERATOR', 1 * $hour);
@@ -61,6 +63,7 @@ class CacheServiceProvider extends ServiceProvider
         */
 
         define('CACHE_KEY_USER_DATA', 'user_data:');
+        define('CACHE_KEY_USER_NOTIFICATIONS_DATA', 'user_notifications_data:');
 
         define('CACHE_KEY_TEAM_DATA', 'team_data:');
         // :teamId:userId
