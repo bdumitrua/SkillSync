@@ -13,6 +13,7 @@ class PostCommentPolicy
      * 
      * @see DELETE_POST_COMMENT_GATE
      */
+    // TODO REFACTOR NAMES(
     public function deletePostComment(User $user, PostComment $postComment): Response
     {
         return $user->id === $postComment->user_id
