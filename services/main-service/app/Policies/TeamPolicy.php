@@ -4,10 +4,8 @@ namespace App\Policies;
 
 use Illuminate\Auth\Access\Response;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
-use App\Models\User;
-use App\Models\Team;
-use App\DTO\Team\CreateTeamDTO;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Models\User;
 
 class TeamPolicy
 {

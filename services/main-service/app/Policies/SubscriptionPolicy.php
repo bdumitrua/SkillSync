@@ -2,10 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\Subscription;
-use App\Models\User;
-use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use Illuminate\Auth\Access\Response;
+use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Models\User;
 
 class SubscriptionPolicy
 {

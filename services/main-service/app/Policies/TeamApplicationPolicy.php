@@ -2,12 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\TeamApplication;
-use App\Models\User;
-use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
-use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use Illuminate\Auth\Access\Response;
-use Illuminate\Support\Facades\Gate;
+use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
+use App\Models\User;
+use App\Models\TeamApplication;
 
 class TeamApplicationPolicy
 {

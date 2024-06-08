@@ -2,12 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use App\Exceptions\InvalidTokenException;
-use Closure;
-use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Closure;
+use App\Exceptions\InvalidTokenException;
 
 class Authenticate extends Middleware
 {

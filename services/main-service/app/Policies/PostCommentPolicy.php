@@ -2,9 +2,9 @@
 
 namespace App\Policies;
 
-use App\Models\PostComment;
-use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use App\Models\User;
+use App\Models\PostComment;
 
 class PostCommentPolicy
 {

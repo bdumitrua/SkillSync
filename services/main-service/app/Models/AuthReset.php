@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use App\Prometheus\PrometheusServiceProxy;
-use Database\Factories\AuthResetFactory;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Database\Factories\AuthResetFactory;
+use App\Prometheus\PrometheusServiceProxy;
 
 class AuthReset extends Model
 {

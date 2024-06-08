@@ -2,8 +2,8 @@
 
 namespace App\Traits;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Collection;
 
 trait SetAdditionalData
 {

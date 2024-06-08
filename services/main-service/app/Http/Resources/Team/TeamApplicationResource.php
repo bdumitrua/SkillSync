@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\Team;
 
-use App\Http\Resources\ActionsResource;
-use App\Http\Resources\User\UserDataResource;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use App\Http\Resources\User\UserDataResource;
+use App\Http\Resources\ActionsResource;
 
 class TeamApplicationResource extends JsonResource
 {

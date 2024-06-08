@@ -2,14 +2,14 @@
 
 namespace Tests\Feature\Team;
 
-use App\Http\Resources\User\UserDataResource;
-use App\Models\Team;
-use App\Models\TeamMember;
 use Tests\TestCase;
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Response;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Models\User;
+use App\Models\TeamMember;
+use App\Models\Team;
+use App\Http\Resources\User\UserDataResource;
 
 class TeamControllerTest extends TestCase
 {

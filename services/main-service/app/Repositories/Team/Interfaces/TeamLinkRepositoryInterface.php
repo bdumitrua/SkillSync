@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Team\Interfaces;
 
-use App\DTO\Team\CreateTeamLinkDTO;
-use App\DTO\Team\UpdateTeamLinkDTO;
-use App\Models\TeamLink;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\TeamLink;
+use App\DTO\Team\UpdateTeamLinkDTO;
+use App\DTO\Team\CreateTeamLinkDTO;
 
 interface TeamLinkRepositoryInterface
 {

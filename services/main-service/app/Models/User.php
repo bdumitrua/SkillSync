@@ -2,19 +2,18 @@
 
 namespace App\Models;
 
-use App\Prometheus\PrometheusServiceProxy;
-use App\Traits\Elasticsearchable;
-use Elastic\Elasticsearch\Client;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Log;
-use Laravel\Scout\Searchable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Laravel\Scout\Searchable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Collection;
+use App\Traits\Elasticsearchable;
+use App\Prometheus\PrometheusServiceProxy;
 
 /**
  * * Модель, относящаяся к таблице users

@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Team\Interfaces;
 
-use App\DTO\Team\CreateTeamApplicationDTO;
-use App\Models\TeamApplication;
 use Illuminate\Support\Collection;
+use App\Models\TeamApplication;
+use App\DTO\Team\CreateTeamApplicationDTO;
 
 interface TeamApplicationRepositoryInterface
 {

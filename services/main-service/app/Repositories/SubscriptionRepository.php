@@ -2,12 +2,12 @@
 
 namespace App\Repositories;
 
-use App\DTO\User\CreateSubscriptionDTO;
-use App\Models\Subscription;
-use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
+use App\Models\Subscription;
+use App\DTO\User\CreateSubscriptionDTO;
 
 class SubscriptionRepository implements SubscriptionRepositoryInterface
 {

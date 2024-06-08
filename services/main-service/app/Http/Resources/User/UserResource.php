@@ -2,10 +2,10 @@
 
 namespace App\Http\Resources\User;
 
-use App\Helpers\TimeHelper;
-use App\Http\Resources\ActionsResource;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use App\Http\Resources\ActionsResource;
+use App\Helpers\TimeHelper;
 
 class UserResource extends JsonResource
 {

@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Post\Interfaces;
 
-use App\DTO\Post\CreatePostDTO;
-use App\DTO\Post\UpdatePostDTO;
-use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\Post;
+use App\DTO\Post\UpdatePostDTO;
+use App\DTO\Post\CreatePostDTO;
 
 interface PostRepositoryInterface
 {

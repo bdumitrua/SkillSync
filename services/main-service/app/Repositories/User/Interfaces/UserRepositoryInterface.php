@@ -3,9 +3,8 @@
 namespace App\Repositories\User\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
-use App\DTO\User\UpdateUserDTO;
 use App\Models\User;
-use Illuminate\Support\Collection as SupportCollection;
+use App\DTO\User\UpdateUserDTO;
 
 interface UserRepositoryInterface
 {
@@ -33,9 +32,9 @@ interface UserRepositoryInterface
     /**
      * @param string $query
      * 
-     * @return SupportCollection
+     * @return Collection
      */
-    function search(string $query): SupportCollection;
+    function search(string $query): Collection;
 
     /**
      * @param int $userId

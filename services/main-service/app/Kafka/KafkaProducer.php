@@ -2,10 +2,10 @@
 
 namespace App\Kafka;
 
-use App\Exceptions\KafkaProducerException;
-use Enqueue\RdKafka\RdKafkaConnectionFactory;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Enqueue\RdKafka\RdKafkaConnectionFactory;
+use App\Exceptions\KafkaProducerException;
 
 class KafkaProducer
 {

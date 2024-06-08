@@ -2,8 +2,8 @@
 
 namespace App\Rules;
 
-use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
+use Closure;
 
 class EmailRule implements ValidationRule
 {

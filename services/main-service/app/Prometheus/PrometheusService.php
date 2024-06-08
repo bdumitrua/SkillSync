@@ -2,8 +2,8 @@
 
 namespace App\Prometheus;
 
-use Prometheus\CollectorRegistry;
 use Prometheus\RenderTextFormat;
+use Prometheus\CollectorRegistry;
 
 class PrometheusService implements IPrometheusService
 {

@@ -2,15 +2,15 @@
 
 namespace App\Repositories\Team;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
+use App\Traits\UpdateFromDTO;
+use App\Traits\GetCachedData;
 use App\Repositories\Team\Interfaces\TeamLinkRepositoryInterface;
 use App\Models\TeamLink;
 use App\DTO\Team\UpdateTeamLinkDTO;
 use App\DTO\Team\CreateTeamLinkDTO;
-use App\Traits\GetCachedData;
-use App\Traits\UpdateFromDTO;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class TeamLinkRepository implements TeamLinkRepositoryInterface
 {

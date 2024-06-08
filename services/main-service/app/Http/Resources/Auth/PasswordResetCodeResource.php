@@ -5,7 +5,6 @@ namespace App\Http\Resources\Auth;
 use App\Http\Resources\ActionsResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 
 class PasswordResetCodeResource extends JsonResource
 {

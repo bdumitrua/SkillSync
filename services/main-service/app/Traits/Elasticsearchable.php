@@ -2,9 +2,9 @@
 
 namespace App\Traits;
 
-use Elastic\Elasticsearch\Client;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Collection;
+use Elastic\Elasticsearch\Client;
 
 trait Elasticsearchable
 {

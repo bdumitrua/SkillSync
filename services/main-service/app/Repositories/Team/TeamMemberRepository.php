@@ -2,16 +2,16 @@
 
 namespace App\Repositories\Team;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\UpdateFromDTO;
+use App\Traits\GetCachedData;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Models\TeamMember;
 use App\DTO\Team\UpdateTeamMemberDTO;
 use App\DTO\Team\CreateTeamMemberDTO;
-use App\Traits\GetCachedData;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class TeamMemberRepository implements TeamMemberRepositoryInterface
 {

@@ -4,7 +4,6 @@ namespace App\Services\User;
 
 use App\DTO\User\UpdateUserDTO;
 use App\Exceptions\UnprocessableContentException;
-use App\Helpers\ResponseHelper;
 use App\Http\Requests\User\UpdateUserRequest;
 use App\Http\Resources\User\UserDataResource;
 use App\Http\Resources\User\UserResource;

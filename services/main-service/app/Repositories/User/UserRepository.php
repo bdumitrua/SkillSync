@@ -2,16 +2,15 @@
 
 namespace App\Repositories\User;
 
-use App\DTO\User\UpdateUserDTO;
-use App\Helpers\ResponseHelper;
-use App\Models\User;
-use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Traits\GetCachedData;
-use App\Traits\UpdateFromDTO;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Response;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use App\Traits\UpdateFromDTO;
+use App\Traits\GetCachedData;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Models\User;
+use App\DTO\User\UpdateUserDTO;
 
 class UserRepository implements UserRepositoryInterface
 {

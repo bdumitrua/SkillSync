@@ -2,11 +2,11 @@
 
 namespace App\Traits;
 
-use App\Helpers\TimeHelper;
-use App\Prometheus\PrometheusServiceProxy;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Eloquent\Collection;
+use App\Prometheus\PrometheusServiceProxy;
+use App\Helpers\TimeHelper;
 
 trait GetCachedData
 {

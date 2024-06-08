@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Team;
 
 use App\DTO\Team\CreateTeamApplicationDTO;
-use App\Enums\TeamApplicationStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Team\CreateTeamApplicationRequest;
 use App\Http\Requests\Team\UpdateTeamApplicationRequest;

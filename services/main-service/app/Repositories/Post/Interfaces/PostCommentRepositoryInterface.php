@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Post\Interfaces;
 
-use App\DTO\Post\CreatePostCommentDTO;
-use App\Models\PostComment;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\PostComment;
+use App\DTO\Post\CreatePostCommentDTO;
 
 interface PostCommentRepositoryInterface
 {

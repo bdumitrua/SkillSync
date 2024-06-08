@@ -2,9 +2,9 @@
 
 namespace App\Traits;
 
-use App\Helpers\StringHelper;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
+use App\Helpers\StringHelper;
 
 trait UpdateFromDTO
 {

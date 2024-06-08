@@ -2,7 +2,6 @@
 
 namespace App\Kafka;
 
-
 class KafkaService
 {
     protected KafkaProducer $producer;

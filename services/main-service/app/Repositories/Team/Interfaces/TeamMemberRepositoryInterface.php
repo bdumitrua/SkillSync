@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Team\Interfaces;
 
-use App\DTO\Team\CreateTeamMemberDTO;
-use App\DTO\Team\UpdateTeamMemberDTO;
-use App\Models\TeamMember;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\TeamMember;
+use App\DTO\Team\UpdateTeamMemberDTO;
+use App\DTO\Team\CreateTeamMemberDTO;
 
 interface TeamMemberRepositoryInterface
 {

@@ -2,8 +2,8 @@
 
 namespace App\Repositories\Post\Interfaces;
 
-use App\Models\PostLike;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\PostLike;
 
 interface PostLikeRepositoryInterface
 {

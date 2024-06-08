@@ -1,12 +1,12 @@
 <?php
 
-use App\Exceptions\LikeException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Configuration\Exceptions;
-use Illuminate\Foundation\Configuration\Middleware;
-use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Http\Request;
+use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Application;
+use App\Exceptions\LikeException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(

@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Post;
-use App\Models\Team;
-use App\Models\User;
-use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\Response;
+use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Models\User;
+use App\Models\Team;
+use App\Models\Post;
 
 class PostPolicy
 {

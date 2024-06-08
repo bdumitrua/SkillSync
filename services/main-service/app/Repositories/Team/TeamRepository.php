@@ -2,15 +2,15 @@
 
 namespace App\Repositories\Team;
 
-use App\DTO\Team\CreateTeamDTO;
-use App\DTO\Team\UpdateTeamDTO;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Collection;
+use App\Traits\UpdateFromDTO;
+use App\Traits\GetCachedData;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Models\Team;
-use App\Traits\GetCachedData;
-use App\Traits\UpdateFromDTO;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+use App\DTO\Team\UpdateTeamDTO;
+use App\DTO\Team\CreateTeamDTO;
 
 class TeamRepository implements TeamRepositoryInterface
 {

@@ -2,10 +2,10 @@
 
 namespace App\Repositories\Team\Interfaces;
 
-use App\DTO\Team\CreateTeamVacancyDTO;
-use App\DTO\Team\UpdateTeamVacancyDTO;
-use App\Models\TeamVacancy;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\TeamVacancy;
+use App\DTO\Team\UpdateTeamVacancyDTO;
+use App\DTO\Team\CreateTeamVacancyDTO;
 
 interface TeamVacancyRepositoryInterface
 {

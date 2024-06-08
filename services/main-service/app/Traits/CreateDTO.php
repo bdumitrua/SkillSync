@@ -2,11 +2,8 @@
 
 namespace App\Traits;
 
-use App\Exceptions\UnprocessableContentException;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Exceptions\UnprocessableContentException;
 
 trait CreateDTO
 {

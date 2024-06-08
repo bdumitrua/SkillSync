@@ -2,9 +2,9 @@
 
 namespace App\Repositories\Interfaces;
 
-use App\DTO\User\CreateTagDTO;
-use App\Models\Tag;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\Tag;
+use App\DTO\User\CreateTagDTO;
 
 interface TagRepositoryInterface
 {

@@ -2,9 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 class ActionsResource extends JsonResource
 {

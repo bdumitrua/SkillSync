@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\Models\Post;
-use App\Models\Tag;
-use App\Models\Team;
-use App\Models\User;
-use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Auth\Access\Response;
+use App\Models\User;
+use App\Models\Team;
+use App\Models\Tag;
+use App\Models\Post;
 
 class TagPolicy
 {

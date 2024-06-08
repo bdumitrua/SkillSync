@@ -2,15 +2,15 @@
 
 namespace App\Repositories\Team;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
+use App\Traits\UpdateFromDTO;
+use App\Traits\GetCachedData;
 use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
 use App\Models\TeamVacancy;
 use App\DTO\Team\UpdateTeamVacancyDTO;
 use App\DTO\Team\CreateTeamVacancyDTO;
-use App\Traits\GetCachedData;
-use App\Traits\UpdateFromDTO;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class TeamVacancyRepository implements TeamVacancyRepositoryInterface
 {

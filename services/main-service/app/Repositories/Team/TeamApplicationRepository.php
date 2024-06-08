@@ -2,12 +2,12 @@
 
 namespace App\Repositories\Team;
 
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use App\Models\TeamApplication;
 use App\DTO\Team\CreateTeamApplicationDTO;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class TeamApplicationRepository implements TeamApplicationRepositoryInterface
 {

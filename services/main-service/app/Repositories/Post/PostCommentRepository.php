@@ -2,11 +2,11 @@
 
 namespace App\Repositories\Post;
 
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
 use App\Models\PostComment;
 use App\DTO\Post\CreatePostCommentDTO;
-use Illuminate\Support\Facades\Log;
 
 class PostCommentRepository implements PostCommentRepositoryInterface
 {

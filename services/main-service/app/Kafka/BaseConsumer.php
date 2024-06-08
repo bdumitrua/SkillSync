@@ -2,12 +2,12 @@
 
 namespace App\Kafka;
 
-use Enqueue\RdKafka\RdKafkaConnectionFactory;
-use Enqueue\RdKafka\RdKafkaConsumer;
-use Illuminate\Log\LogManager;
-use Illuminate\Support\Facades\Log;
-use Interop\Queue\Context;
 use Interop\Queue\Message;
+use Interop\Queue\Context;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Log\LogManager;
+use Enqueue\RdKafka\RdKafkaConsumer;
+use Enqueue\RdKafka\RdKafkaConnectionFactory;
 
 abstract class BaseConsumer
 {
