@@ -51,13 +51,6 @@ class User extends Authenticatable implements JWTSubject
         'token_invalid_before' => 'datetime',
     ];
 
-    protected static function booted(): void
-    {
-        static::created(function ($user) {
-            app(PrometheusServiceProxy::class)->incrementEntityCreatedCount('User');
-        });
-    }
-
     protected static function getESIndex(): string
     {
         return 'users';

@@ -2,11 +2,12 @@
 
 namespace App\Observers;
 
-use App\Kafka\KafkaService;
-use App\Models\PostLike;
-use App\Repositories\Post\Interfaces\PostRepositoryInterface;
-use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostRepositoryInterface;
+use App\Models\PostLike;
+use App\Kafka\KafkaService;
+use App\Events\PostLikeEvent;
 
 class PostLikeObserver
 {
@@ -32,6 +33,7 @@ class PostLikeObserver
      */
     public function created(PostLike $postLike): void
     {
+        event(new PostLikeEvent($postLike));
         $post = $this->postRepository->getById($postLike->post_id);
         $whoLiked = $this->userRepository->getById($postLike->user_id);
         $postAuthor = [];
