@@ -30,10 +30,12 @@ class TeamResource extends JsonResource
             'chatId' => $this->chat_id,
             'chatData' => $chatData,
             'adminId' => $this->admin_id,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'posts' => $this->posts,
             'tags' => $this->tags,
             'links' => $this->links,
-            'actions' => $actions
+            'actions' => $actions,
         ];
     }
 

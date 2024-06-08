@@ -27,6 +27,8 @@ class TeamMemberResource extends JsonResource
             'isModerator' => $this->is_moderator,
             'about' => $this->about,
             'canChange' => $this->canChange,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'actions' => $actions,
         ];
     }

@@ -28,6 +28,8 @@ class UserResource extends JsonResource
             'gender' => $this->gender,
             'birthdate' => $this->birthdate,
             'age' => $age,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'tags' => $this->tags,
             'posts' => $this->posts,
             'teams' => $this->teams,

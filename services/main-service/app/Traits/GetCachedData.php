@@ -64,10 +64,29 @@ trait GetCachedData
     public function getCachedCollection(array $modelIds, \Closure $callback): Collection
     {
         return new Collection(array_map(function ($modelId) use ($callback) {
-            if (!empty($model = $callback($modelId))) {
-                return $model;
+            if (!empty($queryData = $callback($modelId))) {
+                return $queryData;
             }
         }, $modelIds));
+    }
+
+    /**
+     * @param array $modelIds
+     * @param \Closure $callback
+     * 
+     * @return array
+     */
+    public function getCachedArray(array $modelIds, \Closure $callback): array
+    {
+        $dataArray = [];
+
+        array_map(function ($modelId) use ($callback, &$dataArray) {
+            if (!empty($queryData = $callback($modelId))) {
+                $dataArray[$modelId] = $queryData;
+            }
+        }, $modelIds);
+
+        return $dataArray;
     }
 
     /**

@@ -23,7 +23,9 @@ class UserDataResource extends JsonResource
             'avatar' => $this->avatar,
             'gender' => $this->gender,
             'birthdate' => $this->birthdate,
-            'age' => $age
+            'age' => $age,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }

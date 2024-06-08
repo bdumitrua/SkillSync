@@ -17,7 +17,6 @@ class PostCommentResource extends JsonResource
     public function toArray(Request $request): array
     {
         $userData = (new UserDataResource($this->userData))->resolve();
-
         $actions = $this->prepareActions();
 
         return [
@@ -28,7 +27,8 @@ class PostCommentResource extends JsonResource
             'mediaUrl' => $this->media_url,
             'likesCount' => $this->likes_count ?? 0,
             'created_at' => $this->created_at,
-            'isLiked' => $this->isLiked
+            'isLiked' => $this->isLiked,
+            'actions' => $actions
         ];
     }
 

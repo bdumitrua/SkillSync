@@ -81,6 +81,14 @@ class Team extends Model
                 'type' => 'text',
                 'index' => false
             ],
+            'created_at' => [
+                'type' => 'date',
+                'index' => false,
+            ],
+            'updated_at' => [
+                'type' => 'date',
+                'index' => false,
+            ],
         ];
     }
 

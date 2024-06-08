@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->id();
-            $table->text('title');
             $table->unsignedBigInteger('subscriber_id');
             $table->string('entity_type');
             $table->unsignedBigInteger('entity_id');

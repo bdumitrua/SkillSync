@@ -80,6 +80,8 @@ class User extends Authenticatable implements JWTSubject
             'address' => $this->address,
             'birthdate' => $this->birthdate,
             'gender' => $this->gender,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 
@@ -135,6 +137,14 @@ class User extends Authenticatable implements JWTSubject
             'gender' => [
                 'type' => 'text',
                 'index' => false
+            ],
+            'created_at' => [
+                'type' => 'date',
+                'index' => false,
+            ],
+            'updated_at' => [
+                'type' => 'date',
+                'index' => false,
             ],
         ];
     }

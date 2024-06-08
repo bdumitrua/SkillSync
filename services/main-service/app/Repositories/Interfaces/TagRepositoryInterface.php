@@ -18,9 +18,9 @@ interface TagRepositoryInterface
     /**
      * @param array $userIds
      * 
-     * @return Collection
+     * @return array
      */
-    public function getByUserIds(array $userIds): Collection;
+    public function getByUserIds(array $userIds): array;
 
     /**
      * @param int $teamId
@@ -32,9 +32,9 @@ interface TagRepositoryInterface
     /**
      * @param array $teamIds
      * 
-     * @return Collection
+     * @return array
      */
-    public function getByTeamIds(array $teamIds): Collection;
+    public function getByTeamIds(array $teamIds): array;
 
     /**
      * @param int $postId
@@ -46,9 +46,9 @@ interface TagRepositoryInterface
     /**
      * @param array $postIds
      * 
-     * @return Collection
+     * @return array
      */
-    public function getByPostIds(array $postIds): Collection;
+    public function getByPostIds(array $postIds): array;
 
     /**
      * @param CreateTagDTO $dto

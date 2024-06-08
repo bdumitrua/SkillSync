@@ -21,12 +21,12 @@ class PostFactory extends Factory
     {
         $entityTypes = [User::class, Team::class];
         $entityType = $entityTypes[rand(0, 1)];
-        $entityId = $entityType::all()->random();
+        $entity = $entityType::all()->random();
 
         return [
             'text' => $this->faker->words(10, true),
             'media_url' => $this->faker->url(),
-            'entity_id' => $entityId,
+            'entity_id' => $entity->id,
             'entity_type' => $entityType,
         ];
     }

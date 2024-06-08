@@ -33,6 +33,8 @@ class TeamApplicationResource extends JsonResource
             'teamData' => $teamData,
             'canUpdate' => $this->canUpdate,
             'canDelete' => $this->canDelete,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'actions' => $actions
         ];
     }

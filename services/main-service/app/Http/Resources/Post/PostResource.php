@@ -43,6 +43,8 @@ class PostResource extends JsonResource
             'isLiked' => $this->isLiked,
             'canUpdate' => $this->canUpdate,
             'canDelete' => $this->canDelete,
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
             'actions' => $actions
         ];
     }

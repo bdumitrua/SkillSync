@@ -27,7 +27,9 @@ class TeamVacancyResource extends JsonResource
             'teamId' => $this->team_id,
             'teamData' => $teamData,
             'canChange' => $this->canChange,
-            'actions' => $actions
+            'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
+            'actions' => $actions,
         ];
     }
 

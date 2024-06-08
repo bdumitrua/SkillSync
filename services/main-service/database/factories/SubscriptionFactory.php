@@ -22,11 +22,11 @@ class SubscriptionFactory extends Factory
 
         $entityTypes = [User::class, Team::class];
         $entityType = $entityTypes[rand(0, 1)];
-        $entityId = $entityType::all()->random();
+        $entity = $entityType::all()->random();
 
         return [
-            'user_id' => $subscriber->id,
-            'entity_id' => $entityId,
+            'subscriber_id' => $subscriber->id,
+            'entity_id' => $entity->id,
             'entity_type' => $entityType,
         ];
     }

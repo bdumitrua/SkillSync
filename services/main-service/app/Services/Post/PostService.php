@@ -139,7 +139,7 @@ class PostService implements PostServiceInterface
     protected function setPostsEntityData(Collection &$posts): void
     {
         Log::debug("Setting posts entity data", [
-            'posts' => $posts->toArray(),
+            'posts' => $posts->pluck('id')->toArray(),
         ]);
 
         $userIds = [];
@@ -170,25 +170,25 @@ class PostService implements PostServiceInterface
         }
 
         Log::debug("Succesfully setted posts entity data", [
-            'posts' => $posts->toArray(),
+            'posts' => $posts->pluck('id')->toArray(),
         ]);
     }
 
     protected function setPostsTagsData(Collection &$posts): void
     {
         Log::debug("Setting posts tags data", [
-            'posts' => $posts->toArray(),
+            'posts' => $posts->pluck('id')->toArray(),
         ]);
 
         $postIds = $posts->pluck('id')->unique()->all();
         $postsTags = $this->tagRepository->getByPostIds($postIds);
 
         foreach ($posts as $post) {
-            $post->tagsData = $postsTags->where('entity_id', $post->id)->first();
+            $post->tagsData = isset($postsTags[$post->id]) ? $postsTags[$post->id] : [];
         }
 
         Log::debug("Succesfully setted posts tags data", [
-            'posts' => $posts->toArray(),
+            'posts' => $posts->pluck('id')->toArray(),
         ]);
     }
 
