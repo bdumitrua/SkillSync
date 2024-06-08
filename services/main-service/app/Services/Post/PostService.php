@@ -82,7 +82,7 @@ class PostService implements PostServiceInterface
 
     public function search(Request $request): JsonResource
     {
-        $queryPosts = $this->postRepository->search($this->authorizedUserId);
+        $queryPosts = $this->postRepository->search($request->input('query'));
         $queryPosts = $this->assemblePostsData($queryPosts);
 
         return PostResource::collection($queryPosts);
