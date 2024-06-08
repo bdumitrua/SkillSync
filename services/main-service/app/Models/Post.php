@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Elasticsearchable;
 use Elastic\Elasticsearch\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,9 @@ use Laravel\Scout\Searchable;
 
 class Post extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, Searchable, Elasticsearchable {
+        Elasticsearchable::search insteadof Searchable;
+    }
 
     protected $fillable = [
         'text',
@@ -23,97 +26,65 @@ class Post extends Model
         'entity_id',
     ];
 
-    public static function createElasticsearchIndex()
+    protected static function getESIndex(): string
     {
-        $client = app(Client::class);
-
-        if ($client->indices()->exists(['index' => 'posts'])->asBool()) {
-            $client->indices()->delete(['index' => 'posts']);
-        }
-
-        $params = [
-            'index' => 'posts',
-            'body' => [
-                'mappings' => [
-                    'properties' => [
-                        'id' => [
-                            'type' => 'keyword'
-                        ],
-                        'text' => [
-                            'type' => 'text'
-                        ],
-                        'media_url' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'entity_type' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'entity_id' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                    ]
-                ]
-            ]
-        ];
-
-        $response = $client->indices()->create($params);
-        return $response;
+        return 'posts';
     }
 
-    public static function deleteElasticsearchIndex()
+    protected static function getESRefreshInterval(): string
     {
-        $client = app(Client::class);
-
-        if ($client->indices()->exists(['index' => 'posts'])->asBool()) {
-            $client->indices()->delete(['index' => 'posts']);
-        }
+        return '5s';
     }
 
     public function toSearchableArray(): array
     {
-        return [
-            'id' => $this->id,
-            'text' => $this->text,
-            'media_url' => $this->media_url,
-            'entity_type' => $this->entity_type,
-            'entity_id' => $this->entity_id,
+        return $this->attributesToArray();
+    }
+
+    /**
+     * Define the properties for the Elasticsearch index mappings.
+     *
+     * @return array
+     */
+    protected static function getSearchProperties(): array
+    {
+        return  [
+            'id' => [
+                'type' => 'keyword'
+            ],
+            'text' => [
+                'type' => 'text'
+            ],
+            'media_url' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'entity_type' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'entity_id' => [
+                'type' => 'text',
+                'index' => false
+            ],
         ];
     }
 
-    public static function search($query): Collection
+    /**
+     * Build the search query for Elasticsearch.
+     *
+     * @param string $searchString
+     * @return array
+     */
+    protected static function getSearchQuery(string $searchString): array
     {
-        $client = app(Client::class);
-
-        $params = [
-            'index' => 'posts',
-            'body' => [
-                'query' => [
-                    'multi_match' => [
-                        'query' => $query,
-                        'fields' => ['text'],  // Поиск только по индексируемым полям
-                        "fuzziness" => 2
-                    ]
-                ]
+        return [
+            'multi_match' => [
+                'query' => $searchString,
+                'fields' => ['text'],  // Поиск только по индексируемым полям
+                "fuzziness" => 2
             ]
         ];
-
-        $response = $client->search($params);
-
-        // Обработка результатов поиска
-        $hits = $response['hits']['hits'];
-
-        $results = [];
-        foreach ($hits as $hit) {
-            $post = new Post($hit['_source']);
-            $post->id = $hit['_source']['id'];
-
-            $results[] = $post;
-        }
-
-        return new Collection($results);
     }
 
     /**

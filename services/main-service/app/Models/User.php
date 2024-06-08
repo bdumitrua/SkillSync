@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Prometheus\PrometheusServiceProxy;
+use App\Traits\Elasticsearchable;
 use Elastic\Elasticsearch\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Log;
 use Laravel\Scout\Searchable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
@@ -23,7 +25,9 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
  */
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, Searchable, SoftDeletes;
+    use HasFactory, Notifiable, Searchable, Elasticsearchable, SoftDeletes {
+        Elasticsearchable::search insteadof Searchable;
+    }
 
     protected $fillable = [
         'first_name',
@@ -48,80 +52,16 @@ class User extends Authenticatable implements JWTSubject
         'token_invalid_before' => 'datetime',
     ];
 
-    public static function createElasticsearchIndex()
+    protected static function booted(): void
     {
-        $client = app(Client::class);
-
-        if ($client->indices()->exists(['index' => 'users'])->asBool()) {
-            $client->indices()->delete(['index' => 'users']);
-        }
-
-        $params = [
-            'index' => 'users',
-            'body' => [
-                'mappings' => [
-                    'properties' => [
-                        'id' => [
-                            'type' => 'keyword'
-                        ],
-                        'first_name' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'last_name' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'full_name' => [
-                            'type' => 'text'
-                        ],
-                        'nick_name' => [
-                            'type' => 'text'
-                        ],
-                        'email' => [
-                            'type' => 'text',
-                            'index' => false  // не индексируется
-                        ],
-                        'phone' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'about' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'avatar' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'address' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'birthdate' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'gender' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                    ]
-                ]
-            ]
-        ];
-
-        $response = $client->indices()->create($params);
-        return $response;
+        static::created(function ($user) {
+            app(PrometheusServiceProxy::class)->incrementEntityCreatedCount('User');
+        });
     }
 
-    public static function deleteElasticsearchIndex()
+    protected static function getESIndex(): string
     {
-        $client = app(Client::class);
-
-        if ($client->indices()->exists(['index' => 'users'])->asBool()) {
-            $client->indices()->delete(['index' => 'users']);
-        }
+        return 'users';
     }
 
     public function toSearchableArray(): array
@@ -143,46 +83,77 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-    public static function search($query): Collection
+    /**
+     * Define the properties for the Elasticsearch index mappings.
+     *
+     * @return array
+     */
+    protected static function getSearchProperties(): array
     {
-        $client = app(Client::class);
-
-        $params = [
-            'index' => 'users',
-            'body' => [
-                'query' => [
-                    'multi_match' => [
-                        'query' => $query,
-                        'fields' => ['full_name', 'nick_name'],  // Поиск только по индексируемым полям
-                        "fuzziness" => 2
-                    ]
-                ]
-            ]
+        return  [
+            'id' => [
+                'type' => 'keyword'
+            ],
+            'first_name' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'last_name' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'full_name' => [
+                'type' => 'text'
+            ],
+            'nick_name' => [
+                'type' => 'text'
+            ],
+            'email' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'phone' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'about' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'avatar' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'address' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'birthdate' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'gender' => [
+                'type' => 'text',
+                'index' => false
+            ],
         ];
-
-        $response = $client->search($params);
-
-        // Обработка результатов поиска
-        $hits = $response['hits']['hits'];
-
-        $results = [];
-        foreach ($hits as $hit) {
-            $user = new User($hit['_source']);
-            $user->id = $hit['_source']['id'];
-
-            $results[] = $user;
-        }
-
-        return new Collection($results);
     }
 
-    protected static function boot(): void
+    /**
+     * Build the search query for Elasticsearch.
+     *
+     * @param string $searchString
+     * @return array
+     */
+    protected static function getSearchQuery(string $searchString): array
     {
-        parent::boot();
-
-        static::created(function ($user) {
-            app(PrometheusServiceProxy::class)->incrementEntityCreatedCount('User');
-        });
+        return [
+            'multi_match' => [
+                'query' => $searchString,
+                'fields' => ['full_name', 'nick_name'],  // Поиск только по индексируемым полям
+                "fuzziness" => 2
+            ]
+        ];
     }
 
     public function getJWTIdentifier()

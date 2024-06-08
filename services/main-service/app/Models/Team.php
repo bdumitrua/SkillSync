@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\Elasticsearchable;
 use Elastic\Elasticsearch\Client;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,9 @@ use Laravel\Scout\Searchable;
 
 class Team extends Model
 {
-    use HasFactory, Searchable;
+    use HasFactory, Searchable, Elasticsearchable {
+        Elasticsearchable::search insteadof Searchable;
+    }
 
     protected $fillable = [
         'name',
@@ -25,112 +28,77 @@ class Team extends Model
         'admin_id'
     ];
 
-    public static function createElasticsearchIndex()
+    protected static function getESIndex(): string
     {
-        $client = app(Client::class);
-
-        if ($client->indices()->exists(['index' => 'teams'])->asBool()) {
-            $client->indices()->delete(['index' => 'teams']);
-        }
-
-        $params = [
-            'index' => 'teams',
-            'body' => [
-                'mappings' => [
-                    'properties' => [
-                        'id' => [
-                            'type' => 'keyword'
-                        ],
-                        'name' => [
-                            'type' => 'text'
-                        ],
-                        'avatar' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'description' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'email' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'site' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'chat_id' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                        'admin_id' => [
-                            'type' => 'text',
-                            'index' => false
-                        ],
-                    ]
-                ]
-            ]
-        ];
-
-        $response = $client->indices()->create($params);
-        return $response;
+        return 'teams';
     }
 
-    public static function deleteElasticsearchIndex()
+    protected static function getESRefreshInterval(): string
     {
-        $client = app(Client::class);
-
-        if ($client->indices()->exists(['index' => 'teams'])->asBool()) {
-            $client->indices()->delete(['index' => 'teams']);
-        }
+        return '5s';
     }
 
     public function toSearchableArray(): array
     {
-        return [
-            'id' => $this->id,
-            'name' => $this->name,
-            'avatar' => $this->avatar,
-            'description' => $this->description,
-            'email' => $this->email,
-            'site' => $this->site,
-            'chat_id' => $this->chat_id,
-            'admin_id' => $this->admin_id,
+        return $this->attributesToArray();
+    }
+
+    /**
+     * Define the properties for the Elasticsearch index mappings.
+     *
+     * @return array
+     */
+    protected static function getSearchProperties(): array
+    {
+        return  [
+            'id' => [
+                'type' => 'keyword'
+            ],
+            'name' => [
+                'type' => 'text'
+            ],
+            'avatar' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'description' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'email' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'site' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'chat_id' => [
+                'type' => 'text',
+                'index' => false
+            ],
+            'admin_id' => [
+                'type' => 'text',
+                'index' => false
+            ],
         ];
     }
 
-    public static function search($query): Collection
+    /**
+     * Build the search query for Elasticsearch.
+     *
+     * @param string $searchString
+     * @return array
+     */
+    protected static function getSearchQuery(string $searchString): array
     {
-        $client = app(Client::class);
-
-        $params = [
-            'index' => 'teams',
-            'body' => [
-                'query' => [
-                    'multi_match' => [
-                        'query' => $query,
-                        'fields' => ['name'],  // Поиск только по индексируемым полям
-                        "fuzziness" => 2
-                    ]
-                ]
+        return [
+            'multi_match' => [
+                'query' => $searchString,
+                'fields' => ['name'],  // Поиск только по индексируемым полям
+                "fuzziness" => 2
             ]
         ];
-
-        $response = $client->search($params);
-
-        // Обработка результатов поиска
-        $hits = $response['hits']['hits'];
-
-        $results = [];
-        foreach ($hits as $hit) {
-            $team = new Team($hit['_source']);
-            $team->id = $hit['_source']['id'];
-
-            $results[] = $team;
-        }
-
-        return new Collection($results);
     }
 
     /**
