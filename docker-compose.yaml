@@ -9,6 +9,7 @@ services:
                     cpus: "2.0"
         ports:
             - "8000:8000"
+            - "8080:8080"
         volumes:
             - ./services/main-service:/app
             - main-service-vendor:/app/vendor

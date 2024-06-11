@@ -11,7 +11,7 @@ use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\Channel;
 use App\Models\PostLike;
 
-class PostLikeEvent
+class PostLikeEvent implements ShouldBroadCast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -25,15 +25,13 @@ class PostLikeEvent
         $this->postLike = $postLike;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
+    public function broadcastOn(): Channel
     {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
+        return new Channel('post-likes-channel');
+    }
+
+    public function broadcastWith()
+    {
+        return ['postLike' => $this->postLike];
     }
 }

@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use Enqueue\RdKafka\RdKafkaConnectionFactory;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Client;
+use App\Observers\PostLikeObserver;
+use App\Models\PostLike;
 use App\Kafka\KafkaProducer;
 use App\Kafka\KafkaConsumer;
 
@@ -39,6 +41,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // No changes needed
+        PostLike::observe(PostLikeObserver::class);
     }
 }

@@ -16,6 +16,7 @@
         "guzzlehttp/guzzle": "^7.2",
         "kreait/laravel-firebase": "^5.5",
         "laravel/framework": "^11.0",
+        "laravel/reverb": "@beta",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.5",
         "laravel/tinker": "^2.9",

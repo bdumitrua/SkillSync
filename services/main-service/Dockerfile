@@ -1,9 +1,11 @@
 FROM php:8.2-fpm
 
 # Extensions instlling
-RUN docker-php-ext-install pdo pdo_mysql
-RUN apt-get update && apt-get install -y libzip-dev zlib1g-dev openssl zip unzip git supervisor librdkafka-dev
-RUN docker-php-ext-install pdo pdo_mysql zip sockets
+
+RUN apt-get update && apt-get install -y libzip-dev zlib1g-dev openssl zip unzip git supervisor librdkafka-dev libwebsockets-dev
+RUN docker-php-ext-install pdo pdo_mysql zip sockets 
+RUN docker-php-ext-install pcntl
+RUN docker-php-ext-configure pcntl --enable-pcntl
 
 # Redis 
 # RUN pecl install redis && docker-php-ext-enable redis
@@ -27,6 +29,9 @@ RUN composer install --no-scripts
 COPY . .
 
 COPY ./kafka_consumers.conf /etc/supervisor/conf.d/kafka_consumers.conf
+COPY ./queue.conf /etc/supervisor/conf.d/queue.conf
+COPY ./websockets.conf /etc/supervisor/conf.d/websockets.conf
+
 COPY ./start.sh /app/start.sh
 
 EXPOSE 8000
