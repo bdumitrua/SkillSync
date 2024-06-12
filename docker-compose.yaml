@@ -1,7 +1,7 @@
 services:
-    main-service:
+    backend:
         build:
-            context: ./services/main-service
+            context: ./backend
             dockerfile: Dockerfile
         deploy:
             resources:
@@ -11,8 +11,8 @@ services:
             - "8000:8000"
             - "8080:8080"
         volumes:
-            - ./services/main-service:/app
-            - main-service-vendor:/app/vendor
+            - ./backend:/app
+            - backend-vendor:/app/vendor
         depends_on:
             - mysql-db
             - redis
@@ -25,7 +25,7 @@ services:
     mysql-db:
         image: mysql:8.3
         environment:
-            MYSQL_DATABASE: main_db
+            MYSQL_DATABASE: inspirelink
             MYSQL_USER: user
             MYSQL_PASSWORD: password
             MYSQL_ROOT_PASSWORD: rootpassword
@@ -110,4 +110,4 @@ networks:
 
 volumes:
     sql-data:
-    main-service-vendor:
+    backend-vendor:
