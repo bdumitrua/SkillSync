@@ -23,7 +23,10 @@ class DatabaseServiceProvider extends ServiceProvider
     {
         if ($this->app->environment('local')) {
             DB::listen(function ($query) {
-                Log::info('Query Time: ' . $query->time . 'ms', [
+                Log::build([
+                    'driver' => 'single',
+                    'path' => storage_path('logs/sql.log'),
+                ])->info('Query Time: ' . $query->time . 'ms', [
                     'sql' => $query->sql,
                     'bindings' => $query->bindings,
                 ]);
