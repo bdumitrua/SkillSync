@@ -34,4 +34,12 @@ class PostLikeEvent implements ShouldBroadCast
     {
         return ['postLike' => $this->postLike];
     }
+
+    /**
+     * Get the broadcast queue for the event.
+     */
+    public function broadcastQueue(): string
+    {
+        return 'websockets';
+    }
 }
