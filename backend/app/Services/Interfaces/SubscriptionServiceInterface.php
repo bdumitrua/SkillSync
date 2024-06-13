@@ -2,7 +2,7 @@
 
 namespace App\Services\Interfaces;
 
-use App\DTO\User\CreateSubscriptionDTO;
+use App\DTO\CreateSubscriptionDTO;
 use App\Models\Subscription;
 use App\Http\Requests\CreateSubscriptionRequest;
 use Illuminate\Http\Resources\Json\JsonResource;

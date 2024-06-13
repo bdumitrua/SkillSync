@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\DTO\User\CreateSubscriptionDTO;
+use App\DTO\CreateSubscriptionDTO;
 use App\Exceptions\SubscriptionException;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;

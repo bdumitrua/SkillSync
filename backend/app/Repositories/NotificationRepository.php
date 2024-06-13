@@ -8,7 +8,7 @@ use App\Traits\GetCachedData;
 use App\Repositories\Interfaces\NotificationRepositoryInterface;
 use App\Models\Notification;
 use App\Enums\NotificationStatus;
-use App\DTO\User\CreateNotificationDTO;
+use App\DTO\CreateNotificationDTO;
 
 class NotificationRepository implements NotificationRepositoryInterface
 {

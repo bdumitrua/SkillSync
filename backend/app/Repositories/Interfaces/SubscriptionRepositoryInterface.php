@@ -4,7 +4,7 @@ namespace App\Repositories\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Subscription;
-use App\DTO\User\CreateSubscriptionDTO;
+use App\DTO\CreateSubscriptionDTO;
 
 interface SubscriptionRepositoryInterface
 {

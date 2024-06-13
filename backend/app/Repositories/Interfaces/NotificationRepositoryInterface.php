@@ -4,7 +4,7 @@ namespace App\Repositories\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Notification;
-use App\DTO\User\CreateNotificationDTO;
+use App\DTO\CreateNotificationDTO;
 
 interface NotificationRepositoryInterface
 {

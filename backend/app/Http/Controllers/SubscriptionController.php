@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\User\CreateSubscriptionDTO;
-use App\Http\Requests\CreateSubscriptionRequest;
-use App\Models\Subscription;
-use App\Models\User;
-use App\Services\Interfaces\SubscriptionServiceInterface;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Services\Interfaces\SubscriptionServiceInterface;
+use App\Models\User;
+use App\Models\Subscription;
+use App\Http\Requests\CreateSubscriptionRequest;
+use App\DTO\CreateSubscriptionDTO;
 
 class SubscriptionController extends Controller
 {

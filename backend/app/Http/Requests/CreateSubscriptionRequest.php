@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\DTO\User\CreateSubscriptionDTO;
+use App\DTO\CreateSubscriptionDTO;
 use App\Rules\EntityIdRule;
 use App\Traits\CreateDTO;
 use Illuminate\Foundation\Http\FormRequest;
