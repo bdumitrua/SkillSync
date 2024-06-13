@@ -17,7 +17,7 @@ services:
             - mysql-db
             - redis
             - elasticsearch
-            - kafka
+            - rabbitmq
             - prometheus
         networks:
             - app
@@ -48,30 +48,18 @@ services:
         networks:
             - app
 
-    kafka:
-        image: wurstmeister/kafka
-        ports:
-            - "9092:9092"
+    rabbitmq:
+        image: rabbitmq:3.9-management
+        restart: always
         environment:
-            KAFKA_ADVERTISED_HOST_NAME: kafka
-            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-            KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+            - RABBITMQ_DEFAULT_USER=rmuser
+            - RABBITMQ_DEFAULT_PASS=rmpassword
+            - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit disk_free_limit 107374182 # 100 MB
         volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
-        deploy:
-            resources:
-                limits:
-                    cpus: "1.0"
-        restart: unless-stopped
-        networks:
-            - app
-        depends_on:
-            - zookeeper
-
-    zookeeper:
-        image: wurstmeister/zookeeper
+            - rabbitmq:/var/lib/rabbitmq
         ports:
-            - "2181:2181"
+            - 15672:15672
+            - 5672:5672
         networks:
             - app
 
@@ -111,3 +99,4 @@ networks:
 volumes:
     sql-data:
     backend-vendor:
+    rabbitmq:

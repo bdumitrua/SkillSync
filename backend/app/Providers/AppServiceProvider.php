@@ -3,13 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Enqueue\RdKafka\RdKafkaConnectionFactory;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Client;
 use App\Observers\PostLikeObserver;
 use App\Models\PostLike;
-use App\Kafka\KafkaProducer;
-use App\Kafka\KafkaConsumer;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,16 +20,6 @@ class AppServiceProvider extends ServiceProvider
                 ->setHosts([config('services.elasticsearch.host')])
                 ->setRetries(3)
                 ->build();
-        });
-
-        $this->app->singleton(KafkaProducer::class, function ($app) {
-            $connectionFactory = new RdKafkaConnectionFactory([
-                'global' => [
-                    'metadata.broker.list' => config('kafka.broker_list'),
-                ],
-            ]);
-
-            return new KafkaProducer($connectionFactory);
         });
     }
 
