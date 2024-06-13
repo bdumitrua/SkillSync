@@ -2,21 +2,19 @@
 
 namespace App\Services;
 
-use App\DTO\CreateSubscriptionDTO;
-use App\Exceptions\SubscriptionException;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Interfaces\SubscriptionServiceInterface;
-use App\Models\Subscription;
-use App\Http\Requests\CreateSubscriptionRequest;
-use App\Http\Resources\Team\TeamDataResource;
-use App\Http\Resources\User\UserDataResource;
-use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
-use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Traits\CreateDTO;
-use Illuminate\Support\Facades\Log;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
+use App\Models\Subscription;
+use App\Http\Resources\Team\TeamDataResource;
+use App\Exceptions\SubscriptionException;
+
+use App\DTO\CreateSubscriptionDTO;
 
 class SubscriptionService implements SubscriptionServiceInterface
 {
@@ -42,11 +40,16 @@ class SubscriptionService implements SubscriptionServiceInterface
             'userId' => $userId
         ]);
 
-        $userIds = $this->subscriptionRepository->getUsersByUserId($userId)
-            ->pluck('entity_id')->toArray();
+        $userSubscriptions = $this->subscriptionRepository->getUsersByUserId($userId);
+        $userIds = $userSubscriptions->pluck('entity_id')->toArray();
         $usersData = $this->userRepository->getByIds($userIds);
 
-        return UserDataResource::collection($usersData);
+        foreach ($userSubscriptions as &$subscription) {
+            $subscription->userData = $usersData->where('id', '=', $subscription->entity_id);
+        }
+
+        // TODO CREATE RESOURCE
+        return JsonResource::collection($userSubscriptions);
     }
 
     public function teams(int $userId): JsonResource

@@ -30,12 +30,16 @@ return Application::configure(basePath: dirname(__DIR__))
         $exceptions->render(function (LikeException $e) {
             return response()->json([
                 'error: ' . $e->getMessage(),
-            ], 409);
+            ], 409)->stop();
         });
 
         $exceptions->render(function (HttpException $e) {
             return response()->json([
                 'error: ' . $e->getMessage()
             ], $e->getStatusCode());
+        });
+
+        $exceptions->report(function (LikeException $e) {
+            return false;
         });
     })->create();

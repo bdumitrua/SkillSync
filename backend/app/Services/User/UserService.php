@@ -2,25 +2,23 @@
 
 namespace App\Services\User;
 
-use App\DTO\User\UpdateUserDTO;
-use App\Exceptions\UnprocessableContentException;
-use App\Http\Requests\User\UpdateUserRequest;
-use App\Http\Resources\User\UserDataResource;
-use App\Http\Resources\User\UserResource;
-use App\Models\User;
-use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
-use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Services\Interfaces\TagServiceInterface;
-use App\Services\Post\Interfaces\PostServiceInterface;
-use App\Services\Team\Interfaces\TeamServiceInterface;
-use App\Services\User\Interfaces\UserServiceInterface;
-use App\Traits\CreateDTO;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
+use App\Services\User\Interfaces\UserServiceInterface;
+use App\Services\Team\Interfaces\TeamServiceInterface;
+use App\Services\Post\Interfaces\PostServiceInterface;
+use App\Services\Interfaces\TagServiceInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
+use App\Models\User;
+use App\Http\Resources\User\UserResource;
+use App\Http\Resources\User\UserDataResource;
+use App\Exceptions\UnprocessableContentException;
+use App\DTO\User\UpdateUserDTO;
 
 class UserService implements UserServiceInterface
 {

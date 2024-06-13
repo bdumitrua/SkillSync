@@ -2,8 +2,9 @@
 
 namespace App\Observers;
 
+use Illuminate\Support\Facades\Log;
 use App\Models\Subscription;
-use App\Events\NewSubscriptionEvent;
+use App\Jobs\NotifyAboutSubscription;
 
 class SubscriptionObserver
 {
@@ -12,7 +13,11 @@ class SubscriptionObserver
      */
     public function created(Subscription $subscription): void
     {
-        event(new NewSubscriptionEvent($subscription));
+        Log::debug("Handling 'created' method in SubscriptionObserver", [
+            'subscription' => $subscription->toArray()
+        ]);
+
+        NotifyAboutSubscription::dispatch($subscription);
     }
 
     /**

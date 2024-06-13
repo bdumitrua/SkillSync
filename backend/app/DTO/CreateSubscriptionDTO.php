@@ -4,22 +4,34 @@ namespace App\DTO;
 
 class CreateSubscriptionDTO
 {
-    public int $userId;
-    public string $entityType;
-    public int $entityId;
+    public int $subscriberId = 0;
+    public string $entityType = '';
+    public int $entityId = 0;
 
     public function toArray(): array
     {
         return [
-            'user_id' => $this->userId,
+            'subscriber_id' => $this->subscriberId,
             'entity_type' => $this->entityType,
             'entity_id' => $this->entityId,
         ];
     }
 
-    public function setUserId(int $userId): self
+    public function setSubscriberId(int $subscriberId): self
     {
-        $this->userId = $userId;
+        $this->subscriberId = $subscriberId;
+        return $this;
+    }
+
+    public function setEntityType(string $entityType): self
+    {
+        $this->entityType = $entityType;
+        return $this;
+    }
+
+    public function setEntityId(string $entityId): self
+    {
+        $this->entityId = $entityId;
         return $this;
     }
 }

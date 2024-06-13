@@ -112,9 +112,9 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
         $isSubscribed = false;
 
         if ($dto->entityType == config('entities.user')) {
-            $isSubscribed = $this->isSubscribedToUser($dto->userId, $dto->entityId);
+            $isSubscribed = $this->isSubscribedToUser($dto->subscriberId, $dto->entityId);
         } else {
-            $isSubscribed = $this->isSubscribedToTeam($dto->userId, $dto->entityId);
+            $isSubscribed = $this->isSubscribedToTeam($dto->subscriberId, $dto->entityId);
         }
 
         if ($isSubscribed) {

@@ -5,8 +5,14 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Client;
+use App\Observers\SubscriptionObserver;
 use App\Observers\PostLikeObserver;
+use App\Observers\PostCommentLikeObserver;
+use App\Observers\NotificationObserver;
+use App\Models\Subscription;
 use App\Models\PostLike;
+use App\Models\PostCommentLike;
+use App\Models\Notification;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -29,5 +35,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         PostLike::observe(PostLikeObserver::class);
+        PostCommentLike::observe(PostCommentLikeObserver::class);
+        Subscription::observe(SubscriptionObserver::class);
+        Notification::observe(NotificationObserver::class);
     }
 }

@@ -2,26 +2,19 @@
 
 namespace App\Observers;
 
-use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
+use Illuminate\Support\Facades\Log;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Models\PostLike;
-use App\Events\PostLikeEvent;
+use App\Jobs\NotifyAboutPostLike;
 
 class PostLikeObserver
 {
     protected $postRepository;
-    protected $userRepository;
-    protected $teamRepository;
 
     public function __construct(
         PostRepositoryInterface $postRepository,
-        UserRepositoryInterface $userRepository,
-        TeamRepositoryInterface $teamRepository,
     ) {
         $this->postRepository = $postRepository;
-        $this->userRepository = $userRepository;
-        $this->teamRepository = $teamRepository;
     }
 
     /**
@@ -29,6 +22,12 @@ class PostLikeObserver
      */
     public function created(PostLike $postLike): void
     {
-        event(new PostLikeEvent($postLike));
+        Log::debug("Handling 'created' method in PostLikeObserver", [
+            'postLike' => $postLike->toArray()
+        ]);
+
+        $post = $this->postRepository->getById($postLike->post_id);
+
+        NotifyAboutPostLike::dispatch($post, $postLike);
     }
 }

@@ -37,9 +37,10 @@ class SubscriptionController extends Controller
     {
         $this->patchRequestEntityType($request);
 
-        /** @var CreateSubscriptionDTO */
-        $createSubscriptionDTO = $request->createDTO();
-        $createSubscriptionDTO->setUserId(Auth::id());
+        $createSubscriptionDTO = new CreateSubscriptionDTO();
+        $createSubscriptionDTO->setSubscriberId(Auth::id())
+            ->setEntityType($request->entityType)
+            ->setEntityId($request->entityId);
 
         return $this->handleServiceCall(function () use ($createSubscriptionDTO) {
             return $this->subscriptionService->create($createSubscriptionDTO);

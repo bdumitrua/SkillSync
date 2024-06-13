@@ -5,9 +5,9 @@ namespace App\DTO\Post;
 class CreatePostCommentDTO
 {
     public string $text;
-    public int $userId;
-    public int $postId;
-    public ?string $mediaUrl;
+    public int $userId = 0;
+    public int $postId = 0;
+    public ?string $mediaUrl = null;
 
     public function toArray(): array
     {

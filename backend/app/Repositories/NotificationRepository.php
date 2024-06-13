@@ -28,9 +28,9 @@ class NotificationRepository implements NotificationRepositoryInterface
 
     public function create(CreateNotificationDTO $dto): void
     {
-        $newNotification = Notification::create([
+        $newNotification = Notification::create(
             $dto->toArray()
-        ]);
+        );
 
         $this->clearNotificationsCache($newNotification->receiver_id);
     }

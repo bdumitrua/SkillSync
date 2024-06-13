@@ -22,6 +22,10 @@ window.Echo.connector.pusher.connection.bind("error", (err) => {
 	console.error("Error connecting to Pusher:", err);
 });
 
-window.Echo.channel("post-likes-channel").listen("PostLikeEvent", (event) => {
-	console.log(event);
-});
+const userId = 1;
+window.Echo.channel(`user.notifications.${userId}`).listen(
+	"NewNotificationEvent",
+	(event) => {
+		console.log(event?.notification);
+	}
+);

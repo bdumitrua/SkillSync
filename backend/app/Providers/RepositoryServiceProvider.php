@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Contracts\Foundation\Application;
 use App\Repositories\User\UserRepository;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\TeamVacancyRepository;
@@ -25,6 +26,7 @@ use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
+use App\Repositories\NotificationRepository;
 use App\Repositories\Message\MessageRepository;
 use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
 use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
@@ -33,6 +35,7 @@ use App\Repositories\Message\ChatRepository;
 use App\Repositories\Message\ChatMemberRepository;
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
+use App\Repositories\Interfaces\NotificationRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -67,6 +70,9 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Subscription
         $this->app->bind(SubscriptionRepositoryInterface::class, SubscriptionRepository::class);
+
+        // Notification
+        $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
     }
 
     /**
