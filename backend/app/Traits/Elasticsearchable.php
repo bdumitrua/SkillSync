@@ -77,6 +77,11 @@ trait Elasticsearchable
         static::setElasticsearchIndexSettings();
     }
 
+    public static function updateElasticsearchIndex(): void
+    {
+        static::createElasticsearchIndex(true);
+    }
+
     /**
      * Set the settings for the Elasticsearch index.
      */

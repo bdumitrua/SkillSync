@@ -23,6 +23,7 @@ class Post extends Model
         'media_url',
         'entity_type',
         'entity_id',
+        'likes_count'
     ];
 
     protected static function getESIndex(): string
@@ -64,6 +65,10 @@ class Post extends Model
             ],
             'entity_id' => [
                 'type' => 'text',
+                'index' => false
+            ],
+            'likes_count' => [
+                'type' => 'integer',
                 'index' => false
             ],
             'created_at' => [
@@ -112,6 +117,34 @@ class Post extends Model
         ]);
 
         return $this->hasMany(PostLike::class);
+    }
+
+    /**
+     * @return int
+     */
+    public function likesCount(): int
+    {
+        return $this->likes_count;
+    }
+
+    /**
+     * @return void
+     */
+    public function incrementLikesCount(): void
+    {
+        $this->timestamps = false; // To prevent updated_at change
+        $this->increment('likes_count');
+        $this->timestamps = true;
+    }
+
+    /**
+     * @return void
+     */
+    public function decrementLikesCount(): void
+    {
+        $this->timestamps = false; // To prevent updated_at change
+        $this->decrement('likes_count');
+        $this->timestamps = true;
     }
 
     /**

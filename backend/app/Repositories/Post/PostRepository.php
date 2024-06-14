@@ -56,10 +56,7 @@ class PostRepository implements PostRepositoryInterface
             'postId' => $postId
         ]);
 
-        $cacheKey = $this->getPostCacheKey($postId);
-        return $this->getCachedData($cacheKey, CACHE_TIME_POST_DATA, function () use ($postId) {
-            return Post::where('id', '=', $postId)->first();
-        });
+        return Post::where('id', '=', $postId)->first();
     }
 
     public function getByIds(array $postIds): Collection
@@ -68,9 +65,7 @@ class PostRepository implements PostRepositoryInterface
             'postIds' => $postIds
         ]);
 
-        return $this->getCachedCollection($postIds, function ($postId) {
-            return $this->getById($postId);
-        });
+        return Post::whereIn('id', $postIds)->get();
     }
 
     public function search(string $query): Collection
@@ -84,10 +79,7 @@ class PostRepository implements PostRepositoryInterface
             'userId' => $userId
         ]);
 
-        $cacheKey = $this->getUserPostsCacheKey($userId);
-        return $this->getCachedData($cacheKey, CACHE_TIME_USER_POST_DATA, function () use ($userId) {
-            return Post::where('entity_type', '=', 'user')->where('entity_id', '=', $userId)->get();
-        });
+        return Post::where('entity_type', '=', 'user')->where('entity_id', '=', $userId)->get();
     }
 
     public function getByTeamId(int $teamId): Collection
@@ -96,10 +88,7 @@ class PostRepository implements PostRepositoryInterface
             'teamId' => $teamId
         ]);
 
-        $cacheKey = $this->getTeamPostsCacheKey($teamId);
-        return $this->getCachedData($cacheKey, CACHE_TIME_TEAM_POST_DATA, function () use ($teamId) {
-            return Post::where('entity_type', '=', 'team')->where('entity_id', '=', $teamId)->get();
-        });
+        return Post::where('entity_type', '=', 'team')->where('entity_id', '=', $teamId)->get();
     }
 
     public function create(CreatePostDTO $dto): Post
@@ -111,8 +100,6 @@ class PostRepository implements PostRepositoryInterface
         $newPost = Post::create(
             $dto->toArray()
         );
-
-        $this->clearEntityPostsCache($newPost->entity_type, $newPost->entity_id);
 
         Log::debug('Succesfully created post from dto', [
             'dto' => $dto->toArray(),
@@ -129,13 +116,10 @@ class PostRepository implements PostRepositoryInterface
         ]);
 
         $this->updateFromDto($post, $dto);
-        $this->clearPostCache($post->id);
-        $this->clearEntityPostsCache($post->entity_type, $post->entity_id);
     }
 
     public function delete(Post $post): void
     {
-        $postId = $post->id;
         $postData = $post->toArray();
 
         Log::debug('Deleting post', [
@@ -143,40 +127,9 @@ class PostRepository implements PostRepositoryInterface
         ]);
 
         $post->delete();
-        $this->clearPostCache($postId);
-        $this->clearEntityPostsCache($postData['entity_type'], $postData['entity_id']);
 
         Log::debug('Succesfully deleted post', [
             'postData' => $postData,
         ]);
-    }
-
-    protected function getUserPostsCacheKey(int $userId): string
-    {
-        return CACHE_KEY_USER_POST_DATA . $userId;
-    }
-
-    protected function getTeamPostsCacheKey(int $teamId): string
-    {
-        return CACHE_KEY_TEAM_POST_DATA . $teamId;
-    }
-
-    protected function getPostCacheKey(int $postId): string
-    {
-        return CACHE_KEY_POST_DATA . $postId;
-    }
-
-    protected function clearEntityPostsCache(string $entityType, int $entityId): void
-    {
-        if ($entityType === config('entities.user')) {
-            $this->clearCache($this->getUserPostsCacheKey($entityId));
-        } elseif ($entityType === config('entities.team')) {
-            $this->clearCache($this->getTeamPostsCacheKey($entityId));
-        }
-    }
-
-    protected function clearPostCache(int $postId): void
-    {
-        $this->clearCache($this->getPostCacheKey($postId));
     }
 }

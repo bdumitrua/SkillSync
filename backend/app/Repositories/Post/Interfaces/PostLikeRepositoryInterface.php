@@ -4,6 +4,7 @@ namespace App\Repositories\Post\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\PostLike;
+use App\Models\Post;
 
 interface PostLikeRepositoryInterface
 {
@@ -46,18 +47,18 @@ interface PostLikeRepositoryInterface
     public function userLikedPost(int $userId, int $postId): bool;
 
     /**
-     * @param int $postId
+     * @param Post $post
      * @param int $userId
      * 
      * @return bool
      */
-    public function create(int $postId, int $userId): bool;
+    public function create(Post $post, int $userId): bool;
 
     /**
-     * @param int $postId
+     * @param Post $post
      * @param int $userId
      * 
      * @return bool
      */
-    public function delete(int $postId, int $userId): bool;
+    public function delete(Post $post, int $userId): bool;
 }

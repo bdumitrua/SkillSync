@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
 use App\Models\PostLike;
+use App\Models\Post;
 
 class PostLikeRepository implements PostLikeRepositoryInterface
 {
@@ -63,28 +64,37 @@ class PostLikeRepository implements PostLikeRepositoryInterface
         return $this->queryByBothIds($postId, $userId)->exists();
     }
 
-    public function create(int $postId, int $userId): bool
+    public function create(Post $post, int $userId): bool
     {
-        if ($this->userLikedPost($userId, $postId)) {
+        if ($this->userLikedPost($userId, $post->id)) {
             return false;
         }
 
         PostLike::create([
-            'post_id' => $postId,
+            'post_id' => $post->id,
             'user_id' => $userId,
         ]);
+
+        $post->incrementLikesCount();
 
         return true;
     }
 
-    public function delete(int $postId, int $userId): bool
+    public function delete(Post $post, int $userId): bool
     {
-        $like = $this->getByBothIds($postId, $userId);
+        $like = $this->getByBothIds($post->id, $userId);
 
         if (empty($like)) {
             return false;
         }
 
-        return $like->delete();
+        $unliked = $like->delete();
+
+        if (!$unliked) {
+            return false;
+        }
+
+        $post->decrementLikesCount();
+        return true;
     }
 }

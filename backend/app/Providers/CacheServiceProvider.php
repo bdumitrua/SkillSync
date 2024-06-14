@@ -44,14 +44,9 @@ class CacheServiceProvider extends ServiceProvider
         define('CACHE_TIME_TEAM_LINKS_DATA', 24 * $hour);
         define('CACHE_TIME_TEAM_VACANCY_DATA', 1 * $hour);
 
-        define('CACHE_TIME_POST_DATA', 1 * $hour);
-
         define('CACHE_TIME_TEAM_TAGS_DATA', 24 * $hour);
         define('CACHE_TIME_USER_TAGS_DATA', 3 * $hour);
         define('CACHE_TIME_POST_TAGS_DATA', 1 * $hour);
-
-        define('CACHE_TIME_TEAM_POST_DATA', 3 * $hour);
-        define('CACHE_TIME_USER_POST_DATA', 1 * $hour);
 
         define('CACHE_TIME_TEAM_VACANCIES_DATA', 3 * $hour);
     }
@@ -72,14 +67,9 @@ class CacheServiceProvider extends ServiceProvider
         define('CACHE_KEY_TEAM_LINKS_DATA', 'team_links_data:');
         define('CACHE_KEY_TEAM_VACANCY_DATA', 'team_vacancy_data:');
 
-        define('CACHE_KEY_POST_DATA', 'post_data:');
-
         define('CACHE_KEY_TEAM_TAGS_DATA', 'team_tags_data:');
         define('CACHE_KEY_USER_TAGS_DATA', 'user_tags_data:');
         define('CACHE_KEY_POST_TAGS_DATA', 'post_tags_data:');
-
-        define('CACHE_KEY_TEAM_POST_DATA', 'team_post_data:');
-        define('CACHE_KEY_USER_POST_DATA', 'user_post_data:');
 
         define('CACHE_KEY_TEAM_VACANCIES_DATA', 'team_vacancies_data:');
     }

@@ -2,23 +2,23 @@
 
 namespace App\Services\Post;
 
-use App\DTO\Post\CreatePostDTO;
-use App\DTO\Post\UpdatePostDTO;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 use App\Services\Post\Interfaces\PostServiceInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
+use App\Repositories\Interfaces\TagRepositoryInterface;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Models\Post;
 use App\Http\Resources\Post\PostResource;
-use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
-use App\Repositories\Interfaces\TagRepositoryInterface;
-use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
-use App\Repositories\Post\Interfaces\PostRepositoryInterface;
-use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
-use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
+use App\DTO\Post\UpdatePostDTO;
+use App\DTO\Post\CreatePostDTO;
 
 class PostService implements PostServiceInterface
 {
@@ -130,7 +130,6 @@ class PostService implements PostServiceInterface
         $this->setPostsEntityData($posts);
         $this->setPostsTagsData($posts);
         $this->setPostsRights($posts);
-        $this->setLikesCount($posts);
         $this->setLikeAbility($posts);
 
         return $posts;
@@ -197,14 +196,6 @@ class PostService implements PostServiceInterface
         foreach ($posts as $post) {
             $post->canUpdate = Gate::allows(UPDATE_POST_GATE, [Post::class, $post]);
             $post->canDelete = Gate::allows(DELETE_POST_GATE, [Post::class, $post]);
-        }
-    }
-
-    protected function setLikesCount(Collection &$posts): void
-    {
-        /** @var Post */
-        foreach ($posts as $post) {
-            $post->likesCount = $post->likes()->count();
         }
     }
 
