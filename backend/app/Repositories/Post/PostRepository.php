@@ -79,7 +79,7 @@ class PostRepository implements PostRepositoryInterface
             'userId' => $userId
         ]);
 
-        return Post::where('entity_type', '=', 'user')->where('entity_id', '=', $userId)->get();
+        return Post::where('entity_type', '=', config('entities.user'))->where('entity_id', '=', $userId)->get();
     }
 
     public function getByTeamId(int $teamId): Collection
@@ -88,7 +88,7 @@ class PostRepository implements PostRepositoryInterface
             'teamId' => $teamId
         ]);
 
-        return Post::where('entity_type', '=', 'team')->where('entity_id', '=', $teamId)->get();
+        return Post::where('entity_type', '=', config('entities.team'))->where('entity_id', '=', $teamId)->get();
     }
 
     public function create(CreatePostDTO $dto): Post
