@@ -28,8 +28,9 @@ Route::prefix('projects')->name('projects.')->group(function () {
     */
     Route::prefix('{project}/members')->name('members.')->controller(ProjectMemberController::class)->group(function () {
         Route::get('/', 'project')->name('project');
-        Route::put('/{user}', 'update')->name('update');
-        Route::delet('/{user}', 'delete')->name('delete');
+        Route::post('{user}', 'create')->name('create');
+        Route::put('{user}', 'update')->name('update');
+        Route::delet('{user}', 'delete')->name('delete');
     });
 
     /*
@@ -38,6 +39,7 @@ Route::prefix('projects')->name('projects.')->group(function () {
     */
     Route::prefix('{project}/links')->name('links.')->controller(ProjectLinkController::class)->group(function () {
         Route::get('/', 'project')->name('project');
+        Route::post('/', 'create')->name('create');
         Route::put('{projectLink}', 'update')->name('update');
         Route::delet('{projectLink}', 'delete')->name('delete');
     });

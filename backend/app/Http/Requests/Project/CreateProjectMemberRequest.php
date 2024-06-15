@@ -4,13 +4,13 @@ namespace App\Http\Requests\Project;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Traits\Dtoable;
-use App\DTO\Project\UpdateProjectMemberDTO;
+use App\DTO\Project\CreateProjectMemberDTO;
 
-class UpdateProjectMemberRequest extends FormRequest
+class CreateProjectMemberRequest extends FormRequest
 {
     use Dtoable;
 
-    protected string $dtoClass = UpdateProjectMemberDTO::class;
+    protected string $dtoClass = CreateProjectMemberDTO::class;
 
     /**
      * Determine if the user is authorized to make this request.

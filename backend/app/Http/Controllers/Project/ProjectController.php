@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Project;
 
-use Illuminate\Http\Request;
 use App\Services\Project\Interfaces\ProjectServiceInterface;
 use App\Models\User;
 use App\Models\Team;
@@ -10,6 +9,8 @@ use App\Models\Project;
 use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Http\Requests\Project\CreateProjectRequest;
 use App\Http\Controllers\Controller;
+use App\DTO\Project\UpdateProjectDTO;
+use App\DTO\Project\CreateProjectDTO;
 
 class ProjectController extends Controller
 {
@@ -57,15 +58,23 @@ class ProjectController extends Controller
 
     public function create(CreateProjectRequest $request)
     {
-        return $this->handleServiceCall(function () use ($request) {
-            return $this->projectService->create($request);
+        $this->patchRequestEntityType($request, 'authorType');
+
+        /** @var CreateProjectDTO */
+        $createProjectDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($createProjectDTO) {
+            return $this->projectService->create($createProjectDTO);
         });
     }
 
     public function update(UpdateProjectRequest $request)
     {
-        return $this->handleServiceCall(function () use ($request) {
-            return $this->projectService->update($request);
+        /** @var UpdateProjectDTO */
+        $updateProjectDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($updateProjectDTO) {
+            return $this->projectService->update($updateProjectDTO);
         });
     }
 

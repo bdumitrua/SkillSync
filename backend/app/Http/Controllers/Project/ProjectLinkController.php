@@ -7,7 +7,10 @@ use App\Services\Project\Interfaces\ProjectLinkServiceInterface;
 use App\Models\ProjectLink;
 use App\Models\Project;
 use App\Http\Requests\Project\UpdateProjectLinkRequest;
+use App\Http\Requests\Project\CreateProjectLinkRequest;
 use App\Http\Controllers\Controller;
+use App\DTO\Project\UpdateProjectLinkDTO;
+use App\DTO\Project\CreateProjectLinkDTO;
 
 class ProjectLinkController extends Controller
 {
@@ -25,10 +28,24 @@ class ProjectLinkController extends Controller
         });
     }
 
+    public function create(Project $project, CreateProjectLinkRequest $request)
+    {
+        /** @var CreateProjectLinkDTO */
+        $createProjectLinkDTO = $request->createDTO();
+        $createProjectLinkDTO->setProjectId($project->id);
+
+        return $this->handleServiceCall(function () use ($project, $createProjectLinkDTO) {
+            return $this->projectLinkService->create($project, $createProjectLinkDTO);
+        });
+    }
+
     public function update(Project $project, ProjectLink $projectLink, UpdateProjectLinkRequest $request)
     {
-        return $this->handleServiceCall(function () use ($project, $projectLink, $request) {
-            return $this->projectLinkService->update($project, $projectLink, $request);
+        /** @var UpdateProjectLinkDTO */
+        $updateProjectLinkDTO = $request->createDTO();
+
+        return $this->handleServiceCall(function () use ($project, $projectLink, $updateProjectLinkDTO) {
+            return $this->projectLinkService->update($project, $projectLink, $updateProjectLinkDTO);
         });
     }
 
