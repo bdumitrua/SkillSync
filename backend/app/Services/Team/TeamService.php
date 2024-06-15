@@ -96,14 +96,14 @@ class TeamService implements TeamServiceInterface
 
     public function update(Team $team, UpdateTeamDTO $updateTeamDTO): void
     {
-        Gate::authorize(UPDATE_TEAM_GATE, [Team::class, $team->id]);
+        Gate::authorize('update', [Team::class, $team->id]);
 
         $this->teamRepository->update($team, $updateTeamDTO);
     }
 
     public function delete(Team $team): void
     {
-        Gate::authorize(DELETE_TEAM_GATE, [Team::class, $team->id]);
+        Gate::authorize('delete', [Team::class, $team->id]);
 
         $this->teamRepository->delete($team);
     }

@@ -23,10 +23,8 @@ class TeamApplicationPolicy
 
     /**
      * Determine whether the user can view the application.
-     * 
-     * @see VIEW_TEAM_APPLICATIONS_GATE
      */
-    public function viewTeamApplication(User $user, TeamApplication $teamApplication): Response
+    public function view(User $user, TeamApplication $teamApplication): Response
     {
         if ($user->id === $teamApplication->user_id) {
             return Response::allow();
@@ -41,10 +39,8 @@ class TeamApplicationPolicy
 
     /**
      * Determine whether the user can apply to the vacancy.
-     * 
-     * @see APPLY_TO_VACANCY_GATE
      */
-    public function applyToVacancy(User $user, int $teamId, int $vacancyId): Response
+    public function create(User $user, int $teamId, int $vacancyId): Response
     {
         if ($this->teamMemberRepository->userIsMember($teamId, $user->id)) {
             return Response::deny("You can't apply for this vacancy, because you're a member of this team.");
@@ -64,10 +60,8 @@ class TeamApplicationPolicy
 
     /**
      * Determine whether the user can update the application.
-     * 
-     * @see UPDATE_TEAM_APPLICATION_GATE
      */
-    public function updateTeamApplication(User $user, ?int $teamId): Response
+    public function update(User $user, ?int $teamId): Response
     {
         if (empty($teamId)) {
             return Response::deny("You have insufficient rigths.");
@@ -80,10 +74,8 @@ class TeamApplicationPolicy
 
     /**
      * Determine whether the user can delete the application.
-     * 
-     * @see DELETE_TEAM_APPLICATION_GATE
      */
-    public function deleteTeamApplication(User $user, TeamApplication $teamApplication): Response
+    public function delete(User $user, TeamApplication $teamApplication): Response
     {
         return $user->id === $teamApplication->user_id
             ? Response::allow()

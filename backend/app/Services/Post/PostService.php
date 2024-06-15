@@ -106,21 +106,21 @@ class PostService implements PostServiceInterface
 
     public function create(CreatePostDTO $createPostDTO): void
     {
-        Gate::authorize(CREATE_POST_GATE, [Post::class, $createPostDTO->entityType, $createPostDTO->entityId]);
+        Gate::authorize('create', [Post::class, $createPostDTO->entityType, $createPostDTO->entityId]);
 
         $this->postRepository->create($createPostDTO);
     }
 
     public function update(Post $post, UpdatePostDTO $updatePostDTO): void
     {
-        Gate::authorize(UPDATE_POST_GATE, [Post::class, $post]);
+        Gate::authorize('update', [Post::class, $post]);
 
         $this->postRepository->update($post, $updatePostDTO);
     }
 
     public function delete(Post $post): void
     {
-        Gate::authorize(DELETE_POST_GATE, [Post::class, $post]);
+        Gate::authorize('delete', [Post::class, $post]);
 
         $this->postRepository->delete($post);
     }
@@ -194,8 +194,8 @@ class PostService implements PostServiceInterface
     protected function setPostsRights(Collection &$posts): void
     {
         foreach ($posts as $post) {
-            $post->canUpdate = Gate::allows(UPDATE_POST_GATE, [Post::class, $post]);
-            $post->canDelete = Gate::allows(DELETE_POST_GATE, [Post::class, $post]);
+            $post->canUpdate = Gate::allows('update', [Post::class, $post]);
+            $post->canDelete = Gate::allows('delete', [Post::class, $post]);
         }
     }
 

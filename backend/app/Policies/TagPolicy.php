@@ -13,20 +13,16 @@ class TagPolicy
 {
     /**
      * Determine whether the user can create models.
-     * 
-     * @see CREATE_TAG_GATE
      */
-    public function createTag(User $user, string $entityType, int $entityId): Response
+    public function create(User $user, string $entityType, int $entityId): Response
     {
         return $this->getRights($user, $entityType, $entityId);
     }
 
     /**
      * Determine whether the user can delete the model.
-     * 
-     * @see DELETE_TAG_GATE
      */
-    public function deleteTag(User $user, Tag $tag): Response
+    public function delete(User $user, Tag $tag): Response
     {
         return $this->getRights($user, $tag->entity_type, $tag->entity_id);
     }
@@ -44,7 +40,7 @@ class TagPolicy
         }
 
         if ($entityType === config('entities.post')) {
-            return Gate::allows(CREATE_POST_GATE, [Post::class, $entityType, $entityId]);
+            return Gate::allows('create', [Post::class, $entityType, $entityId]);
         }
 
         return Response::deny("Unauthorized action.");

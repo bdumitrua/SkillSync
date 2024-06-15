@@ -10,11 +10,8 @@ class PostCommentPolicy
 {
     /**
      * Determine whether the user can delete the model.
-     * 
-     * @see DELETE_POST_COMMENT_GATE
      */
-    // TODO REFACTOR NAMES(
-    public function deletePostComment(User $user, PostComment $postComment): Response
+    public function delete(User $user, PostComment $postComment): Response
     {
         return $user->id === $postComment->user_id
             ? Response::allow()

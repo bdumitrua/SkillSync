@@ -22,20 +22,16 @@ class TeamPolicy
 
     /**
      * Determine whether the user can update the team.
-     * 
-     * @see UPDATE_TEAM_GATE
      */
-    public function updateTeam(User $user, int $teamId): Response
+    public function update(User $user, int $teamId): Response
     {
         return $this->admin($user, $teamId);
     }
 
     /**
      * Determine whether the user can delete the team.
-     * 
-     * @see DELETE_TEAM_GATE
      */
-    public function deleteTeam(User $user, int $teamId): Response
+    public function delete(User $user, int $teamId): Response
     {
         return $this->admin($user, $teamId);
     }

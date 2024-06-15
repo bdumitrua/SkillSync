@@ -2,17 +2,17 @@
 
 namespace App\Services;
 
-use App\DTO\User\CreateTagDTO;
-use Illuminate\Support\Facades\Auth;
-use App\Services\Interfaces\TagServiceInterface;
-use App\Models\Tag;
-use App\Http\Requests\CreateTagRequest;
-use App\Http\Resources\TagResource;
-use App\Repositories\Interfaces\TagRepositoryInterface;
-use App\Traits\Dtoable;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Traits\Dtoable;
+use App\Services\Interfaces\TagServiceInterface;
+use App\Repositories\Interfaces\TagRepositoryInterface;
+use App\Models\Tag;
+use App\Http\Resources\TagResource;
+use App\Http\Requests\CreateTagRequest;
+use App\DTO\User\CreateTagDTO;
 
 class TagService implements TagServiceInterface
 {
@@ -42,14 +42,14 @@ class TagService implements TagServiceInterface
 
     public function create(CreateTagDTO $createTagDTO): void
     {
-        Gate::authorize(CREATE_TAG_GATE, [Tag::class, $createTagDTO->entityType, $createTagDTO->entityId]);
+        Gate::authorize('create', [Tag::class, $createTagDTO->entityType, $createTagDTO->entityId]);
 
         $this->tagRepository->create($createTagDTO);
     }
 
     public function delete(Tag $tag): void
     {
-        Gate::authorize(DELETE_TAG_GATE, [Tag::class, $tag]);
+        Gate::authorize('delete', [Tag::class, $tag]);
 
         $this->tagRepository->delete($tag);
     }

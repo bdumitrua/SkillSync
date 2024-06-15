@@ -21,30 +21,24 @@ class PostPolicy
 
     /**
      * Determine whether the user can create the post.
-     * 
-     * @see CREATE_POST_GATE
      */
-    public function createPost(User $user, string $entityType, int $entityId): Response
+    public function create(User $user, string $entityType, int $entityId): Response
     {
         return $this->getRights($user, $entityType, $entityId);
     }
 
     /**
      * Determine whether the user can update the post.
-     * 
-     * @see UPDATE_POST_GATE
      */
-    public function updatePost(User $user, Post $post): Response
+    public function update(User $user, Post $post): Response
     {
         return $this->getRights($user, $post->entity_type, $post->entity_id);
     }
 
     /**
      * Determine whether the user can delete the post.
-     * 
-     * @see DELETE_POST_GATE
      */
-    public function deletePost(User $user, Post $post): Response
+    public function delete(User $user, Post $post): Response
     {
         return $this->getRights($user, $post->entity_type, $post->entity_id);
     }

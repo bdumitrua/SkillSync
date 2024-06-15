@@ -50,7 +50,7 @@ class PostCommentService implements PostCommentServiceInterface
 
     public function delete(PostComment $postComment): void
     {
-        Gate::authorize(DELETE_POST_COMMENT_GATE, [PostComment::class, $postComment]);
+        Gate::authorize('delete', [PostComment::class, $postComment]);
 
         $this->postCommentRepository->delete($postComment);
     }
@@ -67,7 +67,7 @@ class PostCommentService implements PostCommentServiceInterface
     protected function setCommentsRights(Collection &$postComments): void
     {
         foreach ($postComments as $postComment) {
-            $postComment->canDelete = Gate::allows(DELETE_POST_COMMENT_GATE, [PostComment::class, $postComment]);
+            $postComment->canDelete = Gate::allows('delete', [PostComment::class, $postComment]);
         }
     }
 

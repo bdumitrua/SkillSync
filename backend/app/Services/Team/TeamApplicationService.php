@@ -46,13 +46,13 @@ class TeamApplicationService implements TeamApplicationServiceInterface
     {
         $teamApplication = $this->teamApplicationRepository->getById($teamApplicationId);
 
-        if (Gate::denies(VIEW_TEAM_APPLICATIONS_GATE, [TeamApplication::class, $teamApplication])) {
+        if (Gate::denies('view', [TeamApplication::class, $teamApplication])) {
             return new JsonResource([]);
         }
 
         $teamApplication = $this->assembleApplicationsData(new Collection([$teamApplication]))->first();
-        $teamApplication->canUpdate = Gate::allows(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication->team_id]);
-        $teamApplication->canDelete = Gate::allows(DELETE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication]);
+        $teamApplication->canUpdate = Gate::allows('update', [TeamApplication::class, $teamApplication->team_id]);
+        $teamApplication->canDelete = Gate::allows('delete', [TeamApplication::class, $teamApplication]);
 
         return new TeamApplicationResource($teamApplication);
     }
@@ -85,7 +85,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function create(CreateTeamApplicationDTO $createTeamApplicationDTO): void
     {
-        Gate::authorize(APPLY_TO_VACANCY_GATE, [
+        Gate::authorize('create', [
             TeamApplication::class,
             $createTeamApplicationDTO->teamId,
             $createTeamApplicationDTO->vacancyId
@@ -96,14 +96,14 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     public function update(TeamApplication $teamApplication, string $newStatus): void
     {
-        Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication->team_id]);
+        Gate::authorize('update', [TeamApplication::class, $teamApplication->team_id]);
 
         $this->teamApplicationRepository->update($teamApplication, $newStatus);
     }
 
     public function delete(TeamApplication $teamApplication): void
     {
-        Gate::authorize(DELETE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication]);
+        Gate::authorize('delete', [TeamApplication::class, $teamApplication]);
 
         $this->teamApplicationRepository->delete($teamApplication);
     }
@@ -122,7 +122,7 @@ class TeamApplicationService implements TeamApplicationServiceInterface
             return $teamApplications;
         }
 
-        $canUpdate = Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplications->first()?->team_id]);
+        $canUpdate = Gate::authorize('update', [TeamApplication::class, $teamApplications->first()?->team_id]);
         $canDelete = false; // If you're watching a list of applications - you're a member = you can't apply = you can't delete
 
         foreach ($teamApplications as $teamApplication) {
