@@ -2,20 +2,18 @@
 
 namespace App\Services\Post;
 
-use App\DTO\Post\CreatePostCommentDTO;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Collection;
+use App\Traits\SetAdditionalData;
 use App\Services\Post\Interfaces\PostCommentServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
+use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
 use App\Models\PostComment;
 use App\Http\Resources\Post\PostCommentResource;
-use App\Http\Requests\Post\CreatePostCommentRequest;
-use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
-use App\Traits\CreateDTO;
-use App\Traits\SetAdditionalData;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
+use App\DTO\Post\CreatePostCommentDTO;
 
 class PostCommentService implements PostCommentServiceInterface
 {

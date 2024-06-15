@@ -2,10 +2,11 @@
 
 namespace App\Services\Post;
 
-use App\Exceptions\LikeException;
-use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
-use App\Services\Post\Interfaces\PostCommentLikeServiceInterface;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Post\Interfaces\PostCommentLikeServiceInterface;
+use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
+use App\Models\PostComment;
+use App\Exceptions\LikeException;
 
 class PostCommentLikeService implements PostCommentLikeServiceInterface
 {
@@ -21,9 +22,9 @@ class PostCommentLikeService implements PostCommentLikeServiceInterface
     /**
      * @throws LikeException
      */
-    public function create(int $postCommentId): void
+    public function create(PostComment $postComment): void
     {
-        $liked = $this->postCommentLikeRepository->create($postCommentId, $this->authorizedUserId);
+        $liked = $this->postCommentLikeRepository->create($postComment, $this->authorizedUserId);
 
         if (!$liked) {
             throw new LikeException("You already liked this comment.");
@@ -33,9 +34,9 @@ class PostCommentLikeService implements PostCommentLikeServiceInterface
     /**
      * @throws LikeException
      */
-    public function delete(int $postCommentId): void
+    public function delete(PostComment $postComment): void
     {
-        $unliked = $this->postCommentLikeRepository->delete($postCommentId, $this->authorizedUserId);
+        $unliked = $this->postCommentLikeRepository->delete($postComment, $this->authorizedUserId);
 
         if (!$unliked) {
             throw new LikeException("You haven't liked this comment.");

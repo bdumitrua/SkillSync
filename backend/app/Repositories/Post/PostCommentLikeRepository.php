@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
 use App\Models\PostCommentLike;
+use App\Models\PostComment;
 
 class PostCommentLikeRepository implements PostCommentLikeRepositoryInterface
 {
@@ -42,28 +43,38 @@ class PostCommentLikeRepository implements PostCommentLikeRepositoryInterface
         return $this->queryByBothIds($postCommentId, $userId)->exists();
     }
 
-    public function create(int $postCommentId, int $userId): bool
+    public function create(PostComment $postComment, int $userId): bool
     {
-        if ($this->userLikedComment($userId, $postCommentId)) {
+        if ($this->userLikedComment($userId, $postComment->id)) {
             return false;
         }
 
         PostCommentLike::create([
-            'post_comment_id' => $postCommentId,
+            'post_comment_id' => $postComment->id,
             'user_id' => $userId
         ]);
+
+        $postComment->incrementLikesCount();
 
         return true;
     }
 
-    public function delete(int $postCommentId, int $userId): bool
+    public function delete(PostComment $postComment, int $userId): bool
     {
-        $like = $this->getByBothIds($postCommentId, $userId);
+        $like = $this->getByBothIds($postComment->id, $userId);
 
         if (empty($like)) {
             return false;
         }
 
-        return $like->delete();
+        $unliked = $like->delete();
+
+        if (!$unliked) {
+            return false;
+        }
+
+        $postComment->decrementLikesCount();
+
+        return true;
     }
 }

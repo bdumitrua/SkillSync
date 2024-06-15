@@ -2,19 +2,21 @@
 
 namespace App\Services\Post\Interfaces;
 
+use App\Models\PostComment;
+
 interface PostCommentLikeServiceInterface
 {
     /**
-     * @param int $postCommentId
+     * @param PostComment $postComment
      * 
      * @return void
      */
-    public function create(int $postCommentId): void;
+    public function create(PostComment $postComment): void;
 
     /**
-     * @param int $postCommentId
+     * @param PostComment $postComment
      * 
      * @return void
      */
-    public function delete(int $postCommentId): void;
+    public function delete(PostComment $postComment): void;
 }

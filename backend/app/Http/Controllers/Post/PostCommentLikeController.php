@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Post;
 
-use App\Http\Controllers\Controller;
-use App\Models\PostComment;
-use App\Services\Post\Interfaces\PostCommentLikeServiceInterface;
 use Illuminate\Http\Request;
+use App\Services\Post\Interfaces\PostCommentLikeServiceInterface;
+use App\Models\PostComment;
+use App\Http\Controllers\Controller;
 
 class PostCommentLikeController extends Controller
 {
@@ -19,14 +19,14 @@ class PostCommentLikeController extends Controller
     public function create(PostComment $postComment)
     {
         return $this->handleServiceCall(function () use ($postComment) {
-            return $this->postCommentLikeService->create($postComment->id);
+            return $this->postCommentLikeService->create($postComment);
         });
     }
 
     public function delete(PostComment $postComment)
     {
         return $this->handleServiceCall(function () use ($postComment) {
-            return $this->postCommentLikeService->delete($postComment->id);
+            return $this->postCommentLikeService->delete($postComment);
         });
     }
 }

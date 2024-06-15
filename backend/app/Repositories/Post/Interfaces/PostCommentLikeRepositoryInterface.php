@@ -4,6 +4,7 @@ namespace App\Repositories\Post\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\PostCommentLike;
+use App\Models\PostComment;
 
 interface PostCommentLikeRepositoryInterface
 {
@@ -32,18 +33,18 @@ interface PostCommentLikeRepositoryInterface
     public function userLikedComment(int $userId, int $postCommentId): bool;
 
     /**
-     * @param int $postCommentId
+     * @param PostComment $postComment
      * @param int $userId
      * 
      * @return bool
      */
-    public function create(int $postCommentId, int $userId): bool;
+    public function create(PostComment $postComment, int $userId): bool;
 
     /**
-     * @param int $postCommentId
+     * @param PostComment $postComment
      * @param int $userId
      * 
      * @return bool
      */
-    public function delete(int $postCommentId, int $userId): bool;
+    public function delete(PostComment $postComment, int $userId): bool;
 }

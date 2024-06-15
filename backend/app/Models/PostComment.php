@@ -16,8 +16,36 @@ class PostComment extends Model
         'post_id',
         'text',
         'media_url',
+        'likes_count',
     ];
 
+    /**
+     * @return int
+     */
+    public function likesCount(): int
+    {
+        return $this->likes_count;
+    }
+
+    /**
+     * @return void
+     */
+    public function incrementLikesCount(): void
+    {
+        $this->timestamps = false; // To prevent updated_at change
+        $this->increment('likes_count');
+        $this->timestamps = true;
+    }
+
+    /**
+     * @return void
+     */
+    public function decrementLikesCount(): void
+    {
+        $this->timestamps = false; // To prevent updated_at change
+        $this->decrement('likes_count');
+        $this->timestamps = true;
+    }
 
     /**
      * @return BelongsTo
