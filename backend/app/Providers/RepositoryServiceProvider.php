@@ -19,13 +19,9 @@ use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use App\Repositories\TagRepository;
 use App\Repositories\SubscriptionRepository;
 use App\Repositories\Post\PostRepository;
-use App\Repositories\Post\PostLikeRepository;
 use App\Repositories\Post\PostCommentRepository;
-use App\Repositories\Post\PostCommentLikeRepository;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
-use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
-use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
 use App\Repositories\NotificationRepository;
 use App\Repositories\Message\MessageRepository;
 use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
@@ -33,9 +29,11 @@ use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
 use App\Repositories\Message\Interfaces\ChatMemberRepositoryInterface;
 use App\Repositories\Message\ChatRepository;
 use App\Repositories\Message\ChatMemberRepository;
+use App\Repositories\LikeRepository;
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Repositories\Interfaces\NotificationRepositoryInterface;
+use App\Repositories\Interfaces\LikeRepositoryInterface;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
@@ -55,9 +53,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TeamVacancyRepositoryInterface::class, TeamVacancyRepository::class);
 
         // Post
-        $this->app->bind(PostCommentLikeRepositoryInterface::class, PostCommentLikeRepository::class);
         $this->app->bind(PostCommentRepositoryInterface::class, PostCommentRepository::class);
-        $this->app->bind(PostLikeRepositoryInterface::class, PostLikeRepository::class);
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
 
         // Message
@@ -70,6 +66,9 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Subscription
         $this->app->bind(SubscriptionRepositoryInterface::class, SubscriptionRepository::class);
+
+        // Like
+        $this->app->bind(LikeRepositoryInterface::class, LikeRepository::class);
 
         // Notification
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);

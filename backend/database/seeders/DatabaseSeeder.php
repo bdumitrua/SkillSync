@@ -19,9 +19,7 @@ class DatabaseSeeder extends Seeder
             TeamApplicationSeeder::class,
             SubscriptionSeeder::class,
             PostSeeder::class,
-            PostLikeSeeder::class,
             PostCommentSeeder::class,
-            PostCommentLikeSeeder::class,
             TagSeeder::class,
         ]);
     }

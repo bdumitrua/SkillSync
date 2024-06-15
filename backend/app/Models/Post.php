@@ -11,8 +11,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Collection;
 use App\Traits\Elasticsearchable;
+use App\Models\Interfaces\Likeable;
 
-class Post extends Model
+class Post extends Model implements Likeable
 {
     use HasFactory, Searchable, Elasticsearchable {
         Elasticsearchable::search insteadof Searchable;
@@ -25,6 +26,16 @@ class Post extends Model
         'entity_id',
         'likes_count'
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($post) {
+            $post->likes()->delete();
+        });
+    }
+
 
     protected static function getESIndex(): string
     {
@@ -100,31 +111,19 @@ class Post extends Model
     }
 
     /**
-     * @return MorphTo
+     * @return bool
      */
-    public function entity(): MorphTo
+    public function createdByUser(): bool
     {
-        return $this->morphTo();
+        return $this->entity_type === config('entities.user');
     }
 
     /**
-     * @return HasMany
+     * @return bool
      */
-    public function likes(): HasMany
+    public function createdByTeam(): bool
     {
-        Log::debug('Getting post likes', [
-            'postId' => $this->id
-        ]);
-
-        return $this->hasMany(PostLike::class);
-    }
-
-    /**
-     * @return int
-     */
-    public function likesCount(): int
-    {
-        return $this->likes_count;
+        return $this->entity_type === config('entities.team');
     }
 
     /**
@@ -148,6 +147,14 @@ class Post extends Model
     }
 
     /**
+     * @return MorphMany
+     */
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeable');
+    }
+
+    /**
      * @return HasMany
      */
     public function comments(): HasMany
@@ -156,26 +163,18 @@ class Post extends Model
     }
 
     /**
+     * @return MorphTo
+     */
+    public function entity(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    /**
      * @return MorphMany
      */
     public function tags(): MorphMany
     {
         return $this->morphMany(Tag::class, 'entity');
-    }
-
-    /**
-     * @return bool
-     */
-    public function createdByUser(): bool
-    {
-        return $this->entity_type === User::class;
-    }
-
-    /**
-     * @return bool
-     */
-    public function createdByTeam(): bool
-    {
-        return $this->entity_type === Team::class;
     }
 }

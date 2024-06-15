@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use App\Traits\Elasticsearchable;
 use App\Prometheus\PrometheusServiceProxy;
 
@@ -200,5 +201,27 @@ class User extends Authenticatable implements JWTSubject
     public function tags(): MorphMany
     {
         return $this->morphMany(Tag::class, 'entity');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class);
+    }
+
+    /**
+     * @param string $likeableType
+     * @param int $likeableId
+     * 
+     * @return Builder
+     */
+    public function likeable(string $likeableType, int $likeableId): Builder
+    {
+        return $this->likes()
+            ->getQuery()
+            ->where('likeable_type', '=', $likeableType)
+            ->where('likeable_id', '=', $likeableId);
     }
 }

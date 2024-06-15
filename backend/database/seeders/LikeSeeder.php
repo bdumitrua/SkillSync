@@ -2,17 +2,17 @@
 
 namespace Database\Seeders;
 
-use App\Models\PostLike;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Like;
 
-class PostLikeSeeder extends Seeder
+class LikeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        PostLike::factory(250)->create();
+        // 
     }
 }

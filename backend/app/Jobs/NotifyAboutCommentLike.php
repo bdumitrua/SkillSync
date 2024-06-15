@@ -9,8 +9,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Bus\Queueable;
 use App\Repositories\NotificationRepository;
-use App\Models\PostCommentLike;
 use App\Models\PostComment;
+use App\Models\Like;
 use App\Enums\NotificationType;
 use App\DTO\CreateNotificationDTO;
 
@@ -19,15 +19,15 @@ class NotifyAboutCommentLike implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public PostComment $postComment;
-    public PostCommentLike $postCommentLike;
+    public Like $like;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(PostComment $postComment, PostCommentLike $postCommentLike)
+    public function __construct(PostComment $postComment, Like $like)
     {
         $this->postComment = $postComment;
-        $this->postCommentLike = $postCommentLike;
+        $this->like = $like;
         $this->queue = 'notifications';
     }
 
@@ -38,13 +38,13 @@ class NotifyAboutCommentLike implements ShouldQueue
     {
         Log::debug('Starting NotifyAboutCommentLike job', [
             'postCommentId' => $this->postComment->id,
-            'postCommentLikeId' => $this->postCommentLike->id
+            'likeId' => $this->like->id
         ]);
 
         $newNotificationDto = CreateNotificationDTO::create()
             ->setReceiverId($this->postComment->user_id)
             ->setType(NotificationType::CommentLike)
-            ->setFromWho($this->postCommentLike->user_id, config('entities.user'))
+            ->setFromWho($this->like->user_id, config('entities.user'))
             ->setToWhat($this->postComment->id, config('entities.postComment'));
 
         $notificationRepository->create($newNotificationDto);

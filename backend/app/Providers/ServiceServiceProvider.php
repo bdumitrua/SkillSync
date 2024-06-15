@@ -18,21 +18,19 @@ use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
 use App\Services\TagService;
 use App\Services\SubscriptionService;
 use App\Services\Post\PostService;
-use App\Services\Post\PostLikeService;
 use App\Services\Post\PostCommentService;
-use App\Services\Post\PostCommentLikeService;
 use App\Services\Post\Interfaces\PostServiceInterface;
-use App\Services\Post\Interfaces\PostLikeServiceInterface;
 use App\Services\Post\Interfaces\PostCommentServiceInterface;
-use App\Services\Post\Interfaces\PostCommentLikeServiceInterface;
 use App\Services\Message\MessageService;
 use App\Services\Message\Interfaces\MessageServiceInterface;
 use App\Services\Message\Interfaces\ChatServiceInterface;
 use App\Services\Message\Interfaces\ChatMemberServiceInterface;
 use App\Services\Message\ChatService;
 use App\Services\Message\ChatMemberService;
+use App\Services\LikeService;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Interfaces\SubscriptionServiceInterface;
+use App\Services\Interfaces\LikeServiceInterface;
 
 class ServiceServiceProvider extends ServiceProvider
 {
@@ -52,9 +50,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(TeamVacancyServiceInterface::class, TeamVacancyService::class);
 
         // Post
-        $this->app->bind(PostCommentLikeServiceInterface::class, PostCommentLikeService::class);
         $this->app->bind(PostCommentServiceInterface::class, PostCommentService::class);
-        $this->app->bind(PostLikeServiceInterface::class, PostLikeService::class);
         $this->app->bind(PostServiceInterface::class, PostService::class);
 
         // Message
@@ -67,6 +63,9 @@ class ServiceServiceProvider extends ServiceProvider
 
         // Subscription
         $this->app->bind(SubscriptionServiceInterface::class, SubscriptionService::class);
+
+        // Like
+        $this->app->bind(LikeServiceInterface::class, LikeService::class);
     }
 
     /**

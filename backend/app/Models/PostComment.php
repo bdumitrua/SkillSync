@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Interfaces\Likeable;
 
-class PostComment extends Model
+class PostComment extends Model implements Likeable
 {
     use HasFactory;
 
@@ -19,12 +21,13 @@ class PostComment extends Model
         'likes_count',
     ];
 
-    /**
-     * @return int
-     */
-    public function likesCount(): int
+    protected static function boot()
     {
-        return $this->likes_count;
+        parent::boot();
+
+        static::deleting(function ($comment) {
+            $comment->likes()->delete();
+        });
     }
 
     /**
@@ -48,6 +51,14 @@ class PostComment extends Model
     }
 
     /**
+     * @return MorphMany
+     */
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeable');
+    }
+
+    /**
      * @return BelongsTo
      */
     public function user(): BelongsTo
@@ -61,13 +72,5 @@ class PostComment extends Model
     public function post(): BelongsTo
     {
         return $this->BelongsTo(Post::class);
-    }
-
-    /**
-     * @return HasMany
-     */
-    public function likes(): HasMany
-    {
-        return $this->hasMany(PostCommentLike::class);
     }
 }

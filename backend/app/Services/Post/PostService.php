@@ -12,9 +12,9 @@ use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
-use App\Repositories\Post\Interfaces\PostLikeRepositoryInterface;
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
+use App\Repositories\Interfaces\LikeRepositoryInterface;
 use App\Models\Post;
 use App\Http\Resources\Post\PostResource;
 use App\DTO\Post\UpdatePostDTO;
@@ -26,7 +26,7 @@ class PostService implements PostServiceInterface
     protected $postRepository;
     protected $userRepository;
     protected $teamRepository;
-    protected $postLikeRepository;
+    protected $likeRepository;
     protected $subscriptionRepository;
     protected ?int $authorizedUserId;
 
@@ -35,7 +35,7 @@ class PostService implements PostServiceInterface
         PostRepositoryInterface $postRepository,
         UserRepositoryInterface $userRepository,
         TeamRepositoryInterface $teamRepository,
-        PostLikeRepositoryInterface $postLikeRepository,
+        LikeRepositoryInterface $likeRepository,
         SubscriptionRepositoryInterface $subscriptionRepository,
 
     ) {
@@ -43,7 +43,7 @@ class PostService implements PostServiceInterface
         $this->postRepository = $postRepository;
         $this->userRepository = $userRepository;
         $this->teamRepository = $teamRepository;
-        $this->postLikeRepository = $postLikeRepository;
+        $this->likeRepository = $likeRepository;
         $this->subscriptionRepository = $subscriptionRepository;
         $this->authorizedUserId = Auth::id();
     }
@@ -202,7 +202,7 @@ class PostService implements PostServiceInterface
     protected function setLikeAbility(Collection &$posts): void
     {
         $postsIds = $posts->pluck('id')->toArray();
-        $postsLikes = $this->postLikeRepository->getByUserAndPostsIds($this->authorizedUserId, $postsIds);
+        $postsLikes = $this->likeRepository->getByUserAndPostsIds($this->authorizedUserId, $postsIds);
 
         $postsLikesKeyedByPostId = $postsLikes->keyBy('post_id');
 

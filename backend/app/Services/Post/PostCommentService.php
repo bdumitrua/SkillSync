@@ -10,7 +10,7 @@ use App\Traits\SetAdditionalData;
 use App\Services\Post\Interfaces\PostCommentServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
-use App\Repositories\Post\Interfaces\PostCommentLikeRepositoryInterface;
+use App\Repositories\Interfaces\LikeRepositoryInterface;
 use App\Models\PostComment;
 use App\Http\Resources\Post\PostCommentResource;
 use App\DTO\Post\CreatePostCommentDTO;
@@ -21,17 +21,17 @@ class PostCommentService implements PostCommentServiceInterface
 
     protected $userRepository;
     protected $postCommentRepository;
-    protected $postCommentLikeRepository;
+    protected $likeRepository;
     protected ?int $authorizedUserId;
 
     public function __construct(
         UserRepositoryInterface $userRepository,
+        LikeRepositoryInterface $likeRepository,
         PostCommentRepositoryInterface $postCommentRepository,
-        PostCommentLikeRepositoryInterface $postCommentLikeRepository,
     ) {
         $this->userRepository = $userRepository;
+        $this->likeRepository = $likeRepository;
         $this->postCommentRepository = $postCommentRepository;
-        $this->postCommentLikeRepository = $postCommentLikeRepository;
         $this->authorizedUserId = Auth::id();
     }
 
@@ -74,7 +74,7 @@ class PostCommentService implements PostCommentServiceInterface
     protected function setLikeAbility(Collection &$postComments): void
     {
         $postCommentsIds = $postComments->pluck('id')->toArray();
-        $postCommentsLikes = $this->postCommentLikeRepository->getByUserAndCommentsIds($this->authorizedUserId, $postCommentsIds);
+        $postCommentsLikes = $this->likeRepository->getByUserAndCommentsIds($this->authorizedUserId, $postCommentsIds);
 
         $likesKeyedByPostCommentId = $postCommentsLikes->keyBy('post_comment_id');
 

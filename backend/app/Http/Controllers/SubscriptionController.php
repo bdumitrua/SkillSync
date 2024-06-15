@@ -37,8 +37,8 @@ class SubscriptionController extends Controller
     {
         $this->patchRequestEntityType($request);
 
-        $createSubscriptionDTO = new CreateSubscriptionDTO();
-        $createSubscriptionDTO->setSubscriberId(Auth::id())
+        $createSubscriptionDTO = (new CreateSubscriptionDTO())
+            ->setSubscriberId(Auth::id())
             ->setEntityType($request->entityType)
             ->setEntityId($request->entityId);
 
