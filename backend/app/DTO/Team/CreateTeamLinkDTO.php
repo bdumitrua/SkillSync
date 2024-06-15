@@ -4,13 +4,13 @@ namespace App\DTO\Team;
 
 class CreateTeamLinkDTO
 {
+    public int $teamId = 0;
     public string $name;
-    public int $teamId;
     public bool $isPrivate;
     public string $url;
 
-    public ?string $text;
-    public ?string $iconType;
+    public ?string $text = null;
+    public ?string $iconType = null;
 
     public function toArray(): array
     {

@@ -4,7 +4,7 @@ namespace App\DTO\Team;
 
 class CreateTeamVacancyDTO
 {
-    public int $teamId;
+    public int $teamId = 0;
     public string $title;
     public string $description;
 

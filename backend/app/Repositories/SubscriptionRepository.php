@@ -20,17 +20,6 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
             ->first();
     }
 
-    public function getUserSubscriptions(int $userId): Collection
-    {
-        Log::debug('Getting user subscriptions', [
-            'userId' => $userId
-        ]);
-
-        return Subscription::where('subscriber_id', '=', $userId)
-            ->groupBy('entity_type')
-            ->get();
-    }
-
     public function getUserSubscribers(int $userId): Collection
     {
         Log::debug('Getting user subscribers', [
@@ -51,6 +40,15 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
         return Subscription::where('entity_type', '=', config('entities.team'))
             ->where('entity_id', '=', $teamId)
             ->get();
+    }
+
+    public function getUserSubscriptions(int $userId): Collection
+    {
+        Log::debug('Getting user subscriptions', [
+            'userId' => $userId
+        ]);
+
+        return Subscription::where('subscriber_id', '=', $userId)->get();
     }
 
     public function getUsersByUserId(int $userId): Collection

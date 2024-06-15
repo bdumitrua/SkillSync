@@ -67,9 +67,13 @@ class TeamApplicationPolicy
      * 
      * @see UPDATE_TEAM_APPLICATION_GATE
      */
-    public function updateTeamApplication(User $user, TeamApplication $teamApplication): Response
+    public function updateTeamApplication(User $user, ?int $teamId): Response
     {
-        return $this->teamMemberRepository->userIsModerator($teamApplication->team_id, $user->id)
+        if (empty($teamId)) {
+            return Response::deny("You have insufficient rigths.");
+        }
+
+        return $this->teamMemberRepository->userIsModerator($teamId, $user->id)
             ? Response::allow()
             : Response::deny("You have insufficient rigths.");
     }

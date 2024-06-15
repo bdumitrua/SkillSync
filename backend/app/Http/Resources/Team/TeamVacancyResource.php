@@ -22,6 +22,7 @@ class TeamVacancyResource extends JsonResource
         $actions = $this->prepareActions();
 
         return [
+            'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
             'teamId' => $this->team_id,

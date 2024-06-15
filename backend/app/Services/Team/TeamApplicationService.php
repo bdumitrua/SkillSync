@@ -2,23 +2,22 @@
 
 namespace App\Services\Team;
 
-use App\DTO\Team\CreateTeamApplicationDTO;
-use App\Enums\TeamApplicationStatus;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Database\Eloquent\Collection;
+use App\Traits\SetAdditionalData;
 use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use App\Models\TeamVacancy;
 use App\Models\TeamApplication;
-use App\Http\Resources\Team\TeamApplicationResource;
 use App\Models\Team;
-use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
-use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
-use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Traits\SetAdditionalData;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
+use App\Http\Resources\Team\TeamApplicationResource;
+use App\DTO\Team\CreateTeamApplicationDTO;
 
 class TeamApplicationService implements TeamApplicationServiceInterface
 {
@@ -52,8 +51,8 @@ class TeamApplicationService implements TeamApplicationServiceInterface
         }
 
         $teamApplication = $this->assembleApplicationsData(new Collection([$teamApplication]))->first();
-        $teamApplication->canUpdate = Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication->team_id]);
-        $teamApplication->canDelete = Gate::authorize(DELETE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication]);
+        $teamApplication->canUpdate = Gate::allows(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication->team_id]);
+        $teamApplication->canDelete = Gate::allows(DELETE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplication]);
 
         return new TeamApplicationResource($teamApplication);
     }
@@ -119,6 +118,10 @@ class TeamApplicationService implements TeamApplicationServiceInterface
 
     protected function setApplicationsRights(Collection $teamApplications): Collection
     {
+        if (empty($teamApplications->toArray())) {
+            return $teamApplications;
+        }
+
         $canUpdate = Gate::authorize(UPDATE_TEAM_APPLICATION_GATE, [TeamApplication::class, $teamApplications->first()?->team_id]);
         $canDelete = false; // If you're watching a list of applications - you're a member = you can't apply = you can't delete
 

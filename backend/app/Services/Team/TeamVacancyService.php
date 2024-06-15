@@ -2,22 +2,19 @@
 
 namespace App\Services\Team;
 
-use App\DTO\Team\CreateTeamVacancyDTO;
-use App\DTO\Team\UpdateTeamVacancyDTO;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Database\Eloquent\Collection;
+use App\Traits\SetAdditionalData;
 use App\Services\Team\Interfaces\TeamVacancyServiceInterface;
 use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
-use App\Models\TeamVacancy;
-use App\Http\Requests\Team\UpdateTeamVacancyRequest;
-use App\Http\Requests\Team\CreateTeamVacancyRequest;
-use App\Http\Resources\Team\TeamVacancyResource;
-use App\Models\Team;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
-use App\Traits\Dtoable;
-use App\Traits\SetAdditionalData;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
+use App\Models\TeamVacancy;
+use App\Models\Team;
+use App\Http\Resources\Team\TeamVacancyResource;
+use App\DTO\Team\UpdateTeamVacancyDTO;
+use App\DTO\Team\CreateTeamVacancyDTO;
 
 class TeamVacancyService implements TeamVacancyServiceInterface
 {
@@ -81,6 +78,10 @@ class TeamVacancyService implements TeamVacancyServiceInterface
 
     protected function assembleVacanciesRights(Collection &$teamVacancies): void
     {
+        if (empty($teamVacancies->toArray())) {
+            return;
+        }
+
         // All vacancies should be from one team
         $canTouchTeamVacancies = Gate::allows(TOUCH_TEAM_VACANCIES_GATE, [Team::class, $teamVacancies->first()?->team_id]);
 

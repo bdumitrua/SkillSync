@@ -2,11 +2,11 @@
 
 namespace Database\Factories;
 
-use App\Enums\TeamApplicationStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
 use App\Models\TeamVacancy;
 use App\Models\Team;
+use App\Enums\TeamApplicationStatus;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TeamApplication>
@@ -29,7 +29,7 @@ class TeamApplicationFactory extends Factory
             'vacancy_id' => $teamVacancy->id,
             'team_id' => $team->id,
             'text' => $this->faker->words(30, true),
-            'status' => TeamApplicationStatus::Sended,
+            'status' => TeamApplicationStatus::Sended->value,
         ];
     }
 }

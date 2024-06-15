@@ -4,7 +4,7 @@ namespace App\DTO\Team;
 
 class UpdateTeamMemberDTO
 {
-    public bool $isModerator;
+    public bool $isModerator = false;
 
     public ?string $about = null;
 

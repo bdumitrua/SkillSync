@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Team;
 
-use App\DTO\Team\UpdateTeamLinkDTO;
-use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\Dtoable;
+use App\DTO\Team\UpdateTeamLinkDTO;
 
 class UpdateTeamLinkRequest extends FormRequest
 {
@@ -29,7 +29,7 @@ class UpdateTeamLinkRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:30',
-            'url' => 'required|url',
+            'url' => 'required',
             'isPrivate' => 'required|boolean',
             'text' => 'nullable|string|max:30',
             'iconType' => 'nullable|string|max:30',
@@ -42,7 +42,6 @@ class UpdateTeamLinkRequest extends FormRequest
             'name.required' => 'Name is required.',
             'name.max' => 'Name cannot exceed 30 characters.',
             'url.required' => 'URL is required.',
-            'url.url' => 'Invalid URL format.',
             'isPrivate.required' => 'IsPrivate is required.',
             'text.max' => 'Text cannot exceed 30 characters.',
             'iconType.max' => 'IconType cannot exceed 30 characters.',

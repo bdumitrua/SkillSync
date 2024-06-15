@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Team;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\EnumValue;
+use App\Enums\TeamApplicationStatus;
 
 class UpdateTeamApplicationRequest extends FormRequest
 {
@@ -22,14 +24,15 @@ class UpdateTeamApplicationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|string|max:20',
+            'status' => ['required', 'string', new EnumValue(TeamApplicationStatus::class)],
         ];
     }
 
     public function messages()
     {
         return [
-            'status.max' => 'Status must be 20 characters or fewer.',
+            'status.required' => 'Status is required.',
+            'status.string' => 'Status must be string.',
         ];
     }
 }

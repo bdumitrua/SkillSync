@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests\Team;
 
-use App\DTO\Team\CreateTeamApplicationDTO;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\EntityIdRule;
 use App\Traits\Dtoable;
+use App\Rules\EntityIdRule;
+use App\DTO\Team\CreateTeamApplicationDTO;
 
 class CreateTeamApplicationRequest extends FormRequest
 {
@@ -31,8 +31,6 @@ class CreateTeamApplicationRequest extends FormRequest
     {
         return [
             'text' => 'nullable|string|max:200',
-            'teamId' => [new EntityIdRule(), Rule::exists('teams', 'id')],
-            'vacancyId' => [new EntityIdRule(), Rule::exists('team_vacancies', 'id')],
         ];
     }
 
@@ -41,9 +39,6 @@ class CreateTeamApplicationRequest extends FormRequest
         return [
             'text.string' => 'The text should be string.',
             'text.max' => 'The text cannot be longer than 200 characters.',
-
-            'teamId.exists' => 'The selected team does not exist.',
-            'vacancyId.exists' => 'The selected vacancy does not exist.',
         ];
     }
 }

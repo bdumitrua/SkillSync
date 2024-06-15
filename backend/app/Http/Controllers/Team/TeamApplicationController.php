@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Team;
 
-use App\DTO\Team\CreateTeamApplicationDTO;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Team\CreateTeamApplicationRequest;
-use App\Http\Requests\Team\UpdateTeamApplicationRequest;
-use App\Models\Team;
-use App\Models\TeamApplication;
-use App\Models\TeamVacancy;
-use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
+use App\Models\TeamVacancy;
+use App\Models\TeamApplication;
+use App\Models\Team;
+use App\Http\Requests\Team\UpdateTeamApplicationRequest;
+use App\Http\Requests\Team\CreateTeamApplicationRequest;
+use App\Http\Controllers\Controller;
+use App\DTO\Team\CreateTeamApplicationDTO;
 
 class TeamApplicationController extends Controller
 {
@@ -43,11 +43,13 @@ class TeamApplicationController extends Controller
         });
     }
 
-    public function create(CreateTeamApplicationRequest $request)
+    public function create(TeamVacancy $teamVacancy, CreateTeamApplicationRequest $request)
     {
         /** @var CreateTeamApplicationDTO */
-        $createTeamApplicationDTO = $request->createDTO();
-        $createTeamApplicationDTO->setUserId(Auth::id());
+        $createTeamApplicationDTO = ($request->createDTO())
+            ->setUserId(Auth::id())
+            ->setVacancyId($teamVacancy->id)
+            ->setTeamId($teamVacancy->team_id);
 
         return $this->handleServiceCall(function () use ($createTeamApplicationDTO) {
             return $this->teamApplicationService->create($createTeamApplicationDTO);

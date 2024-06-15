@@ -8,7 +8,7 @@ class CreateTeamMemberDTO
     public int $teamId;
     public bool $isModerator;
 
-    public function __construct(int $userId, int $teamId, bool $isModerator)
+    public function __construct(int $userId = 0, int $teamId = 0, bool $isModerator = false)
     {
         $this->userId = $userId;
         $this->teamId = $teamId;
