@@ -3,12 +3,12 @@
 namespace App\Http\Requests\Team;
 
 use App\DTO\Team\UpdateTeamLinkDTO;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateTeamLinkRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = UpdateTeamLinkDTO::class;
 

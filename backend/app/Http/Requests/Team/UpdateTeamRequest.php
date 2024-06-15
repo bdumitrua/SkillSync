@@ -4,11 +4,11 @@ namespace App\Http\Requests\Team;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\DTO\Team\UpdateTeamDTO;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 
 class UpdateTeamRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = UpdateTeamDTO::class;
 

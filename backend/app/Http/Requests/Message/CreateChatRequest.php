@@ -4,12 +4,12 @@ namespace App\Http\Requests\Message;
 
 use App\DTO\Message\CreateChatDTO;
 use App\Rules\EntityIdRule;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateChatRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = CreateChatDTO::class;
 

@@ -21,7 +21,7 @@ use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Team\Interfaces\TeamLinkServiceInterface;
 use App\Services\Team\Interfaces\TeamMemberServiceInterface;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;

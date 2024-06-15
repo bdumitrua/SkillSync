@@ -3,13 +3,13 @@
 namespace App\Http\Requests\Team;
 
 use App\DTO\Team\CreateTeamVacancyDTO;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class CreateTeamVacancyRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = CreateTeamVacancyDTO::class;
 

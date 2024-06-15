@@ -6,11 +6,11 @@ use App\DTO\Team\CreateTeamMemberDTO;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\EntityIdRule;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 
 class CreateTeamMemberRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = CreateTeamMemberDTO::class;
 

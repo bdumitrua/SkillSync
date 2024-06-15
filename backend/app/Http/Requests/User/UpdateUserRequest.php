@@ -5,11 +5,11 @@ namespace App\Http\Requests\User;
 use App\DTO\User\UpdateUserDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\EmailRule;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 
 class UpdateUserRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = UpdateUserDTO::class;
 

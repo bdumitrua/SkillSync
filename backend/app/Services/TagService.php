@@ -9,7 +9,7 @@ use App\Models\Tag;
 use App\Http\Requests\CreateTagRequest;
 use App\Http\Resources\TagResource;
 use App\Repositories\Interfaces\TagRepositoryInterface;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;

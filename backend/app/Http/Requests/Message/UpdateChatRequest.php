@@ -3,12 +3,12 @@
 namespace App\Http\Requests\Message;
 
 use App\DTO\Message\UpdateChatDTO;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateChatRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = UpdateChatDTO::class;
 

@@ -3,12 +3,12 @@
 namespace App\Http\Requests\Post;
 
 use App\DTO\Post\UpdatePostDTO;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdatePostRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = UpdatePostDTO::class;
 

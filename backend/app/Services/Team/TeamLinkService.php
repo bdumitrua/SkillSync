@@ -14,7 +14,7 @@ use App\Http\Resources\Team\TeamLinkResource;
 use App\Http\Requests\Team\UpdateTeamLinkRequest;
 use App\Http\Requests\Team\CreateTeamLinkRequest;
 use App\Models\Team;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Support\Facades\Gate;
 
 class TeamLinkService implements TeamLinkServiceInterface

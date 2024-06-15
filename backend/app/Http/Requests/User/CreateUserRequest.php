@@ -2,16 +2,16 @@
 
 namespace App\Http\Requests\User;
 
-use App\DTO\User\CreateUserDTO;
 use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\Dtoable;
 use App\Rules\PasswordRule;
 use App\Rules\EmailRule;
-use App\Traits\CreateDTO;
+use App\DTO\User\CreateUserDTO;
 
 class CreateUserRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = CreateUserDTO::class;
 

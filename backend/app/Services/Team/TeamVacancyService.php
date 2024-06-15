@@ -12,7 +12,7 @@ use App\Http\Requests\Team\CreateTeamVacancyRequest;
 use App\Http\Resources\Team\TeamVacancyResource;
 use App\Models\Team;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use App\Traits\SetAdditionalData;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;

@@ -3,12 +3,12 @@
 namespace App\Http\Requests\Message;
 
 use App\DTO\Message\CreateMesssageDTO;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateMesssageRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = CreateMesssageDTO::class;
 

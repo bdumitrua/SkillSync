@@ -3,12 +3,12 @@
 namespace App\Http\Requests\Post;
 
 use App\DTO\Post\CreatePostCommentDTO;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreatePostCommentRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = CreatePostCommentDTO::class;
 

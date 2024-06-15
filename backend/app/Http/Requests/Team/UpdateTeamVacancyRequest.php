@@ -3,12 +3,12 @@
 namespace App\Http\Requests\Team;
 
 use App\DTO\Team\UpdateTeamVacancyDTO;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateTeamVacancyRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = UpdateTeamVacancyDTO::class;
 

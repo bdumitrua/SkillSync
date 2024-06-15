@@ -4,12 +4,12 @@ namespace App\Http\Requests;
 
 use App\DTO\CreateSubscriptionDTO;
 use App\Rules\EntityIdRule;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateSubscriptionRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = CreateSubscriptionDTO::class;
 

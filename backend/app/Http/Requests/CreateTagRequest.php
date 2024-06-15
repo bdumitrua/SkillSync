@@ -5,11 +5,11 @@ namespace App\Http\Requests;
 use App\DTO\User\CreateTagDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\EntityIdRule;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 
 class CreateTagRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = CreateTagDTO::class;
 

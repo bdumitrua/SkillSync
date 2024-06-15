@@ -15,7 +15,7 @@ use App\Http\Resources\Team\TeamMemberResource;
 use App\Http\Requests\Team\CreateTeamMemberRequest;
 use App\Http\Requests\Team\UpdateTeamMemberRequest;
 use App\Models\Team;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use App\Traits\SetAdditionalData;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;

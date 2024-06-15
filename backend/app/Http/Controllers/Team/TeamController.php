@@ -9,7 +9,7 @@ use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Models\Team;
 use App\Models\User;
 use App\Services\Team\Interfaces\TeamServiceInterface;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

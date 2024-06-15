@@ -5,7 +5,7 @@ namespace App\Traits;
 use Illuminate\Support\Facades\Log;
 use App\Exceptions\UnprocessableContentException;
 
-trait CreateDTO
+trait Dtoable
 {
     public function createDTO()
     {

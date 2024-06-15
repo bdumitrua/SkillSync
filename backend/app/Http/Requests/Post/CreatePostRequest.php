@@ -6,11 +6,11 @@ use App\DTO\Post\CreatePostDTO;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Rules\ValidatePostEntityType;
 use App\Rules\EntityIdRule;
-use App\Traits\CreateDTO;
+use App\Traits\Dtoable;
 
 class CreatePostRequest extends FormRequest
 {
-    use CreateDTO;
+    use Dtoable;
 
     protected string $dtoClass = CreatePostDTO::class;
 
