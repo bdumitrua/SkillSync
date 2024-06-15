@@ -28,31 +28,16 @@ class LikeRepository implements LikeRepositoryInterface
         $this->postCommentRepository = $postCommentRepository;
     }
 
-    /**
-     * @param User $user
-     * 
-     * @return Collection
-     */
     public function getByUser(User $user): Collection
     {
         return $user->likes()->get();
     }
 
-    /**
-     * @param Post $post
-     * 
-     * @return Collection
-     */
     public function getByPost(Post $post): Collection
     {
         return $post->likes()->get();
     }
 
-    /**
-     * @param LikeDTO $likeDTO
-     * 
-     * @return Like|null
-     */
     public function getByDTO(LikeDTO $likeDTO): ?Like
     {
         return Like::where('user_id', '=', $likeDTO->userId)
@@ -90,7 +75,6 @@ class LikeRepository implements LikeRepositoryInterface
             ->whereIn('likeable_id', $postsIds)
             ->get();
     }
-
 
     /**
      * @param int $userId

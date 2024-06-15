@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\Team\TeamApplicationController;
-use App\Http\Controllers\Team\TeamController;
-use App\Http\Controllers\Team\TeamLinkController;
-use App\Http\Controllers\Team\TeamMemberController;
-use App\Http\Controllers\Team\TeamVacancyController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Team\TeamVacancyController;
+use App\Http\Controllers\Team\TeamMemberController;
+use App\Http\Controllers\Team\TeamLinkController;
+use App\Http\Controllers\Team\TeamController;
+use App\Http\Controllers\Team\TeamApplicationController;
 
 Route::prefix('teams')->name('teams.')->group(function () {
     /*
@@ -17,7 +17,6 @@ Route::prefix('teams')->name('teams.')->group(function () {
         Route::get('show/{team}', 'show')->name('show');
         Route::get('search', 'search')->name('search');
         Route::get('user/{user}', 'user')->name('user');
-        Route::get('subscribers/{team}', 'subscribers')->name('subscribers');
 
         Route::post('/', 'create')->name('create');
         Route::put('{team}', 'update')->name('update');

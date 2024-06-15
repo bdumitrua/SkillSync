@@ -2,12 +2,20 @@
 
 namespace App\Repositories\Interfaces;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Subscription;
-use App\DTO\CreateSubscriptionDTO;
+use App\DTO\SubscriptionDTO;
 
 interface SubscriptionRepositoryInterface
 {
+    /**
+     * @param SubscriptionDTO $subscriptionDTO
+     * 
+     * @return Subscription|null
+     */
+    public function getByDTO(SubscriptionDTO $subscriptionDTO): ?Subscription;
+
     /**
      * @param int $userId
      * 
@@ -60,11 +68,11 @@ interface SubscriptionRepositoryInterface
     public function isSubscribedToTeam(int $userId, int $teamId): bool;
 
     /**
-     * @param CreateSubscriptionDTO $dto
+     * @param SubscriptionDTO $dto
      * 
-     * @return bool
+     * @return void
      */
-    public function create(CreateSubscriptionDTO $dto): bool;
+    public function create(SubscriptionDTO $dto): void;
 
     /**
      * @param Subscription $subscription

@@ -6,9 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Services\Interfaces\SubscriptionServiceInterface;
 use App\Models\User;
+use App\Models\Team;
 use App\Models\Subscription;
-use App\Http\Requests\CreateSubscriptionRequest;
-use App\DTO\CreateSubscriptionDTO;
+use App\Http\Requests\SubscriptionRequest;
+use App\DTO\SubscriptionDTO;
 
 class SubscriptionController extends Controller
 {
@@ -33,24 +34,45 @@ class SubscriptionController extends Controller
         });
     }
 
-    public function create(CreateSubscriptionRequest $request)
+    public function user(User $user)
     {
-        $this->patchRequestEntityType($request);
-
-        $createSubscriptionDTO = (new CreateSubscriptionDTO())
-            ->setSubscriberId(Auth::id())
-            ->setEntityType($request->entityType)
-            ->setEntityId($request->entityId);
-
-        return $this->handleServiceCall(function () use ($createSubscriptionDTO) {
-            return $this->subscriptionService->create($createSubscriptionDTO);
+        return $this->handleServiceCall(function () use ($user) {
+            return $this->subscriptionService->user($user);
         });
     }
 
-    public function delete(Subscription $subscription)
+    public function team(Team $team)
     {
-        return $this->handleServiceCall(function () use ($subscription) {
-            return $this->subscriptionService->delete($subscription);
+        return $this->handleServiceCall(function () use ($team) {
+            return $this->subscriptionService->team($team);
         });
+    }
+
+    public function create(SubscriptionRequest $request)
+    {
+        $this->patchRequestEntityType($request);
+        $SubscriptionDTO = $this->createSubscriptionDTO($request);
+
+        return $this->handleServiceCall(function () use ($SubscriptionDTO) {
+            return $this->subscriptionService->create($SubscriptionDTO);
+        });
+    }
+
+    public function delete(SubscriptionRequest $request)
+    {
+        $this->patchRequestEntityType($request);
+        $subscriptionDTO = $this->createSubscriptionDTO($request);
+
+        return $this->handleServiceCall(function () use ($subscriptionDTO) {
+            return $this->subscriptionService->delete($subscriptionDTO);
+        });
+    }
+
+    protected function createSubscriptionDTO(SubscriptionRequest $request): SubscriptionDTO
+    {
+        return (new SubscriptionDTO())
+            ->setSubscriberId(Auth::id())
+            ->setEntityType($request->entityType)
+            ->setEntityId($request->entityId);
     }
 }

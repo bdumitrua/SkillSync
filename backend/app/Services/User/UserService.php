@@ -84,15 +84,6 @@ class UserService implements UserServiceInterface
         return UserDataResource::collection($users);
     }
 
-    public function subscribers(User $user): JsonResource
-    {
-        $subscribersIds = $this->subscriptionRepository->getUserSubscribers($user->id)
-            ->pluck('user_id')->toArray();
-        $usersData = $this->userRepository->getByIds($subscribersIds);
-
-        return UserDataResource::collection($usersData);
-    }
-
     public function update(UpdateUserDTO $updateUserDTO): void
     {
         $this->validateRequestEmail($updateUserDTO->email, $this->authorizedUserId);

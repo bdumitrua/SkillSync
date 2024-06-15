@@ -2,7 +2,7 @@
 
 namespace App\DTO;
 
-class CreateSubscriptionDTO
+class SubscriptionDTO
 {
     public int $subscriberId = 0;
     public string $entityType = '';

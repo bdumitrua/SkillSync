@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\UpdateUserRequest;
-use App\Models\User;
-use App\Services\User\Interfaces\UserServiceInterface;
 use Illuminate\Http\Request;
+use App\Services\User\Interfaces\UserServiceInterface;
+use App\Models\User;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Controllers\Controller;
 
 class UserController extends Controller
 {
@@ -35,13 +35,6 @@ class UserController extends Controller
     {
         return $this->handleServiceCall(function () use ($request) {
             return $this->userService->search($request);
-        });
-    }
-
-    public function subscribers(User $user)
-    {
-        return $this->handleServiceCall(function () use ($user) {
-            return $this->userService->subscribers($user);
         });
     }
 

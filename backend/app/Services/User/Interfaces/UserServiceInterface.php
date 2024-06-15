@@ -2,12 +2,12 @@
 
 namespace App\Services\User\Interfaces;
 
-use App\DTO\User\UpdateUserDTO;
+use Illuminate\Http\Response;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\User\UpdateUserRequest;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Response;
+use App\DTO\User\UpdateUserDTO;
 
 interface UserServiceInterface
 {
@@ -29,13 +29,6 @@ interface UserServiceInterface
      * @return JsonResource
      */
     public function search(Request $request): JsonResource;
-
-    /**
-     * @param User $user
-     * 
-     * @return JsonResource
-     */
-    public function subscribers(User $user): JsonResource;
 
     /**
      * @param UpdateUserDTO $updateUserDTO

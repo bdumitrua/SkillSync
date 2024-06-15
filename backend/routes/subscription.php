@@ -11,6 +11,9 @@ Route::prefix('subscriptions')->name('subscriptions.')->controller(SubscriptionC
     */
     Route::get('users/{user}', 'users')->name('users');
     Route::get('teams/{user}', 'teams')->name('teams');
+    Route::get('to/user/{user}', 'user')->name('to.user');
+    Route::get('to/team/{team}', 'team')->name('to.team');
+
     Route::post('/', 'create')->name('create');
-    Route::delete('{subscription}', 'delete')->name('delete');
+    Route::delete('/', 'delete')->name('delete');
 });

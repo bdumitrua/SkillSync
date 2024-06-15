@@ -184,7 +184,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function subscriptions(): hasMany
     {
-        return $this->hasMany(Subscription::class, 'user_id', 'id');
+        return $this->hasMany(Subscription::class, 'subscriber_id', 'id');
     }
 
     /**
@@ -209,6 +209,14 @@ class User extends Authenticatable implements JWTSubject
     public function likes(): HasMany
     {
         return $this->hasMany(Like::class);
+    }
+
+    public function subscriptable(string $entityType, int $entityId): Builder
+    {
+        return $this->subscriptions()
+            ->getQuery()
+            ->where('entity_type', '=', $entityType)
+            ->where('entity_id', '=', $entityId);
     }
 
     /**

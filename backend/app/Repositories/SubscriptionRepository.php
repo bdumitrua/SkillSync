@@ -3,28 +3,21 @@
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Models\Subscription;
-use App\DTO\CreateSubscriptionDTO;
+use App\DTO\SubscriptionDTO;
 
 class SubscriptionRepository implements SubscriptionRepositoryInterface
 {
-    protected function querySubscriptionToUser(int $subscriberId, int $targetUserId): Builder
+    public function getByDTO(SubscriptionDTO $subscriptionDTO): ?Subscription
     {
-        return Subscription::query()
-            ->where('subscriber_id', '=', $subscriberId)
-            ->where('entity_type', '=', config('entities.user'))
-            ->where('entity_id', '=', $targetUserId);
-    }
-
-    protected function querySubscriptionToTeam(int $userId, int $teamId): Builder
-    {
-        return Subscription::query()
-            ->where('subscriber_id', '=', $userId)
-            ->where('entity_type', '=', config('entities.team'))
-            ->where('entity_id', '=', $teamId);
+        return Subscription::where('subscriber_id', '=', $subscriptionDTO->subscriberId)
+            ->where('entity_type', '=', $subscriptionDTO->entityType)
+            ->where('entity_id', '=', $subscriptionDTO->entityId)
+            ->first();
     }
 
     public function getUserSubscriptions(int $userId): Collection
@@ -89,7 +82,11 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
             'targetUserId' => $targetUserId
         ]);
 
-        return $this->querySubscriptionToUser($subscriberId, $targetUserId)->exists();
+        return Subscription::query()
+            ->where('subscriber_id', '=', $subscriberId)
+            ->where('entity_type', '=', config('entities.user'))
+            ->where('entity_id', '=', $targetUserId)
+            ->exists();
     }
 
     public function isSubscribedToTeam(int $userId, int $teamId): bool
@@ -99,55 +96,30 @@ class SubscriptionRepository implements SubscriptionRepositoryInterface
             'teamId' => $teamId
         ]);
 
-        return $this->querySubscriptionToTeam($userId, $teamId)->exists();
+        return Subscription::query()
+            ->where('subscriber_id', '=', $userId)
+            ->where('entity_type', '=', config('entities.team'))
+            ->where('entity_id', '=', $teamId)
+            ->exists();
     }
 
-
-    public function create(CreateSubscriptionDTO $dto): bool
+    public function create(SubscriptionDTO $dto): void
     {
-        Log::debug('Start creating new subscription', [
-            'dto' => $dto->toArray()
-        ]);
-
-        $isSubscribed = false;
-
-        if ($dto->entityType == config('entities.user')) {
-            $isSubscribed = $this->isSubscribedToUser($dto->subscriberId, $dto->entityId);
-        } else {
-            $isSubscribed = $this->isSubscribedToTeam($dto->subscriberId, $dto->entityId);
-        }
-
-        if ($isSubscribed) {
-            return false;
-        }
-
         Log::debug('Creating new subscription', [
             'dto' => $dto->toArray()
         ]);
 
-        $newSubscription = Subscription::create(
+        Subscription::create(
             $dto->toArray()
         );
-
-        Log::debug('New subscription created succesfully', [
-            'newSubscription' => $newSubscription->toArray()
-        ]);
-
-        return true;
     }
 
     public function delete(Subscription $subscription): void
     {
-        $subscriptionData = $subscription->toArray();
-
         Log::debug('Deleting subscription', [
-            'subscription' => $subscriptionData
+            'subscription' => $subscription->toArray()
         ]);
 
         $subscription->delete();
-
-        Log::debug('Subscription deleted succesfully', [
-            'subscription' => $subscriptionData
-        ]);
     }
 }

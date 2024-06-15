@@ -2,32 +2,25 @@
 
 namespace App\Services\Team;
 
-use App\DTO\Team\CreateTeamDTO;
-use App\DTO\Team\CreateTeamMemberDTO;
-use App\DTO\Team\UpdateTeamDTO;
-use App\Exceptions\UnprocessableContentException;
-use App\Services\Team\Interfaces\TeamServiceInterface;
-use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
-use App\Models\Team;
-use App\Http\Requests\Team\UpdateTeamRequest;
-use App\Http\Requests\Team\CreateTeamRequest;
-use App\Http\Resources\Team\TeamDataResource;
-use App\Http\Resources\Team\TeamResource;
-use App\Http\Resources\User\UserDataResource;
-use App\Policies\TeamPolicy;
-use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
-use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
-use App\Repositories\User\Interfaces\UserRepositoryInterface;
-use App\Services\Interfaces\TagServiceInterface;
-use App\Services\Team\Interfaces\TeamLinkServiceInterface;
-use App\Services\Team\Interfaces\TeamMemberServiceInterface;
-use App\Traits\Dtoable;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use App\Services\Team\Interfaces\TeamServiceInterface;
+use App\Services\Team\Interfaces\TeamLinkServiceInterface;
+use App\Services\Interfaces\TagServiceInterface;
+use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
+use App\Models\Team;
+use App\Http\Resources\User\UserDataResource;
+use App\Http\Resources\Team\TeamResource;
+use App\Http\Resources\Team\TeamDataResource;
+use App\DTO\Team\UpdateTeamDTO;
+use App\DTO\Team\CreateTeamMemberDTO;
+use App\DTO\Team\CreateTeamDTO;
 
 class TeamService implements TeamServiceInterface
 {
@@ -86,15 +79,6 @@ class TeamService implements TeamServiceInterface
         return TeamDataResource::collection(
             $this->teamRepository->getByIds($userTeamsIds)
         );
-    }
-
-    public function subscribers(int $teamId): JsonResource
-    {
-        $subscribersIds = $this->subscriptionRepository->getTeamSubscribers($teamId)
-            ->pluck('user_id')->toArray();
-        $usersData = $this->userRepository->getByIds($subscribersIds);
-
-        return UserDataResource::collection($usersData);
     }
 
     public function create(CreateTeamDTO $createTeamDTO): void

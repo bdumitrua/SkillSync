@@ -2,10 +2,12 @@
 
 namespace App\Services\Interfaces;
 
-use App\DTO\CreateSubscriptionDTO;
-use App\Models\Subscription;
-use App\Http\Requests\CreateSubscriptionRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\User;
+use App\Models\Team;
+use App\Models\Subscription;
+use App\Http\Requests\SubscriptionRequest;
+use App\DTO\SubscriptionDTO;
 
 interface SubscriptionServiceInterface
 {
@@ -24,16 +26,30 @@ interface SubscriptionServiceInterface
     public function teams(int $userId): JsonResource;
 
     /**
-     * @param CreateSubscriptionDTO $createSubscriptionDTO
+     * @param User $user
      * 
-     * @return void
+     * @return JsonResource
      */
-    public function create(CreateSubscriptionDTO $createSubscriptionDTO): void;
+    public function user(User $user): JsonResource;
 
     /**
-     * @param Subscription $subscription
+     * @param Team $team
+     * 
+     * @return JsonResource
+     */
+    public function team(Team $team): JsonResource;
+
+    /**
+     * @param SubscriptionDTO $subscriptionDTO
      * 
      * @return void
      */
-    public function delete(Subscription $subscription): void;
+    public function create(SubscriptionDTO $subscriptionDTO): void;
+
+    /**
+     * @param SubscriptionDTO $subscriptionDTO
+     * 
+     * @return void
+     */
+    public function delete(SubscriptionDTO $subscriptionDTO): void;
 }
