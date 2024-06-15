@@ -53,20 +53,6 @@ class PostResource extends JsonResource
     {
         $actions = [];
 
-        if ($this->isLiked) {
-            $actions[] = [
-                'UnlikePost',
-                'posts.likes.delete',
-                ['post' => $this->id]
-            ];
-        } else {
-            $actions[] = [
-                'LikePost',
-                'posts.likes.create',
-                ['post' => $this->id]
-            ];
-        }
-
         if ($this->canDelete) {
             $actions[] = [
                 'DeletePost',

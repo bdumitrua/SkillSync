@@ -49,7 +49,7 @@ class TeamResource extends JsonResource
             ],
             [
                 "GetTeamSubscribers",
-                "teams.subscribers",
+                "subscriptions.to.team",
                 ["team" => $this->id]
             ],
             [

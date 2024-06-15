@@ -45,12 +45,17 @@ class UserResource extends JsonResource
         $actions = [
             [
                 "GetUserSubscribers",
-                "users.subscribers",
+                "subscriptions.to.user",
                 ["user" => $this->id]
             ],
             [
-                "GetUserSubscriptions",
-                "subscriptions.show",
+                "GetUserSubscriptionsToUsers",
+                "subscriptions.users",
+                ["user" => $this->id]
+            ],
+            [
+                "GetUserSubscriptionsToTeams",
+                "subscriptions.teams",
                 ["user" => $this->id]
             ],
         ];
