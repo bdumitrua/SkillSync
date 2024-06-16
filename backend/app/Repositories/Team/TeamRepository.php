@@ -68,6 +68,8 @@ class TeamRepository implements TeamRepositoryInterface
             $dto->toArray()
         );
 
+        $this->clearTeamCache($newTeam->id);
+
         Log::debug('Succesfully created team from dto', [
             'dto' => $dto->toArray(),
             'newTeam' => $newTeam->toArray()

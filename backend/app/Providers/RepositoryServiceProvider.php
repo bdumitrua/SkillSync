@@ -18,6 +18,12 @@ use App\Repositories\Team\Interfaces\TeamLinkRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamApplicationRepositoryInterface;
 use App\Repositories\TagRepository;
 use App\Repositories\SubscriptionRepository;
+use App\Repositories\Project\ProjectRepository;
+use App\Repositories\Project\ProjectMemberRepository;
+use App\Repositories\Project\ProjectLinkRepository;
+use App\Repositories\Project\Interfaces\ProjectRepositoryInterface;
+use App\Repositories\Project\Interfaces\ProjectMemberRepositoryInterface;
+use App\Repositories\Project\Interfaces\ProjectLinkRepositoryInterface;
 use App\Repositories\Post\PostRepository;
 use App\Repositories\Post\PostCommentRepository;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
@@ -72,6 +78,11 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Notification
         $this->app->bind(NotificationRepositoryInterface::class, NotificationRepository::class);
+
+        // Project
+        $this->app->bind(ProjectRepositoryInterface::class, ProjectRepository::class);
+        $this->app->bind(ProjectMemberRepositoryInterface::class, ProjectMemberRepository::class);
+        $this->app->bind(ProjectLinkRepositoryInterface::class, ProjectLinkRepository::class);
     }
 
     /**

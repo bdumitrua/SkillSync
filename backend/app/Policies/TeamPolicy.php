@@ -67,6 +67,16 @@ class TeamPolicy
     }
 
     /**
+     * Determine whether the user can work with team posts (create, update, delete).
+     * 
+     * @see TOUCH_TEAM_PROJECTS_GATE
+     */
+    public function touchTeamProjects(User $user, int $teamId): Response
+    {
+        return $this->admin($user, $teamId);
+    }
+
+    /**
      * Determine whether the user can work with team tags (create, delete).
      * 
      * @see TOUCH_TEAM_TAGS_GATE

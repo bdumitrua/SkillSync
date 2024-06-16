@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use App\Traits\Elasticsearchable;
 use App\Models\ProjectMember;
 use App\Models\ProjectLink;
@@ -89,20 +90,36 @@ class Project extends Model
         ];
     }
 
-    /**
-     * @return bool
-     */
-    public function createdByUser(): bool
+    public function scopeFromUser(Builder $query, int $userId): void
     {
-        return $this->author_type === config('entities.user');
+        $query->where('author_type', '=', config('entities.user'))
+            ->where('author_id', '=', $userId);
+    }
+
+    public function scopeFromTeam(Builder $query, int $teamId): void
+    {
+        $query->where('author_type', '=', config('entities.team'))
+            ->where('author_id', '=', $teamId);
     }
 
     /**
      * @return bool
      */
-    public function createdByTeam(): bool
+    public function createdByUser(int $userId = 0): bool
     {
-        return $this->author_type === config('entities.team');
+        return empty($userId)
+            ? $this->author_type === config('entities.user')
+            : $this->author_type === config('entities.user') && $this->author_id === $userId;
+    }
+
+    /**
+     * @return bool
+     */
+    public function createdByTeam(int $teamId = 0): bool
+    {
+        return empty($teamId)
+            ? $this->author_type === config('entities.team')
+            : $this->author_type === config('entities.team') && $this->author_id === $teamId;
     }
 
     /**

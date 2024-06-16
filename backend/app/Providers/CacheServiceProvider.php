@@ -49,6 +49,10 @@ class CacheServiceProvider extends ServiceProvider
         define('CACHE_TIME_POST_TAGS_DATA', 1 * $hour);
 
         define('CACHE_TIME_TEAM_VACANCIES_DATA', 3 * $hour);
+
+        define('CACHE_TIME_PROJECT_DATA', 3 * $hour);
+        define('CACHE_TIME_PROJECT_MEMBERS_DATA', 3 * $hour);
+        define('CACHE_TIME_PROJECT_LINKS_DATA', 3 * $hour);
     }
 
     private function defineCacheKeysConstants(): void
@@ -72,5 +76,9 @@ class CacheServiceProvider extends ServiceProvider
         define('CACHE_KEY_POST_TAGS_DATA', 'post_tags_data:');
 
         define('CACHE_KEY_TEAM_VACANCIES_DATA', 'team_vacancies_data:');
+
+        define('CACHE_KEY_PROJECT_DATA', 'project_data:');
+        define('CACHE_KEY_PROJECT_MEMBERS_DATA', 'project_data_members:');
+        define('CACHE_KEY_PROJECT_LINKS_DATA', 'project_data_links:');
     }
 }

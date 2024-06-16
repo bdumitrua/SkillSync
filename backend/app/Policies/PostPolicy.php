@@ -52,9 +52,7 @@ class PostPolicy
         }
 
         if ($entityType === config('entities.team')) {
-            return Gate::allows(TOUCH_TEAM_POSTS_GATE, [Team::class, $entityId])
-                ? Response::allow()
-                : Response::deny("You have insufficient rigths.");
+            return Gate::inspect(TOUCH_TEAM_POSTS_GATE, [Team::class, $entityId]);
         }
 
         return Response::deny("Unauthorized action.");

@@ -36,6 +36,7 @@ class GateServiceProvider extends ServiceProvider
         define('MONITOR_TEAM_APPLICATIONS_GATE', 'monitorTeamApplications');
         define('TOUCH_TEAM_VACANCIES_GATE', 'touchTeamVacancies');
         define('TOUCH_TEAM_POSTS_GATE', 'touchTeamPosts');
+        define('TOUCH_TEAM_PROJECTS_GATE', 'touchTeamProjects');
         define('TOUCH_TEAM_TAGS_GATE', 'touchTeamTags');
         define('TOUCH_TEAM_LINKS_GATE', 'touchTeamLinks');
         define('TOUCH_TEAM_MEMBERS_GATE', 'touchTeamMembers');

@@ -68,13 +68,13 @@ class ProjectController extends Controller
         });
     }
 
-    public function update(UpdateProjectRequest $request)
+    public function update(Project $project, UpdateProjectRequest $request)
     {
         /** @var UpdateProjectDTO */
         $updateProjectDTO = $request->createDTO();
 
-        return $this->handleServiceCall(function () use ($updateProjectDTO) {
-            return $this->projectService->update($updateProjectDTO);
+        return $this->handleServiceCall(function () use ($project, $updateProjectDTO) {
+            return $this->projectService->update($project, $updateProjectDTO);
         });
     }
 

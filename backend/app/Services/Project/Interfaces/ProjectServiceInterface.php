@@ -54,11 +54,12 @@ interface ProjectServiceInterface
     public function create(CreateProjectDTO $createProjectDTO): void;
 
     /**
+     * @param Project $project
      * @param UpdateProjectDTO $updateProjectDTO
      * 
      * @return void
      */
-    public function update(UpdateProjectDTO $updateProjectDTO): void;
+    public function update(Project $project, UpdateProjectDTO $updateProjectDTO): void;
 
     /**
      * @param Project $project

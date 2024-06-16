@@ -17,6 +17,12 @@ use App\Services\Team\Interfaces\TeamLinkServiceInterface;
 use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
 use App\Services\TagService;
 use App\Services\SubscriptionService;
+use App\Services\Project\ProjectService;
+use App\Services\Project\ProjectMemberService;
+use App\Services\Project\ProjectLinkService;
+use App\Services\Project\Interfaces\ProjectServiceInterface;
+use App\Services\Project\Interfaces\ProjectMemberServiceInterface;
+use App\Services\Project\Interfaces\ProjectLinkServiceInterface;
 use App\Services\Post\PostService;
 use App\Services\Post\PostCommentService;
 use App\Services\Post\Interfaces\PostServiceInterface;
@@ -66,6 +72,11 @@ class ServiceServiceProvider extends ServiceProvider
 
         // Like
         $this->app->bind(LikeServiceInterface::class, LikeService::class);
+
+        // Project
+        $this->app->bind(ProjectServiceInterface::class, ProjectService::class);
+        $this->app->bind(ProjectMemberServiceInterface::class, ProjectMemberService::class);
+        $this->app->bind(ProjectLinkServiceInterface::class, ProjectLinkService::class);
     }
 
     /**

@@ -30,7 +30,7 @@ Route::prefix('projects')->name('projects.')->group(function () {
         Route::get('/', 'project')->name('project');
         Route::post('{user}', 'create')->name('create');
         Route::put('{user}', 'update')->name('update');
-        Route::delet('{user}', 'delete')->name('delete');
+        Route::delete('{user}', 'delete')->name('delete');
     });
 
     /*
@@ -41,6 +41,6 @@ Route::prefix('projects')->name('projects.')->group(function () {
         Route::get('/', 'project')->name('project');
         Route::post('/', 'create')->name('create');
         Route::put('{projectLink}', 'update')->name('update');
-        Route::delet('{projectLink}', 'delete')->name('delete');
+        Route::delete('{projectLink}', 'delete')->name('delete');
     });
 });

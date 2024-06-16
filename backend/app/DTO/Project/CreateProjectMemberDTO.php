@@ -6,7 +6,7 @@ class CreateProjectMemberDTO
 {
     public int $projectId = 0;
     public int $userId = 0;
-    public string $additional;
+    public string $additional = '';
 
     public function toArray(): array
     {
@@ -26,6 +26,12 @@ class CreateProjectMemberDTO
     public function setUserId(int $userId): self
     {
         $this->userId = $userId;
+        return $this;
+    }
+
+    public function setAdditional(int $additional): self
+    {
+        $this->additional = $additional;
         return $this;
     }
 }

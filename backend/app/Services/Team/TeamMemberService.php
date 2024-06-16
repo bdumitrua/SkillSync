@@ -2,26 +2,26 @@
 
 namespace App\Services\Team;
 
-use App\DTO\Team\CreateTeamMemberDTO;
-use App\DTO\Team\UpdateTeamMemberDTO;
-use App\Exceptions\AccessDeniedException;
-use App\Exceptions\MembershipException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Collection;
+use App\Traits\SetAdditionalData;
+use App\Traits\Dtoable;
 use App\Services\Team\Interfaces\TeamMemberServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
-use App\Http\Resources\Team\TeamMemberResource;
-use App\Http\Requests\Team\CreateTeamMemberRequest;
-use App\Http\Requests\Team\UpdateTeamMemberRequest;
 use App\Models\Team;
-use App\Traits\Dtoable;
-use App\Traits\SetAdditionalData;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Gate;
-use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use App\Http\Resources\Team\TeamMemberResource;
+use App\Http\Requests\Team\UpdateTeamMemberRequest;
+use App\Http\Requests\Team\CreateTeamMemberRequest;
+use App\Exceptions\MembershipException;
+use App\Exceptions\AccessDeniedException;
+use App\DTO\Team\UpdateTeamMemberDTO;
+use App\DTO\Team\CreateTeamMemberDTO;
 
 class TeamMemberService implements TeamMemberServiceInterface
 {
@@ -71,6 +71,7 @@ class TeamMemberService implements TeamMemberServiceInterface
     {
         Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
 
+        // TODO MOVE TO GATE
         $membership = $this->teamMemberRepository->getMemberByBothIds(
             $teamId,
             $userId
