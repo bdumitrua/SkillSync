@@ -4,7 +4,6 @@ namespace App\DTO\Team;
 
 class UpdateTeamLinkDTO
 {
-    public string $name;
     public string $url;
     public bool $isPrivate;
 
@@ -14,7 +13,6 @@ class UpdateTeamLinkDTO
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
             'is_private' => $this->isPrivate,
             'url' => $this->url,
             'text' => $this->text,

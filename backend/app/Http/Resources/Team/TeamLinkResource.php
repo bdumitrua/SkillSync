@@ -16,7 +16,6 @@ class TeamLinkResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
             'url' => $this->url,
             'text' => $this->text,
             'iconType' => $this->icon_type,

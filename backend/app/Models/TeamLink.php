@@ -11,7 +11,6 @@ class TeamLink extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
         'url',
         'text',
         'icon_type',

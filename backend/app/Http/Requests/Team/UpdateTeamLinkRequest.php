@@ -28,7 +28,6 @@ class UpdateTeamLinkRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:30',
             'url' => 'required',
             'isPrivate' => 'required|boolean',
             'text' => 'nullable|string|max:30',
@@ -39,8 +38,6 @@ class UpdateTeamLinkRequest extends FormRequest
     public function messages()
     {
         return [
-            'name.required' => 'Name is required.',
-            'name.max' => 'Name cannot exceed 30 characters.',
             'url.required' => 'URL is required.',
             'isPrivate.required' => 'IsPrivate is required.',
             'text.max' => 'Text cannot exceed 30 characters.',

@@ -5,7 +5,6 @@ namespace App\DTO\Team;
 class CreateTeamLinkDTO
 {
     public int $teamId = 0;
-    public string $name;
     public bool $isPrivate;
     public string $url;
 
@@ -15,7 +14,6 @@ class CreateTeamLinkDTO
     public function toArray(): array
     {
         return [
-            'name' => $this->name,
             'team_id' => $this->teamId,
             'is_private' => $this->isPrivate,
             'url' => $this->url,
