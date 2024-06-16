@@ -15,6 +15,8 @@ use App\Services\Interfaces\TagServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Models\User;
+use App\Models\Project;
+use App\Models\Post;
 use App\Http\Resources\User\UserResource;
 use App\Http\Resources\User\UserDataResource;
 use App\Exceptions\UnprocessableContentException;

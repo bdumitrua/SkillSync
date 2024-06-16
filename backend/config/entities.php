@@ -5,4 +5,5 @@ return [
     'team' => App\Models\Team::class,
     'post' => App\Models\Post::class,
     'postComment' => App\Models\PostComment::class,
+    'project' => App\Models\Project::class,
 ];

@@ -67,10 +67,10 @@ services:
         image: elasticsearch:8.10.1
         volumes:
             - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+            - elasticsearch-data:/usr/share/elasticsearch/data
         environment:
             - "discovery.type=single-node"
             - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-            - "indices.memory.index_buffer_size=20%"
         deploy:
             resources:
                 limits:
@@ -100,3 +100,4 @@ volumes:
     sql-data:
     backend-vendor:
     rabbitmq:
+    elasticsearch-data:

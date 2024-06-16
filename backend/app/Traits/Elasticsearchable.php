@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
 use Elastic\Elasticsearch\Client;
 
@@ -64,17 +65,16 @@ trait Elasticsearchable
         $params = [
             'index' => static::getESIndex(),
             'body' => [
+                'settings' => static::getElasticsearchIndexSettings(),
                 'mappings' => [
                     'properties' => static::getSearchProperties()
                 ]
-            ]
+            ],
+            'pretty' => true
         ];
 
         // Create the index
         $client->indices()->create($params);
-
-        // Set index settings such as refresh interval
-        static::setElasticsearchIndexSettings();
     }
 
     public static function updateElasticsearchIndex(): void
@@ -85,20 +85,13 @@ trait Elasticsearchable
     /**
      * Set the settings for the Elasticsearch index.
      */
-    protected static function setElasticsearchIndexSettings(): void
+    protected static function getElasticsearchIndexSettings(): array
     {
-        $client = static::getElasticsearchClient();
-
-        $params = [
-            'index' => static::getESIndex(),
-            'body' => [
-                'settings' => [
-                    'refresh_interval' => static::getESRefreshInterval()
-                ]
-            ]
+        return [
+            'index.store.stats_refresh_interval' => static::getESRefreshInterval(),
+            'index.number_of_shards' => 4,
+            'index.number_of_replicas' => 2
         ];
-
-        $client->indices()->putSettings($params);
     }
 
     /**
@@ -111,6 +104,64 @@ trait Elasticsearchable
         if (static::elasticsearchIndexExists()) {
             $client->indices()->delete(['index' => static::getESIndex()]);
         }
+    }
+
+    /**
+     * Add a document to Elasticsearch index.
+     *
+     * @param Model $model
+     * @return void
+     */
+    public static function addToElasticsearch($model): void
+    {
+        $client = static::getElasticsearchClient();
+
+        $params = [
+            'index' => static::getESIndex(),
+            'id' => $model->id,
+            'body' => $model->toSearchableArray()
+        ];
+
+        $client->index($params);
+    }
+
+    /**
+     * Update a document in Elasticsearch index.
+     *
+     * @param Model $model
+     * @return void
+     */
+    public static function updateElasticsearchDocument(Model $model): void
+    {
+        $client = static::getElasticsearchClient();
+
+        $params = [
+            'index' => static::getESIndex(),
+            'id' => $model->id,
+            'body' => [
+                'doc' => $model->toSearchableArray()
+            ]
+        ];
+
+        $client->update($params);
+    }
+
+    /**
+     * Delete a document from Elasticsearch index.
+     *
+     * @param int $id
+     * @return void
+     */
+    public static function deleteElasticsearchDocument(int $id): void
+    {
+        $client = static::getElasticsearchClient();
+
+        $params = [
+            'index' => static::getESIndex(),
+            'id' => $id
+        ];
+
+        $client->delete($params);
     }
 
     /**

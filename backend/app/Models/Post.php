@@ -15,9 +15,7 @@ use App\Models\Interfaces\Likeable;
 
 class Post extends Model implements Likeable
 {
-    use HasFactory, Searchable, Elasticsearchable {
-        Elasticsearchable::search insteadof Searchable;
-    }
+    use HasFactory, Elasticsearchable;
 
     protected $fillable = [
         'text',

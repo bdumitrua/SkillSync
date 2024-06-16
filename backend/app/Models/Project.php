@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Laravel\Scout\Searchable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,12 +13,11 @@ use Illuminate\Database\Eloquent\Builder;
 use App\Traits\Elasticsearchable;
 use App\Models\ProjectMember;
 use App\Models\ProjectLink;
+use App\Models\Interfaces\Likeable;
 
-class Project extends Model
+class Project extends Model implements Likeable
 {
-    use HasFactory, Searchable, Elasticsearchable {
-        Elasticsearchable::search insteadof Searchable;
-    }
+    use HasFactory, Elasticsearchable;
 
     protected $fillable = [
         'author_type',
@@ -24,6 +25,7 @@ class Project extends Model
         'name',
         'description',
         'cover_url',
+        'likes_count'
     ];
 
     protected static function getESIndex(): string
@@ -33,11 +35,15 @@ class Project extends Model
 
     protected static function getESRefreshInterval(): string
     {
-        return '60s';
+        return '5s';
     }
 
     public function toSearchableArray(): array
     {
+        Log::info('Project searchable', [
+            $this->attributesToArray()
+        ]);
+
         return $this->attributesToArray();
     }
 
@@ -70,6 +76,10 @@ class Project extends Model
                 'type' => 'text',
                 'index' => false
             ],
+            'likes_count' => [
+                'type' => 'integer',
+                'index' => false
+            ]
         ];
     }
 
@@ -123,6 +133,26 @@ class Project extends Model
     }
 
     /**
+     * @return void
+     */
+    public function incrementLikesCount(): void
+    {
+        $this->timestamps = false; // To prevent updated_at change
+        $this->increment('likes_count');
+        $this->timestamps = true;
+    }
+
+    /**
+     * @return void
+     */
+    public function decrementLikesCount(): void
+    {
+        $this->timestamps = false; // To prevent updated_at change
+        $this->decrement('likes_count');
+        $this->timestamps = true;
+    }
+
+    /**
      * @return MorphTo
      */
     public function author(): MorphTo
@@ -144,5 +174,13 @@ class Project extends Model
     public function members(): HasMany
     {
         return $this->hasMany(ProjectMember::class);
+    }
+
+    /**
+     * @return MorphMany
+     */
+    public function likes(): MorphMany
+    {
+        return $this->morphMany(Like::class, 'likeable');
     }
 }

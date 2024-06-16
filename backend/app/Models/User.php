@@ -25,9 +25,7 @@ use App\Prometheus\PrometheusServiceProxy;
  */
 class User extends Authenticatable implements JWTSubject
 {
-    use HasFactory, Notifiable, Searchable, Elasticsearchable, SoftDeletes {
-        Elasticsearchable::search insteadof Searchable;
-    }
+    use HasFactory, Notifiable, Elasticsearchable, SoftDeletes;
 
     protected $fillable = [
         'first_name',

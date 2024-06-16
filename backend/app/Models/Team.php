@@ -13,9 +13,7 @@ use App\Traits\Elasticsearchable;
 
 class Team extends Model
 {
-    use HasFactory, Searchable, Elasticsearchable {
-        Elasticsearchable::search insteadof Searchable;
-    }
+    use HasFactory, Elasticsearchable;
 
     protected $fillable = [
         'name',

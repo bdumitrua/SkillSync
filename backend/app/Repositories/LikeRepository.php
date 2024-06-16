@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Project\Interfaces\ProjectRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
 use App\Repositories\Interfaces\LikeRepositoryInterface;
@@ -18,13 +19,16 @@ use App\DTO\LikeDTO;
 class LikeRepository implements LikeRepositoryInterface
 {
     protected $postRepository;
+    protected $projectRepository;
     protected $postCommentRepository;
 
     public function __construct(
         PostRepositoryInterface $postRepository,
+        ProjectRepositoryInterface $projectRepository,
         PostCommentRepositoryInterface $postCommentRepository,
     ) {
         $this->postRepository = $postRepository;
+        $this->projectRepository = $projectRepository;
         $this->postCommentRepository = $postCommentRepository;
     }
 
@@ -52,6 +56,8 @@ class LikeRepository implements LikeRepositoryInterface
             return $this->postRepository->getById($likeDTO->likeableId);
         } elseif ($likeDTO->likeableType === config('entities.postComment')) {
             return $this->postCommentRepository->getById($likeDTO->likeableId);
+        } elseif ($likeDTO->likeableType === config('entities.project')) {
+            return $this->projectRepository->getById($likeDTO->likeableId);
         }
 
         Log::warning("likeableType from LikeDTO didn't match any type of repository", [

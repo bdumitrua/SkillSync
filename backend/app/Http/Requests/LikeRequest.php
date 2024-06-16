@@ -29,7 +29,7 @@ class LikeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'likeableType' => 'required|in:post,comment',
+            'likeableType' => 'required|in:post,comment,project',
             'likeableId' => [new EntityIdRule()],
         ];
     }
