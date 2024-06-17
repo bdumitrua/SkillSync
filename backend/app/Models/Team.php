@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -159,5 +160,10 @@ class Team extends Model
     public function subscribers(): MorphMany
     {
         return $this->morphMany(Subscription::class, 'entity');
+    }
+
+    public function chat(): MorphOne
+    {
+        return $this->morphOne(GroupChat::class, 'admin');
     }
 }
