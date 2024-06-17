@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -15,15 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\Elasticsearchable;
-use App\Prometheus\PrometheusServiceProxy;
 
-/**
- * * Модель, относящаяся к таблице users
- * 
- * * Необходима для работы с основными данными пользователей и выстраивания связей.
- * 
- * * Также, соответственно, отвечает за аутентификацию пользователей и валидацию JWT токенов.
- */
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable, Elasticsearchable, SoftDeletes;

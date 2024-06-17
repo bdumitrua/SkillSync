@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;

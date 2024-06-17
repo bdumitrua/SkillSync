@@ -2,24 +2,18 @@
 
 namespace App\Services\Team;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Collection;
 use App\Traits\SetAdditionalData;
-use App\Traits\Dtoable;
 use App\Services\Team\Interfaces\TeamMemberServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Models\TeamMember;
 use App\Models\Team;
 use App\Http\Resources\Team\TeamMemberResource;
-use App\Http\Requests\Team\UpdateTeamMemberRequest;
-use App\Http\Requests\Team\CreateTeamMemberRequest;
-use App\Exceptions\MembershipException;
-use App\Exceptions\AccessDeniedException;
 use App\DTO\Team\UpdateTeamMemberDTO;
 use App\DTO\Team\CreateTeamMemberDTO;
 
@@ -48,21 +42,16 @@ class TeamMemberService implements TeamMemberServiceInterface
         );
     }
 
-    /**
-     * @throws MembershipException
-     */
     public function create(int $teamId, CreateTeamMemberDTO $createTeamMemberDTO): void
     {
         Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
 
-        $isMember = $this->teamMemberRepository->userIsMember(
+        $membership = $this->teamMemberRepository->getMemberByBothIds(
             $createTeamMemberDTO->teamId,
             $createTeamMemberDTO->userId
         );
 
-        if ($isMember) {
-            throw new MembershipException("User is already member of this team.");
-        }
+        Gate::authorize('create', [TeamMember::class, $membership]);
 
         $this->teamMemberRepository->addMember($createTeamMemberDTO);
     }
@@ -71,23 +60,16 @@ class TeamMemberService implements TeamMemberServiceInterface
     {
         Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamId]);
 
-        // TODO MOVE TO GATE
         $membership = $this->teamMemberRepository->getMemberByBothIds(
             $teamId,
             $userId
         );
 
-        if (empty($membership)) {
-            throw new MembershipException("User is not member of this team");
-        }
+        Gate::authorize('update', [TeamMember::class, $membership]);
 
         $this->teamMemberRepository->updateMember($membership, $updateTeamMemberDTO);
     }
 
-    /**
-     * @throws MembershipException
-     * @throws AccessDeniedException
-     */
     public function delete(Team $team, int $userId): void
     {
         Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $team->id]);
@@ -97,13 +79,7 @@ class TeamMemberService implements TeamMemberServiceInterface
             $userId
         );
 
-        if (empty($membership)) {
-            throw new MembershipException("User is not member of this team");
-        }
-
-        if ($team->admin_id === $userId) {
-            throw new AccessDeniedException();
-        }
+        Gate::authorize('delete', [TeamMember::class, $membership, $team]);
 
         $this->teamMemberRepository->removeMember($membership);
     }
@@ -118,7 +94,7 @@ class TeamMemberService implements TeamMemberServiceInterface
 
     protected function setMembershipRights(Collection &$teamMembers): void
     {
-        $canChange = Gate::authorize(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamMembers->first()?->team_id]);
+        $canChange = Gate::allows(TOUCH_TEAM_MEMBERS_GATE, [Team::class, $teamMembers->first()?->team_id]);
 
         foreach ($teamMembers as $teamMember) {
             $teamMember->canChange = $canChange || Auth::id() === $teamMember->user_id;

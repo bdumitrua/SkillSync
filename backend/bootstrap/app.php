@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Application;
-use App\Exceptions\LikeException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -27,19 +26,9 @@ return Application::configure(basePath: dirname(__DIR__))
             ], 404);
         });
 
-        $exceptions->render(function (LikeException $e) {
-            return response()->json([
-                'error: ' . $e->getMessage(),
-            ], 409);
-        });
-
         $exceptions->render(function (HttpException $e) {
             return response()->json([
                 'error: ' . $e->getMessage()
             ], $e->getStatusCode());
-        });
-
-        $exceptions->report(function (LikeException $e) {
-            return false;
         });
     })->create();

@@ -13,11 +13,8 @@ use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Models\User;
-
 use App\Models\Team;
 use App\Models\Subscription;
-use App\Http\Resources\Team\TeamDataResource;
-use App\Exceptions\SubscriptionException;
 use App\Exceptions\NotFoundException;
 use App\DTO\SubscriptionDTO;
 

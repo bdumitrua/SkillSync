@@ -1,8 +1,7 @@
 <?php
 
 return [
-    // 'default' => env('LOG_CHANNEL', 'elasticsearch'),
-    'default' => 'file',
+    'default' => env('LOG_CHANNEL', 'file'),
 
     'deprecations' => [
         'channel' => env('LOG_DEPRECATIONS_CHANNEL', 'null'),

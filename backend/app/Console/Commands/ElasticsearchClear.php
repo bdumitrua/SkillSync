@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Elastic\Elasticsearch\ClientBuilder;
+use Elastic\Elasticsearch\Client;
 
 class ElasticsearchClear extends Command
 {
@@ -38,8 +39,6 @@ class ElasticsearchClear extends Command
 
     protected function getElasticsearchClient()
     {
-        return ClientBuilder::create()
-            ->setHosts(['http://localhost:9200']) // Замените на ваш хост Elasticsearch
-            ->build();
+        return app(Client::class);
     }
 }
