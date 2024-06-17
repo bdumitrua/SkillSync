@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Collection;
-use App\Traits\SetAdditionalData;
+use App\Traits\AttachEntityData;
 use App\Services\Team\Interfaces\TeamVacancyServiceInterface;
 use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
@@ -18,7 +18,7 @@ use App\DTO\Team\CreateTeamVacancyDTO;
 
 class TeamVacancyService implements TeamVacancyServiceInterface
 {
-    use SetAdditionalData;
+    use AttachEntityData;
 
     protected $teamVacancyRepository;
     protected $teamRepository;

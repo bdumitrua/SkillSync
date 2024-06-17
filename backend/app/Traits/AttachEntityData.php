@@ -5,7 +5,7 @@ namespace App\Traits;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
 
-trait SetAdditionalData
+trait AttachEntityData
 {
     /**
      * @param Collection $collection

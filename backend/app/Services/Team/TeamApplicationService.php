@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Collection;
-use App\Traits\SetAdditionalData;
+use App\Traits\AttachEntityData;
 use App\Services\Team\Interfaces\TeamApplicationServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamVacancyRepositoryInterface;
@@ -21,7 +21,7 @@ use App\DTO\Team\CreateTeamApplicationDTO;
 
 class TeamApplicationService implements TeamApplicationServiceInterface
 {
-    use SetAdditionalData;
+    use AttachEntityData;
 
     protected $userRepository;
     protected $teamRepository;

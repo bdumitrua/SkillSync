@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Collection;
-use App\Traits\SetAdditionalData;
+use App\Traits\AttachEntityData;
 use App\Services\Interfaces\LikeServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
@@ -22,7 +22,7 @@ use App\DTO\LikeDTO;
 
 class LikeService implements LikeServiceInterface
 {
-    use SetAdditionalData;
+    use AttachEntityData;
 
     protected $userRepository;
     protected $likeRepository;

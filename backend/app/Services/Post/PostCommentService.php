@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Collection;
-use App\Traits\SetAdditionalData;
+use App\Traits\AttachEntityData;
 use App\Services\Post\Interfaces\PostCommentServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
@@ -17,7 +17,7 @@ use App\DTO\Post\CreatePostCommentDTO;
 
 class PostCommentService implements PostCommentServiceInterface
 {
-    use SetAdditionalData;
+    use AttachEntityData;
 
     protected $userRepository;
     protected $postCommentRepository;

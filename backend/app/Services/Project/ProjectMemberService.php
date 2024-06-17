@@ -5,7 +5,7 @@ namespace App\Services\Project;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Traits\SetAdditionalData;
+use App\Traits\AttachEntityData;
 use App\Services\Project\Interfaces\ProjectMemberServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Project\Interfaces\ProjectMemberRepositoryInterface;
@@ -18,7 +18,7 @@ use App\DTO\Project\CreateProjectMemberDTO;
 
 class ProjectMemberService implements ProjectMemberServiceInterface
 {
-    use SetAdditionalData;
+    use AttachEntityData;
 
     protected $userRepository;
     protected $projectMemberRepository;
