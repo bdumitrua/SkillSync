@@ -4,7 +4,7 @@ namespace App\Repositories\Project;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
-use App\Traits\UpdateFromDTO;
+use App\Traits\Updateable;
 use App\Traits\Cacheable;
 use App\Repositories\Project\Interfaces\ProjectRepositoryInterface;
 use App\Models\Project;
@@ -13,7 +13,7 @@ use App\DTO\Project\CreateProjectDTO;
 
 class ProjectRepository implements ProjectRepositoryInterface
 {
-    use Cacheable, UpdateFromDTO;
+    use Updateable, Cacheable;
 
     public function getAll(): Collection
     {

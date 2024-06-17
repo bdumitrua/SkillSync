@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
-use App\Traits\UpdateFromDTO;
+use App\Traits\Updateable;
 use App\Traits\Cacheable;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Models\TeamMember;
@@ -15,7 +15,7 @@ use App\DTO\Team\CreateTeamMemberDTO;
 
 class TeamMemberRepository implements TeamMemberRepositoryInterface
 {
-    use Cacheable, UpdateFromDTO;
+    use Updateable, Cacheable;
 
     protected function queryByBothIds(int $teamId, int $userId): Builder
     {

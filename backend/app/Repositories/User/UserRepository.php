@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Response;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Builder;
-use App\Traits\UpdateFromDTO;
+use App\Traits\Updateable;
 use App\Traits\Cacheable;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Models\User;
@@ -14,7 +14,7 @@ use App\DTO\User\UpdateUserDTO;
 
 class UserRepository implements UserRepositoryInterface
 {
-    use UpdateFromDTO, Cacheable;
+    use Updateable, Cacheable;
 
     protected function queryById($userId): Builder
     {

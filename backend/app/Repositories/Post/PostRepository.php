@@ -4,17 +4,16 @@ namespace App\Repositories\Post;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
-use App\Traits\UpdateFromDTO;
+use App\Traits\Updateable;
 use App\Traits\Cacheable;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
-use App\Models\Team;
 use App\Models\Post;
 use App\DTO\Post\UpdatePostDTO;
 use App\DTO\Post\CreatePostDTO;
 
 class PostRepository implements PostRepositoryInterface
 {
-    use UpdateFromDTO, Cacheable;
+    use Updateable, Cacheable;
 
     public function getAll(): Collection
     {

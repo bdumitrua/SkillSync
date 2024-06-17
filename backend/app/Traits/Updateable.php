@@ -6,13 +6,19 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\StringHelper;
 
-trait UpdateFromDTO
+trait Updateable
 {
     /**
-     * @param Model $entity
-     * @param mixed $dto
+     * Update a model from a Data Transfer Object (DTO).
      * 
-     * @return bool
+     * Iterates over the DTO properties,
+     * converts property names from camelCase to snake_case, and updates the model.
+     * Saves the model and logs the success or failure of the save operation.
+     * 
+     * @param Model $entity The model to be updated.
+     * @param mixed $dto The DTO containing the updated data.
+     * 
+     * @return bool True if the model was successfully updated, false otherwise.
      */
     public function updateFromDto(Model $entity, $dto): bool
     {
@@ -36,7 +42,7 @@ trait UpdateFromDTO
             return $saved;
         }
 
-        Log::debug('Succesfully updated model from DTO');
+        Log::debug('Successfully updated model from DTO');
         return $saved;
     }
 }

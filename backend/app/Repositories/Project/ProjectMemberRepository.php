@@ -4,16 +4,15 @@ namespace App\Repositories\Project;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
-use App\Traits\UpdateFromDTO;
+use App\Traits\Updateable;
 use App\Repositories\Project\Interfaces\ProjectMemberRepositoryInterface;
 use App\Models\ProjectMember;
-use App\Models\ProjectLink;
 use App\DTO\Project\UpdateProjectMemberDTO;
 use App\DTO\Project\CreateProjectMemberDTO;
 
 class ProjectMemberRepository implements ProjectMemberRepositoryInterface
 {
-    use UpdateFromDTO;
+    use Updateable;
 
     public function getByProjectId(int $projectId): Collection
     {
