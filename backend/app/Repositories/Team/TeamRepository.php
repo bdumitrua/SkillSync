@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use App\Traits\UpdateFromDTO;
-use App\Traits\GetCachedData;
+use App\Traits\Cacheable;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Models\Team;
 use App\DTO\Team\UpdateTeamDTO;
@@ -14,7 +14,7 @@ use App\DTO\Team\CreateTeamDTO;
 
 class TeamRepository implements TeamRepositoryInterface
 {
-    use UpdateFromDTO, GetCachedData;
+    use UpdateFromDTO, Cacheable;
 
     public function getAll(): Collection
     {

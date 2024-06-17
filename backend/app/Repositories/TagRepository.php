@@ -4,14 +4,14 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
-use App\Traits\GetCachedData;
+use App\Traits\Cacheable;
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Models\Tag;
 use App\DTO\User\CreateTagDTO;
 
 class TagRepository implements TagRepositoryInterface
 {
-    use GetCachedData;
+    use Cacheable;
 
     protected $cacheKeys;
 

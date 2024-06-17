@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
 use App\Traits\UpdateFromDTO;
-use App\Traits\GetCachedData;
+use App\Traits\Cacheable;
 use App\Repositories\Team\Interfaces\TeamLinkRepositoryInterface;
 use App\Models\TeamLink;
 use App\DTO\Team\UpdateTeamLinkDTO;
@@ -14,7 +14,7 @@ use App\DTO\Team\CreateTeamLinkDTO;
 
 class TeamLinkRepository implements TeamLinkRepositoryInterface
 {
-    use UpdateFromDTO, GetCachedData;
+    use UpdateFromDTO, Cacheable;
 
     public function getByTeamId(int $teamId, bool $isMember): Collection
     {

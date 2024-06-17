@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Prometheus\PrometheusServiceProxy;
 use App\Helpers\TimeHelper;
 
-trait GetCachedData
+trait Cacheable
 {
     /**
      * @param string $cacheKey

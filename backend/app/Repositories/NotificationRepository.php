@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
-use App\Traits\GetCachedData;
+use App\Traits\Cacheable;
 use App\Repositories\Interfaces\NotificationRepositoryInterface;
 use App\Models\Notification;
 use App\Enums\NotificationStatus;
@@ -12,7 +12,7 @@ use App\DTO\CreateNotificationDTO;
 
 class NotificationRepository implements NotificationRepositoryInterface
 {
-    use GetCachedData;
+    use Cacheable;
 
     public function getByUserId(int $userId): Collection
     {
