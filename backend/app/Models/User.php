@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Tymon\JWTAuth\Contracts\JWTSubject;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Laravel\Scout\Searchable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Notifications\Notifiable;

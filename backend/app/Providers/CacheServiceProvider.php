@@ -78,7 +78,5 @@ class CacheServiceProvider extends ServiceProvider
         define('CACHE_KEY_TEAM_VACANCIES_DATA', 'team_vacancies_data:');
 
         define('CACHE_KEY_PROJECT_DATA', 'project_data:');
-        define('CACHE_KEY_PROJECT_MEMBERS_DATA', 'project_data_members:');
-        define('CACHE_KEY_PROJECT_LINKS_DATA', 'project_data_links:');
     }
 }
