@@ -62,7 +62,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PostCommentRepositoryInterface::class, PostCommentRepository::class);
         $this->app->bind(PostRepositoryInterface::class, PostRepository::class);
 
-        // Message
+        // Chatting
         $this->app->bind(ChatMemberRepositoryInterface::class, ChatMemberRepository::class);
         $this->app->bind(ChatRepositoryInterface::class, ChatRepository::class);
         $this->app->bind(MessageRepositoryInterface::class, MessageRepository::class);

@@ -37,6 +37,8 @@ use App\Services\LikeService;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Interfaces\SubscriptionServiceInterface;
 use App\Services\Interfaces\LikeServiceInterface;
+use App\Services\FirebaseService;
+use App\Firebase\FirebaseServiceInterface;
 
 class ServiceServiceProvider extends ServiceProvider
 {
@@ -59,7 +61,7 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(PostCommentServiceInterface::class, PostCommentService::class);
         $this->app->bind(PostServiceInterface::class, PostService::class);
 
-        // Message
+        // Chatting
         $this->app->bind(ChatMemberServiceInterface::class, ChatMemberService::class);
         $this->app->bind(ChatServiceInterface::class, ChatService::class);
         $this->app->bind(MessageServiceInterface::class, MessageService::class);
@@ -77,6 +79,9 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(ProjectServiceInterface::class, ProjectService::class);
         $this->app->bind(ProjectMemberServiceInterface::class, ProjectMemberService::class);
         $this->app->bind(ProjectLinkServiceInterface::class, ProjectLinkService::class);
+
+        // Firebase
+        $this->app->singleton(FirebaseServiceInterface::class, FirebaseService::class);
     }
 
     /**
