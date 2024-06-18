@@ -18,8 +18,14 @@ class CreateChatDTO
     public ?string $name = null;
     public ?string $avatarUrl = null;
 
-    public function toArray(): array
+    public function toArray(bool $creatingBasicChat = false): array
     {
+        if ($creatingBasicChat) {
+            return [
+                'type' => $this->type
+            ];
+        }
+
         if ($this->isDialog()) {
             return [
                 'chat_id' => $this->chatId,

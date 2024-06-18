@@ -67,7 +67,7 @@ class ChatService implements ChatServiceInterface
             return new JsonResource([]);
         }
 
-        $chat->load('data');
+        $chat->data = $this->chatRepository->getChatData($chat);
 
         $membersIds = $chat->membersIds();
         $chat->members = $this->userRepository->getByIds($membersIds);
@@ -93,7 +93,7 @@ class ChatService implements ChatServiceInterface
 
     public function update(Chat $chat, UpdateChatDTO $updateChatDTO): void
     {
-        Gate::authorize('update', [Chat::class, $updateChatDTO]);
+        Gate::authorize('update', [Chat::class, $chat]);
 
         $this->chatRepository->update($chat, $updateChatDTO);
     }

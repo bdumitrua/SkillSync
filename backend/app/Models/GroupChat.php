@@ -28,4 +28,19 @@ class GroupChat extends Model
     {
         return $this->morphTo();
     }
+
+    public function isTeamChat(): bool
+    {
+        return $this->admin_type === config('entities.team');
+    }
+
+    public function isUserGroupChat(): bool
+    {
+        return $this->admin_type === config('entities.user');
+    }
+
+    public function createdByUser(int $userId): bool
+    {
+        return $this->isUserGroupChat() && $this->admin_id === $userId;
+    }
 }

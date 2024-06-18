@@ -40,5 +40,6 @@ class GateServiceProvider extends ServiceProvider
         define('TOUCH_TEAM_TAGS_GATE', 'touchTeamTags');
         define('TOUCH_TEAM_LINKS_GATE', 'touchTeamLinks');
         define('TOUCH_TEAM_MEMBERS_GATE', 'touchTeamMembers');
+        define('TOUCH_TEAM_CHAT_GATE', 'touchTeamChat');
     }
 }

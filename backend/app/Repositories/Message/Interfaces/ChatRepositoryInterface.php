@@ -2,7 +2,10 @@
 
 namespace App\Repositories\Message\Interfaces;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use App\Models\GroupChat;
+use App\Models\DialogChat;
 use App\Models\Chat;
 use App\DTO\Message\UpdateChatDTO;
 use App\DTO\Message\CreateChatDTO;
@@ -10,11 +13,11 @@ use App\DTO\Message\CreateChatDTO;
 interface ChatRepositoryInterface
 {
     /**
-     * @param int $chatId
+     * @param Chat $chat
      * 
-     * @return array|null
+     * @return GroupChat|DialogChat
      */
-    public function getById(int $chatId): ?array;
+    public function getChatData(Chat $chat);
 
     /**
      * @param array $chatIds

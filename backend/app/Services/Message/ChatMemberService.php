@@ -47,28 +47,28 @@ class ChatMemberService implements ChatMemberServiceInterface
     /**
      * @throws UnprocessableContentException if $chat->type is dialog
      */
-    public function add(Chat $chat, User $user): void
+    public function add(Chat $chat, User $newUser): void
     {
         if ($chat->isDialog()) {
             throw new UnprocessableContentException("You can't change dialog members");
         }
 
         /** @var GroupChatMember|null */
-        $chatMembership = $this->chatMemberRepository->getByBothIds($chat->id, $user->id);
-        Gate::authorize('create', [GroupChatMember::class, $chat, $user, $chatMembership]);
+        $chatMembership = $this->chatMemberRepository->getByBothIds($chat->id, $newUser->id);
+        Gate::authorize('create', [GroupChatMember::class, $chat, $newUser, $chatMembership]);
 
-        $this->chatMemberRepository->create($chat->id, $user->id);
+        $this->chatMemberRepository->create($chat->id, $newUser->id);
     }
 
-    public function delete(Chat $chat, User $user): void
+    public function delete(Chat $chat, User $userToDelete): void
     {
         if ($chat->isDialog()) {
             throw new UnprocessableContentException("You can't change dialog members");
         }
 
         /** @var GroupChatMember|null */
-        $chatMembership = $this->chatMemberRepository->getByBothIds($chat->id, $user->id);
-        Gate::authorize('delete', [GroupChatMember::class, $chat, $user, $chatMembership]);
+        $chatMembership = $this->chatMemberRepository->getByBothIds($chat->id, $userToDelete->id);
+        Gate::authorize('delete', [GroupChatMember::class, $chat, $userToDelete, $chatMembership]);
 
         $this->chatMemberRepository->delete($chatMembership);
     }

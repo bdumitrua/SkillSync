@@ -31,6 +31,13 @@ interface ChatMemberRepositoryInterface
     public function getByBothIds(int $chatId, int $userId): ?GroupChatMember;
 
     /**
+     * @param array $memberIds
+     * 
+     * @return bool
+     */
+    public function dialogExists(array $memberIds): bool;
+
+    /**
      * @param int $chatId
      * @param array $userIds
      * 

@@ -107,6 +107,16 @@ class TeamPolicy
     }
 
     /**
+     * Determine whether the user can change team chat
+     * 
+     * @see TOUCH_TEAM_CHAT_GATE
+     */
+    public function touchTeamChat(User $user, int $teamId): Response
+    {
+        return $this->moderator($user, $teamId);
+    }
+
+    /**
      * Determine if the user is member of this team.
      * 
      * It's public, but prefer to not use outside this policy

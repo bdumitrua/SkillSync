@@ -2,65 +2,48 @@
 
 namespace App\Policies;
 
-use App\Models\DialogChat;
-use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
+use App\Repositories\Message\Interfaces\ChatMemberRepositoryInterface;
+use App\Models\User;
+use App\Models\DialogChat;
+use App\Models\Chat;
+use App\DTO\Message\CreateChatDTO;
 
 class DialogChatPolicy
 {
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        //
+    protected $chatMemberRepository;
+
+    public function __construct(
+        ChatMemberRepositoryInterface $chatMemberRepository
+    ) {
+        $this->chatMemberRepository = $chatMemberRepository;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, DialogChat $dialogChat): bool
+    public function view(User $user, Chat $chat): Response
     {
-        //
+        $memberIds = $this->chatMemberRepository->getByChat($chat);
+
+        return in_array($user->id, $memberIds)
+            ? Response::allow()
+            : Response::deny("You're not member of this chat.", 403);
     }
 
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create(User $user, CreateChatDTO $createChatDTO): Response
     {
-        //
-    }
+        $dialogMemberIds = [$createChatDTO->firstUserId, $createChatDTO->secondUserId];
+        if (!in_array($user->id, $dialogMemberIds)) {
+            return Response::deny("You can't create dialogs for other users", 422);
+        }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, DialogChat $dialogChat): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, DialogChat $dialogChat): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, DialogChat $dialogChat): bool
-    {
-        //
-    }
-
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, DialogChat $dialogChat): bool
-    {
-        //
+        return $this->chatMemberRepository->dialogExists($dialogMemberIds)
+            ? Response::deny('Dialog between you already exists', 400)
+            : Response::allow();
     }
 }
