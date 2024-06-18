@@ -31,10 +31,10 @@ class ChatMemberController extends Controller
         });
     }
 
-    public function remove(Chat $chat, User $user)
+    public function delete(Chat $chat, User $user)
     {
         return $this->handleServiceCall(function () use ($chat, $user) {
-            return $this->chatMemberService->remove($chat, $user);
+            return $this->chatMemberService->delete($chat, $user);
         });
     }
 }

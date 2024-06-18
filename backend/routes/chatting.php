@@ -32,7 +32,7 @@ Route::prefix('messages')->name('messages.')->group(function () {
         Route::prefix('members')->name('members.')->controller(ChatMemberController::class)->group(function () {
             Route::get('{chat}', 'show')->name('show');
             Route::post('{chat}/{userId}', 'add')->name('add');
-            Route::delete('{chat}/{userId}', 'remove')->name('remove');
+            Route::delete('{chat}/{userId}', 'delete')->name('delete');
         });
     });
 });

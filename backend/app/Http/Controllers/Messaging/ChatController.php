@@ -38,9 +38,10 @@ class ChatController extends Controller
     {
         /** @var CreateChatDTO */
         $createChatDTO = $request->createDTO();
+        $memberIds = $request->input('memberIds');
 
-        return $this->handleServiceCall(function () use ($createChatDTO) {
-            return $this->chatService->create($createChatDTO);
+        return $this->handleServiceCall(function () use ($createChatDTO, $memberIds) {
+            return $this->chatService->create($createChatDTO, $memberIds);
         });
     }
 

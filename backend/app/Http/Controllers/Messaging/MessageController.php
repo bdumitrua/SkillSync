@@ -23,7 +23,7 @@ class MessageController extends Controller
     {
         /** @var CreateMesssageDTO */
         $createMessageDTO = $request->createDTO();
-        $createMessageDTO->setSenderId(Auth::id())->setChatId($chat->id);
+        $createMessageDTO->setSenderId(Auth::id());
 
         return $this->handleServiceCall(function () use ($chat, $createMessageDTO) {
             return $this->messageService->send($chat, $createMessageDTO);

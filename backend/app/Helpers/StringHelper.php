@@ -17,4 +17,14 @@ class StringHelper
     {
         return lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $string))));
     }
+
+    public static function generateMessageUuid(int $chatId, int $senderId): string
+    {
+        return '';
+    }
+
+    public static function decodeMessageUuid(string $messageUuid): array
+    {
+        return [];
+    }
 }

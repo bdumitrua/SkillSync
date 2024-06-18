@@ -42,6 +42,21 @@ class CreateChatDTO
         return $this->type === ChatType::Dialog->value;
     }
 
+    public function isGroupChat(): bool
+    {
+        return $this->type === ChatType::Group->value;
+    }
+
+    public function isTeamChat(): bool
+    {
+        return $this->isGroupChat() && $this->adminType === config('entities.team');
+    }
+
+    public function isUserGroupChat(): bool
+    {
+        return $this->isGroupChat() && $this->adminType === config('entities.user');
+    }
+
     public function setChatId(int $chatId): void
     {
         $this->chatId = $chatId;

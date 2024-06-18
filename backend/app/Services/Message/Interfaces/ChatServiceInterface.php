@@ -26,10 +26,11 @@ interface ChatServiceInterface
 
     /**
      * @param CreateChatDTO $createChatDTO
+     * @param array $memberIds
      * 
      * @return void
      */
-    public function create(CreateChatDTO $createChatDTO): void;
+    public function create(CreateChatDTO $createChatDTO, array $memberIds): void;
 
     /**
      * @param Chat $chat

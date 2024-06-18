@@ -29,5 +29,5 @@ interface ChatMemberServiceInterface
      * 
      * @return void
      */
-    public function remove(Chat $chat, User $user): void;
+    public function delete(Chat $chat, User $user): void;
 }

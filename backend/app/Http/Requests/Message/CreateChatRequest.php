@@ -42,8 +42,8 @@ class CreateChatRequest extends FormRequest
                 'required_if:adminType,team|exists:teams,id'
             ],
             'name' => 'required_if:type,group|string|max:50',
-            'members' => 'required_if:type,group|array',
-            'members.*' => 'distinct|exists:users,id',
+            'memberIds' => 'required_if:adminType,user|array',
+            'memberIds.*' => 'distinct|exists:users,id',
             'avatarUrl' => 'nullable|string',
         ];
     }
@@ -78,10 +78,10 @@ class CreateChatRequest extends FormRequest
             'name.string' => 'Name must be a string.',
             'name.max' => 'Name cannot exceed 50 characters.',
 
-            'members.required_if' => 'Members are required for groups.',
-            'members.array' => 'Members must be an array.',
-            'members.*.distinct' => 'Each member ID must be unique.',
-            'members.*.exists' => 'Each member ID must exist in users.',
+            'memberIds.required_if' => 'MemberIds are required for user groups.',
+            'memberIds.array' => 'MemberIds must be an array.',
+            'memberIds.*.distinct' => 'Each member ID must be unique.',
+            'memberIds.*.exists' => 'Each member ID must exist in users.',
 
             'avatarUrl.string' => 'Avatar URL must be a string.',
         ];
