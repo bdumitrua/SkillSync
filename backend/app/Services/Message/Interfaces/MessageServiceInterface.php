@@ -2,32 +2,32 @@
 
 namespace App\Services\Message\Interfaces;
 
+use App\Models\Chat;
 use App\DTO\Message\CreateMesssageDTO;
-use App\Http\Requests\Message\CreateMesssageRequest;
 
 interface MessageServiceInterface
 {
     /**
-     * @param int $chatId
+     * @param Chat $chat
      * @param CreateMesssageDTO $createMesssageDTO
      * 
      * @return void
      */
-    public function send(int $chatId, CreateMesssageDTO $createMesssageDTO): void;
+    public function send(Chat $chat, CreateMesssageDTO $createMesssageDTO): void;
 
     /**
-     * @param int $chatId
+     * @param Chat $chat
      * @param string $messageUuid
      * 
      * @return void
      */
-    public function read(int $chatId, string $messageUuid): void;
+    public function read(Chat $chat, string $messageUuid): void;
 
     /**
-     * @param int $chatId
+     * @param Chat $chat
      * @param string $messageUuid
      * 
      * @return void
      */
-    public function delete(int $chatId, string $messageUuid): void;
+    public function delete(Chat $chat, string $messageUuid): void;
 }

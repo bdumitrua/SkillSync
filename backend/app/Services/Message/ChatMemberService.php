@@ -2,12 +2,14 @@
 
 namespace App\Services\Message;
 
-use App\Repositories\Message\Interfaces\ChatMemberRepositoryInterface;
-use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
-use App\Services\Message\Interfaces\ChatMemberServiceInterface;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Resources\Json\JsonResource;
+use App\Services\Message\Interfaces\ChatMemberServiceInterface;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
+use App\Repositories\Message\Interfaces\ChatMemberRepositoryInterface;
+use App\Models\User;
+use App\Models\Chat;
 
 class ChatMemberService implements ChatMemberServiceInterface
 {
@@ -24,19 +26,17 @@ class ChatMemberService implements ChatMemberServiceInterface
         $this->authorizedUserId = Auth::id();
     }
 
-    public function show(int $chatId): JsonResource
+    public function show(Chat $chat): JsonResource
     {
-        return new JsonResource(
-            $this->chatMemberRepository->getByChatId($chatId)
-        );
+        return new JsonResource([]);
     }
 
-    public function add(int $chatId, int $userId): void
+    public function add(Chat $chat, User $user): void
     {
         // 
     }
 
-    public function remove(int $chatId): void
+    public function remove(Chat $chat, User $user): void
     {
         // 
     }

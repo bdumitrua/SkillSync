@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Messaging\ChatController;
-use App\Http\Controllers\Messaging\ChatMemberController;
-use App\Http\Controllers\Messaging\MessageController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Messaging\MessageController;
+use App\Http\Controllers\Messaging\ChatMemberController;
+use App\Http\Controllers\Messaging\ChatController;
 
 Route::prefix('messages')->name('messages.')->group(function () {
     /*
@@ -11,9 +11,9 @@ Route::prefix('messages')->name('messages.')->group(function () {
     *   name: messages.
     */
     Route::controller(MessageController::class)->group(function () {
-        Route::post('send/{chatId}', 'send')->name('send');
-        Route::post('read/{chatId}/{messageUuid}', 'read')->name('read');
-        Route::delete('delete/{chatId}/{messageUuid}', 'delete')->name('delete');
+        Route::post('send/{chat}', 'send')->name('send');
+        Route::post('read/{chat}/{messageUuid}', 'read')->name('read');
+        Route::delete('delete/{chat}/{messageUuid}', 'delete')->name('delete');
     });
 
     /*
@@ -22,7 +22,7 @@ Route::prefix('messages')->name('messages.')->group(function () {
     */
     Route::prefix('chats')->name('chats.')->controller(ChatController::class)->group(function () {
         Route::get('/', 'index')->name('index');
-        Route::get('show/{chatId}', 'show')->name('show');
+        Route::get('show/{chat}', 'show')->name('show');
         Route::post('/', 'create')->name('create');
 
         /*
@@ -30,9 +30,9 @@ Route::prefix('messages')->name('messages.')->group(function () {
         *   name: messages.chats.members.
         */
         Route::prefix('members')->name('members.')->controller(ChatMemberController::class)->group(function () {
-            Route::get('{chatId}', 'show')->name('show');
-            Route::post('{chatId}/{userId}', 'add')->name('add');
-            Route::delete('{chatId}/{userId}', 'remove')->name('remove');
+            Route::get('{chat}', 'show')->name('show');
+            Route::post('{chat}/{userId}', 'add')->name('add');
+            Route::delete('{chat}/{userId}', 'remove')->name('remove');
         });
     });
 });

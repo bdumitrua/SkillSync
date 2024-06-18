@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests\Message;
 
-use App\DTO\Message\UpdateChatDTO;
-use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\Dtoable;
+use App\Rules\EnumValue;
+use App\Enums\ChatType;
+use App\DTO\Message\UpdateChatDTO;
 
 class UpdateChatRequest extends FormRequest
 {

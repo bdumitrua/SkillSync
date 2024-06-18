@@ -3,28 +3,31 @@
 namespace App\Services\Message\Interfaces;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\User;
+use App\Models\Chat;
 
 interface ChatMemberServiceInterface
 {
     /**
-     * @param int $chatId
+     * @param Chat $chat
      * 
      * @return JsonResource
      */
-    public function show(int $chatId): JsonResource;
+    public function show(Chat $chat): JsonResource;
 
     /**
-     * @param int $chatId
-     * @param int $userId
+     * @param Chat $chat
+     * @param User $user
      * 
      * @return void
      */
-    public function add(int $chatId, int $userId): void;
+    public function add(Chat $chat, User $user): void;
 
     /**
-     * @param int $chatId
+     * @param Chat $chat
+     * @param User $user
      * 
      * @return void
      */
-    public function remove(int $chatId): void;
+    public function remove(Chat $chat, User $user): void;
 }

@@ -25,8 +25,8 @@ class DialogChat extends Model
     public function membersIds(): array
     {
         return [
-            'user_id' => $this->first_user,
-            'user_id' => $this->second_user,
+            $this->first_user,
+            $this->second_user,
         ];
     }
 }

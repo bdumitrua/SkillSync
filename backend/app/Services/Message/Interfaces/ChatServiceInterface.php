@@ -2,12 +2,13 @@
 
 namespace App\Services\Message\Interfaces;
 
-use App\DTO\Message\CreateChatDTO;
-use App\DTO\Message\UpdateChatDTO;
-use App\Http\Requests\Message\CreateChatRequest;
-use App\Http\Requests\Message\UpdateChatRequest;
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use App\Models\Chat;
+use App\Http\Requests\Message\UpdateChatRequest;
+use App\Http\Requests\Message\CreateChatRequest;
+use App\DTO\Message\UpdateChatDTO;
+use App\DTO\Message\CreateChatDTO;
 
 interface ChatServiceInterface
 {
@@ -17,25 +18,24 @@ interface ChatServiceInterface
     public function index(): JsonResource;
 
     /**
-     * @param int $chatId
+     * @param Chat $chat
      * 
      * @return JsonResource
      */
-    public function show(int $chatId): JsonResource;
+    public function show(Chat $chat): JsonResource;
 
     /**
-     * @param int $teamId
      * @param CreateChatDTO $createChatDTO
      * 
      * @return void
      */
-    public function create(int $teamId, CreateChatDTO $createChatDTO): void;
+    public function create(CreateChatDTO $createChatDTO): void;
 
     /**
-     * @param int $chatId
+     * @param Chat $chat
      * @param UpdateChatDTO $updateChatDTO
      * 
      * @return void
      */
-    public function update(int $chatId, UpdateChatDTO $updateChatDTO): void;
+    public function update(Chat $chat, UpdateChatDTO $updateChatDTO): void;
 }

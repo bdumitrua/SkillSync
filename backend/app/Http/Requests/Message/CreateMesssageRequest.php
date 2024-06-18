@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Message;
 
-use App\DTO\Message\CreateMesssageDTO;
-use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\Dtoable;
+use App\DTO\Message\CreateMesssageDTO;
 
 class CreateMesssageRequest extends FormRequest
 {
@@ -28,7 +28,7 @@ class CreateMesssageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "text" => 'required|string|max:1000',
+            "text" => 'required|string',
         ];
     }
 }

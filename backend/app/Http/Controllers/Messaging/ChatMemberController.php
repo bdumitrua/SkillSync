@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Messaging;
 
-use App\Http\Controllers\Controller;
-use App\Services\Message\Interfaces\ChatMemberServiceInterface;
 use Illuminate\Http\Request;
+use App\Services\Message\Interfaces\ChatMemberServiceInterface;
+use App\Models\User;
+use App\Models\Chat;
+use App\Http\Controllers\Controller;
 
 class ChatMemberController extends Controller
 {
@@ -15,24 +17,24 @@ class ChatMemberController extends Controller
         $this->chatMemberService = $chatMemberService;
     }
 
-    public function show(int $chatId)
+    public function show(Chat $chat)
     {
-        return $this->handleServiceCall(function () use ($chatId) {
-            return $this->chatMemberService->show($chatId);
+        return $this->handleServiceCall(function () use ($chat) {
+            return $this->chatMemberService->show($chat);
         });
     }
 
-    public function add(int $chatId, int $userId)
+    public function add(Chat $chat, User $user)
     {
-        return $this->handleServiceCall(function () use ($chatId, $userId) {
-            return $this->chatMemberService->add($chatId, $userId);
+        return $this->handleServiceCall(function () use ($chat, $user) {
+            return $this->chatMemberService->add($chat, $user);
         });
     }
 
-    public function remove(int $chatId, int $userId)
+    public function remove(Chat $chat, User $user)
     {
-        return $this->handleServiceCall(function () use ($chatId, $userId) {
-            return $this->chatMemberService->remove($chatId, $userId);
+        return $this->handleServiceCall(function () use ($chat, $user) {
+            return $this->chatMemberService->remove($chat, $user);
         });
     }
 }

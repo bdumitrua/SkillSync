@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests\Message;
 
-use App\DTO\Message\CreateChatDTO;
-use App\Rules\EntityIdRule;
-use App\Traits\Dtoable;
 use Illuminate\Foundation\Http\FormRequest;
+use App\Traits\Dtoable;
+use App\Rules\EnumValue;
+use App\Rules\EntityIdRule;
+use App\Enums\ChatType;
+use App\DTO\Message\CreateChatDTO;
 
 class CreateChatRequest extends FormRequest
 {
@@ -29,18 +31,57 @@ class CreateChatRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:50',
+            'type' => ['required', 'string', new EnumValue(ChatType::class)],
+
+            'firstUserId' => 'required_if:type,dialog|exists:users,id',
+            'secondUserId' => 'required_if:type,dialog|exists:users,id',
+
+            'adminType' => 'required_if:type,group|string|in:user,team',
+            'adminId' => [
+                'required_if:adminType,user|exists:users,id',
+                'required_if:adminType,team|exists:teams,id'
+            ],
+            'name' => 'required_if:type,group|string|max:50',
+            'members' => 'required_if:type,group|array',
+            'members.*' => 'distinct|exists:users,id',
             'avatarUrl' => 'nullable|string',
-            'chatId' => [new EntityIdRule()],
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.required' => 'Name is required.',
+            'type.required' => 'Type is required.',
+            'type.string' => 'Type must be a string.',
+            'type.in' => 'Type must be either dialog or group.',
+
+            'firstUserId.required_if' => 'First user ID is required for dialogs.',
+            'firstUserId.exists' => 'First user ID must exist in users.',
+
+            'secondUserId.required_if' => 'Second user ID is required for dialogs.',
+            'secondUserId.exists' => 'Second user ID must exist in users.',
+
+            'adminType.required_if' => 'Admin type is required for groups.',
+            'adminType.string' => 'Admin type must be a string.',
+            'adminType.in' => 'Admin type must be either user or team.',
+
+            'adminId.required_if' => [
+                'Admin ID is required if admin type is user.',
+                'Admin ID is required if admin type is team.'
+            ],
+            'adminId.exists' => [
+                'Admin ID must exist in users if admin type is user.',
+                'Admin ID must exist in teams if admin type is team.'
+            ],
+
+            'name.required_if' => 'Name is required for groups.',
             'name.string' => 'Name must be a string.',
-            'name.max' => 'Name cannot exceed 255 characters.',
+            'name.max' => 'Name cannot exceed 50 characters.',
+
+            'members.required_if' => 'Members are required for groups.',
+            'members.array' => 'Members must be an array.',
+            'members.*.distinct' => 'Each member ID must be unique.',
+            'members.*.exists' => 'Each member ID must exist in users.',
 
             'avatarUrl.string' => 'Avatar URL must be a string.',
         ];

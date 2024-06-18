@@ -2,35 +2,48 @@
 
 namespace App\DTO\Message;
 
+use App\Enums\ChatType;
+
 class CreateChatDTO
 {
-    public string $name;
-    public int $chatId;
-    public int $adminId;
-    public int $teamId;
+    public string $type;
 
-    public ?string $avatarUrl;
+    public ?int $chatId = null;
+
+    public ?int $firstUserId = null;
+    public ?int $secondUserId = null;
+
+    public ?string $adminType = null;
+    public ?int $adminId = null;
+    public ?string $name = null;
+    public ?string $avatarUrl = null;
 
     public function toArray(): array
     {
-        return [
-            'name' => $this->name,
-            'chatId' => $this->chatId,
-            'adminId' => $this->adminId,
-            'teamId' => $this->teamId,
-            'avatarUrl' => $this->avatarUrl,
-        ];
+        if ($this->isDialog()) {
+            return [
+                'chat_id' => $this->chatId,
+                'first_user_id' => $this->firstUserId,
+                'second_user_id' => $this->secondUserId,
+            ];
+        } else {
+            return [
+                'chat_id' => $this->chatId,
+                'admin_type' => $this->adminType,
+                'admin_id' => $this->adminId,
+                'name' => $this->name,
+                'avatar_url' => $this->avatarUrl,
+            ];
+        }
     }
 
-    public function setAdminId(int $adminId): self
+    public function isDialog(): bool
     {
-        $this->adminId = $adminId;
-        return $this;
+        return $this->type === ChatType::Dialog->value;
     }
 
-    public function setChatId(int $chatId): self
+    public function setChatId(int $chatId): void
     {
         $this->chatId = $chatId;
-        return $this;
     }
 }

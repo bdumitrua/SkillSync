@@ -5,6 +5,7 @@ namespace App\Services\Message;
 use Illuminate\Support\Facades\Auth;
 use App\Services\Message\Interfaces\MessageServiceInterface;
 use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
+use App\Models\Chat;
 use App\Http\Requests\Message\CreateMesssageRequest;
 use App\DTO\Message\CreateMesssageDTO;
 
@@ -19,21 +20,18 @@ class MessageService implements MessageServiceInterface
         $this->authorizedUserId = Auth::id();
     }
 
-    public function send(int $chatId, CreateMesssageDTO $createMesssageDTO): void
+    public function send(Chat $chat, CreateMesssageDTO $createMesssageDTO): void
     {
-        // TODO check if authorized user is chat member
         // 
     }
 
-    public function read(int $chatId, string $messageUuid): void
+    public function read(Chat $chat, string $messageUuid): void
     {
-        // TODO check if authorized user is chat member
         // 
     }
 
-    public function delete(int $chatId, string $messageUuid): void
+    public function delete(Chat $chat, string $messageUuid): void
     {
-        // TODO check if authorized user is author
         // 
     }
 }

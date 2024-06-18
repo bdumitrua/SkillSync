@@ -2,17 +2,18 @@
 
 namespace App\Services\Message;
 
-use App\DTO\Message\CreateChatDTO;
-use App\DTO\Message\UpdateChatDTO;
-use App\Http\Requests\Message\CreateChatRequest;
-use App\Http\Requests\Message\UpdateChatRequest;
-use Illuminate\Support\Facades\Auth;
-use App\Services\Message\Interfaces\ChatServiceInterface;
-use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
-use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
-use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
+use App\Services\Message\Interfaces\ChatServiceInterface;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
+use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
+use App\Models\Chat;
+use App\Http\Requests\Message\UpdateChatRequest;
+use App\Http\Requests\Message\CreateChatRequest;
+use App\DTO\Message\UpdateChatDTO;
+use App\DTO\Message\CreateChatDTO;
 
 class ChatService implements ChatServiceInterface
 {
@@ -31,25 +32,20 @@ class ChatService implements ChatServiceInterface
 
     public function index(): JsonResource
     {
-        return JsonResource::collection(
-            $this->chatRepository->getByUserId($this->authorizedUserId)
-        );
+        return new JsonResource([]);
     }
 
-    public function show(int $chatId): JsonResource
+    public function show(Chat $chat): JsonResource
     {
-        // TODO check if authorized user is chat member
-        return new JsonResource(
-            $this->chatRepository->getById($chatId)
-        );
+        return new JsonResource([]);
     }
 
-    public function create(int $teamId, CreateChatDTO $createChatDTO): void
+    public function create(CreateChatDTO $createChatDTO): void
     {
         // 
     }
 
-    public function update(int $chatId, UpdateChatDTO $updateChatDTO): void
+    public function update(Chat $chat, UpdateChatDTO $updateChatDTO): void
     {
         // 
     }

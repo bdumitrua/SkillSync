@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Messaging;
 
-use App\DTO\Message\CreateMesssageDTO;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Message\CreateMesssageRequest;
-use App\Services\Message\Interfaces\MessageServiceInterface;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Services\Message\Interfaces\MessageServiceInterface;
+use App\Models\Chat;
+use App\Http\Requests\Message\CreateMesssageRequest;
+use App\Http\Controllers\Controller;
+use App\DTO\Message\CreateMesssageDTO;
 
 class MessageController extends Controller
 {
@@ -18,28 +19,28 @@ class MessageController extends Controller
         $this->messageService = $messageService;
     }
 
-    public function send(int $chatId, CreateMesssageRequest $request)
+    public function send(Chat $chat, CreateMesssageRequest $request)
     {
         /** @var CreateMesssageDTO */
         $createMessageDTO = $request->createDTO();
-        $createMessageDTO->setSenderId(Auth::id())->setChatId($chatId);
+        $createMessageDTO->setSenderId(Auth::id())->setChatId($chat->id);
 
-        return $this->handleServiceCall(function () use ($chatId, $createMessageDTO) {
-            return $this->messageService->send($chatId, $createMessageDTO);
+        return $this->handleServiceCall(function () use ($chat, $createMessageDTO) {
+            return $this->messageService->send($chat, $createMessageDTO);
         });
     }
 
-    public function read(int $chatId, string $messageUuid)
+    public function read(Chat $chat, string $messageUuid)
     {
-        return $this->handleServiceCall(function () use ($chatId, $messageUuid) {
-            return $this->messageService->read($chatId, $messageUuid);
+        return $this->handleServiceCall(function () use ($chat, $messageUuid) {
+            return $this->messageService->read($chat, $messageUuid);
         });
     }
 
-    public function delete(int $chatId, string $messageUuid)
+    public function delete(Chat $chat, string $messageUuid)
     {
-        return $this->handleServiceCall(function () use ($chatId, $messageUuid) {
-            return $this->messageService->delete($chatId, $messageUuid);
+        return $this->handleServiceCall(function () use ($chat, $messageUuid) {
+            return $this->messageService->delete($chat, $messageUuid);
         });
     }
 }

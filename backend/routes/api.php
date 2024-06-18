@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\Authenticate;
 
 include __DIR__ . "/auth.php";
-include __DIR__ . "/message.php";
+include __DIR__ . "/chatting.php";
 include __DIR__ . "/post.php";
 include __DIR__ . "/team.php";
 include __DIR__ . "/user.php";

@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Messaging;
 
-use App\DTO\Message\CreateChatDTO;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Message\CreateChatRequest;
-use App\Http\Requests\Message\UpdateChatRequest;
-use App\Models\Team;
-use App\Services\Message\Interfaces\ChatServiceInterface;
 use Illuminate\Http\Request;
+use App\Services\Message\Interfaces\ChatServiceInterface;
+use App\Models\Team;
+use App\Models\Chat;
+use App\Http\Requests\Message\UpdateChatRequest;
+use App\Http\Requests\Message\CreateChatRequest;
+use App\Http\Controllers\Controller;
+use App\DTO\Message\CreateChatDTO;
 
 class ChatController extends Controller
 {
@@ -26,30 +27,29 @@ class ChatController extends Controller
         });
     }
 
-    public function show(int $chatId)
+    public function show(Chat $chat)
     {
-        return $this->handleServiceCall(function () use ($chatId) {
-            return $this->chatService->show($chatId);
+        return $this->handleServiceCall(function () use ($chat) {
+            return $this->chatService->show($chat);
         });
     }
 
-    public function create(Team $team, CreateChatRequest $request)
+    public function create(CreateChatRequest $request)
     {
         /** @var CreateChatDTO */
         $createChatDTO = $request->createDTO();
-        $createChatDTO->setChatId(0)->setAdminId($team->admin_id);
 
-        return $this->handleServiceCall(function () use ($team, $createChatDTO) {
-            return $this->chatService->create($team->id, $createChatDTO);
+        return $this->handleServiceCall(function () use ($createChatDTO) {
+            return $this->chatService->create($createChatDTO);
         });
     }
 
-    public function update(int $chatId, UpdateChatRequest $request)
+    public function update(Chat $chat, UpdateChatRequest $request)
     {
         $updateChatDTO = $request->createDTO();
 
-        return $this->handleServiceCall(function () use ($chatId, $updateChatDTO) {
-            return $this->chatService->update($chatId, $updateChatDTO);
+        return $this->handleServiceCall(function () use ($chat, $updateChatDTO) {
+            return $this->chatService->update($chat, $updateChatDTO);
         });
     }
 }
