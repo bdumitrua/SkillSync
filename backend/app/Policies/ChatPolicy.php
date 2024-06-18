@@ -63,7 +63,7 @@ class ChatPolicy
             return $canView;
         }
 
-        $messageSenderId = StringHelper::decodeMessageUuid($messageUuid)['sender_id'];
+        $messageSenderId = StringHelper::decodeMessageUuid($messageUuid)['senderId'];
         if ($user->id === $messageSenderId) {
             return Response::deny("You can't mark your own messages as reeded", 400);
         }
@@ -78,7 +78,7 @@ class ChatPolicy
             return $canView;
         }
 
-        $messageSenderId = StringHelper::decodeMessageUuid($messageUuid)['sender_id'];
+        $messageSenderId = StringHelper::decodeMessageUuid($messageUuid)['senderId'];
         if ($user->id !== $messageSenderId) {
             return Response::deny("You can't delete messages sended by other users", 403);
         }

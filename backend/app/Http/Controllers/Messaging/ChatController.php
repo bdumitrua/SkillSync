@@ -36,6 +36,8 @@ class ChatController extends Controller
 
     public function create(CreateChatRequest $request)
     {
+        $this->patchRequestEntityType($request, 'adminType');
+
         /** @var CreateChatDTO */
         $createChatDTO = $request->createDTO();
         $memberIds = $request->input('memberIds') ?? [];

@@ -2,11 +2,19 @@
 
 namespace App\Services\Message\Interfaces;
 
+use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\Chat;
 use App\DTO\Message\CreateMesssageDTO;
 
 interface MessageServiceInterface
 {
+    /**
+     * @param Chat $chat
+     * 
+     * @return JsonResource
+     */
+    public function chat(Chat $chat): JsonResource;
+
     /**
      * @param Chat $chat
      * @param CreateMesssageDTO $createMesssageDTO

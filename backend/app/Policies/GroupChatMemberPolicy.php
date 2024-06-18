@@ -65,6 +65,10 @@ class GroupChatMemberPolicy
             if ($userToDeleteIsTeamAdmin) {
                 return Response::deny("You have insufficient rigths.");
             }
+        } elseif ($groupChat->isUserGroupChat()) {
+            if ($userToDelete->id === $groupChat->admin_id) {
+                return Response::deny("Chat admin can't be removed from chat.");
+            }
         }
 
         return Response::allow();

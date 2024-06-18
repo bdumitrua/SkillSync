@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use Illuminate\Support\Str;
+
 class StringHelper
 {
     public static function camelToSnake(string $string): string
@@ -20,11 +22,38 @@ class StringHelper
 
     public static function generateMessageUuid(int $chatId, int $senderId): string
     {
-        return '';
+        // ChatId string
+        $cis = "ci" . (string)$chatId;
+        // SenderId string
+        $sis = "si" . (string)$senderId . 'uu';
+
+        $baseUuid = Str::uuid();
+
+        return $cis . $sis . $baseUuid;
     }
 
     public static function decodeMessageUuid(string $messageUuid): array
     {
-        return [];
+        $ciStr = 'ci';
+        $ciLen = strlen($ciStr);
+        $ciPos = strpos($messageUuid, $ciStr);
+
+        $siStr = 'si';
+        $siLen = strlen($siStr);
+        $siPos = strpos($messageUuid, $siStr);
+
+        $uuStr = 'uu';
+        $uuPos = strpos($messageUuid, $uuStr);
+
+        // Извлечение chatId
+        $chatId = substr($messageUuid, $ciPos + $ciLen, $siPos - ($ciPos + $ciLen));
+
+        // Извлечение senderId
+        $senderId = substr($messageUuid, $siPos + $siLen, $uuPos - ($siPos + $siLen));
+
+        return [
+            'chatId' => (int)$chatId,
+            'senderId' => (int)$senderId
+        ];
     }
 }

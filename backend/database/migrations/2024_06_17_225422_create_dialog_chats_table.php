@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('dialog_chats', function (Blueprint $table) {
             $table->id();
             $table->foreignId('chat_id')->constrained()->onDelete('cascade');
-            $table->unsignedBigInteger('first_user')->index();
-            $table->unsignedBigInteger('second_user')->index();
+            $table->unsignedBigInteger('first_user_id')->index();
+            $table->unsignedBigInteger('second_user_id')->index();
             $table->timestamps();
 
-            $table->foreign('first_user')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('second_user')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('first_user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('second_user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

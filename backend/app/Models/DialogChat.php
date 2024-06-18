@@ -13,8 +13,8 @@ class DialogChat extends Model
 
     protected $fillable = [
         'chat_id',
-        'first_user',
-        'second_user'
+        'first_user_id',
+        'second_user_id'
     ];
 
     public function chat(): BelongsTo
@@ -25,8 +25,8 @@ class DialogChat extends Model
     public function membersIds(): array
     {
         return [
-            $this->first_user,
-            $this->second_user,
+            $this->first_user_id,
+            $this->second_user_id,
         ];
     }
 }

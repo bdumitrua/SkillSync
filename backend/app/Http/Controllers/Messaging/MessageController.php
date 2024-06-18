@@ -19,6 +19,13 @@ class MessageController extends Controller
         $this->messageService = $messageService;
     }
 
+    public function chat(Chat $chat)
+    {
+        return $this->handleServiceCall(function () use ($chat) {
+            return $this->messageService->chat($chat);
+        });
+    }
+
     public function send(Chat $chat, CreateMesssageRequest $request)
     {
         /** @var CreateMesssageDTO */

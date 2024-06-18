@@ -5,34 +5,36 @@ use App\Http\Controllers\Messaging\MessageController;
 use App\Http\Controllers\Messaging\ChatMemberController;
 use App\Http\Controllers\Messaging\ChatController;
 
-Route::prefix('messages')->name('messages.')->group(function () {
+Route::prefix('chats')->name('chats.')->group(function () {
     /*
-    *   url: /messages/
-    *   name: messages.
+    *   url: /chats/
+    *   name: chats.
     */
-    Route::controller(MessageController::class)->group(function () {
-        Route::post('send/{chat}', 'send')->name('send');
-        Route::post('read/{chat}/{messageUuid}', 'read')->name('read');
-        Route::delete('delete/{chat}/{messageUuid}', 'delete')->name('delete');
-    });
-
-    /*
-    *   url: /messages/chats/
-    *   name: messages.chats.
-    */
-    Route::prefix('chats')->name('chats.')->controller(ChatController::class)->group(function () {
+    Route::controller(ChatController::class)->group(function () {
         Route::get('/', 'index')->name('index');
         Route::get('show/{chat}', 'show')->name('show');
         Route::post('/', 'create')->name('create');
+        Route::put('/{chat}', 'update')->name('update');
+    });
 
-        /*
-        *   url: /messages/chats/members/
-        *   name: messages.chats.members.
+    /*
+        *   url: /chats/chats/members/
+        *   name: chats.chats.members.
         */
-        Route::prefix('members')->name('members.')->controller(ChatMemberController::class)->group(function () {
-            Route::get('{chat}', 'show')->name('show');
-            Route::post('{chat}/{userId}', 'add')->name('add');
-            Route::delete('{chat}/{userId}', 'delete')->name('delete');
-        });
+    Route::prefix('{chat}/members')->name('members.')->controller(ChatMemberController::class)->group(function () {
+        Route::get('/', 'show')->name('show');
+        Route::post('{user}', 'add')->name('add');
+        Route::delete('{user}', 'delete')->name('delete');
+    });
+
+    /*
+    *   url: /chats/messages/
+    *   name: chats.messages
+    */
+    Route::prefix('{chat}/messages')->controller(MessageController::class)->group(function () {
+        Route::get('/', 'chat')->name('chat');
+        Route::post('send', 'send')->name('send');
+        Route::post('read/{messageUuid}', 'read')->name('read');
+        Route::delete('delete/{messageUuid}', 'delete')->name('delete');
     });
 });

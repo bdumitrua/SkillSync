@@ -42,6 +42,10 @@ class DialogChatPolicy
             return Response::deny("You can't create dialogs for other users", 422);
         }
 
+        if ($dialogMemberIds[0] === $dialogMemberIds[1]) {
+            return Response::deny("You can't create dialog with yourself.");
+        }
+
         return $this->chatMemberRepository->dialogExists($dialogMemberIds)
             ? Response::deny('Dialog between you already exists', 400)
             : Response::allow();

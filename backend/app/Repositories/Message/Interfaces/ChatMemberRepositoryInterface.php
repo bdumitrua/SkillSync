@@ -18,9 +18,9 @@ interface ChatMemberRepositoryInterface
     /**
      * @param int $userId
      * 
-     * @return Collection
+     * @return array
      */
-    public function getByUserId(int $userId): Collection;
+    public function getIdsByUserId(int $userId): array;
 
     /**
      * @param int $chatId

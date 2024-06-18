@@ -27,13 +27,6 @@ interface ChatRepositoryInterface
     public function getDataByIds(array $chatIds): Collection;
 
     /**
-     * @param int $userId
-     * 
-     * @return array
-     */
-    public function getByUserId(int $userId): array;
-
-    /**
      * @param CreateChatDTO $createChatDTO
      * 
      * @return Chat

@@ -53,9 +53,7 @@ class ChatService implements ChatServiceInterface
 
     public function index(): JsonResource
     {
-        $chatIds = $this->chatMemberRepository->getByUserId($this->authorizedUserId)
-            ->pluck('chat_id')->toArray();
-
+        $chatIds = $this->chatMemberRepository->getIdsByUserId($this->authorizedUserId);
         $chatsData = $this->chatRepository->getDataByIds($chatIds);
 
         return JsonResource::collection($chatsData);
