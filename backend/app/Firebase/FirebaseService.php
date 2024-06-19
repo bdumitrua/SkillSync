@@ -1,13 +1,10 @@
 <?php
 
-namespace App\Services;
+namespace App\Firebase;
 
-use Ramsey\Uuid\Uuid;
 use Kreait\Firebase\Database;
 use App\Firebase\FirebaseServiceInterface;
-use App\Exceptions\UnprocessableContentException;
 use App\Exceptions\NotFoundException;
-use App\Exceptions\AccessDeniedException;
 use App\Enums\MessageStatus;
 use App\DTO\Message\CreateMesssageDTO;
 
@@ -22,6 +19,19 @@ class FirebaseService implements FirebaseServiceInterface
         $this->bucket = config('firebase.projects.app.storage.bucket');
     }
 
+    public function measureLatency(): float
+    {
+        $startTime = microtime(true);
+
+        // Пример запроса к базе данных
+        $reference = $this->database->getReference($this->bucket);
+        $snapshot = $reference->getSnapshot();
+
+        $endTime = microtime(true);
+
+        return ($endTime - $startTime) * 1000; // Возвращаем время в миллисекундах
+    }
+
     public function wipeMyData(): bool
     {
         $bucketReference = $this->database->getReference($this->bucket);
@@ -33,14 +43,20 @@ class FirebaseService implements FirebaseServiceInterface
         return true;
     }
 
-    public function sendMessage(int $chatId, string $newMessageUuid, CreateMesssageDTO $messageData): void
+    public function sendMessage(int $chatId, string $newMessageUuid, CreateMesssageDTO $messageData): array
     {
         $newMessageRef = $this->database->getReference($this->getMessagePath($chatId, $newMessageUuid));
 
+        // Запись данных в базу данных
         $newMessageRef->set($messageData->toArray());
+
+        // Получение обратно данных сообщения
+        $newMessageSnapshot = $newMessageRef->getSnapshot();
+
+        return (array) $newMessageSnapshot->getValue();
     }
 
-    public function readMessage(string $chatId, string $messageUuid): void
+    public function readMessage(int $chatId, string $messageUuid): void
     {
         $messageRef = $this->database->getReference($this->getMessagePath($chatId, $messageUuid));
         $snapshot = $messageRef->getSnapshot();
@@ -55,7 +71,7 @@ class FirebaseService implements FirebaseServiceInterface
         }
     }
 
-    public function deleteMessage(string $chatId, string $messageUuid): void
+    public function deleteMessage(int $chatId, string $messageUuid): void
     {
         $messageRef = $this->database->getReference($this->getMessagePath($chatId, $messageUuid));
         $snapshot = $messageRef->getSnapshot();
@@ -67,7 +83,7 @@ class FirebaseService implements FirebaseServiceInterface
         $messageRef->remove();
     }
 
-    public function getChatMessages(string $chatId): array
+    public function getChatMessages(int $chatId): array
     {
         $chatMessagesRef = $this->database->getReference($this->getChatMessagesPath($chatId));
         $snapshot = $chatMessagesRef->getSnapshot();

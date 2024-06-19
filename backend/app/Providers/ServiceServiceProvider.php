@@ -37,8 +37,8 @@ use App\Services\LikeService;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Interfaces\SubscriptionServiceInterface;
 use App\Services\Interfaces\LikeServiceInterface;
-use App\Services\FirebaseService;
 use App\Firebase\FirebaseServiceInterface;
+use App\Firebase\FirebaseService;
 
 class ServiceServiceProvider extends ServiceProvider
 {
@@ -79,9 +79,6 @@ class ServiceServiceProvider extends ServiceProvider
         $this->app->bind(ProjectServiceInterface::class, ProjectService::class);
         $this->app->bind(ProjectMemberServiceInterface::class, ProjectMemberService::class);
         $this->app->bind(ProjectLinkServiceInterface::class, ProjectLinkService::class);
-
-        // Firebase
-        $this->app->singleton(FirebaseServiceInterface::class, FirebaseService::class);
     }
 
     /**

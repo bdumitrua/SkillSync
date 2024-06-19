@@ -2,10 +2,18 @@
 
 namespace App\Repositories\Message\Interfaces;
 
+use Illuminate\Support\Collection;
 use App\DTO\Message\CreateMesssageDTO;
 
 interface MessageRepositoryInterface
 {
+    /**
+     * @param int $chatId
+     * 
+     * @return Collection
+     */
+    public function getByChatId(int $chatId): Collection;
+
     /**
      * @param int $chatId
      * @param string $newMessageUuid

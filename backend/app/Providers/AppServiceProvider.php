@@ -12,11 +12,11 @@ use Elastic\Elasticsearch\Client;
 
 class AppServiceProvider extends ServiceProvider
 {
+    /**
+     * Register any application services.
+     */
     public function register(): void
     {
-        /**
-         * Register any application services.
-         */
         $this->app->singleton(Client::class, function () {
             $logger = new Logger('name');
             $logger->pushHandler(new StreamHandler('storage/logs/elasticsearch.log', Level::Debug));

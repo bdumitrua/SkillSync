@@ -22,10 +22,10 @@ window.Echo.connector.pusher.connection.bind("error", (err) => {
 	console.error("Error connecting to Pusher:", err);
 });
 
-const userId = 1;
-window.Echo.channel(`user.notifications.${userId}`).listen(
-	"NewNotificationEvent",
-	(event) => {
-		console.log(event?.notification);
+const chatId = 5;
+window.Echo.channel(`chat.${chatId}`).listen(
+	"MessageSentMessage",
+	(message) => {
+		console.log(message);
 	}
 );

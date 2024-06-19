@@ -4,6 +4,7 @@ namespace App\Services\Message;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Collection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Services\Message\Interfaces\MessageServiceInterface;
 use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
@@ -25,7 +26,9 @@ class MessageService implements MessageServiceInterface
 
     public function chat(Chat $chat): JsonResource
     {
-        return new JsonResource([]);
+        return JsonResource::collection(
+            $this->messageRepository->getByChatId($chat->id)
+        );
     }
 
     public function send(Chat $chat, CreateMesssageDTO $createMesssageDTO): void

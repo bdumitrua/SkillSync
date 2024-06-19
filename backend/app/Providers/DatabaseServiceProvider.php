@@ -2,9 +2,13 @@
 
 namespace App\Providers;
 
+use Kreait\Firebase\ServiceAccount;
+use Kreait\Firebase\Factory;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Firebase\FirebaseServiceInterface;
+use App\Firebase\FirebaseService;
 
 class DatabaseServiceProvider extends ServiceProvider
 {
@@ -13,7 +17,8 @@ class DatabaseServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Firebase
+        $this->app->bind(FirebaseServiceInterface::class, FirebaseService::class);
     }
 
     /**

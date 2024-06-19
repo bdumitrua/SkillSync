@@ -11,32 +11,32 @@ interface FirebaseServiceInterface
      * @param string $newMessageUuid
      * @param CreateMesssageDTO $messageData
      * 
-     * @return void
+     * @return array
      */
-    public function sendMessage(int $chatId, string $newMessageUuid, CreateMesssageDTO $messageData): void;
+    public function sendMessage(int $chatId, string $newMessageUuid, CreateMesssageDTO $messageData): array;
 
     /**
-     * @param string $chatId
+     * @param int $chatId
      * @param string $messageUuid
      * 
      * @return void
      */
-    public function readMessage(string $chatId, string $messageUuid): void;
+    public function readMessage(int $chatId, string $messageUuid): void;
 
     /**
-     * @param string $chatId
+     * @param int $chatId
      * @param string $messageUuid
      * 
      * @return void
      */
-    public function deleteMessage(string $chatId, string $messageUuid): void;
+    public function deleteMessage(int $chatId, string $messageUuid): void;
 
     /**
-     * @param string $chatId
+     * @param int $chatId
      * 
      * @return array
      */
-    public function getChatMessages(string $chatId): array;
+    public function getChatMessages(int $chatId): array;
 
     /**
      * @param array $chatIds
