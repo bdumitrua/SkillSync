@@ -48,7 +48,12 @@ class FirebaseService implements FirebaseServiceInterface
         $newMessageRef = $this->database->getReference($this->getMessagePath($chatId, $newMessageUuid));
 
         // Запись данных в базу данных
-        $newMessageRef->set($messageData->toArray());
+        $newMessageData = array_merge(
+            $messageData->toArray(),
+            ['created_at' => Database::SERVER_TIMESTAMP]
+        );
+
+        $newMessageRef->set($newMessageData);
 
         // Получение обратно данных сообщения
         $newMessageSnapshot = $newMessageRef->getSnapshot();
@@ -85,9 +90,11 @@ class FirebaseService implements FirebaseServiceInterface
 
     public function getChatMessages(int $chatId): array
     {
-        $chatMessagesRef = $this->database->getReference($this->getChatMessagesPath($chatId));
-        $snapshot = $chatMessagesRef->getSnapshot();
+        $chatMessagesRef = $this->database->getReference($this->getChatMessagesPath($chatId))
+            ->orderByChild('created_at')
+            ->limitToLast(15);
 
+        $snapshot = $chatMessagesRef->getSnapshot();
         return $snapshot->getValue() ?? [];
     }
 
@@ -95,19 +102,9 @@ class FirebaseService implements FirebaseServiceInterface
     {
         $messages = [];
 
-        // Создаем массив путей для мульти-запроса
-        $paths = [];
         foreach ($chatIds as $chatId) {
-            $paths[$chatId] = $this->getChatMessagesPath($chatId);
-        }
-
-        // Выполняем мульти-запрос к базе данных
-        $chatMessagesRef = $this->database->getReference();
-        $snapshots = $chatMessagesRef->getSnapshot()->getValue($paths);
-
-        // Обрабатываем результаты запроса
-        foreach ($chatIds as $chatId) {
-            $messages[$chatId] = $snapshots[$chatId] ?? [];
+            $chatMessages = $this->getChatMessages($chatId);
+            $messages[$chatId] = $chatMessages;
         }
 
         return $messages;

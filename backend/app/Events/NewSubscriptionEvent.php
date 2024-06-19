@@ -13,7 +13,7 @@ use App\Models\Subscription;
 
 class NewSubscriptionEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
     public Subscription $subscription;
     /**

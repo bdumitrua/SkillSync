@@ -12,7 +12,7 @@ use Illuminate\Broadcasting\Channel;
 
 class MessageReadEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
     public $chatId;
     public $messageUuid;

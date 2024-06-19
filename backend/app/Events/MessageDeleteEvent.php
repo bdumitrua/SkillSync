@@ -12,7 +12,7 @@ use Illuminate\Broadcasting\Channel;
 
 class MessageDeleteEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
     public $chatId;
     public $messageUuid;

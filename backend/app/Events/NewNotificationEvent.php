@@ -13,17 +13,13 @@ use App\Models\Notification;
 
 class NewNotificationEvent implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
     public Notification $notification;
-    public $from;
-    public $to;
 
     public function __construct(Notification $notification)
     {
         $this->notification = $notification;
-        $this->notification->from = $notification->from;
-        $this->notification->to = $notification->to;
     }
 
     public function broadcastOn(): Channel
