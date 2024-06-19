@@ -15,6 +15,13 @@ interface ProjectRepositoryInterface
     public function getAll(): Collection;
 
     /**
+     * @param string $query
+     * 
+     * @return Collection
+     */
+    public function search(string $query): Collection;
+
+    /**
      * @param int $projectId
      * 
      * @return Project|null

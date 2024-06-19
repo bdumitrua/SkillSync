@@ -27,6 +27,13 @@ interface ChatRepositoryInterface
     public function getDataByIds(array $chatIds): Collection;
 
     /**
+     * @param string $query
+     * 
+     * @return Collection
+     */
+    public function search(string $query): Collection;
+
+    /**
      * @param CreateChatDTO $createChatDTO
      * 
      * @return Chat

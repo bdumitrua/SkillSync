@@ -6,6 +6,7 @@ use App\Services\Project\Interfaces\ProjectServiceInterface;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Project;
+use App\Http\Requests\SearchRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
 use App\Http\Requests\Project\CreateProjectRequest;
 use App\Http\Controllers\Controller;
@@ -32,6 +33,13 @@ class ProjectController extends Controller
     {
         return $this->handleServiceCall(function () use ($project) {
             return $this->projectService->show($project);
+        });
+    }
+
+    public function search(SearchRequest $request)
+    {
+        return $this->handleServiceCall(function () use ($request) {
+            return $this->projectService->search($request->input('query'));
         });
     }
 

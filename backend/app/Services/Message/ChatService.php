@@ -59,6 +59,13 @@ class ChatService implements ChatServiceInterface
         return JsonResource::collection($chatsData);
     }
 
+    public function search(string $query): JsonResource
+    {
+        $chats = $this->chatRepository->search($query);
+
+        return JsonResource::collection($chats);
+    }
+
     public function show(Chat $chat): JsonResource
     {
         if (Gate::denies('view', [Chat::class, $chat])) {

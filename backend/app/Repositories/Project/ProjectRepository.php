@@ -20,6 +20,11 @@ class ProjectRepository implements ProjectRepositoryInterface
         return Project::get();
     }
 
+    public function search(string $query): Collection
+    {
+        return Project::search($query);
+    }
+
     public function getById(int $projectId): ?Project
     {
         Log::debug('Getting project data by id', [

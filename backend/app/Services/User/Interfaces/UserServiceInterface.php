@@ -24,11 +24,11 @@ interface UserServiceInterface
     public function show(User $user): JsonResource;
 
     /**
-     * @param Request $request
+     * @param string $query
      * 
      * @return JsonResource
      */
-    public function search(Request $request): JsonResource;
+    public function search(string $query): JsonResource;
 
     /**
      * @param UpdateUserDTO $updateUserDTO

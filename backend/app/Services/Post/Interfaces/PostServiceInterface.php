@@ -2,16 +2,16 @@
 
 namespace App\Services\Post\Interfaces;
 
-use App\DTO\Post\CreatePostDTO;
-use App\DTO\Post\UpdatePostDTO;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Post;
 use App\Http\Requests\Post\UpdatePostRequest;
 use App\Http\Requests\Post\CreatePostRequest;
-use Illuminate\Http\Request;
+use App\DTO\Post\UpdatePostDTO;
+use App\DTO\Post\CreatePostDTO;
 
 interface PostServiceInterface
 {
@@ -33,11 +33,11 @@ interface PostServiceInterface
     public function show(Post $post): JsonResource;
 
     /**
-     * @param Request $request
+     * @param string $query
      * 
      * @return JsonResource
      */
-    public function search(Request $request): JsonResource;
+    public function search(string $query): JsonResource;
 
     /**
      * @param int $userId

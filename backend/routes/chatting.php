@@ -12,6 +12,7 @@ Route::prefix('chats')->name('chats.')->group(function () {
     */
     Route::controller(ChatController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('search', 'search')->name('search');
         Route::get('show/{chat}', 'show')->name('show');
         Route::post('/', 'create')->name('create');
         Route::put('/{chat}', 'update')->name('update');

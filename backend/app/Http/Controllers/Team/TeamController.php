@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Team;
 use App\Http\Requests\Team\UpdateTeamRequest;
 use App\Http\Requests\Team\CreateTeamRequest;
+use App\Http\Requests\SearchRequest;
 use App\Http\Controllers\Controller;
 use App\DTO\Team\CreateTeamDTO;
 
@@ -36,10 +37,10 @@ class TeamController extends Controller
         });
     }
 
-    public function search(Request $request)
+    public function search(SearchRequest $request)
     {
         return $this->handleServiceCall(function () use ($request) {
-            return $this->teamService->search($request);
+            return $this->teamService->search($request->input('query'));
         });
     }
 

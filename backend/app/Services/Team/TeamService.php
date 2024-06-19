@@ -64,9 +64,9 @@ class TeamService implements TeamServiceInterface
         return new TeamResource($team);
     }
 
-    public function search(Request $request): JsonResource
+    public function search(string $query): JsonResource
     {
-        $teams = $this->teamRepository->search($request->input('query'));
+        $teams = $this->teamRepository->search($query);
 
         return TeamDataResource::collection($teams);
     }

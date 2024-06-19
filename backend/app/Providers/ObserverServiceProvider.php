@@ -14,6 +14,8 @@ use App\Models\Project;
 use App\Models\Post;
 use App\Models\Notification;
 use App\Models\Like;
+use App\Models\GroupChat;
+use App\Models\DialogChat;
 
 class ObserverServiceProvider extends ServiceProvider
 {
@@ -36,5 +38,7 @@ class ObserverServiceProvider extends ServiceProvider
         Team::observe(ElasticsearchObserver::class);
         Post::observe(ElasticsearchObserver::class);
         Project::observe(ElasticsearchObserver::class);
+        DialogChat::observe(ElasticsearchObserver::class);
+        GroupChat::observe(ElasticsearchObserver::class);
     }
 }

@@ -39,6 +39,14 @@ class ChatRepository implements ChatRepositoryInterface
         return $chats;
     }
 
+    public function search(string $query): Collection
+    {
+        $dialogChats = DialogChat::search($query);
+        $groupChats = GroupChat::search($query);
+
+        return $dialogChats->merge($groupChats);
+    }
+
     public function create(CreateChatDTO $createChatDTO): Chat
     {
         Log::debug('Start creating chat from dto', [

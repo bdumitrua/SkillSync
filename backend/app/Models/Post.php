@@ -33,7 +33,6 @@ class Post extends Model implements Likeable
         });
     }
 
-
     protected static function getESIndex(): string
     {
         return 'posts';

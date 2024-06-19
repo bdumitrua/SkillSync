@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Services\User\Interfaces\UserServiceInterface;
 use App\Models\User;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Requests\SearchRequest;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
@@ -31,10 +32,10 @@ class UserController extends Controller
         });
     }
 
-    public function search(Request $request)
+    public function search(SearchRequest $request)
     {
         return $this->handleServiceCall(function () use ($request) {
-            return $this->userService->search($request);
+            return $this->userService->search($request->input('query'));
         });
     }
 

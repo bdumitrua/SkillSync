@@ -18,6 +18,13 @@ interface ChatServiceInterface
     public function index(): JsonResource;
 
     /**
+     * @param string $query
+     * 
+     * @return JsonResource
+     */
+    public function search(string $query): JsonResource;
+
+    /**
      * @param Chat $chat
      * 
      * @return JsonResource

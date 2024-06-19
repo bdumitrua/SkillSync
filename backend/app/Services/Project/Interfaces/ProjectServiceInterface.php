@@ -26,6 +26,13 @@ interface ProjectServiceInterface
     public function show(Project $project): JsonResource;
 
     /**
+     * @param string $query
+     * 
+     * @return JsonResource
+     */
+    public function search(string $query): JsonResource;
+
+    /**
      * @param Team $team
      * 
      * @return JsonResource

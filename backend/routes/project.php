@@ -12,6 +12,7 @@ Route::prefix('projects')->name('projects.')->group(function () {
     */
     Route::controller(ProjectController::class)->group(function () {
         Route::get('/', 'index')->name('index');
+        Route::get('search', 'search')->name('search');
         Route::get('show/{project}', 'show')->name('show');
         Route::get('team/{team}', 'team')->name('team');
         Route::get('user/member/{user}', 'member')->name('member');

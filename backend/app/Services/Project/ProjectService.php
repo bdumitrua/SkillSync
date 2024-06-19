@@ -64,6 +64,14 @@ class ProjectService implements ProjectServiceInterface
         return new JsonResource($project);
     }
 
+    public function search(string $query): JsonResource
+    {
+        $projects = $this->projectRepository->search($query);
+        $projects = $this->assembleProjectsData($projects);
+
+        return JsonResource::collection($projects);
+    }
+
     public function team(Team $team): JsonResource
     {
         $projects = $this->projectRepository->getByTeamId($team->id);
@@ -163,8 +171,8 @@ class ProjectService implements ProjectServiceInterface
             }
         }
 
-        Log::debug("Succesfully setted posts author data", [
-            'posts' => $projects->pluck('id')->toArray(),
+        Log::debug("Succesfully setted projects author data", [
+            'projects' => $projects->pluck('id')->toArray(),
         ]);
     }
 

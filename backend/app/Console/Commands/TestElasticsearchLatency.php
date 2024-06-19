@@ -15,10 +15,6 @@ class TestElasticsearchLatency extends Command
     public function __construct()
     {
         parent::__construct();
-
-        // Laravel will execute ALL _construct() methods for ALL commands whenever a SINGLE command is
-        // executed. This leads to noticeable slow-downs and class calls, so be carefully.
-        $this->client = app(Client::class);
     }
 
     public function handle()

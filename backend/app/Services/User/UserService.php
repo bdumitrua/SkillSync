@@ -79,9 +79,9 @@ class UserService implements UserServiceInterface
         return new UserResource($user);
     }
 
-    public function search(Request $request): JsonResource
+    public function search(string $query): JsonResource
     {
-        $users = $this->userRepository->search($request->input('query'));
+        $users = $this->userRepository->search($query);
 
         return UserDataResource::collection($users);
     }

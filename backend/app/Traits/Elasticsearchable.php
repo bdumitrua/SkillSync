@@ -89,8 +89,8 @@ trait Elasticsearchable
     {
         return [
             'index.store.stats_refresh_interval' => static::getESRefreshInterval(),
-            'index.number_of_shards' => 4,
-            'index.number_of_replicas' => 2
+            'index.number_of_shards' => 1,
+            'index.number_of_replicas' => 0
         ];
     }
 
@@ -203,6 +203,13 @@ trait Elasticsearchable
         foreach ($hits as $hit) {
             $model = new self($hit['_source']);
             $model->id = $hit['_source']['id'];
+
+            // Add missing attributes from _source to the model
+            foreach ($hit['_source'] as $key => $value) {
+                if (!property_exists($model, $key)) {
+                    $model->{$key} = $value;
+                }
+            }
 
             $results[] = $model;
         }

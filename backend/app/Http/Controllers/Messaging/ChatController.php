@@ -6,9 +6,11 @@ use Illuminate\Http\Request;
 use App\Services\Message\Interfaces\ChatServiceInterface;
 use App\Models\Team;
 use App\Models\Chat;
+use App\Http\Requests\SearchRequest;
 use App\Http\Requests\Message\UpdateChatRequest;
 use App\Http\Requests\Message\CreateChatRequest;
 use App\Http\Controllers\Controller;
+use App\Enums\ChatType;
 use App\DTO\Message\CreateChatDTO;
 
 class ChatController extends Controller
@@ -27,6 +29,13 @@ class ChatController extends Controller
         });
     }
 
+    public function search(SearchRequest $request)
+    {
+        return $this->handleServiceCall(function () use ($request) {
+            return $this->chatService->search($request->input('query'));
+        });
+    }
+
     public function show(Chat $chat)
     {
         return $this->handleServiceCall(function () use ($chat) {
@@ -36,7 +45,9 @@ class ChatController extends Controller
 
     public function create(CreateChatRequest $request)
     {
-        $this->patchRequestEntityType($request, 'adminType');
+        if ($request->input('type') === ChatType::Group->value) {
+            $this->patchRequestEntityType($request, 'adminType');
+        }
 
         /** @var CreateChatDTO */
         $createChatDTO = $request->createDTO();

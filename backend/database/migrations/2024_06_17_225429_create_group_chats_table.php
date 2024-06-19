@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Models\GroupChat;
 
 return new class extends Migration
 {
@@ -19,6 +20,8 @@ return new class extends Migration
             $table->string('avatar_url')->nullable();
             $table->timestamps();
         });
+
+        GroupChat::createElasticsearchIndex();
     }
 
     /**
@@ -27,5 +30,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('group_chats');
+
+        GroupChat::deleteElasticsearchIndex();
     }
 };

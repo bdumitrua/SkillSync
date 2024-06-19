@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Post;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Post\CreatePostRequest;
-use App\Http\Requests\Post\UpdatePostRequest;
-use App\Models\Post;
-use App\Models\Team;
-use App\Models\User;
-use App\Services\Post\Interfaces\PostServiceInterface;
 use Illuminate\Http\Request;
+use App\Services\Post\Interfaces\PostServiceInterface;
+use App\Models\User;
+use App\Models\Team;
+use App\Models\Post;
+use App\Http\Requests\SearchRequest;
+use App\Http\Requests\Post\UpdatePostRequest;
+use App\Http\Requests\Post\CreatePostRequest;
+use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
@@ -41,10 +42,10 @@ class PostController extends Controller
         });
     }
 
-    public function search(Request $request)
+    public function search(SearchRequest $request)
     {
         return $this->handleServiceCall(function () use ($request) {
-            return $this->postService->search($request);
+            return $this->postService->search($request->input('query'));
         });
     }
 

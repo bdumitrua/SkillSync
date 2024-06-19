@@ -80,9 +80,9 @@ class PostService implements PostServiceInterface
         return new PostResource($post);
     }
 
-    public function search(Request $request): JsonResource
+    public function search(string $query): JsonResource
     {
-        $queryPosts = $this->postRepository->search($request->input('query'));
+        $queryPosts = $this->postRepository->search($query);
         $queryPosts = $this->assemblePostsData($queryPosts);
 
         return PostResource::collection($queryPosts);
