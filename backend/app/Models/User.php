@@ -41,6 +41,20 @@ class User extends Authenticatable implements JWTSubject
         'token_invalid_before' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        // You can't delete users from API,
+        // but anyway let this logic be here
+        static::deleting(function ($user) {
+            $user->subscribers()->delete();
+            $user->posts()->delete();
+            $user->tags()->delete();
+            // Doing nothing about chats, where user is admin
+        });
+    }
+
     protected static function getESIndex(): string
     {
         return 'users';

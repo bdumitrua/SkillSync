@@ -25,6 +25,25 @@ class Team extends Model
         'admin_id'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($team) {
+            $team->posts()->delete();
+            $team->tags()->delete();
+            $team->subscribers()->delete();
+
+            // It's not logical to DELETE the whole chat, 
+            // so we just change the admin of chat to team admin
+            /** @var GroupChat */
+            $teamChat = $team->chat()->first();
+            $teamChat->admin_type = config('entities.user');
+            $teamChat->admin_id = $team->admin_id;
+            $teamChat->save();
+        });
+    }
+
     protected static function getESIndex(): string
     {
         return 'teams';

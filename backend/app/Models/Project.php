@@ -27,6 +27,15 @@ class Project extends Model implements Likeable
         'likes_count'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($project) {
+            $project->likes()->delete();
+        });
+    }
+
     protected static function getESIndex(): string
     {
         return 'projects';

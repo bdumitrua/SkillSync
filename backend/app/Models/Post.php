@@ -30,6 +30,7 @@ class Post extends Model implements Likeable
 
         static::deleting(function ($post) {
             $post->likes()->delete();
+            $post->tags()->delete();
         });
     }
 
