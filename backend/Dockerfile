@@ -27,5 +27,4 @@ COPY ./websockets.conf /etc/supervisor/conf.d/websockets.conf
 
 COPY ./start.sh /app/start.sh
 
-EXPOSE 8000
 CMD ["/app/start.sh"]
