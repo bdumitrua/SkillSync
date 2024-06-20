@@ -5,6 +5,7 @@ namespace App\Repositories\Project;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
 use App\Traits\Updateable;
+use App\Traits\Cacheable;
 use App\Repositories\Project\Interfaces\ProjectLinkRepositoryInterface;
 use App\Models\ProjectLink;
 use App\DTO\Project\UpdateProjectLinkDTO;
@@ -12,16 +13,21 @@ use App\DTO\Project\CreateProjectLinkDTO;
 
 class ProjectLinkRepository implements ProjectLinkRepositoryInterface
 {
-    use Updateable;
+    use Updateable, Cacheable;
 
     public function getByProjectId(int $projectId): Collection
     {
-        return ProjectLink::where('project_id', '=', $projectId)->get();
+        $cacheKey = $this->getProjectLinksCacheKey($projectId);
+        return $this->getCachedData($cacheKey, CACHE_TIME_PROJECT_LINKS_DATA, function () use ($projectId) {
+            return ProjectLink::where('project_id', '=', $projectId)->get();
+        });
     }
 
     public function getByProjectsIds(array $projectsIds): Collection
     {
-        return ProjectLink::whereIn('project_id', $projectsIds)->get();
+        return $this->getCachedCollection($projectsIds, function ($projectId) {
+            return $this->getByProjectId($projectId);
+        });
     }
 
     public function create(CreateProjectLinkDTO $createProjectLinkDTO): void
@@ -51,5 +57,10 @@ class ProjectLinkRepository implements ProjectLinkRepositoryInterface
         ]);
 
         $projectLink->delete();
+    }
+
+    protected function getProjectLinksCacheKey(int $projectId): string
+    {
+        return CACHE_KEY_PROJECT_LINKS_DATA . $projectId;
     }
 }

@@ -63,8 +63,6 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
             $dto->toArray()
         );
 
-        $this->clearTeamVacanciesCache($newVacancy->team_id);
-
         Log::debug('Succesfully created teamVacancy from dto', [
             'dto' => $dto->toArray(),
             'newVacancy' => $newVacancy->toArray()
@@ -81,8 +79,6 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
         ]);
 
         $this->updateFromDto($teamVacancy, $dto);
-        $this->clearVacancyCache($teamVacancy->id);
-        $this->clearTeamVacanciesCache($teamVacancy->team_id);
 
         Log::debug('Succesfully updated teamVacancy from dto', [
             'teamVacancy id' => $teamVacancy->id,
@@ -91,7 +87,6 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
 
     public function delete(TeamVacancy $teamVacancy): void
     {
-        $teamVacancyId = $teamVacancy->id;
         $teamVacancyData = $teamVacancy->toArray();
 
         Log::debug('Deleting teamVacancy', [
@@ -100,8 +95,6 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
         ]);
 
         $teamVacancy->delete();
-        $this->clearVacancyCache($teamVacancyId);
-        $this->clearTeamVacanciesCache($teamVacancyData['team_id']);
 
         Log::debug('Succesfully deleted teamVacancy', [
             'teamVacancyData' => $teamVacancyData,
@@ -110,21 +103,11 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
 
     protected function getVacancyCacheKey(int $teamVacancyId): string
     {
-        return CACHE_KEY_TEAM_VACANCY_DATA . $teamVacancyId;
+        return CACHE_KEY_VACANCY_DATA . $teamVacancyId;
     }
 
     protected function getTeamVacanciesCacheKey(int $teamId): string
     {
         return CACHE_KEY_TEAM_VACANCIES_DATA . $teamId;
-    }
-
-    protected function clearVacancyCache(int $teamVacancyId): void
-    {
-        $this->clearCache($this->getVacancyCacheKey($teamVacancyId));
-    }
-
-    protected function clearTeamVacanciesCache(int $teamId): void
-    {
-        $this->clearCache($this->getTeamVacanciesCacheKey($teamId));
     }
 }

@@ -67,7 +67,6 @@ class UserRepository implements UserRepositoryInterface
         $user = $this->queryById($userId)->first();
 
         $this->updateFromDto($user, $dto);
-        $this->clearUserCache($user->id);
 
         Log::debug('User data succesfully updated', [
             'userId' => $userId
@@ -79,10 +78,5 @@ class UserRepository implements UserRepositoryInterface
     protected function getUserCacheKey(int $userId): string
     {
         return CACHE_KEY_USER_DATA . $userId;
-    }
-
-    protected function clearUserCache(int $userId): void
-    {
-        $this->clearCache($this->getUserCacheKey($userId));
     }
 }

@@ -46,8 +46,6 @@ class TeamLinkRepository implements TeamLinkRepositoryInterface
             $dto->toArray()
         );
 
-        $this->clearTeamLinksCache($newTeamLink->team_id);
-
         Log::debug('Succesfully created teamLink from dto', [
             'dto' => $dto->toArray(),
             'newTeamLink' => $newTeamLink->toArray()
@@ -64,7 +62,6 @@ class TeamLinkRepository implements TeamLinkRepositoryInterface
         ]);
 
         $this->updateFromDto($teamLink, $dto);
-        $this->clearTeamLinksCache($teamLink->team_id);
 
         Log::debug('Succesfully updated teamLink from dto', [
             'teamLink id' => $teamLink->id,
@@ -73,7 +70,6 @@ class TeamLinkRepository implements TeamLinkRepositoryInterface
 
     public function delete(TeamLink $teamLink): void
     {
-        $teamId = $teamLink->team_id;
         $teamLinkData = $teamLink->toArray();
 
         Log::debug('Deleting teamLink', [
@@ -82,7 +78,6 @@ class TeamLinkRepository implements TeamLinkRepositoryInterface
         ]);
 
         $teamLink->delete();
-        $this->clearTeamLinksCache($teamId);
 
         Log::debug('Succesfully deleted teamLink', [
             'teamLinkData' => $teamLinkData,
@@ -92,11 +87,5 @@ class TeamLinkRepository implements TeamLinkRepositoryInterface
     protected function getTeamLinksCacheKey(int $teamId, bool $isMember): string
     {
         return CACHE_KEY_TEAM_LINKS_DATA . $teamId . ":" . $isMember;
-    }
-
-    protected function clearTeamLinksCache(int $teamId): void
-    {
-        $this->clearCache($this->getTeamLinksCacheKey($teamId, false));
-        $this->clearCache($this->getTeamLinksCacheKey($teamId, true));
     }
 }

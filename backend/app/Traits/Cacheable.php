@@ -63,11 +63,17 @@ trait Cacheable
      */
     public function getCachedCollection(array $modelIds, \Closure $callback): Collection
     {
-        return new Collection(array_map(function ($modelId) use ($callback) {
+        $data = array_map(function ($modelId) use ($callback) {
             if (!empty($queryData = $callback($modelId))) {
                 return $queryData;
             }
-        }, $modelIds));
+        }, $modelIds);
+
+        if ($data instanceof Collection) {
+            return $data;
+        }
+
+        return new Collection($data);
     }
 
     /**

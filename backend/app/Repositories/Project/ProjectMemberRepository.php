@@ -5,6 +5,7 @@ namespace App\Repositories\Project;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
 use App\Traits\Updateable;
+use App\Traits\Cacheable;
 use App\Repositories\Project\Interfaces\ProjectMemberRepositoryInterface;
 use App\Models\ProjectMember;
 use App\DTO\Project\UpdateProjectMemberDTO;
@@ -12,16 +13,21 @@ use App\DTO\Project\CreateProjectMemberDTO;
 
 class ProjectMemberRepository implements ProjectMemberRepositoryInterface
 {
-    use Updateable;
+    use Updateable, Cacheable;
 
     public function getByProjectId(int $projectId): Collection
     {
-        return ProjectMember::where('project_id', '=', $projectId)->get();
+        $cacheKey = $this->getProjectMembersCacheKey($projectId);
+        return $this->getCachedData($cacheKey, CACHE_TIME_PROJECT_MEMBERS_DATA, function () use ($projectId) {
+            return ProjectMember::where('project_id', '=', $projectId)->get();
+        });
     }
 
     public function getByProjectsIds(array $projectsIds): Collection
     {
-        return ProjectMember::whereIn('project_id', $projectsIds)->get();
+        return $this->getCachedCollection($projectsIds, function ($projectId) {
+            return $this->getByProjectId($projectId);
+        });
     }
 
     public function getByMemberId(int $memberId): Collection
@@ -63,5 +69,10 @@ class ProjectMemberRepository implements ProjectMemberRepositoryInterface
         ]);
 
         $projectMember->delete();
+    }
+
+    protected function getProjectMembersCacheKey(int $projectId): string
+    {
+        return CACHE_KEY_PROJECT_MEMBERS_DATA . $projectId;
     }
 }

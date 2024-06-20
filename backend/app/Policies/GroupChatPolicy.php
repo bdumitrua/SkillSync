@@ -44,7 +44,16 @@ class GroupChatPolicy
     public function create(User $user, CreateChatDTO $createChatDTO): Response
     {
         if ($createChatDTO->isTeamChat()) {
-            return Gate::inspect(TOUCH_TEAM_CHAT_GATE, [Team::class, $createChatDTO->adminId]);
+            $canTouchTeamChats = Gate::inspect(TOUCH_TEAM_CHAT_GATE, [Team::class, $createChatDTO->adminId]);
+
+            if ($canTouchTeamChats->denied()) {
+                return $canTouchTeamChats;
+            }
+
+            $teamChat = $this->chatRepository->getChatByTeamId($createChatDTO->adminId);
+            if (!empty($teamChat)) {
+                return Response::deny("Chat, associated with this team, already exists.", 409);
+            }
         }
 
         return Response::allow();

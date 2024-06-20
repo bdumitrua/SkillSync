@@ -28,36 +28,24 @@ class NotificationRepository implements NotificationRepositoryInterface
 
     public function create(CreateNotificationDTO $dto): void
     {
-        $newNotification = Notification::create(
+        Notification::create(
             $dto->toArray()
         );
-
-        $this->clearNotificationsCache($newNotification->receiver_id);
     }
 
     public function seen(Notification $notification): void
     {
         $notification->status = NotificationStatus::Seen;
         $notification->save();
-
-        $this->clearNotificationsCache($notification->receiver_id);
     }
 
     public function delete(Notification $notification): void
     {
-        $notificationReceiverId = $notification->receiver_id;
-
         $notification->delete();
-        $this->clearNotificationsCache($notificationReceiverId);
     }
 
     protected function getNotificationsCacheKey(int $userId): string
     {
         return CACHE_KEY_USER_NOTIFICATIONS_DATA . $userId;
-    }
-
-    protected function clearNotificationsCache(int $userId): void
-    {
-        $this->clearCache($this->getNotificationsCacheKey($userId));
     }
 }

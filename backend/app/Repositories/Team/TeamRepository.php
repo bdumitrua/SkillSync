@@ -68,8 +68,6 @@ class TeamRepository implements TeamRepositoryInterface
             $dto->toArray()
         );
 
-        $this->clearTeamCache($newTeam->id);
-
         Log::debug('Succesfully created team from dto', [
             'dto' => $dto->toArray(),
             'newTeam' => $newTeam->toArray()
@@ -86,7 +84,6 @@ class TeamRepository implements TeamRepositoryInterface
         ]);
 
         $this->updateFromDto($team, $dto);
-        $this->clearTeamCache($team->id);
 
         Log::debug('Succesfully updated team from dto', [
             'team id' => $team->id,
@@ -95,7 +92,6 @@ class TeamRepository implements TeamRepositoryInterface
 
     public function delete(Team $team): void
     {
-        $teamId = $team->id;
         $teamData = $team->toArray();
 
         Log::debug('Deleting team', [
@@ -104,7 +100,6 @@ class TeamRepository implements TeamRepositoryInterface
         ]);
 
         $team->delete();
-        $this->clearTeamCache($teamId);
 
         Log::debug('Succesfully deleted team', [
             'teamData' => $teamData,
@@ -114,10 +109,5 @@ class TeamRepository implements TeamRepositoryInterface
     protected function getTeamCacheKey(int $teamId): string
     {
         return CACHE_KEY_TEAM_DATA . $teamId;
-    }
-
-    protected function clearTeamCache(int $teamId): void
-    {
-        $this->clearCache($this->getTeamCacheKey($teamId));
     }
 }

@@ -90,8 +90,6 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
         $newTeamMember = TeamMember::create(
             $dto->toArray()
         );
-
-        $this->clearTeamUserModeratorCache($newTeamMember->team_id, $newTeamMember->user_id);
     }
 
     public function updateMember(TeamMember $teamMember, UpdateTeamMemberDTO $dto): void
@@ -101,7 +99,6 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
         ]);
 
         $this->updateFromDto($teamMember, $dto);
-        $this->clearTeamUserModeratorCache($teamMember->team_id, $teamMember->user_id);
     }
 
     public function removeMember(TeamMember $teamMember): void
@@ -111,17 +108,11 @@ class TeamMemberRepository implements TeamMemberRepositoryInterface
             'authorizedUserId' => Auth::id()
         ]);
 
-        $this->clearTeamUserModeratorCache($teamMember->team_id, $teamMember->user_id);
         $teamMember->delete();
     }
 
     protected function getTeamUserModeratorCacheKey(int $teamId, int $userId): string
     {
         return CACHE_KEY_TEAM_USER_MODERATOR . $teamId . ':' . $userId;
-    }
-
-    protected function clearTeamUserModeratorCache(int $teamId, int $userId): void
-    {
-        $this->clearCache($this->getTeamUserModeratorCacheKey($teamId, $userId));
     }
 }

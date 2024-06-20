@@ -76,8 +76,6 @@ class ProjectRepository implements ProjectRepositoryInterface
             $createProjectDTO->toArray()
         );
 
-        $this->clearProjectCache($newProject->id);
-
         Log::debug('Succesfully created project from dto', [
             'newProject' => $newProject->toArray()
         ]);
@@ -93,7 +91,6 @@ class ProjectRepository implements ProjectRepositoryInterface
         ]);
 
         $this->updateFromDto($project, $updateProjectDTO);
-        $this->clearProjectCache($project->id);
 
         Log::debug('Succesfully updated project from dto', [
             'project id' => $project->id,
@@ -109,7 +106,6 @@ class ProjectRepository implements ProjectRepositoryInterface
         ]);
 
         $project->delete();
-        $this->clearProjectCache($projectId);
 
         Log::debug('Succesfully deleted project', [
             'projectId' => $projectId,
@@ -119,10 +115,5 @@ class ProjectRepository implements ProjectRepositoryInterface
     public function getProjectCacheKey(int $projectId): string
     {
         return CACHE_KEY_PROJECT_DATA . $projectId;
-    }
-
-    protected function clearProjectCache(int $projectId): void
-    {
-        $this->clearCache($this->getProjectCacheKey($projectId));
     }
 }

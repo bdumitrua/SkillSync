@@ -39,6 +39,13 @@ class ChatRepository implements ChatRepositoryInterface
         return $chats;
     }
 
+    public function getChatByTeamId(int $teamId): ?GroupChat
+    {
+        return GroupChat::where('admin_type', '=', config('entities.team'))
+            ->where('admin_id', '=', $teamId)
+            ->first();
+    }
+
     public function search(string $query): Collection
     {
         $dialogChats = DialogChat::search($query);

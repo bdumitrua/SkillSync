@@ -34,13 +34,17 @@ class Team extends Model
             $team->tags()->delete();
             $team->subscribers()->delete();
 
+
+
             // It's not logical to DELETE the whole chat, 
             // so we just change the admin of chat to team admin
-            /** @var GroupChat */
+            /** @var GroupChat|null */
             $teamChat = $team->chat()->first();
-            $teamChat->admin_type = config('entities.user');
-            $teamChat->admin_id = $team->admin_id;
-            $teamChat->save();
+            if (!empty($teamChat)) {
+                $teamChat->admin_type = config('entities.user');
+                $teamChat->admin_id = $team->admin_id;
+                $teamChat->save();
+            }
         });
     }
 

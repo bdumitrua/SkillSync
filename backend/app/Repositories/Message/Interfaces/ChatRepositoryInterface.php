@@ -27,6 +27,13 @@ interface ChatRepositoryInterface
     public function getDataByIds(array $chatIds): Collection;
 
     /**
+     * @param int $teamId
+     * 
+     * @return GroupChat|null
+     */
+    public function getChatByTeamId(int $teamId): ?GroupChat;
+
+    /**
      * @param string $query
      * 
      * @return Collection

@@ -103,8 +103,6 @@ class TagRepository implements TagRepositoryInterface
             $dto->toArray()
         );
 
-        $this->clearTagsCache($newTag->entity_type, $newTag->entity_id);
-
         Log::debug('Created new tag', [
             'tag' => $newTag->toArray()
         ]);
@@ -114,29 +112,20 @@ class TagRepository implements TagRepositoryInterface
 
     public function delete(Tag $tag): void
     {
+        $tagId = $tag->id;
         Log::debug('Start delete tag', [
-            'tag' => $tag->toArray()
+            'tagId' => $tag->id
         ]);
 
-        $tagId = $tag->id;
-        $entityType = $tag->entity_type;
-        $entityId = $tag->entity_id;
-
         $tag->delete();
-        $this->clearTagsCache($entityType, $entityId);
 
         Log::debug('Deleted tag', [
-            'tag' => ['id' => $tagId]
+            'tagId' => $tagId
         ]);
     }
 
     protected function getTagsCacheKey(string $entityType, int $entityId): string
     {
         return $this->cacheKeys[$entityType] . $entityId;
-    }
-
-    protected function clearTagsCache(string $entityType, int $entityId): void
-    {
-        $this->clearCache($this->getTagsCacheKey($entityType, $entityId));
     }
 }
