@@ -15,6 +15,13 @@ interface MessageRepositoryInterface
     public function getByChatId(int $chatId): Collection;
 
     /**
+     * @param string $query
+     * 
+     * @return Collection
+     */
+    public function search(string $query): Collection;
+
+    /**
      * @param int $chatId
      * @param string $newMessageUuid
      * @param CreateMesssageDTO $createMesssageDTO

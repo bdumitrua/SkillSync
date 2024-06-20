@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Team;
 use App\Models\Project;
 use App\Models\Post;
+use App\Models\NoSQL\Message;
 use App\Models\GroupChat;
 use App\Models\DialogChat;
 use App\Firebase\FirebaseService;
@@ -35,6 +36,7 @@ class DBClear extends Command
         Project::deleteElasticsearchIndex();
         DialogChat::deleteElasticsearchIndex();
         GroupChat::deleteElasticsearchIndex();
+        Message::deleteElasticsearchIndex();
         $this->info('Elasticsearch indexes deleted');
 
         /** @var FirebaseService */

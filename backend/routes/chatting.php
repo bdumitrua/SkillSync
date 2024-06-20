@@ -19,8 +19,8 @@ Route::prefix('chats')->name('chats.')->group(function () {
     });
 
     /*
-        *   url: /chats/chats/members/
-        *   name: chats.chats.members.
+        *   url: /chats/{chat}/members/
+        *   name: chats.members.
         */
     Route::prefix('{chat}/members')->name('members.')->controller(ChatMemberController::class)->group(function () {
         Route::get('/', 'show')->name('show');
@@ -29,13 +29,19 @@ Route::prefix('chats')->name('chats.')->group(function () {
     });
 
     /*
-    *   url: /chats/messages/
+    *   url: /chats/{chat}/messages/
     *   name: chats.messages
     */
-    Route::prefix('{chat}/messages')->controller(MessageController::class)->group(function () {
+    Route::prefix('{chat}/messages')->name('messages.')->controller(MessageController::class)->group(function () {
         Route::get('/', 'chat')->name('chat');
         Route::post('send', 'send')->name('send');
         Route::post('read/{messageUuid}', 'read')->name('read');
-        Route::delete('delete/{messageUuid}', 'delete')->name('delete');
+        Route::delete('{messageUuid}', 'delete')->name('delete');
     });
+
+    /*
+    *   url: /chats/messages/search
+    *   name: chats.messages.search
+    */
+    Route::get('messages/search', [MessageController::class, 'search'])->name('messages.search');
 });

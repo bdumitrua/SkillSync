@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use App\Models\NoSQL\Message;
 
 return new class extends Migration
 {
@@ -17,6 +18,8 @@ return new class extends Migration
             $table->boolean('is_empty')->default(true);
             $table->timestamps();
         });
+
+        Message::createElasticsearchIndex(false);
     }
 
     /**

@@ -108,17 +108,19 @@ trait Elasticsearchable
 
     /**
      * Add a document to Elasticsearch index.
-     *
-     * @param Model $model
+     * 
+     * @param mixed $model
+     * @param string $key
+     * 
      * @return void
      */
-    public static function addToElasticsearch($model): void
+    public static function addToElasticsearch($model, string $key = 'id'): void
     {
         $client = static::getElasticsearchClient();
 
         $params = [
             'index' => static::getESIndex(),
-            'id' => $model->id,
+            'id' => $model->{$key},
             'body' => $model->toSearchableArray()
         ];
 
@@ -127,17 +129,19 @@ trait Elasticsearchable
 
     /**
      * Update a document in Elasticsearch index.
-     *
-     * @param Model $model
+     * 
+     * @param mixed $model
+     * @param string $key
+     * 
      * @return void
      */
-    public static function updateElasticsearchDocument(Model $model): void
+    public static function updateElasticsearchDocument($model, string $key = 'id'): void
     {
         $client = static::getElasticsearchClient();
 
         $params = [
             'index' => static::getESIndex(),
-            'id' => $model->id,
+            'id' => $model->{$key},
             'body' => [
                 'doc' => $model->toSearchableArray()
             ]
@@ -148,11 +152,12 @@ trait Elasticsearchable
 
     /**
      * Delete a document from Elasticsearch index.
-     *
-     * @param int $id
+     * 
+     * @param $id
+     * 
      * @return void
      */
-    public static function deleteElasticsearchDocument(int $id): void
+    public static function deleteElasticsearchDocument($id): void
     {
         $client = static::getElasticsearchClient();
 

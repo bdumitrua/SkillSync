@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Services\Message\Interfaces\MessageServiceInterface;
 use App\Models\Chat;
+use App\Http\Requests\SearchRequest;
 use App\Http\Requests\Message\CreateMesssageRequest;
 use App\Http\Controllers\Controller;
 use App\DTO\Message\CreateMesssageDTO;
@@ -23,6 +24,13 @@ class MessageController extends Controller
     {
         return $this->handleServiceCall(function () use ($chat) {
             return $this->messageService->chat($chat);
+        });
+    }
+
+    public function search(SearchRequest $request)
+    {
+        return $this->handleServiceCall(function () use ($request) {
+            return $this->messageService->search($request->input('query'));
         });
     }
 

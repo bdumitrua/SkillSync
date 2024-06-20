@@ -10,18 +10,19 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\Channel;
+use App\Models\NoSQL\Message;
 
 class MessageSentEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets;
 
     public $chatId;
-    public $message;
+    public Message $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(int $chatId, $message)
+    public function __construct(int $chatId, Message $message)
     {
         $this->chatId = $chatId;
         $this->message = $message;

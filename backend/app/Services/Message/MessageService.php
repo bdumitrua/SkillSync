@@ -31,6 +31,13 @@ class MessageService implements MessageServiceInterface
         );
     }
 
+    public function search(string $query): JsonResource
+    {
+        return JsonResource::collection(
+            $this->messageRepository->search($query)
+        );
+    }
+
     public function send(Chat $chat, CreateMesssageDTO $createMesssageDTO): void
     {
         Gate::authorize('sendMessage', [Chat::class, $chat, $createMesssageDTO]);

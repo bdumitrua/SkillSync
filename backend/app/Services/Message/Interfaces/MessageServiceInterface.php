@@ -16,6 +16,13 @@ interface MessageServiceInterface
     public function chat(Chat $chat): JsonResource;
 
     /**
+     * @param string $query
+     * 
+     * @return JsonResource
+     */
+    public function search(string $query): JsonResource;
+
+    /**
      * @param Chat $chat
      * @param CreateMesssageDTO $createMesssageDTO
      * 

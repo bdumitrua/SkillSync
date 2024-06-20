@@ -72,7 +72,7 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array
      */
-    protected static function getSearchProperties(): array
+    public static function getSearchProperties(): array
     {
         return  [
             'id' => [
