@@ -21,9 +21,9 @@ class PostResource extends JsonResource
     public function toArray(Request $request): array
     {
         $entityData = [];
-        if ($this->entity_type === User::class) {
+        if ($this->entity_type === config('entities.user')) {
             $entityData = (new UserDataResource($this->entityData))->resolve();
-        } elseif ($this->entity_type === Team::class) {
+        } elseif ($this->entity_type === config('entities.team')) {
             $entityData = (new TeamDataResource($this->entityData))->resolve();
         }
 

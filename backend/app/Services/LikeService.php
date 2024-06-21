@@ -18,6 +18,7 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Like;
 use App\Models\Interfaces\Likeable;
+use App\Http\Resources\LikeResource;
 use App\Exceptions\NotFoundException;
 use App\DTO\LikeDTO;
 
@@ -52,7 +53,7 @@ class LikeService implements LikeServiceInterface
         $likes = $this->likeRepository->getByUser($user);
         $likes = $this->assembleLikesLikeableData($likes);
 
-        return JsonResource::collection($likes);
+        return LikeResource::collection($likes);
     }
 
     public function post(Post $post): JsonResource
@@ -60,7 +61,7 @@ class LikeService implements LikeServiceInterface
         $likes = $this->likeRepository->getByPost($post);
         $likes = $this->assembleLikesUserData($likes);
 
-        return JsonResource::collection($likes);
+        return LikeResource::collection($likes);
     }
 
     public function create(LikeDTO $likeDTO): void
