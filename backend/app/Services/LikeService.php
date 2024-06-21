@@ -10,11 +10,14 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Traits\AttachEntityData;
 use App\Services\Interfaces\LikeServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Project\Interfaces\ProjectRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
 use App\Repositories\Interfaces\LikeRepositoryInterface;
 use App\Models\User;
+use App\Models\Project;
+use App\Models\PostComment;
 use App\Models\Post;
 use App\Models\Like;
 use App\Models\Interfaces\Likeable;
@@ -27,6 +30,7 @@ class LikeService implements LikeServiceInterface
     use AttachEntityData;
 
     protected $userRepository;
+    protected $teamRepository;
     protected $likeRepository;
     protected $postRepository;
     protected $projectRepository;
@@ -35,12 +39,14 @@ class LikeService implements LikeServiceInterface
 
     public function __construct(
         UserRepositoryInterface $userRepository,
+        TeamRepositoryInterface $teamRepository,
         LikeRepositoryInterface $likeRepository,
         PostRepositoryInterface $postRepository,
         ProjectRepositoryInterface $projectRepository,
         PostCommentRepositoryInterface $postCommentRepository,
     ) {
         $this->userRepository = $userRepository;
+        $this->teamRepository = $teamRepository;
         $this->likeRepository = $likeRepository;
         $this->postRepository = $postRepository;
         $this->projectRepository = $projectRepository;
@@ -108,9 +114,19 @@ class LikeService implements LikeServiceInterface
             'likesIds' => $likes->pluck('id')->toArray()
         ]);
 
-        $this->setCollectionMorphData($likes, 'likeable', 'post', $this->postRepository);
-        $this->setCollectionMorphData($likes, 'likeable', 'postComment', $this->postCommentRepository);
-        $this->setCollectionMorphData($likes, 'likeable', 'project', $this->projectRepository);
+        // Anyway likeable models doesn't cache, so this is much easier to do
+        $likes = $this->likeRepository->getLikesWithLikeable($likes);
+
+        foreach ($likes as $like) {
+            /** @var Post|PostComment|Project */
+            $likeable = $like->likeable;
+
+            if ($likeable->getAuthorType() === config('entities.user')) {
+                $likeable->setRelation('author', $this->userRepository->getById($likeable->getAuthorId()));
+            } elseif ($likeable->getAuthorType() === config('entities.team')) {
+                $likeable->setRelation('author', $this->teamRepository->getById($likeable->getAuthorId()));
+            }
+        }
 
         return $likes;
     }

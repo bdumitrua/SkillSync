@@ -76,7 +76,6 @@ class CacheServiceProvider extends ServiceProvider
 
         define('CACHE_KEY_POST_TAGS_DATA', 'post_tags_data:');
 
-        define('CACHE_KEY_PROJECT_DATA', 'project_data:');
         define('CACHE_KEY_PROJECT_MEMBERS_DATA', 'project_members_data:');
         define('CACHE_KEY_PROJECT_LINKS_DATA', 'project_links_data:');
     }

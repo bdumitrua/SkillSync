@@ -16,13 +16,17 @@ class PostCommentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $userData = (new UserDataResource($this->userData))->resolve();
+        $authorData = $this->author ?? null;
+        $authorData = !empty($authorData)
+            ? (new UserDataResource($authorData))->resolve()
+            : [];
+
         $actions = $this->prepareActions();
 
         return [
             'id' => $this->id,
             'userId' => $this->user_id,
-            'userData' => $userData,
+            'authorData' => $authorData,
             'text' => $this->text,
             'mediaUrl' => $this->media_url,
             'likesCount' => $this->likes_count ?? 0,

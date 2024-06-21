@@ -172,6 +172,16 @@ class Project extends Model implements Likeable
         return $this->morphTo();
     }
 
+    public function getAuthorType(): string
+    {
+        return $this->author_type;
+    }
+
+    public function getAuthorId(): int
+    {
+        return $this->author_id;
+    }
+
     /**
      * @return HasMany
      */

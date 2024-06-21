@@ -57,7 +57,7 @@ class PostCommentService implements PostCommentServiceInterface
 
     protected function assembleCommentsData(Collection $postComments): Collection
     {
-        $this->setCollectionEntityData($postComments, 'user_id', 'userData', $this->userRepository);
+        $this->setCollectionEntityData($postComments, 'user_id', 'author', $this->userRepository);
         $this->setCommentsRights($postComments);
         $this->setCollectionIsLiked($postComments, 'postComment', $this->likeRepository);
 

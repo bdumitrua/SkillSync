@@ -66,6 +66,21 @@ class PostComment extends Model implements Likeable
         return $this->BelongsTo(User::class);
     }
 
+    public function author(): BelongsTo
+    {
+        return $this->user();
+    }
+
+    public function getAuthorType(): string
+    {
+        return config('entities.user');
+    }
+
+    public function getAuthorId(): int
+    {
+        return $this->user_id;
+    }
+
     /**
      * @return BelongsTo
      */

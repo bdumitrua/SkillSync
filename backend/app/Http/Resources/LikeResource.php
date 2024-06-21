@@ -18,13 +18,13 @@ class LikeResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if ($likeableData = !empty($this->likeableData)) {
+        if ($likeable = !empty($this->likeable)) {
             if ($this->likeable_type === config('entities.post')) {
-                $likeableData = (new PostResource($this->likeableData));
+                $likeable = (new PostResource($this->likeable));
             } elseif ($this->likeable_type === config('entities.postComment')) {
-                $likeableData = (new PostCommentResource($this->likeableData));
+                $likeable = (new PostCommentResource($this->likeable));
             } elseif ($this->likeable_type === config('entities.project')) {
-                $likeableData = (new ProjectResource($this->likeableData));
+                $likeable = (new ProjectResource($this->likeable));
             }
         }
 
@@ -39,7 +39,7 @@ class LikeResource extends JsonResource
             "likeableId" => $this->likeable_id,
             "created_at" => $this->created_at,
             "updated_at" => $this->updated_at,
-            "likeableData" => $likeableData,
+            "likeable" => $likeable,
             "userData" => $userData,
         ];
     }

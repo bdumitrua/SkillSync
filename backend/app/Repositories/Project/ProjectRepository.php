@@ -13,7 +13,7 @@ use App\DTO\Project\CreateProjectDTO;
 
 class ProjectRepository implements ProjectRepositoryInterface
 {
-    use Updateable, Cacheable;
+    use Updateable;
 
     public function getAll(): Collection
     {
@@ -31,10 +31,7 @@ class ProjectRepository implements ProjectRepositoryInterface
             'projectId' => $projectId
         ]);
 
-        $cacheKey = $this->getProjectCacheKey($projectId);
-        return $this->getCachedData($cacheKey, CACHE_TIME_PROJECT_DATA, function () use ($projectId) {
-            return Project::find($projectId);
-        });
+        return Project::find($projectId);
     }
 
     public function getByIds(array $projectsIds): Collection
@@ -43,9 +40,7 @@ class ProjectRepository implements ProjectRepositoryInterface
             'projectsIds' => $projectsIds
         ]);
 
-        return $this->getCachedCollection($projectsIds, function ($projectId) {
-            return $this->getById($projectId);
-        });
+        return Project::whereIn('id', $projectsIds);
     }
 
     public function getByAuthorId(int $authorId): Collection
@@ -110,10 +105,5 @@ class ProjectRepository implements ProjectRepositoryInterface
         Log::debug('Succesfully deleted project', [
             'projectId' => $projectId,
         ]);
-    }
-
-    public function getProjectCacheKey(int $projectId): string
-    {
-        return CACHE_KEY_PROJECT_DATA . $projectId;
     }
 }

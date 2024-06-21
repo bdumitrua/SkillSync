@@ -23,8 +23,7 @@ class ProjectObserver
      */
     public function updated(Project $project): void
     {
-        Log::info("Entered projectObserver 'update'");
-        $this->clearMainCache($project->id);
+        // 
     }
 
     /**
@@ -39,20 +38,9 @@ class ProjectObserver
      * * Recache stuff
      */
 
-    protected function getMainCacheKey(int $projectId): string
-    {
-        return CACHE_KEY_PROJECT_DATA . $projectId;
-    }
-
-    protected function clearMainCache(int $projectId): void
-    {
-        $this->clearCache($this->getMainCacheKey($projectId));
-    }
-
     protected function getCacheKeys(int $projectId): array
     {
         return [
-            CACHE_KEY_PROJECT_DATA . $projectId,
             CACHE_KEY_PROJECT_MEMBERS_DATA . $projectId,
             CACHE_KEY_PROJECT_LINKS_DATA . $projectId,
         ];

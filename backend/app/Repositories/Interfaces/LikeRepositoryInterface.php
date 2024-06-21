@@ -28,6 +28,13 @@ interface LikeRepositoryInterface
     public function getByPost(Post $post): Collection;
 
     /**
+     * @param Collection $likes
+     * 
+     * @return Collection
+     */
+    public function getLikesWithLikeable(Collection $likes): Collection;
+
+    /**
      * @param LikeDTO $likeDTO
      * 
      * @return Like|null

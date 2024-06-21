@@ -42,6 +42,11 @@ class LikeRepository implements LikeRepositoryInterface
         return $post->likes()->get();
     }
 
+    public function getLikesWithLikeable(Collection $likes): Collection
+    {
+        return $likes->load('likeable');
+    }
+
     public function getByDTO(LikeDTO $likeDTO): ?Like
     {
         return Like::where('user_id', '=', $likeDTO->userId)

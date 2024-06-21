@@ -17,11 +17,12 @@ class ProjectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        if ($authorData = !empty($this->authorData)) {
+        $authorData = $this->authorData ?? $this->author ?? null;
+        if (!empty($authorData)) {
             if ($this->author_type === config('entities.user')) {
-                $authorData = (new UserDataResource($this->authorData));
+                $authorData = (new UserDataResource($authorData));
             } elseif ($this->author_type === config('entities.team')) {
-                $authorData = (new TeamDataResource($this->authorData));
+                $authorData = (new TeamDataResource($authorData));
             }
         }
 
