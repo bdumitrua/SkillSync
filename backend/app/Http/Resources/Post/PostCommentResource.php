@@ -16,7 +16,7 @@ class PostCommentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $authorData = $this->author ?? null;
+        $authorData = $this->whenLoaded('author', null, null) ?? null;
         $authorData = !empty($authorData)
             ? (new UserDataResource($authorData))->resolve()
             : [];

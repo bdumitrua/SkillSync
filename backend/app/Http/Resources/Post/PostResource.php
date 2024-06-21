@@ -20,11 +20,13 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $authorData = $this->authorData ?? $this->author ?? null;
-        if ($this->author_type === config('entities.user')) {
-            $authorData = (new UserDataResource($authorData))->resolve();
-        } elseif ($this->author_type === config('entities.team')) {
-            $authorData = (new TeamDataResource($authorData))->resolve();
+        $authorData = $this->authorData ?? $this->whenLoaded('author', null, null) ?? null;
+        if ($authorData) {
+            if ($this->author_type === config('entities.user')) {
+                $authorData = (new UserDataResource($authorData))->resolve();
+            } elseif ($this->author_type === config('entities.team')) {
+                $authorData = (new TeamDataResource($authorData))->resolve();
+            }
         }
 
         $tags = $this->tagsData ? (TagResource::collection($this->tagsData))->resolve() : [];

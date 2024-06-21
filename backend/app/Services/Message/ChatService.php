@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Collection;
 use App\Traits\AttachEntityData;
 use App\Services\Message\Interfaces\ChatServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
@@ -14,11 +15,14 @@ use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Repositories\Message\Interfaces\MessageRepositoryInterface;
 use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
 use App\Repositories\Message\Interfaces\ChatMemberRepositoryInterface;
+use App\Models\User;
 use App\Models\GroupChat;
 use App\Models\DialogChat;
 use App\Models\Chat;
+use App\Http\Resources\Message\ChatResource;
 use App\Http\Requests\Message\UpdateChatRequest;
 use App\Http\Requests\Message\CreateChatRequest;
+use App\Enums\ChatType;
 use App\DTO\Message\UpdateChatDTO;
 use App\DTO\Message\CreateChatDTO;
 
@@ -55,15 +59,16 @@ class ChatService implements ChatServiceInterface
     {
         $chatIds = $this->chatMemberRepository->getIdsByUserId($this->authorizedUserId);
         $chatsData = $this->chatRepository->getDataByIds($chatIds);
+        $this->setDialogsMembersData($chatsData);
 
-        return JsonResource::collection($chatsData);
+        return ChatResource::collection($chatsData);
     }
 
     public function search(string $query): JsonResource
     {
         $chats = $this->chatRepository->search($query);
 
-        return JsonResource::collection($chats);
+        return ChatResource::collection($chats);
     }
 
     public function show(Chat $chat): JsonResource
@@ -101,5 +106,18 @@ class ChatService implements ChatServiceInterface
         Gate::authorize('update', [Chat::class, $chat]);
 
         $this->chatRepository->update($chat, $updateChatDTO);
+    }
+
+    protected function setDialogsMembersData(Collection &$chats): void
+    {
+        foreach ($chats as $chat) {
+            if ($chat->type === ChatType::Dialog->value) {
+                $chat->data->membersData = new Collection(
+                    array_map(function ($memberData) {
+                        return new User($memberData);
+                    }, $chat->data->toSearchableArray()['membersData'])
+                );
+            }
+        }
     }
 }

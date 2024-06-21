@@ -12,6 +12,7 @@ use App\Repositories\Message\Interfaces\ChatMemberRepositoryInterface;
 use App\Models\User;
 use App\Models\GroupChatMember;
 use App\Models\Chat;
+use App\Http\Resources\User\UserDataResource;
 use App\Exceptions\UnprocessableContentException;
 
 class ChatMemberService implements ChatMemberServiceInterface
@@ -41,7 +42,7 @@ class ChatMemberService implements ChatMemberServiceInterface
         $chatMemberIds = $this->chatMemberRepository->getByChat($chat);
         $chatMemberData = $this->userRepository->getByIds($chatMemberIds);
 
-        return JsonResource::collection($chatMemberData);
+        return UserDataResource::collection($chatMemberData);
     }
 
     /**

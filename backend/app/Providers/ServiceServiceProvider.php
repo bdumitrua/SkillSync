@@ -27,6 +27,7 @@ use App\Services\Post\PostService;
 use App\Services\Post\PostCommentService;
 use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Services\Post\Interfaces\PostCommentServiceInterface;
+use App\Services\NotificationService;
 use App\Services\Message\MessageService;
 use App\Services\Message\Interfaces\MessageServiceInterface;
 use App\Services\Message\Interfaces\ChatServiceInterface;
@@ -36,6 +37,7 @@ use App\Services\Message\ChatMemberService;
 use App\Services\LikeService;
 use App\Services\Interfaces\TagServiceInterface;
 use App\Services\Interfaces\SubscriptionServiceInterface;
+use App\Services\Interfaces\NotificationServiceInterface;
 use App\Services\Interfaces\LikeServiceInterface;
 use App\Firebase\FirebaseServiceInterface;
 use App\Firebase\FirebaseService;
@@ -74,6 +76,9 @@ class ServiceServiceProvider extends ServiceProvider
 
         // Like
         $this->app->bind(LikeServiceInterface::class, LikeService::class);
+
+        // Notification
+        $this->app->bind(NotificationServiceInterface::class, NotificationService::class);
 
         // Project
         $this->app->bind(ProjectServiceInterface::class, ProjectService::class);

@@ -17,7 +17,7 @@ class ProjectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $authorData = $this->authorData ?? $this->author ?? null;
+        $authorData = $this->authorData ?? $this->whenLoaded('author', null, null) ?? null;
         if (!empty($authorData)) {
             if ($this->author_type === config('entities.user')) {
                 $authorData = (new UserDataResource($authorData));

@@ -9,7 +9,7 @@ Route::prefix('notifications')->name('notifications.')->controller(NotificationC
     *   url: /notifications/
     *   name: notifications.
     */
-    Route::get('index', 'index')->name('index');
+    Route::get('/', 'index')->name('index');
     Route::patch('{notification}', 'seen')->name('seen');
     Route::delete('{notification}', 'delete')->name('delete');
 });
