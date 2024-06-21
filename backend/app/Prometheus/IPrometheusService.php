@@ -21,6 +21,4 @@ interface IPrometheusService
     public function incrementDatabaseQueryCount($source): void;
 
     public function addDatabaseQueryTimeHistogram($duration, $source): void;
-
-    public function incrementEntityCreatedCount($entityName): void;
 }

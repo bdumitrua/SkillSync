@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Prometheus\PrometheusServiceProxy;
+use App\Prometheus\IPrometheusService;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +11,7 @@ class ErrorTrackingMiddleware
 {
     protected $prometheusService;
 
-    public function __construct(PrometheusServiceProxy $prometheusService)
+    public function __construct(IPrometheusService $prometheusService)
     {
         $this->prometheusService = $prometheusService;
     }

@@ -1,18 +1,10 @@
 <?php
 
-use App\Prometheus\PrometheusServiceProxy;
-use Illuminate\Support\Facades\Route;
 use Prometheus\RenderTextFormat;
+use Illuminate\Support\Facades\Route;
+use App\Prometheus\IPrometheusService;
 
 Route::get('/metrics', function () {
-    $result = app(PrometheusServiceProxy::class)->getMetrics();
+    $result = app(IPrometheusService::class)->getMetrics();
     return response($result)->header('Content-Type', RenderTextFormat::MIME_TYPE);
-});
-
-Route::get('/metrics/wipe', function () {
-    app(PrometheusServiceProxy::class)->clearMetrics();
-});
-
-Route::get('/aaa', function () {
-    return '1231231';
 });

@@ -5,7 +5,7 @@ namespace App\Traits;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Collection;
-use App\Prometheus\PrometheusServiceProxy;
+use App\Prometheus\IPrometheusService;
 use App\Helpers\TimeHelper;
 
 trait Cacheable
@@ -24,7 +24,7 @@ trait Cacheable
             'cacheKey' => $cacheKey,
         ]);
 
-        $prometheusService = app(PrometheusServiceProxy::class);
+        $prometheusService = app(IPrometheusService::class);
         $cacheKeyForMetrics = explode(':', $cacheKey)[0];
 
         if ($updateCache || !Cache::has($cacheKey)) {

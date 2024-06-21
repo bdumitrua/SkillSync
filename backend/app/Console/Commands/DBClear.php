@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Console\Command;
+use App\Prometheus\IPrometheusService;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Project;
@@ -55,5 +56,10 @@ class DBClear extends Command
         $this->info('Starting cache clear');
         $this->call('cache:clear');
         $this->info('Cache cleared');
+
+        app(IPrometheusService::class)->clearMetrics();
+        $this->info('Metrics cleared');
+
+        $this->info('End!');
     }
 }

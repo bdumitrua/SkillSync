@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(append: [
+            \App\Http\Middleware\ErrorTrackingMiddleware::class,
             \App\Http\Middleware\ForceJsonResponse::class,
             \App\Http\Middleware\Authenticate::class . ':api',
         ]);

@@ -9,6 +9,9 @@ use Illuminate\Support\ServiceProvider;
 use GuzzleHttp\Client as GuzzleClient;
 use Elastic\Elasticsearch\ClientBuilder;
 use Elastic\Elasticsearch\Client;
+use App\Prometheus\PrometheusServiceProxy;
+use App\Prometheus\PrometheusService;
+use App\Prometheus\IPrometheusService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,6 +34,15 @@ class AppServiceProvider extends ServiceProvider
                 ->setHttpClient($guzzleClient)
                 ->setLogger($logger)
                 ->build();
+        });
+
+        $this->app->singleton(PrometheusService::class, function ($app) {
+            return new PrometheusService();
+        });
+
+        // Регистрация PrometheusServiceProxy
+        $this->app->singleton(IPrometheusService::class, function ($app) {
+            return new PrometheusServiceProxy($app->make(PrometheusService::class));
         });
     }
 

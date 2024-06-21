@@ -7,6 +7,7 @@ use Kreait\Firebase\Factory;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use App\Prometheus\IPrometheusService;
 use App\Firebase\FirebaseServiceInterface;
 use App\Firebase\FirebaseService;
 
@@ -38,14 +39,14 @@ class DatabaseServiceProvider extends ServiceProvider
             });
         }
 
-        // DB::listen(function ($query) {
-        //     /** @var PrometheusServiceProxy */
-        //     $prometheusService = app(PrometheusServiceProxy::class);
-        //     $source = optional(request()->route())->getActionName() ?? 'unknown';
-        //     $executionTimeInSeconds = floatval($query->time) / 1000;
+        DB::listen(function ($query) {
+            /** @var IPrometheusService */
+            $prometheusService = app(IPrometheusService::class);
+            $source = optional(request()->route())->getActionName() ?? 'unknown';
+            $executionTimeInSeconds = floatval($query->time) / 1000;
 
-        //     $prometheusService->incrementDatabaseQueryCount($source);
-        //     $prometheusService->addDatabaseQueryTimeHistogram($executionTimeInSeconds, $source);
-        // });
+            $prometheusService->incrementDatabaseQueryCount($source);
+            $prometheusService->addDatabaseQueryTimeHistogram($executionTimeInSeconds, $source);
+        });
     }
 }

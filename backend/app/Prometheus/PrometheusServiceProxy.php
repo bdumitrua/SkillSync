@@ -74,11 +74,4 @@ class PrometheusServiceProxy implements IPrometheusService
             $this->prometheusService->addDatabaseQueryTimeHistogram($duration, $source);
         }
     }
-
-    public function incrementEntityCreatedCount($entityName): void
-    {
-        if ($this->isActive) {
-            $this->prometheusService->incrementEntityCreatedCount($entityName);
-        }
-    }
 }

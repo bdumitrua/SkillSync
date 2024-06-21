@@ -161,20 +161,4 @@ class PrometheusService implements IPrometheusService
 
         $histogram->observe($duration, ['source' => $source]);
     }
-
-    /**
-     * @param mixed $entityName
-     * 
-     * @return void
-     */
-    public function incrementEntityCreatedCount($entityName): void
-    {
-        $counter = $this->registry->getOrRegisterCounter(
-            $this->countersNamespace,
-            'entities_total',
-            'Total count of all entities',
-            ['entity']
-        );
-        $counter->inc([$entityName]);
-    }
 }
