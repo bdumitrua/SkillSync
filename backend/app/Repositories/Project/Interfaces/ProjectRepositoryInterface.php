@@ -3,11 +3,12 @@
 namespace App\Repositories\Project\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\IdentifiableRepositoryInterface;
 use App\Models\Project;
 use App\DTO\Project\UpdateProjectDTO;
 use App\DTO\Project\CreateProjectDTO;
 
-interface ProjectRepositoryInterface
+interface ProjectRepositoryInterface extends IdentifiableRepositoryInterface
 {
     /**
      * @return Collection

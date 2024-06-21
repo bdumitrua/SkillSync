@@ -71,6 +71,7 @@ class PostCommentService implements PostCommentServiceInterface
         }
     }
 
+    // TODO NE NRAVITSA)
     protected function setLikeAbility(Collection &$postComments): void
     {
         $postCommentsIds = $postComments->pluck('id')->toArray();

@@ -3,11 +3,12 @@
 namespace App\Repositories\Team\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\IdentifiableRepositoryInterface;
 use App\Models\Team;
 use App\DTO\Team\UpdateTeamDTO;
 use App\DTO\Team\CreateTeamDTO;
 
-interface TeamRepositoryInterface
+interface TeamRepositoryInterface extends IdentifiableRepositoryInterface
 {
     /**
      * @return Collection

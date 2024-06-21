@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Traits\AttachEntityData;
 use App\Services\Interfaces\LikeServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\Project\Interfaces\ProjectRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Repositories\Post\Interfaces\PostCommentRepositoryInterface;
 use App\Repositories\Interfaces\LikeRepositoryInterface;
@@ -27,6 +28,7 @@ class LikeService implements LikeServiceInterface
     protected $userRepository;
     protected $likeRepository;
     protected $postRepository;
+    protected $projectRepository;
     protected $postCommentRepository;
     protected ?int $authorizedUserId;
 
@@ -34,11 +36,13 @@ class LikeService implements LikeServiceInterface
         UserRepositoryInterface $userRepository,
         LikeRepositoryInterface $likeRepository,
         PostRepositoryInterface $postRepository,
+        ProjectRepositoryInterface $projectRepository,
         PostCommentRepositoryInterface $postCommentRepository,
     ) {
         $this->userRepository = $userRepository;
         $this->likeRepository = $likeRepository;
         $this->postRepository = $postRepository;
+        $this->projectRepository = $projectRepository;
         $this->postCommentRepository = $postCommentRepository;
         $this->authorizedUserId = Auth::id();
     }
@@ -46,7 +50,7 @@ class LikeService implements LikeServiceInterface
     public function user(User $user): JsonResource
     {
         $likes = $this->likeRepository->getByUser($user);
-        $likes = $this->assembleLikesUserData($likes);
+        $likes = $this->assembleLikesLikeableData($likes);
 
         return JsonResource::collection($likes);
     }
@@ -93,6 +97,19 @@ class LikeService implements LikeServiceInterface
     protected function assembleLikesUserData(Collection $likes): Collection
     {
         $this->setCollectionEntityData($likes, 'user_id', 'userData', $this->userRepository);
+
+        return $likes;
+    }
+
+    protected function assembleLikesLikeableData(Collection $likes): Collection
+    {
+        Log::debug('Assebmling likes likeable data', [
+            'likesIds' => $likes->pluck('id')->toArray()
+        ]);
+
+        $this->setCollectionMorphData($likes, 'likeable', 'post', $this->postRepository);
+        $this->setCollectionMorphData($likes, 'likeable', 'postComment', $this->postCommentRepository);
+        $this->setCollectionMorphData($likes, 'likeable', 'project', $this->projectRepository);
 
         return $likes;
     }

@@ -4,7 +4,9 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\IdentifiableRepositoryInterface;
 
+// God forgive me...
 trait AttachEntityData
 {
     /**
@@ -19,7 +21,7 @@ trait AttachEntityData
         Collection &$collection,
         string $entityFieldKey,
         string $entityDataKey,
-        $entityRepository
+        IdentifiableRepositoryInterface $entityRepository
     ): void {
         Log::debug("Setting collection entity data", [
             'collection' => $collection->toArray(),
@@ -38,6 +40,49 @@ trait AttachEntityData
             'collection' => $collection->toArray(),
             'entityFieldKey' => $entityFieldKey,
             'entityDataKey' => $entityDataKey
+        ]);
+    }
+
+    protected function setCollectionMorphData(
+        Collection &$morphCollection,
+        string $morphKey,
+        string $entityKey,
+        IdentifiableRepositoryInterface $repository
+    ) {
+        Log::debug("Setting collection morph data", [
+            'collection' => $morphCollection->toArray(),
+            'morphKey' => $morphKey,
+            'entityKey' => $entityKey
+        ]);
+
+        $morphKeyType = $morphKey . '_type';
+        $morphKeyId = $morphKey . '_id';
+        $morphIds = [];
+
+        foreach ($morphCollection as $model) {
+            if ($model->{$morphKeyType} === config('entities.' . $entityKey)) {
+                $morphIds[] = $model->{$morphKeyId};
+            }
+        }
+
+        $morphIds = array_unique($morphIds);
+        Log::debug('Quering morph data by morphIds', [
+            'morphIds' => $morphIds,
+            'entityKey' => $entityKey
+        ]);
+        $entitiesData = $repository->getByIds($morphIds);
+
+        $morphKeyData = $morphKey . 'Data';
+        foreach ($morphCollection as $model) {
+            if ($model->{$morphKeyType} === config('entities.' . $entityKey)) {
+                $model->{$morphKeyData} = $entitiesData->where('id', $model->{$morphKeyId})->first();
+            }
+        }
+
+        Log::debug("Succesfully setted collection morph data", [
+            'collection' => $morphCollection->toArray(),
+            'morphKey' => $morphKey,
+            'entityKey' => $entityKey
         ]);
     }
 }

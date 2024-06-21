@@ -3,11 +3,12 @@
 namespace App\Repositories\Team\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\IdentifiableRepositoryInterface;
 use App\Models\TeamVacancy;
 use App\DTO\Team\UpdateTeamVacancyDTO;
 use App\DTO\Team\CreateTeamVacancyDTO;
 
-interface TeamVacancyRepositoryInterface
+interface TeamVacancyRepositoryInterface extends IdentifiableRepositoryInterface
 {
     /**
      * @param int $teamId

@@ -144,40 +144,20 @@ class ProjectService implements ProjectServiceInterface
             'projects' => $projects->pluck('id')->toArray(),
         ]);
 
-        $userIds = [];
-        $teamIds = [];
+        $this->setCollectionMorphData($projects, 'author', 'user', $this->userRepository);
+        $this->setCollectionMorphData($projects, 'author', 'team', $this->teamRepository);
 
-        /** @var Project */
-        foreach ($projects as $project) {
-            if ($project->createdByUser()) {
-                $userIds[] = $project->author_id;
-            } elseif ($project->createdByTeam()) {
-                $teamIds[] = $project->author_id;
-            }
-        }
-
-        $userIds = array_unique($userIds);
-        $teamIds = array_unique($teamIds);
-
-        $usersData = $this->userRepository->getByIds($userIds);
-        $teamsData = $this->teamRepository->getByIds($teamIds);
-
-        /** @var Post */
-        foreach ($projects as $project) {
-            if ($project->createdByUser()) {
-                $project->authorData = $usersData->where('id', $project->author_id)->first();
-            } elseif ($project->createdByTeam()) {
-                $project->authorData = $teamsData->where('id', $project->author_id)->first();
-            }
-        }
-
-        Log::debug("Succesfully setted projects author data", [
+        Log::debug("Successfully set projects author data", [
             'projects' => $projects->pluck('id')->toArray(),
         ]);
     }
 
     protected function setProjectsMembersData(Collection &$projects): void
     {
+        Log::debug("Setting projects members data", [
+            'projects' => $projects->pluck('id')->toArray(),
+        ]);
+
         $projectsIds = $projects->pluck('id')->toArray();
         $projectsMembers = $this->projectMemberRepository->getByProjectsIds($projectsIds);
 
@@ -185,21 +165,33 @@ class ProjectService implements ProjectServiceInterface
         foreach ($projectsMembers as $projectMembers) {
             $this->setCollectionEntityData($projectMembers, 'user_id', 'userData', $this->userRepository);
             $projectMembers = $projectMembers->groupBy('project_id');
-
-            foreach ($projects as &$project) {
-                $project->membersData = $projectMembers->get($project->id) ?? [];
-            }
         }
+
+        foreach ($projects as &$project) {
+            $project->membersData = $projectMembers->get($project->id) ?? [];
+        }
+
+        Log::debug("Successfully set projects members data", [
+            'projects' => $projects->pluck('id')->toArray(),
+        ]);
     }
 
     protected function setProjectsLinks(Collection &$projects): void
     {
+        Log::debug("Setting projects links data", [
+            'projects' => $projects->pluck('id')->toArray(),
+        ]);
+
         $projectsIds = $projects->pluck('id')->toArray();
         $projectsLinks = $this->projectLinkRepository->getByProjectsIds($projectsIds)->groupBy('project_id');
 
         foreach ($projects as &$project) {
             $project->linksData = $projectsLinks->get($project->id) ?? [];
         }
+
+        Log::debug("Successfully set projects links data", [
+            'projects' => $projects->pluck('id')->toArray(),
+        ]);
     }
 
     protected function setProjectsRighs(Collection &$projects): void

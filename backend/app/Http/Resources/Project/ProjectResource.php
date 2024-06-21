@@ -5,6 +5,7 @@ namespace App\Http\Resources\Project;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\User\UserDataResource;
+use App\Http\Resources\Team\TeamDataResource;
 
 class ProjectResource extends JsonResource
 {
@@ -15,9 +16,13 @@ class ProjectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $authorData = !empty($this->authorData)
-            ? (new UserDataResource($this->authorData))->resolve()
-            : [];
+        if ($authorData = !empty($this->authorData)) {
+            if ($this->author_type === config('entities.user')) {
+                $authorData = (new UserDataResource($this->authorData));
+            } elseif ($this->author_type === config('entities.team')) {
+                $authorData = (new TeamDataResource($this->authorData));
+            }
+        }
 
         $membersData = !empty($this->membersData)
             ? (ProjectMemberResource::collection($this->membersData))->resolve()

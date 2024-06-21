@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
+use App\Traits\AttachEntityData;
 use App\Services\Post\Interfaces\PostServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
@@ -22,6 +23,8 @@ use App\DTO\Post\CreatePostDTO;
 
 class PostService implements PostServiceInterface
 {
+    use AttachEntityData;
+
     protected $tagRepository;
     protected $postRepository;
     protected $userRepository;
@@ -141,38 +144,15 @@ class PostService implements PostServiceInterface
             'posts' => $posts->pluck('id')->toArray(),
         ]);
 
-        $userIds = [];
-        $teamIds = [];
-
-        /** @var Post */
-        foreach ($posts as $post) {
-            if ($post->createdByUser()) {
-                $userIds[] = $post->entity_id;
-            } elseif ($post->createdByTeam()) {
-                $teamIds[] = $post->entity_id;
-            }
-        }
-
-        $userIds = array_unique($userIds);
-        $teamIds = array_unique($teamIds);
-
-        $usersData = $this->userRepository->getByIds($userIds);
-        $teamsData = $this->teamRepository->getByIds($teamIds);
-
-        /** @var Post */
-        foreach ($posts as $post) {
-            if ($post->createdByUser()) {
-                $post->entityData = $usersData->where('id', $post->entity_id)->first();
-            } elseif ($post->createdByTeam()) {
-                $post->entityData = $teamsData->where('id', $post->entity_id)->first();
-            }
-        }
+        $this->setCollectionMorphData($posts, 'entity', 'user', $this->userRepository);
+        $this->setCollectionMorphData($posts, 'entity', 'team', $this->teamRepository);
 
         Log::debug("Succesfully setted posts entity data", [
             'posts' => $posts->pluck('id')->toArray(),
         ]);
     }
 
+    // TODO NE NRAVITSA)
     protected function setPostsTagsData(Collection &$posts): void
     {
         Log::debug("Setting posts tags data", [
@@ -199,6 +179,7 @@ class PostService implements PostServiceInterface
         }
     }
 
+    // TODO NE NRAVITSA)
     protected function setLikeAbility(Collection &$posts): void
     {
         $postsIds = $posts->pluck('id')->toArray();

@@ -47,8 +47,7 @@ class SubscriptionService implements SubscriptionServiceInterface
         ]);
 
         $userSubscriptions = $this->subscriptionRepository->getUsersByUserId($userId);
-        $this->fillSubscriptionsEntityData($userSubscriptions);
-
+        $this->setSubscriptionsEntityData($userSubscriptions);
 
         return SubscriptionResource::collection($userSubscriptions);
     }
@@ -60,7 +59,7 @@ class SubscriptionService implements SubscriptionServiceInterface
         ]);
 
         $teamSubscriptions = $this->subscriptionRepository->getTeamsByUserId($userId);
-        $this->fillSubscriptionsEntityData($teamSubscriptions);
+        $this->setSubscriptionsEntityData($teamSubscriptions);
 
         return SubscriptionResource::collection($teamSubscriptions);
     }
@@ -72,7 +71,7 @@ class SubscriptionService implements SubscriptionServiceInterface
         ]);
 
         $userSubscriptions = $this->subscriptionRepository->getUserSubscribers($user->id);
-        $this->fillSubscriptionsUserData($userSubscriptions);
+        $this->setSubscriptionsUserData($userSubscriptions);
 
         return SubscriptionResource::collection($userSubscriptions);
     }
@@ -84,7 +83,7 @@ class SubscriptionService implements SubscriptionServiceInterface
         ]);
 
         $teamSubscriptions = $this->subscriptionRepository->getTeamSubscribers($team->id);
-        $this->fillSubscriptionsUserData($teamSubscriptions);
+        $this->setSubscriptionsUserData($teamSubscriptions);
 
         return SubscriptionResource::collection($teamSubscriptions);
     }
@@ -134,31 +133,16 @@ class SubscriptionService implements SubscriptionServiceInterface
         return null;
     }
 
-    protected function fillSubscriptionsUserData(Collection &$subscriptions): void
+    protected function setSubscriptionsUserData(Collection &$subscriptions): void
     {
         $this->setCollectionEntityData($subscriptions, 'subscriber_id', 'subscriberData', $this->userRepository);
     }
 
-    protected function fillSubscriptionsEntityData(Collection &$entitySubscriptions): void
+    protected function setSubscriptionsEntityData(Collection &$entitySubscriptions): void
     {
-        $entityIds = $entitySubscriptions->pluck('entity_id')->unique()->toArray();
         $entityType = $entitySubscriptions->first()->entity_type;
-        $entitiesData = new Collection([]);
+        $entityRepository = $entityType === config('entities.team') ? $this->teamRepository : $this->userRepository;
 
-        if ($entityType === config('entities.team')) {
-            $entitiesData = $this->teamRepository->getByIds($entityIds);
-        } elseif ($entityType === config('entities.user')) {
-            $entitiesData = $this->userRepository->getByIds($entityIds);
-        } else {
-            Log::warning("entityType didn't match any existing type", [
-                'entitySubscriptions' => $entitySubscriptions,
-                'entityType' => $entityType
-            ]);
-            return;
-        }
-
-        foreach ($entitySubscriptions as &$subscription) {
-            $subscription->entityData = $entitiesData->where('id', '=', $subscription->entity_id)->first();
-        }
+        $this->setCollectionEntityData($entitySubscriptions, 'entity_id', 'entityData', $entityRepository);
     }
 }

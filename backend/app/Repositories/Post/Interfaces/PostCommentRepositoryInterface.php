@@ -3,10 +3,11 @@
 namespace App\Repositories\Post\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\IdentifiableRepositoryInterface;
 use App\Models\PostComment;
 use App\DTO\Post\CreatePostCommentDTO;
 
-interface PostCommentRepositoryInterface
+interface PostCommentRepositoryInterface extends IdentifiableRepositoryInterface
 {
     /**
      * @param int $postCommentId
@@ -14,6 +15,13 @@ interface PostCommentRepositoryInterface
      * @return PostComment|null
      */
     public function getById(int $postCommentId): ?PostComment;
+
+    /**
+     * @param array $postCommentIds
+     * 
+     * @return Collection
+     */
+    public function getByIds(array $postCommentIds): Collection;
 
     /**
      * @param int $postId

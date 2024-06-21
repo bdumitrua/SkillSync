@@ -3,10 +3,11 @@
 namespace App\Repositories\User\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\IdentifiableRepositoryInterface;
 use App\Models\User;
 use App\DTO\User\UpdateUserDTO;
 
-interface UserRepositoryInterface
+interface UserRepositoryInterface extends IdentifiableRepositoryInterface
 {
     /**
      * @param int $userId

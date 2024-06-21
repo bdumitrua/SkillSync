@@ -12,11 +12,20 @@ class PostCommentRepository implements PostCommentRepositoryInterface
 {
     public function getById(int $postCommentId): ?PostComment
     {
-        Log::debug("Getting post comment by id", [
+        Log::debug("Getting postComment by id", [
             'postCommentId' => $postCommentId
         ]);
 
         return PostComment::where('id', '=', $postCommentId)->first();
+    }
+
+    public function getByIds(array $postCommentIds): Collection
+    {
+        Log::debug("Getting postComments by ids", [
+            'postCommentIds' => $postCommentIds
+        ]);
+
+        return PostComment::whereIn('id', $postCommentIds)->get();
     }
 
     public function getByPostId(int $postId): Collection

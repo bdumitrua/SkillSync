@@ -3,11 +3,12 @@
 namespace App\Repositories\Post\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\IdentifiableRepositoryInterface;
 use App\Models\Post;
 use App\DTO\Post\UpdatePostDTO;
 use App\DTO\Post\CreatePostDTO;
 
-interface PostRepositoryInterface
+interface PostRepositoryInterface extends IdentifiableRepositoryInterface
 {
     /**
      * @return Collection
