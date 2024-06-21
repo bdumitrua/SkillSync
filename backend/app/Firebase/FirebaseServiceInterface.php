@@ -2,6 +2,8 @@
 
 namespace App\Firebase;
 
+use Illuminate\Database\Eloquent\Collection;
+use App\Models\NoSQL\Message;
 use App\DTO\Message\CreateMesssageDTO;
 
 interface FirebaseServiceInterface
@@ -11,9 +13,9 @@ interface FirebaseServiceInterface
      * @param string $newMessageUuid
      * @param CreateMesssageDTO $messageData
      * 
-     * @return array
+     * @return Message
      */
-    public function sendMessage(int $chatId, string $newMessageUuid, CreateMesssageDTO $messageData): array;
+    public function sendMessage(int $chatId, string $newMessageUuid, CreateMesssageDTO $messageData): Message;
 
     /**
      * @param int $chatId
@@ -34,14 +36,14 @@ interface FirebaseServiceInterface
     /**
      * @param int $chatId
      * 
-     * @return array
+     * @return Collection
      */
-    public function getChatMessages(int $chatId): array;
+    public function getChatMessages(int $chatId): Collection;
 
     /**
      * @param array $chatIds
      * 
-     * @return array
+     * @return Collection
      */
-    public function getChatsMessages(array $chatIds): array;
+    public function getChatsMessages(array $chatIds): Collection;
 }

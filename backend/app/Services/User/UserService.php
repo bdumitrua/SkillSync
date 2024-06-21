@@ -4,19 +4,13 @@ namespace App\Services\User;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Response;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
 use App\Services\User\Interfaces\UserServiceInterface;
-use App\Services\Team\Interfaces\TeamServiceInterface;
-use App\Services\Post\Interfaces\PostServiceInterface;
-use App\Services\Interfaces\TagServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
+use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Models\User;
-use App\Models\Project;
-use App\Models\Post;
 use App\Http\Resources\User\UserResource;
 use App\Http\Resources\User\UserDataResource;
 use App\Exceptions\UnprocessableContentException;
@@ -24,23 +18,17 @@ use App\DTO\User\UpdateUserDTO;
 
 class UserService implements UserServiceInterface
 {
-    private $teamService;
-    private $postService;
-    private $tagService;
+    private $tagRepository;
     private $userRepository;
     private $subscriptionRepository;
     private ?int $authorizedUserId;
 
     public function __construct(
-        TeamServiceInterface $teamService,
-        PostServiceInterface $postService,
-        TagServiceInterface $tagService,
+        TagRepositoryInterface $tagRepository,
         UserRepositoryInterface $userRepository,
         SubscriptionRepositoryInterface $subscriptionRepository,
     ) {
-        $this->teamService = $teamService;
-        $this->postService = $postService;
-        $this->tagService = $tagService;
+        $this->tagRepository = $tagRepository;
         $this->userRepository = $userRepository;
         $this->subscriptionRepository = $subscriptionRepository;
         $this->authorizedUserId = Auth::id();
@@ -123,19 +111,24 @@ class UserService implements UserServiceInterface
             'userId' => $user->id
         ]);
 
-        // TODO REMOVE SERVICES
-        $user->tags = $this->tagService->user($user->id);
-        $user->teams = $this->teamService->user($user->id);
-        $user->posts = $this->postService->user($user->id);
-
-        Log::debug('Counting user subscribers and subscriptions number');
-        $user->subscribersCount = count($this->subscriptionRepository->getUserSubscribers($user->id));
-        $user->subscriptionsCount = count($this->subscriptionRepository->getUserSubscriptions($user->id));
+        $this->setUserTags($user);
+        $this->setUserCounters($user);
 
         Log::debug('Ended assembling user profile data', [
             'userId' => $user->id
         ]);
 
         return $user;
+    }
+
+    protected function setUserTags(User &$user): void
+    {
+        $user->tags = $this->tagRepository->getByUserId($user->id);
+    }
+
+    protected function setUserCounters(User &$user): void
+    {
+        $user->subscribersCount = count($this->subscriptionRepository->getUserSubscribers($user->id));
+        $user->subscriptionsCount = count($this->subscriptionRepository->getUserSubscriptions($user->id));
     }
 }

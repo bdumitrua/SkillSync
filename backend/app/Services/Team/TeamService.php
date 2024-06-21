@@ -6,16 +6,14 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Request;
 use App\Services\Team\Interfaces\TeamServiceInterface;
-use App\Services\Team\Interfaces\TeamLinkServiceInterface;
-use App\Services\Interfaces\TagServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Repositories\Team\Interfaces\TeamLinkRepositoryInterface;
+use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Models\Team;
-use App\Http\Resources\User\UserDataResource;
 use App\Http\Resources\Team\TeamResource;
 use App\Http\Resources\Team\TeamDataResource;
 use App\DTO\Team\UpdateTeamDTO;
@@ -24,26 +22,26 @@ use App\DTO\Team\CreateTeamDTO;
 
 class TeamService implements TeamServiceInterface
 {
-    protected $tagService;
-    protected $teamLinkService;
+    protected $tagRepository;
     protected $userRepository;
     protected $teamRepository;
+    protected $teamLinkRepository;
     protected $teamMemberRepository;
     protected $subscriptionRepository;
     protected ?int $authorizedUserId;
 
     public function __construct(
-        TagServiceInterface $tagService,
-        TeamLinkServiceInterface $teamLinkService,
+        TagRepositoryInterface $tagRepository,
         UserRepositoryInterface $userRepository,
         TeamRepositoryInterface $teamRepository,
+        TeamLinkRepositoryInterface $teamLinkRepository,
         TeamMemberRepositoryInterface $teamMemberRepository,
         SubscriptionRepositoryInterface $subscriptionRepository,
     ) {
-        $this->tagService = $tagService;
-        $this->teamLinkService = $teamLinkService;
+        $this->tagRepository = $tagRepository;
         $this->userRepository = $userRepository;
         $this->teamRepository = $teamRepository;
+        $this->teamLinkRepository = $teamLinkRepository;
         $this->teamMemberRepository = $teamMemberRepository;
         $this->subscriptionRepository = $subscriptionRepository;
         $this->authorizedUserId = Auth::id();
@@ -110,8 +108,10 @@ class TeamService implements TeamServiceInterface
 
     protected function assembleTeam(Team $team): Team
     {
-        $team->links = $this->teamLinkService->team($team->id);
-        $team->tags = $this->tagService->team($team->id);
+        $isTeamMember = $this->teamMemberRepository->userIsMember($team->id, $this->authorizedUserId);
+
+        $team->links = $this->teamLinkRepository->getByTeamId($team->id, $isTeamMember);
+        $team->tags = $this->tagRepository->getByTeamId($team->id);
 
         return $team;
     }

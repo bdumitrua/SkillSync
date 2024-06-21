@@ -3,6 +3,7 @@
 namespace App\Repositories\Message\Interfaces;
 
 use Illuminate\Support\Collection;
+use App\Models\NoSQL\Message;
 use App\DTO\Message\CreateMesssageDTO;
 
 interface MessageRepositoryInterface
@@ -26,9 +27,9 @@ interface MessageRepositoryInterface
      * @param string $newMessageUuid
      * @param CreateMesssageDTO $createMesssageDTO
      * 
-     * @return array
+     * @return Message
      */
-    public function create(int $chatId, string $newMessageUuid, CreateMesssageDTO $createMesssageDTO): array;
+    public function create(int $chatId, string $newMessageUuid, CreateMesssageDTO $createMesssageDTO): Message;
 
     /**
      * @param int $chatId

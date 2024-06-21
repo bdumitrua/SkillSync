@@ -3,6 +3,8 @@
 namespace App\Firebase;
 
 use Kreait\Firebase\Database;
+use Illuminate\Database\Eloquent\Collection;
+use App\Models\NoSQL\Message;
 use App\Firebase\FirebaseServiceInterface;
 use App\Exceptions\NotFoundException;
 use App\Enums\MessageStatus;
@@ -43,7 +45,7 @@ class FirebaseService implements FirebaseServiceInterface
         return true;
     }
 
-    public function sendMessage(int $chatId, string $newMessageUuid, CreateMesssageDTO $messageData): array
+    public function sendMessage(int $chatId, string $newMessageUuid, CreateMesssageDTO $messageData): Message
     {
         $newMessageRef = $this->database->getReference($this->getMessagePath($chatId, $newMessageUuid));
 
@@ -56,9 +58,9 @@ class FirebaseService implements FirebaseServiceInterface
         $newMessageRef->set($newMessageData);
 
         // Получение обратно данных сообщения
-        $newMessageSnapshot = $newMessageRef->getSnapshot();
+        $newMessage = $newMessageRef->getSnapshot()->getValue();
 
-        return (array) $newMessageSnapshot->getValue();
+        return $this->createMessageObject($newMessageUuid, $chatId, $newMessage);
     }
 
     public function readMessage(int $chatId, string $messageUuid): void
@@ -88,28 +90,46 @@ class FirebaseService implements FirebaseServiceInterface
         $messageRef->remove();
     }
 
-    public function getChatMessages(int $chatId): array
+    public function getChatMessages(int $chatId): Collection
     {
         $chatMessagesRef = $this->database->getReference($this->getChatMessagesPath($chatId))
             ->orderByChild('created_at')
             ->limitToLast(15);
 
-        $snapshot = $chatMessagesRef->getSnapshot();
-        return $snapshot->getValue() ?? [];
-    }
+        $messagesData = $chatMessagesRef->getSnapshot()->getValue() ?? [];
+        $messages = new Collection([]);
 
-    public function getChatsMessages(array $chatIds): array
-    {
-        $messages = [];
-
-        foreach ($chatIds as $chatId) {
-            $chatMessages = $this->getChatMessages($chatId);
-            $messages[$chatId] = $chatMessages;
+        foreach ($messagesData as $uuid => &$messageData) {
+            $messageData['uuid'] = $uuid;
+            $messages->push($this->createMessageObject($messageData['uuid'], $chatId, $messageData));
         }
 
         return $messages;
     }
 
+    public function getChatsMessages(array $chatIds): Collection
+    {
+        $messages = new Collection();
+
+        foreach ($chatIds as $chatId) {
+            $chatMessages = $this->getChatMessages($chatId);
+            $messages->put($chatId, $chatMessages);
+        }
+
+        return $messages;
+    }
+
+    protected function createMessageObject(string $messageUuid, int $chatId, $data): Message
+    {
+        return new Message(
+            $messageUuid,
+            $chatId,
+            $data['text'],
+            $data['status'],
+            $data['senderId'],
+            $data['created_at'],
+        );
+    }
 
     protected function getChatMessagesPath(int $chatId): string
     {

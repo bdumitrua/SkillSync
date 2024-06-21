@@ -138,8 +138,14 @@ class Message
 
         $results = [];
         foreach ($hits as $hit) {
-            $model = $hit['_source'];
-            $model['uuid'] = $hit['_source']['uuid'];
+            $model = new self(
+                $hit['_source']['uuid'],
+                $hit['_source']['chatId'],
+                $hit['_source']['text'],
+                $hit['_source']['status'],
+                $hit['_source']['senderId'],
+                $hit['_source']['created_at'],
+            );
 
             $results[] = $model;
         }

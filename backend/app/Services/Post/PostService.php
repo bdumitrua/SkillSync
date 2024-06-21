@@ -159,8 +159,6 @@ class PostService implements PostServiceInterface
         ]);
 
         $postIds = $posts->pluck('id')->unique()->all();
-        // Развернуть коллекцию коллекций в одну плоскую коллекцию
-        // TODO NE NRAVITSA)
         $postsTags = $this->tagRepository->getByPostIds($postIds)->flatten();
 
         foreach ($posts as $post) {

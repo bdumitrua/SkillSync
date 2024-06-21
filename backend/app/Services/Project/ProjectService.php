@@ -163,18 +163,13 @@ class ProjectService implements ProjectServiceInterface
             'projects' => $projects->pluck('id')->toArray(),
         ]);
 
-        // TODO NE NRAVITSA)
         $projectsIds = $projects->pluck('id')->toArray();
-        $projectsMembers = $this->projectMemberRepository->getByProjectsIds($projectsIds);
+        $projectsMembers = $this->projectMemberRepository->getByProjectsIds($projectsIds)->flatten();
+        $this->setCollectionEntityData($projectsMembers, 'user_id', 'userData', $this->userRepository);
 
-        /** @var Collection $projectMembers */
-        foreach ($projectsMembers as $projectMembers) {
-            $this->setCollectionEntityData($projectMembers, 'user_id', 'userData', $this->userRepository);
-            $projectMembers = $projectMembers->groupBy('project_id');
-        }
-
+        Log::debug('Setting projects membersData');
         foreach ($projects as &$project) {
-            $project->membersData = $projectMembers->get($project->id) ?? [];
+            $project->membersData = $projectsMembers->where('project_id', $project->id);
         }
 
         Log::debug("Successfully set projects members data", [

@@ -4,7 +4,7 @@ namespace App\Traits;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection;
 use App\Repositories\Interfaces\LikeRepositoryInterface;
 use App\Repositories\Interfaces\IdentifiableRepositoryInterface;
 
@@ -32,10 +32,10 @@ trait AttachEntityData
         ]);
 
         $entitiesIds = $collection->pluck($entityFieldKey)->unique()->all();
-        $entitysData = $entityRepository->getByIds($entitiesIds);
+        $entitiesData = $entityRepository->getByIds($entitiesIds);
 
         foreach ($collection as $item) {
-            $item->{$entityDataKey} = $entitysData->where('id', $item->{$entityFieldKey})->first();
+            $item->{$entityDataKey} = $entitiesData->where('id', $item->{$entityFieldKey})->first();
         }
 
         Log::debug("Succesfully setted collection entity data", [

@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\User\UserDataResource;
 use App\Http\Resources\Team\TeamDataResource;
+use App\Http\Resources\ActionsResource;
 
 class ProjectResource extends JsonResource
 {
@@ -32,6 +33,8 @@ class ProjectResource extends JsonResource
             ? (ProjectLinkResource::collection($this->linksData))->resolve()
             : [];
 
+        $actions = $this->prepareActions();
+
         return [
             "id" => $this->id,
             "authorType" => $this->author_type,
@@ -45,8 +48,21 @@ class ProjectResource extends JsonResource
             "authorData" => $authorData,
             "membersData" => $membersData,
             "linksData" => $linksData,
-            'isLiked' => $this->isLiked
-            // TODO ADD ACTIONS
+            'isLiked' => $this->isLiked,
+            'actions' => $actions
         ];
+    }
+
+    private function prepareActions(): array
+    {
+        $actions = [
+            [
+                "DeleteProject",
+                "projects.delete",
+                ["project" => $this->id]
+            ],
+        ];
+
+        return (array) ActionsResource::collection($actions);
     }
 }

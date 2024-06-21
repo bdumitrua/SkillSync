@@ -2,8 +2,9 @@
 
 namespace App\Http\Resources\Message;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 class MessageResource extends JsonResource
 {
@@ -15,10 +16,13 @@ class MessageResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'uuid' => $this->uuid,
+            'chatId' => $this->chatId,
             'text' => $this->text,
+            'status' => $this->status,
             'senderId' => $this->senderId,
-            'senderData' => [],
-            'created_at' => $this->created_at,
+            'senderData' => $this->senderData,
+            'created_at' => Carbon::createFromTimestampMs($this->created_at),
         ];
     }
 }

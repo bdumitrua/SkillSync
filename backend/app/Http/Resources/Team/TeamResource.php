@@ -4,6 +4,7 @@ namespace App\Http\Resources\Team;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
+use App\Http\Resources\TagResource;
 use App\Http\Resources\Message\ChatResource;
 use App\Http\Resources\ActionsResource;
 
@@ -16,7 +17,8 @@ class TeamResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $chatData = $this->chatData ? (new ChatResource($this->chatData))->resolve() : [];
+        $tags = !empty($this->tags) ? TagResource::collection($this->tags) : [];
+        $links = !empty($this->links) ? TeamLinkResource::collection($this->links) : [];
 
         $actions = $this->prepareActions();
 
@@ -28,13 +30,11 @@ class TeamResource extends JsonResource
             'email' => $this->email,
             'site' => $this->site,
             'chatId' => $this->chat_id,
-            'chatData' => $chatData,
             'adminId' => $this->admin_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'posts' => $this->posts,
-            'tags' => $this->tags,
-            'links' => $this->links,
+            'tags' => $tags,
+            'links' => $links,
             'actions' => $actions,
         ];
     }

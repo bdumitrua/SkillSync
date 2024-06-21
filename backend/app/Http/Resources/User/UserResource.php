@@ -4,6 +4,7 @@ namespace App\Http\Resources\User;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
+use App\Http\Resources\TagResource;
 use App\Http\Resources\ActionsResource;
 use App\Helpers\TimeHelper;
 
@@ -12,6 +13,7 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         $age = TimeHelper::calculateAge($this->birthdate);
+        $tags = !empty($this->tags) ? TagResource::collection($this->tags) : [];
 
         $actions = $this->prepareActions();
 
@@ -30,9 +32,7 @@ class UserResource extends JsonResource
             'age' => $age,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'tags' => $this->tags,
-            'posts' => $this->posts,
-            'teams' => $this->teams,
+            'tags' => $tags,
             'subscribersCount' => $this->subscribersCount ?? 0,
             'subscriptionsCount' => $this->subscriptionsCount ?? 0,
             'canSubscribe' => $this->canSubscribe,

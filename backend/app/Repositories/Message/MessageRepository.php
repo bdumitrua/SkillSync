@@ -23,7 +23,7 @@ class MessageRepository implements MessageRepositoryInterface
 
     public function getByChatId(int $chatId): Collection
     {
-        return new Collection($this->firebaseService->getChatMessages($chatId));
+        return $this->firebaseService->getChatMessages($chatId);
     }
 
     public function search(string $query): Collection
@@ -31,26 +31,14 @@ class MessageRepository implements MessageRepositoryInterface
         return Message::search($query);
     }
 
-    public function create(int $chatId, string $newMessageUuid, CreateMesssageDTO $createMesssageDTO): array
+    public function create(int $chatId, string $newMessageUuid, CreateMesssageDTO $createMesssageDTO): Message
     {
-        $newMessageData = $this->firebaseService->sendMessage($chatId, $newMessageUuid, $createMesssageDTO);
+        $newMessage = $this->firebaseService->sendMessage($chatId, $newMessageUuid, $createMesssageDTO);
+        Message::addToElasticsearch($newMessage, 'uuid');
 
-        // TODO
-        // I know it's bad, fix later
-        $message = new Message(
-            $newMessageUuid,
-            $chatId,
-            $newMessageData['text'],
-            $newMessageData['status'],
-            $newMessageData['senderId'],
-            $newMessageData['created_at']
-        );
+        event(new MessageSentEvent($chatId, $newMessage));
 
-        Message::addToElasticsearch($message, 'uuid');
-
-        event(new MessageSentEvent($chatId, $message));
-
-        return $newMessageData;
+        return $newMessage;
     }
 
     public function read(int $chatId, string $messageUuid): void
