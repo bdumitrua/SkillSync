@@ -43,6 +43,14 @@ trait AttachEntityData
         ]);
     }
 
+    /**
+     * @param Collection $morphCollection
+     * @param string $morphKey
+     * @param string $entityKey
+     * @param IdentifiableRepositoryInterface $repository
+     * 
+     * @return void
+     */
     protected function setCollectionMorphData(
         Collection &$morphCollection,
         string $morphKey,

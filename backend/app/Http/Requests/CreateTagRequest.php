@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use App\DTO\User\CreateTagDTO;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\EntityIdRule;
 use App\Traits\Dtoable;
+use App\Rules\EntityIdRule;
+use App\DTO\CreateTagDTO;
 
 class CreateTagRequest extends FormRequest
 {

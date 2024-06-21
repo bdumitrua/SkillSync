@@ -45,7 +45,8 @@ class ProjectResource extends JsonResource
             "authorData" => $authorData,
             "membersData" => $membersData,
             "linksData" => $linksData,
-
+            'isLiked' => $this->isLiked
+            // TODO ADD ACTIONS
         ];
     }
 }

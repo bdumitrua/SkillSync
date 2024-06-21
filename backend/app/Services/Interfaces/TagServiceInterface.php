@@ -2,10 +2,10 @@
 
 namespace App\Services\Interfaces;
 
-use App\DTO\User\CreateTagDTO;
+use Illuminate\Http\Resources\Json\JsonResource;
 use App\Models\Tag;
 use App\Http\Requests\CreateTagRequest;
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\DTO\CreateTagDTO;
 
 interface TagServiceInterface
 {

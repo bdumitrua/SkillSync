@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use Illuminate\Support\Facades\Log;
 use App\Traits\Cacheable;
 use App\Models\Project;
 
@@ -22,6 +23,7 @@ class ProjectObserver
      */
     public function updated(Project $project): void
     {
+        Log::info("Entered projectObserver 'update'");
         $this->clearMainCache($project->id);
     }
 

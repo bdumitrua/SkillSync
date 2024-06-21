@@ -77,10 +77,8 @@ class PostCommentService implements PostCommentServiceInterface
         $postCommentsIds = $postComments->pluck('id')->toArray();
         $postCommentsLikes = $this->likeRepository->getByUserAndCommentsIds($this->authorizedUserId, $postCommentsIds);
 
-        $likesKeyedByPostCommentId = $postCommentsLikes->keyBy('post_comment_id');
-
         foreach ($postComments as $postComment) {
-            $postComment->isLiked = isset($likesKeyedByPostCommentId[$postComment->id]);
+            $postComment->isLiked = $postCommentsLikes->contains('likeable_id', $postComment->id);
         }
     }
 }

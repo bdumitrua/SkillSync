@@ -4,7 +4,7 @@ namespace App\Repositories\Interfaces;
 
 use Illuminate\Database\Eloquent\Collection;
 use App\Models\Tag;
-use App\DTO\User\CreateTagDTO;
+use App\DTO\CreateTagDTO;
 
 interface TagRepositoryInterface
 {
@@ -46,9 +46,9 @@ interface TagRepositoryInterface
     /**
      * @param array $postIds
      * 
-     * @return array
+     * @return Collection
      */
-    public function getByPostIds(array $postIds): array;
+    public function getByPostIds(array $postIds): Collection;
 
     /**
      * @param CreateTagDTO $dto

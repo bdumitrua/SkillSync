@@ -41,6 +41,7 @@ interface LikeRepositoryInterface
      */
     public function getLikeableByDTO(LikeDTO $likeDTO): ?Likeable;
 
+    // TODO MAYBE MERGE
     /**
      * @param int $userId
      * @param array $postCommentsIds
@@ -48,6 +49,14 @@ interface LikeRepositoryInterface
      * @return Collection
      */
     public function getByUserAndCommentsIds(int $userId, array $postCommentsIds): Collection;
+
+    /**
+     * @param int $userId
+     * @param array $projectIds
+     * 
+     * @return Collection
+     */
+    public function getByUserAndProjectsIds(int $userId, array $projectIds): Collection;
 
     /**
      * @param int $userId

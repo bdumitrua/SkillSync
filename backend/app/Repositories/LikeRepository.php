@@ -74,6 +74,14 @@ class LikeRepository implements LikeRepositoryInterface
             ->get();
     }
 
+    public function getByUserAndProjectsIds(int $userId, array $projectIds): Collection
+    {
+        return Like::where('user_id', '=', $userId)
+            ->where('likeable_type', '=', config('entities.project'))
+            ->whereIn('likeable_id', $projectIds)
+            ->get();
+    }
+
     public function getByUserAndPostsIds(int $userId, array $postsIds): Collection
     {
         return Like::where('user_id', '=', $userId)
@@ -101,7 +109,7 @@ class LikeRepository implements LikeRepositoryInterface
      */
     public function delete(Like $like): void
     {
-        $like->decrementLikeableLikesCount();
+        $like->likeable()->first()->decrementLikesCount();
         $like->delete();
     }
 }

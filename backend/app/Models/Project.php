@@ -48,10 +48,6 @@ class Project extends Model implements Likeable
 
     public function toSearchableArray(): array
     {
-        Log::info('Project searchable', [
-            $this->attributesToArray()
-        ]);
-
         return $this->attributesToArray();
     }
 

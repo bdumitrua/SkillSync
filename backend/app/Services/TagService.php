@@ -12,7 +12,7 @@ use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Models\Tag;
 use App\Http\Resources\TagResource;
 use App\Http\Requests\CreateTagRequest;
-use App\DTO\User\CreateTagDTO;
+use App\DTO\CreateTagDTO;
 
 class TagService implements TagServiceInterface
 {

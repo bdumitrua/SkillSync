@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use App\Traits\Cacheable;
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Models\Tag;
-use App\DTO\User\CreateTagDTO;
+use App\DTO\CreateTagDTO;
 
 class TagRepository implements TagRepositoryInterface
 {
@@ -82,13 +82,13 @@ class TagRepository implements TagRepositoryInterface
         });
     }
 
-    public function getByPostIds(array $postIds): array
+    public function getByPostIds(array $postIds): Collection
     {
         Log::debug('Getting tags by postIds', [
             'postIds' => $postIds
         ]);
 
-        return $this->getCachedArray($postIds, function ($postId) {
+        return $this->getCachedCollection($postIds, function ($postId) {
             return $this->getByPostId($postId);
         });
     }

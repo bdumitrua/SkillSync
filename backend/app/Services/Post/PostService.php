@@ -152,7 +152,6 @@ class PostService implements PostServiceInterface
         ]);
     }
 
-    // TODO NE NRAVITSA)
     protected function setPostsTagsData(Collection &$posts): void
     {
         Log::debug("Setting posts tags data", [
@@ -160,10 +159,12 @@ class PostService implements PostServiceInterface
         ]);
 
         $postIds = $posts->pluck('id')->unique()->all();
-        $postsTags = $this->tagRepository->getByPostIds($postIds);
+        // Развернуть коллекцию коллекций в одну плоскую коллекцию
+        // TODO NE NRAVITSA)
+        $postsTags = $this->tagRepository->getByPostIds($postIds)->flatten();
 
         foreach ($posts as $post) {
-            $post->tagsData = isset($postsTags[$post->id]) ? $postsTags[$post->id] : [];
+            $post->tagsData = $postsTags->where('entity_id', $post->id);
         }
 
         Log::debug("Succesfully setted posts tags data", [
@@ -185,10 +186,8 @@ class PostService implements PostServiceInterface
         $postsIds = $posts->pluck('id')->toArray();
         $postsLikes = $this->likeRepository->getByUserAndPostsIds($this->authorizedUserId, $postsIds);
 
-        $postsLikesKeyedByPostId = $postsLikes->keyBy('post_id');
-
         foreach ($posts as $post) {
-            $post->isLiked = isset($postsLikesKeyedByPostId[$post->id]);
+            $post->isLiked = $postsLikes->contains('likeable_id', $post->id);
         }
     }
 }

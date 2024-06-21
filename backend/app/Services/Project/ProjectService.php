@@ -14,6 +14,7 @@ use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Project\Interfaces\ProjectRepositoryInterface;
 use App\Repositories\Project\Interfaces\ProjectMemberRepositoryInterface;
 use App\Repositories\Project\Interfaces\ProjectLinkRepositoryInterface;
+use App\Repositories\Interfaces\LikeRepositoryInterface;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Project;
@@ -28,6 +29,7 @@ class ProjectService implements ProjectServiceInterface
 
     protected $userRepository;
     protected $teamRepository;
+    protected $likeRepository;
     protected $projectRepository;
     protected $projectLinkRepository;
     protected $projectMemberRepository;
@@ -36,12 +38,14 @@ class ProjectService implements ProjectServiceInterface
     public function __construct(
         UserRepositoryInterface $userRepository,
         TeamRepositoryInterface $teamRepository,
+        LikeRepositoryInterface $likeRepository,
         ProjectRepositoryInterface $projectRepository,
         ProjectLinkRepositoryInterface $projectLinkRepository,
         ProjectMemberRepositoryInterface $projectMemberRepository,
     ) {
         $this->userRepository = $userRepository;
         $this->teamRepository = $teamRepository;
+        $this->likeRepository = $likeRepository;
         $this->projectRepository = $projectRepository;
         $this->projectLinkRepository = $projectLinkRepository;
         $this->projectMemberRepository = $projectMemberRepository;
@@ -194,11 +198,14 @@ class ProjectService implements ProjectServiceInterface
         ]);
     }
 
+    // TODO NE NRAVITSA)
     protected function setProjectsRighs(Collection &$projects): void
     {
-        foreach ($projects as &$project) {
-            // TODO LIKES
-            $project->isLiked = false;
+        $projectsIds = $projects->pluck('id')->toArray();
+        $projectsLikes = $this->likeRepository->getByUserAndProjectsIds($this->authorizedUserId, $projectsIds);
+
+        foreach ($projects as $project) {
+            $project->isLiked = $projectsLikes->contains('likeable_id', $project->id);
             $project->canUpdate = Gate::allows('update', [Project::class, $project]);
             $project->canDelete = Gate::allows('delete', [Project::class, $project]);;
         }

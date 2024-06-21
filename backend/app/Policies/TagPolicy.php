@@ -36,11 +36,11 @@ class TagPolicy
         }
 
         if ($entityType === config('entities.team')) {
-            return Gate::allows(TOUCH_TEAM_TAGS_GATE, [Team::class, $entityId]);
+            return Gate::inspect(TOUCH_TEAM_TAGS_GATE, [Team::class, $entityId]);
         }
 
         if ($entityType === config('entities.post')) {
-            return Gate::allows('create', [Post::class, $entityType, $entityId]);
+            return Gate::inspect('tag', [Post::class, $entityId]);
         }
 
         return Response::deny("Unauthorized action.");

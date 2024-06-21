@@ -5,17 +5,22 @@ namespace App\Policies;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Auth\Access\Response;
 use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
+use App\Repositories\Post\PostRepository;
+use App\Repositories\Post\Interfaces\PostRepositoryInterface;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Post;
 
 class PostPolicy
 {
+    protected $postRepository;
     protected $teamMemberRepository;
 
     public function __construct(
+        PostRepositoryInterface $postRepository,
         TeamMemberRepositoryInterface $teamMemberRepository,
     ) {
+        $this->postRepository = $postRepository;
         $this->teamMemberRepository = $teamMemberRepository;
     }
 
@@ -41,6 +46,13 @@ class PostPolicy
     public function delete(User $user, Post $post): Response
     {
         return $this->getRights($user, $post->entity_type, $post->entity_id);
+    }
+
+    public function tag(User $user, int $postId): Response
+    {
+        $post = $this->postRepository->getById($postId);
+
+        return $this->update($user, $post);
     }
 
     private function getRights(User $user, string $entityType, int $entityId): Response
