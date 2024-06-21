@@ -42,7 +42,7 @@ class Message
         ];
     }
 
-    protected static function getESIndex(): string
+    public static function getESIndex(): string
     {
         return 'messages';
     }

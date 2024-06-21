@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests\Post;
 
-use App\DTO\Post\CreatePostDTO;
 use Illuminate\Foundation\Http\FormRequest;
-use App\Rules\ValidatePostEntityType;
-use App\Rules\EntityIdRule;
 use App\Traits\Dtoable;
+use App\Rules\EntityIdRule;
+use App\DTO\Post\CreatePostDTO;
 
 class CreatePostRequest extends FormRequest
 {
@@ -32,8 +31,8 @@ class CreatePostRequest extends FormRequest
         return [
             'text' => 'required|string|max:255',
             'mediaUrl' => 'nullable|string',
-            'entityType' => 'required|in:user,team',
-            'entityId' => [new EntityIdRule()],
+            'authorType' => 'required|in:user,team',
+            'authorId' => [new EntityIdRule()],
         ];
     }
 
@@ -49,8 +48,8 @@ class CreatePostRequest extends FormRequest
             'text.string' => 'Text must be a string.',
             'text.max' => 'Text cannot exceed 255 characters.',
             'mediaUrl.string' => 'Media URL must be a string.',
-            'entityType.required' => 'Entity type is required.',
-            'entityType.int' => 'Entity type can be user or team.',
+            'authorType.required' => 'Author type is required.',
+            'authorType.int' => 'Author type can be user or team.',
         ];
     }
 }

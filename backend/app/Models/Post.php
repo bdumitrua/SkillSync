@@ -19,8 +19,8 @@ class Post extends Model implements Likeable
     protected $fillable = [
         'text',
         'media_url',
-        'entity_type',
-        'entity_id',
+        'author_type',
+        'author_id',
         'likes_count'
     ];
 
@@ -34,7 +34,7 @@ class Post extends Model implements Likeable
         });
     }
 
-    protected static function getESIndex(): string
+    public static function getESIndex(): string
     {
         return 'posts';
     }
@@ -67,11 +67,11 @@ class Post extends Model implements Likeable
                 'type' => 'text',
                 'index' => false
             ],
-            'entity_type' => [
+            'author_type' => [
                 'type' => 'text',
                 'index' => false
             ],
-            'entity_id' => [
+            'author_id' => [
                 'type' => 'text',
                 'index' => false
             ],
@@ -112,7 +112,7 @@ class Post extends Model implements Likeable
      */
     public function createdByUser(): bool
     {
-        return $this->entity_type === config('entities.user');
+        return $this->author_type === config('entities.user');
     }
 
     /**
@@ -120,7 +120,7 @@ class Post extends Model implements Likeable
      */
     public function createdByTeam(): bool
     {
-        return $this->entity_type === config('entities.team');
+        return $this->author_type === config('entities.team');
     }
 
     /**
@@ -162,7 +162,7 @@ class Post extends Model implements Likeable
     /**
      * @return MorphTo
      */
-    public function entity(): MorphTo
+    public function author(): MorphTo
     {
         return $this->morphTo();
     }

@@ -20,7 +20,7 @@ class GroupChat extends Model
         'avatar_url'
     ];
 
-    protected static function getESIndex(): string
+    public static function getESIndex(): string
     {
         return 'group_chats';
     }

@@ -36,7 +36,7 @@ class Project extends Model implements Likeable
         });
     }
 
-    protected static function getESIndex(): string
+    public static function getESIndex(): string
     {
         return 'projects';
     }

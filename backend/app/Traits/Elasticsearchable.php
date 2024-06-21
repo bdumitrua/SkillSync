@@ -10,7 +10,7 @@ use Elastic\Elasticsearch\Client;
 
 trait Elasticsearchable
 {
-    protected static function getESIndex(): string
+    public static function getESIndex(): string
     {
         return '';
     }

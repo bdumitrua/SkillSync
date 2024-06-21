@@ -5,8 +5,8 @@ namespace App\DTO\Post;
 class CreatePostDTO
 {
     public string $text;
-    public string $entityType;
-    public int $entityId;
+    public string $authorType;
+    public int $authorId;
 
     public ?string $mediaUrl = null;
 
@@ -14,8 +14,8 @@ class CreatePostDTO
     {
         return [
             'text' => $this->text,
-            'entity_type' => $this->entityType,
-            'entity_id' => $this->entityId,
+            'author_type' => $this->authorType,
+            'author_id' => $this->authorId,
             'media_url' => $this->mediaUrl,
         ];
     }

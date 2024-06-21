@@ -32,15 +32,15 @@ class PostRepository implements PostRepositoryInterface
 
         if (!empty($usersIds)) {
             $query->orWhere(function ($query) use ($usersIds) {
-                $query->where('entity_type', '=', config('entities.user'))
-                    ->whereIn('entity_id', $usersIds);
+                $query->where('author_type', '=', config('entities.user'))
+                    ->whereIn('author_id', $usersIds);
             });
         }
 
         if (!empty($teamsIds)) {
             $query->orWhere(function ($query) use ($teamsIds) {
-                $query->where('entity_type', '=', config('entities.team'))
-                    ->whereIn('entity_id', $teamsIds);
+                $query->where('author_type', '=', config('entities.team'))
+                    ->whereIn('author_id', $teamsIds);
             });
         }
 
@@ -78,7 +78,7 @@ class PostRepository implements PostRepositoryInterface
             'userId' => $userId
         ]);
 
-        return Post::where('entity_type', '=', config('entities.user'))->where('entity_id', '=', $userId)->get();
+        return Post::where('author_type', '=', config('entities.user'))->where('author_id', '=', $userId)->get();
     }
 
     public function getByTeamId(int $teamId): Collection
@@ -87,7 +87,7 @@ class PostRepository implements PostRepositoryInterface
             'teamId' => $teamId
         ]);
 
-        return Post::where('entity_type', '=', config('entities.team'))->where('entity_id', '=', $teamId)->get();
+        return Post::where('author_type', '=', config('entities.team'))->where('author_id', '=', $teamId)->get();
     }
 
     public function create(CreatePostDTO $dto): Post

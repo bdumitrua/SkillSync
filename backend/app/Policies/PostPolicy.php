@@ -27,9 +27,9 @@ class PostPolicy
     /**
      * Determine whether the user can create the post.
      */
-    public function create(User $user, string $entityType, int $entityId): Response
+    public function create(User $user, string $authorType, int $authorId): Response
     {
-        return $this->getRights($user, $entityType, $entityId);
+        return $this->getRights($user, $authorType, $authorId);
     }
 
     /**
@@ -37,7 +37,7 @@ class PostPolicy
      */
     public function update(User $user, Post $post): Response
     {
-        return $this->getRights($user, $post->entity_type, $post->entity_id);
+        return $this->getRights($user, $post->author_type, $post->author_id);
     }
 
     /**
@@ -45,7 +45,7 @@ class PostPolicy
      */
     public function delete(User $user, Post $post): Response
     {
-        return $this->getRights($user, $post->entity_type, $post->entity_id);
+        return $this->getRights($user, $post->author_type, $post->author_id);
     }
 
     public function tag(User $user, int $postId): Response
@@ -55,16 +55,16 @@ class PostPolicy
         return $this->update($user, $post);
     }
 
-    private function getRights(User $user, string $entityType, int $entityId): Response
+    private function getRights(User $user, string $authorType, int $authorId): Response
     {
-        if ($entityType === config('entities.user')) {
-            return $user->id === $entityId
+        if ($authorType === config('entities.user')) {
+            return $user->id === $authorId
                 ? Response::allow()
                 : Response::deny("Access denied.");
         }
 
-        if ($entityType === config('entities.team')) {
-            return Gate::inspect(TOUCH_TEAM_POSTS_GATE, [Team::class, $entityId]);
+        if ($authorType === config('entities.team')) {
+            return Gate::inspect(TOUCH_TEAM_POSTS_GATE, [Team::class, $authorId]);
         }
 
         return Response::deny("Unauthorized action.");

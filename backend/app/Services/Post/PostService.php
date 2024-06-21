@@ -66,8 +66,8 @@ class PostService implements PostServiceInterface
 
         $feedPosts = $this->postRepository->feed(
             $this->authorizedUserId,
-            $subscriptionsToUsers->pluck('entity_id')->toArray(),
-            $subscriptionsToTeams->pluck('entity_id')->toArray()
+            $subscriptionsToUsers->pluck('author_id')->toArray(),
+            $subscriptionsToTeams->pluck('author_id')->toArray()
         );
 
         $feedPosts = $this->assemblePostsData($feedPosts);
@@ -109,7 +109,7 @@ class PostService implements PostServiceInterface
 
     public function create(CreatePostDTO $createPostDTO): void
     {
-        Gate::authorize('create', [Post::class, $createPostDTO->entityType, $createPostDTO->entityId]);
+        Gate::authorize('create', [Post::class, $createPostDTO->authorType, $createPostDTO->authorId]);
 
         $this->postRepository->create($createPostDTO);
     }
@@ -130,7 +130,7 @@ class PostService implements PostServiceInterface
 
     protected function assemblePostsData(Collection $posts): Collection
     {
-        $this->setPostsEntityData($posts);
+        $this->setPostsAuthorData($posts);
         $this->setPostsTagsData($posts);
         $this->setPostsRights($posts);
         $this->setCollectionIsLiked($posts, 'post', $this->likeRepository);
@@ -138,16 +138,16 @@ class PostService implements PostServiceInterface
         return $posts;
     }
 
-    protected function setPostsEntityData(Collection &$posts): void
+    protected function setPostsAuthorData(Collection &$posts): void
     {
-        Log::debug("Setting posts entity data", [
+        Log::debug("Setting posts author data", [
             'posts' => $posts->pluck('id')->toArray(),
         ]);
 
-        $this->setCollectionMorphData($posts, 'entity', 'user', $this->userRepository);
-        $this->setCollectionMorphData($posts, 'entity', 'team', $this->teamRepository);
+        $this->setCollectionMorphData($posts, 'author', 'user', $this->userRepository);
+        $this->setCollectionMorphData($posts, 'author', 'team', $this->teamRepository);
 
-        Log::debug("Succesfully setted posts entity data", [
+        Log::debug("Succesfully setted posts author data", [
             'posts' => $posts->pluck('id')->toArray(),
         ]);
     }

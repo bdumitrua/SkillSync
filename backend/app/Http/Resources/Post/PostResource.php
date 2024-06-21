@@ -20,11 +20,11 @@ class PostResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $entityData = [];
-        if ($this->entity_type === config('entities.user')) {
-            $entityData = (new UserDataResource($this->entityData))->resolve();
-        } elseif ($this->entity_type === config('entities.team')) {
-            $entityData = (new TeamDataResource($this->entityData))->resolve();
+        $authorData = [];
+        if ($this->author_type === config('entities.user')) {
+            $authorData = (new UserDataResource($this->authorData))->resolve();
+        } elseif ($this->author_type === config('entities.team')) {
+            $authorData = (new TeamDataResource($this->authorData))->resolve();
         }
 
         $tags = $this->tagsData ? (TagResource::collection($this->tagsData))->resolve() : [];
@@ -35,9 +35,9 @@ class PostResource extends JsonResource
             'text' => $this->text,
             'mediaUrl' => $this->media_url,
             'createdAt' => $this->created_at,
-            'entityId' => $this->entity_id,
-            'entityType' => $this->entity_type,
-            'entityData' => $entityData,
+            'authorId' => $this->author_id,
+            'authorType' => $this->author_type,
+            'authorData' => $authorData,
             'tags' => $tags,
             'likesCount' => $this->likes_count ?? 0,
             'isLiked' => $this->isLiked,

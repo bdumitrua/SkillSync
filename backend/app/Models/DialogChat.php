@@ -23,7 +23,7 @@ class DialogChat extends Model
         'second_user_id'
     ];
 
-    protected static function getESIndex(): string
+    public static function getESIndex(): string
     {
         return 'dialog_chats';
     }

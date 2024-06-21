@@ -41,12 +41,12 @@ class NotifyAboutPostLike implements ShouldQueue
             'likeId' => $this->like->id
         ]);
 
-        if ($this->post->entity_type !== config('entities.user')) {
+        if ($this->post->author_type !== config('entities.user')) {
             Log::debug('Notifications are being created only for users');
         }
 
         $newNotificationDto = CreateNotificationDTO::create()
-            ->setReceiverId($this->post->entity_id)
+            ->setReceiverId($this->post->author_id)
             ->setType(NotificationType::PostLike)
             ->setFromWho($this->like->user_id, config('entities.user'))
             ->setToWhat($this->post->id, config('entities.post'));

@@ -65,7 +65,7 @@ class PostController extends Controller
 
     public function create(CreatePostRequest $request)
     {
-        $this->patchRequestEntityType($request);
+        $this->patchRequestEntityType($request, 'authorType');
 
         $createPostDTO = $request->createDTO();
 

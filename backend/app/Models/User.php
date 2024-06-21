@@ -55,7 +55,7 @@ class User extends Authenticatable implements JWTSubject
         });
     }
 
-    protected static function getESIndex(): string
+    public static function getESIndex(): string
     {
         return 'users';
     }

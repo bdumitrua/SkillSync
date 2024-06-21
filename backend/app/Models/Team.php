@@ -48,7 +48,7 @@ class Team extends Model
         });
     }
 
-    protected static function getESIndex(): string
+    public static function getESIndex(): string
     {
         return 'teams';
     }
