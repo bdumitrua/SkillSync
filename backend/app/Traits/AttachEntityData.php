@@ -3,7 +3,9 @@
 namespace App\Traits;
 
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Collection;
+use App\Repositories\Interfaces\LikeRepositoryInterface;
 use App\Repositories\Interfaces\IdentifiableRepositoryInterface;
 
 // God forgive me...
@@ -92,5 +94,18 @@ trait AttachEntityData
             'morphKey' => $morphKey,
             'entityKey' => $entityKey
         ]);
+    }
+
+    protected function setCollectionIsLiked(
+        Collection &$collection,
+        string $entityKey,
+        LikeRepositoryInterface $likeRepository
+    ) {
+        $entityIds = $collection->pluck('id')->toArray();
+        $entityLikes = $likeRepository->getByUserAndEntityIds(Auth::id(), $entityKey, $entityIds);
+
+        foreach ($collection as $entity) {
+            $entity->isLiked = $entityLikes->contains('likeable_id', $entity->id);
+        }
     }
 }

@@ -138,6 +138,7 @@ class ProjectService implements ProjectServiceInterface
         $this->setProjectsMembersData($projects);
         $this->setProjectsLinks($projects);
         $this->setProjectsRighs($projects);
+        $this->setCollectionIsLiked($projects, 'project', $this->likeRepository);
 
         return $projects;
     }
@@ -162,6 +163,7 @@ class ProjectService implements ProjectServiceInterface
             'projects' => $projects->pluck('id')->toArray(),
         ]);
 
+        // TODO NE NRAVITSA)
         $projectsIds = $projects->pluck('id')->toArray();
         $projectsMembers = $this->projectMemberRepository->getByProjectsIds($projectsIds);
 
@@ -198,14 +200,9 @@ class ProjectService implements ProjectServiceInterface
         ]);
     }
 
-    // TODO NE NRAVITSA)
     protected function setProjectsRighs(Collection &$projects): void
     {
-        $projectsIds = $projects->pluck('id')->toArray();
-        $projectsLikes = $this->likeRepository->getByUserAndProjectsIds($this->authorizedUserId, $projectsIds);
-
         foreach ($projects as $project) {
-            $project->isLiked = $projectsLikes->contains('likeable_id', $project->id);
             $project->canUpdate = Gate::allows('update', [Project::class, $project]);
             $project->canDelete = Gate::allows('delete', [Project::class, $project]);;
         }

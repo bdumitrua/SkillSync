@@ -41,30 +41,14 @@ interface LikeRepositoryInterface
      */
     public function getLikeableByDTO(LikeDTO $likeDTO): ?Likeable;
 
-    // TODO MAYBE MERGE
     /**
      * @param int $userId
-     * @param array $postCommentsIds
+     * @param string $entityType
+     * @param array $entityIds
      * 
      * @return Collection
      */
-    public function getByUserAndCommentsIds(int $userId, array $postCommentsIds): Collection;
-
-    /**
-     * @param int $userId
-     * @param array $projectIds
-     * 
-     * @return Collection
-     */
-    public function getByUserAndProjectsIds(int $userId, array $projectIds): Collection;
-
-    /**
-     * @param int $userId
-     * @param array $postsIds
-     * 
-     * @return Collection
-     */
-    public function getByUserAndPostsIds(int $userId, array $postsIds): Collection;
+    public function getByUserAndEntityIds(int $userId, string $entityType, array $entityIds): Collection;
 
     /**
      * @param int $userId

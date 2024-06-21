@@ -59,7 +59,7 @@ class PostCommentService implements PostCommentServiceInterface
     {
         $this->setCollectionEntityData($postComments, 'user_id', 'userData', $this->userRepository);
         $this->setCommentsRights($postComments);
-        $this->setLikeAbility($postComments);
+        $this->setCollectionIsLiked($postComments, 'postComment', $this->likeRepository);
 
         return $postComments;
     }
@@ -68,17 +68,6 @@ class PostCommentService implements PostCommentServiceInterface
     {
         foreach ($postComments as $postComment) {
             $postComment->canDelete = Gate::allows('delete', [PostComment::class, $postComment]);
-        }
-    }
-
-    // TODO NE NRAVITSA)
-    protected function setLikeAbility(Collection &$postComments): void
-    {
-        $postCommentsIds = $postComments->pluck('id')->toArray();
-        $postCommentsLikes = $this->likeRepository->getByUserAndCommentsIds($this->authorizedUserId, $postCommentsIds);
-
-        foreach ($postComments as $postComment) {
-            $postComment->isLiked = $postCommentsLikes->contains('likeable_id', $postComment->id);
         }
     }
 }

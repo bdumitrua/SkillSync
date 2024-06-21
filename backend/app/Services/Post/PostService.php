@@ -133,7 +133,7 @@ class PostService implements PostServiceInterface
         $this->setPostsEntityData($posts);
         $this->setPostsTagsData($posts);
         $this->setPostsRights($posts);
-        $this->setLikeAbility($posts);
+        $this->setCollectionIsLiked($posts, 'post', $this->likeRepository);
 
         return $posts;
     }
@@ -177,17 +177,6 @@ class PostService implements PostServiceInterface
         foreach ($posts as $post) {
             $post->canUpdate = Gate::allows('update', [Post::class, $post]);
             $post->canDelete = Gate::allows('delete', [Post::class, $post]);
-        }
-    }
-
-    // TODO NE NRAVITSA)
-    protected function setLikeAbility(Collection &$posts): void
-    {
-        $postsIds = $posts->pluck('id')->toArray();
-        $postsLikes = $this->likeRepository->getByUserAndPostsIds($this->authorizedUserId, $postsIds);
-
-        foreach ($posts as $post) {
-            $post->isLiked = $postsLikes->contains('likeable_id', $post->id);
         }
     }
 }

@@ -66,27 +66,11 @@ class LikeRepository implements LikeRepositoryInterface
         return null;
     }
 
-    public function getByUserAndCommentsIds(int $userId, array $postCommentsIds): Collection
+    public function getByUserAndEntityIds(int $userId, string $entityType, array $entityIds): Collection
     {
         return Like::where('user_id', '=', $userId)
-            ->where('likeable_type', '=', config('entities.postComment'))
-            ->whereIn('likeable_id', $postCommentsIds)
-            ->get();
-    }
-
-    public function getByUserAndProjectsIds(int $userId, array $projectIds): Collection
-    {
-        return Like::where('user_id', '=', $userId)
-            ->where('likeable_type', '=', config('entities.project'))
-            ->whereIn('likeable_id', $projectIds)
-            ->get();
-    }
-
-    public function getByUserAndPostsIds(int $userId, array $postsIds): Collection
-    {
-        return Like::where('user_id', '=', $userId)
-            ->where('likeable_type', '=', config('entities.post'))
-            ->whereIn('likeable_id', $postsIds)
+            ->where('likeable_type', '=', config('entities.' . $entityType))
+            ->whereIn('likeable_id', $entityIds)
             ->get();
     }
 
