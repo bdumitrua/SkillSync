@@ -9,6 +9,7 @@ use App\Services\Project\Interfaces\ProjectLinkServiceInterface;
 use App\Repositories\Project\Interfaces\ProjectLinkRepositoryInterface;
 use App\Models\ProjectLink;
 use App\Models\Project;
+use App\Http\Resources\Project\ProjectLinkResource;
 use App\DTO\Project\UpdateProjectLinkDTO;
 use App\DTO\Project\CreateProjectLinkDTO;
 
@@ -26,8 +27,7 @@ class ProjectLinkService implements ProjectLinkServiceInterface
 
     public function project(Project $project): JsonResource
     {
-        // TODO RESOURCE
-        return JsonResource::collection(
+        return ProjectLinkResource::collection(
             $this->projectLinkRepository->getByProjectId($project->id)
         );
     }

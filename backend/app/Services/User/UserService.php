@@ -123,6 +123,7 @@ class UserService implements UserServiceInterface
             'userId' => $user->id
         ]);
 
+        // TODO REMOVE SERVICES
         $user->tags = $this->tagService->user($user->id);
         $user->teams = $this->teamService->user($user->id);
         $user->posts = $this->postService->user($user->id);

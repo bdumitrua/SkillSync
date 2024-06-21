@@ -17,6 +17,7 @@ use App\Repositories\Project\Interfaces\ProjectLinkRepositoryInterface;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Project;
+use App\Http\Resources\Project\ProjectResource;
 use App\DTO\Project\UpdateProjectDTO;
 use App\DTO\Project\CreateProjectMemberDTO;
 use App\DTO\Project\CreateProjectDTO;
@@ -52,7 +53,7 @@ class ProjectService implements ProjectServiceInterface
         $projects = $this->projectRepository->getAll();
         $projects = $this->assembleProjectsData($projects);
 
-        return JsonResource::collection($projects);
+        return ProjectResource::collection($projects);
     }
 
     public function show(Project $project): JsonResource
@@ -60,8 +61,7 @@ class ProjectService implements ProjectServiceInterface
         $project = $this->projectRepository->getById($project->id);
         $project = $this->assembleProjectsData(new Collection([$project]))->first();
 
-        // TODO RESOURCE
-        return new JsonResource($project);
+        return new ProjectResource($project);
     }
 
     public function search(string $query): JsonResource
@@ -69,7 +69,7 @@ class ProjectService implements ProjectServiceInterface
         $projects = $this->projectRepository->search($query);
         $projects = $this->assembleProjectsData($projects);
 
-        return JsonResource::collection($projects);
+        return ProjectResource::collection($projects);
     }
 
     public function team(Team $team): JsonResource
@@ -77,7 +77,7 @@ class ProjectService implements ProjectServiceInterface
         $projects = $this->projectRepository->getByTeamId($team->id);
         $projects = $this->assembleProjectsData($projects);
 
-        return JsonResource::collection($projects);
+        return ProjectResource::collection($projects);
     }
 
     public function member(User $user): JsonResource
@@ -88,7 +88,7 @@ class ProjectService implements ProjectServiceInterface
         $projects = $this->projectRepository->getByIds($projectsIds);
         $projects = $this->assembleProjectsData($projects);
 
-        return JsonResource::collection($projects);
+        return ProjectResource::collection($projects);
     }
 
     public function author(User $user): JsonResource
@@ -96,7 +96,7 @@ class ProjectService implements ProjectServiceInterface
         $projects = $this->projectRepository->getByAuthorId($user->id);
         $projects = $this->assembleProjectsData($projects);
 
-        return JsonResource::collection($projects);
+        return ProjectResource::collection($projects);
     }
 
     public function create(CreateProjectDTO $createProjectDTO): void
@@ -181,11 +181,14 @@ class ProjectService implements ProjectServiceInterface
         $projectsIds = $projects->pluck('id')->toArray();
         $projectsMembers = $this->projectMemberRepository->getByProjectsIds($projectsIds);
 
-        $this->setCollectionEntityData($projectsMembers, 'user_id', 'userData', $this->userRepository);
-        $projectsMembers = $projectsMembers->groupBy('project_id');
+        /** @var Collection $projectMembers */
+        foreach ($projectsMembers as $projectMembers) {
+            $this->setCollectionEntityData($projectMembers, 'user_id', 'userData', $this->userRepository);
+            $projectMembers = $projectMembers->groupBy('project_id');
 
-        foreach ($projects as &$project) {
-            $project->members = $projectsMembers->get($project->id) ?? [];
+            foreach ($projects as &$project) {
+                $project->membersData = $projectMembers->get($project->id) ?? [];
+            }
         }
     }
 
@@ -195,7 +198,7 @@ class ProjectService implements ProjectServiceInterface
         $projectsLinks = $this->projectLinkRepository->getByProjectsIds($projectsIds)->groupBy('project_id');
 
         foreach ($projects as &$project) {
-            $project->links = $projectsLinks->get($project->id) ?? [];
+            $project->linksData = $projectsLinks->get($project->id) ?? [];
         }
     }
 

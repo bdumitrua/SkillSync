@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use App\Traits\AttachEntityData;
 use App\Services\Interfaces\SubscriptionServiceInterface;
 use App\Repositories\User\Interfaces\UserRepositoryInterface;
 use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
@@ -15,11 +16,14 @@ use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Subscription;
+use App\Http\Resources\SubscriptionResource;
 use App\Exceptions\NotFoundException;
 use App\DTO\SubscriptionDTO;
 
 class SubscriptionService implements SubscriptionServiceInterface
 {
+    use AttachEntityData;
+
     protected $teamRepository;
     protected $userRepository;
     protected $subscriptionRepository;
@@ -43,10 +47,10 @@ class SubscriptionService implements SubscriptionServiceInterface
         ]);
 
         $userSubscriptions = $this->subscriptionRepository->getUsersByUserId($userId);
-        $this->fillSubscriptionsUserData($userSubscriptions);
+        $this->fillSubscriptionsEntityData($userSubscriptions);
 
-        // TODO CREATE RESOURCE
-        return JsonResource::collection($userSubscriptions);
+
+        return SubscriptionResource::collection($userSubscriptions);
     }
 
     public function teams(int $userId): JsonResource
@@ -56,9 +60,9 @@ class SubscriptionService implements SubscriptionServiceInterface
         ]);
 
         $teamSubscriptions = $this->subscriptionRepository->getTeamsByUserId($userId);
-        $this->fillSubscriptionsTeamData($teamSubscriptions);
+        $this->fillSubscriptionsEntityData($teamSubscriptions);
 
-        return JsonResource::collection($teamSubscriptions);
+        return SubscriptionResource::collection($teamSubscriptions);
     }
 
     public function user(User $user): JsonResource
@@ -70,7 +74,7 @@ class SubscriptionService implements SubscriptionServiceInterface
         $userSubscriptions = $this->subscriptionRepository->getUserSubscribers($user->id);
         $this->fillSubscriptionsUserData($userSubscriptions);
 
-        return JsonResource::collection($userSubscriptions);
+        return SubscriptionResource::collection($userSubscriptions);
     }
 
     public function team(Team $team): JsonResource
@@ -79,10 +83,10 @@ class SubscriptionService implements SubscriptionServiceInterface
             'teamId' => $team->id
         ]);
 
-        $userSubscriptions = $this->subscriptionRepository->getTeamSubscribers($team->id);
-        $this->fillSubscriptionsUserData($userSubscriptions);
+        $teamSubscriptions = $this->subscriptionRepository->getTeamSubscribers($team->id);
+        $this->fillSubscriptionsUserData($teamSubscriptions);
 
-        return JsonResource::collection($userSubscriptions);
+        return SubscriptionResource::collection($teamSubscriptions);
     }
 
     public function create(SubscriptionDTO $subscriptionDTO): void
@@ -130,23 +134,31 @@ class SubscriptionService implements SubscriptionServiceInterface
         return null;
     }
 
-    protected function fillSubscriptionsUserData(Collection &$userSubscriptions): void
+    protected function fillSubscriptionsUserData(Collection &$subscriptions): void
     {
-        $userIds = $userSubscriptions->pluck('entity_id')->toArray();
-        $usersData = $this->userRepository->getByIds($userIds);
-
-        foreach ($userSubscriptions as &$subscription) {
-            $subscription->userData = $usersData->where('id', '=', $subscription->entity_id);
-        }
+        $this->setCollectionEntityData($subscriptions, 'subscriber_id', 'subscriberData', $this->userRepository);
     }
 
-    protected function fillSubscriptionsTeamData(Collection &$teamSubscriptions): void
+    protected function fillSubscriptionsEntityData(Collection &$entitySubscriptions): void
     {
-        $teamIds = $teamSubscriptions->pluck('entity_id')->toArray();
-        $teamsData = $this->teamRepository->getByIds($teamIds);
+        $entityIds = $entitySubscriptions->pluck('entity_id')->unique()->toArray();
+        $entityType = $entitySubscriptions->first()->entity_type;
+        $entitiesData = new Collection([]);
 
-        foreach ($teamSubscriptions as &$subscription) {
-            $subscription->teamData = $teamsData->where('id', '=', $subscription->entity_id);
+        if ($entityType === config('entities.team')) {
+            $entitiesData = $this->teamRepository->getByIds($entityIds);
+        } elseif ($entityType === config('entities.user')) {
+            $entitiesData = $this->userRepository->getByIds($entityIds);
+        } else {
+            Log::warning("entityType didn't match any existing type", [
+                'entitySubscriptions' => $entitySubscriptions,
+                'entityType' => $entityType
+            ]);
+            return;
+        }
+
+        foreach ($entitySubscriptions as &$subscription) {
+            $subscription->entityData = $entitiesData->where('id', '=', $subscription->entity_id)->first();
         }
     }
 }

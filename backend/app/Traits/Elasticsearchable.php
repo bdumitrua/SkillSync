@@ -5,6 +5,7 @@ namespace App\Traits;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Collection;
+use Elastic\Elasticsearch\Exception\ClientResponseException;
 use Elastic\Elasticsearch\Client;
 
 trait Elasticsearchable
@@ -124,7 +125,11 @@ trait Elasticsearchable
             'body' => $model->toSearchableArray()
         ];
 
-        $client->index($params);
+        try {
+            $client->index($params);
+        } catch (ClientResponseException $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -147,7 +152,11 @@ trait Elasticsearchable
             ]
         ];
 
-        $client->update($params);
+        try {
+            $client->update($params);
+        } catch (ClientResponseException $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**
@@ -166,7 +175,11 @@ trait Elasticsearchable
             'id' => $id
         ];
 
-        $client->delete($params);
+        try {
+            $client->delete($params);
+        } catch (ClientResponseException $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     /**

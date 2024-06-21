@@ -46,7 +46,7 @@ class LikeService implements LikeServiceInterface
     public function user(User $user): JsonResource
     {
         $likes = $this->likeRepository->getByUser($user);
-        $likes = $this->assembleLikesData($likes);
+        $likes = $this->assembleLikesUserData($likes);
 
         return JsonResource::collection($likes);
     }
@@ -54,7 +54,7 @@ class LikeService implements LikeServiceInterface
     public function post(Post $post): JsonResource
     {
         $likes = $this->likeRepository->getByPost($post);
-        $likes = $this->assembleLikesData($likes);
+        $likes = $this->assembleLikesUserData($likes);
 
         return JsonResource::collection($likes);
     }
@@ -90,7 +90,7 @@ class LikeService implements LikeServiceInterface
         $this->likeRepository->delete($like);
     }
 
-    protected function assembleLikesData(Collection $likes): Collection
+    protected function assembleLikesUserData(Collection $likes): Collection
     {
         $this->setCollectionEntityData($likes, 'user_id', 'userData', $this->userRepository);
 

@@ -87,7 +87,15 @@ class Project extends Model implements Likeable
             'likes_count' => [
                 'type' => 'integer',
                 'index' => false
-            ]
+            ],
+            'created_at' => [
+                'type' => 'date',
+                'index' => false,
+            ],
+            'updated_at' => [
+                'type' => 'date',
+                'index' => false,
+            ],
         ];
     }
 

@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\ProjectMember;
 use App\Models\Project;
 use App\Http\Resources\User\UserDataResource;
+use App\Http\Resources\Project\ProjectMemberResource;
 use App\DTO\Project\UpdateProjectMemberDTO;
 use App\DTO\Project\CreateProjectMemberDTO;
 
@@ -38,8 +39,7 @@ class ProjectMemberService implements ProjectMemberServiceInterface
         $members = $this->projectMemberRepository->getByProjectId($project->id);
         $this->setCollectionEntityData($members, 'user_id', 'userData', $this->userRepository);
 
-        // TODO RESOURCE
-        return JsonResource::collection($members);
+        return ProjectMemberResource::collection($members);
     }
 
     public function create(Project $project, User $user, CreateProjectMemberDTO $createDTO): void
