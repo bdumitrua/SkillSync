@@ -34,7 +34,7 @@ class LikeRepository implements LikeRepositoryInterface
 
     public function getByUser(User $user): Collection
     {
-        return $user->likes()->get();
+        return $user->likes()->where('likeable_type', '!=', config('entities.postComment'))->get();
     }
 
     public function getByPost(Post $post): Collection
