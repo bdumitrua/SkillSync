@@ -117,6 +117,15 @@ class LikeService implements LikeServiceInterface
         // Anyway likeable models doesn't cache, so this is much easier to do
         $likes = $this->likeRepository->getLikesWithLikeable($likes);
 
+        $likes = $likes->filter(function ($like) {
+            /** @var Post|PostComment|Project */
+            if ($like->likeable_type === config('entities.postComment')) {
+                return false;
+            }
+
+            return true; // Оставляем элемент
+        });
+
         foreach ($likes as $like) {
             /** @var Post|PostComment|Project */
             $likeable = $like->likeable;
