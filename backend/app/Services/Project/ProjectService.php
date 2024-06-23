@@ -189,7 +189,7 @@ class ProjectService implements ProjectServiceInterface
         ]);
 
         $projectsIds = $projects->pluck('id')->toArray();
-        $projectsTags = $this->tagRepository->getByProjectIds($projectsIds)->flatten();
+        $projectsTags = $this->tagRepository->getByEntityIds($projectsIds, config('entities.project'))->flatten();
 
         Log::debug('Setting projects tagsData');
         foreach ($projects as &$project) {

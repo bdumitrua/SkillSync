@@ -159,7 +159,7 @@ class PostService implements PostServiceInterface
         ]);
 
         $postIds = $posts->pluck('id')->unique()->all();
-        $postsTags = $this->tagRepository->getByPostIds($postIds)->flatten();
+        $postsTags = $this->tagRepository->getByEntityIds($postIds, config('entities.post'))->flatten();
 
         foreach ($posts as $post) {
             $post->tagsData = $postsTags->where('entity_id', $post->id);

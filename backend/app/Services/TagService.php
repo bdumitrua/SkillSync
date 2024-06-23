@@ -29,14 +29,14 @@ class TagService implements TagServiceInterface
     public function user(int $userId): JsonResource
     {
         return TagResource::collection(
-            $this->tagRepository->getByUserId($userId)
+            $this->tagRepository->getByEntityId($userId, config('entities.user'))
         );
     }
 
     public function team(int $teamId): JsonResource
     {
         return TagResource::collection(
-            $this->tagRepository->getByTeamId($teamId)
+            $this->tagRepository->getByEntityId($teamId, config('entities.team'))
         );
     }
 

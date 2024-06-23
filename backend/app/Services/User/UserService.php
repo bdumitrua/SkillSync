@@ -123,7 +123,7 @@ class UserService implements UserServiceInterface
 
     protected function setUserTags(User &$user): void
     {
-        $user->tags = $this->tagRepository->getByUserId($user->id);
+        $user->tags = $this->tagRepository->getByEntityId($user->id, config('entities.user'));
     }
 
     protected function setUserCounters(User &$user): void

@@ -58,13 +58,14 @@ trait Cacheable
     /**
      * @param array $modelIds
      * @param \Closure $callback
+     * @param mixed ...$params
      * 
      * @return Collection
      */
-    public function getCachedCollection(array $modelIds, \Closure $callback): Collection
+    public function getCachedCollection(array $modelIds, \Closure $callback, ...$params): Collection
     {
-        $data = array_map(function ($modelId) use ($callback) {
-            if (!empty($queryData = $callback($modelId))) {
+        $data = array_map(function ($modelId) use ($callback, $params) {
+            if (!empty($queryData = $callback($modelId, ...$params))) {
                 return $queryData;
             }
         }, $modelIds);
@@ -74,25 +75,6 @@ trait Cacheable
         }
 
         return new Collection($data);
-    }
-
-    /**
-     * @param array $modelIds
-     * @param \Closure $callback
-     * 
-     * @return array
-     */
-    public function getCachedArray(array $modelIds, \Closure $callback): array
-    {
-        $dataArray = [];
-
-        array_map(function ($modelId) use ($callback, &$dataArray) {
-            if (!empty($queryData = $callback($modelId))) {
-                $dataArray[$modelId] = $queryData;
-            }
-        }, $modelIds);
-
-        return $dataArray;
     }
 
     /**

@@ -111,7 +111,7 @@ class TeamService implements TeamServiceInterface
         $isTeamMember = $this->teamMemberRepository->userIsMember($team->id, $this->authorizedUserId);
 
         $team->links = $this->teamLinkRepository->getByTeamId($team->id, $isTeamMember);
-        $team->tags = $this->tagRepository->getByTeamId($team->id);
+        $team->tags = $this->tagRepository->getByEntityId($team->id, config('entities.team'));
 
         return $team;
     }

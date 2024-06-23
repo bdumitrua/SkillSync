@@ -13,108 +13,29 @@ class TagRepository implements TagRepositoryInterface
 {
     use Cacheable;
 
-    protected $cacheKeys;
-
-    public function __construct()
+    public function getByEntityId(int $entityId, string $entityType): Collection
     {
-        $this->cacheKeys = [
-            config('entities.user') => CACHE_KEY_USER_TAGS_DATA,
-            config('entities.team') => CACHE_KEY_TEAM_TAGS_DATA,
-            config('entities.post') => CACHE_KEY_POST_TAGS_DATA,
-            config('entities.project') => CACHE_KEY_PROJECT_TAGS_DATA,
-        ];
-    }
-
-    public function getByUserId(int $userId): Collection
-    {
-        Log::debug('Getting tags by userId', [
-            'userId' => $userId
+        Log::debug("Getting $entityType tags by id", [
+            'entityId' => $entityId
         ]);
 
-        $cacheKey = $this->getTagsCacheKey(config('entities.user'), $userId);
-        return $this->getCachedData($cacheKey, CACHE_TIME_USER_TAGS_DATA, function () use ($userId) {
-            return Tag::where('entity_type', '=', config('entities.user'))->where('entity_id', '=', $userId)->get();
+        $cacheKey = $this->getTagsCacheKey($entityType, $entityId);
+        $cacheTime = $this->getTagsCacheTime($entityType);
+
+        return $this->getCachedData($cacheKey, $cacheTime, function () use ($entityType, $entityId) {
+            return Tag::where('entity_type', '=', $entityType)->where('entity_id', '=', $entityId)->get();
         });
     }
 
-    public function getByUserIds(array $userIds): array
+    public function getByEntityIds(array $entityIds, string $entityType): Collection
     {
-        Log::debug('Getting tags by userIds', [
-            'userIds' => $userIds
+        Log::debug("Getting $entityType's tags by entityIds", [
+            'entityIds' => $entityIds
         ]);
 
-        return $this->getCachedArray($userIds, function ($userId) {
-            return $this->getByUserId($userId);
-        });
-    }
-
-    public function getByTeamId(int $teamId): Collection
-    {
-        Log::debug('Getting tags by teamId', [
-            'teamId' => $teamId
-        ]);
-
-        $cacheKey = $this->getTagsCacheKey(config('entities.team'), $teamId);
-        return $this->getCachedData($cacheKey, CACHE_TIME_TEAM_TAGS_DATA, function () use ($teamId) {
-            return Tag::where('entity_type', '=', config('entities.team'))->where('entity_id', '=', $teamId)->get();
-        });
-    }
-
-    public function getByTeamIds(array $teamIds): array
-    {
-        Log::debug('Getting tags by teamIds', [
-            'teamIds' => $teamIds
-        ]);
-
-        return $this->getCachedArray($teamIds, function ($teamId) {
-            return $this->getByTeamId($teamId);
-        });
-    }
-
-    public function getByPostId(int $postId): Collection
-    {
-        Log::debug('Getting tags by postId', [
-            'postId' => $postId
-        ]);
-
-        $cacheKey = $this->getTagsCacheKey(config('entities.post'), $postId);
-        return $this->getCachedData($cacheKey, CACHE_TIME_POST_TAGS_DATA, function () use ($postId) {
-            return Tag::where('entity_type', '=', config('entities.post'))->where('entity_id', '=', $postId)->get();
-        });
-    }
-
-    public function getByPostIds(array $postIds): Collection
-    {
-        Log::debug('Getting tags by postIds', [
-            'postIds' => $postIds
-        ]);
-
-        return $this->getCachedCollection($postIds, function ($postId) {
-            return $this->getByPostId($postId);
-        });
-    }
-
-    public function getByProjectId(int $projectId): Collection
-    {
-        Log::debug('Getting tags by projectId', [
-            'projectId' => $projectId
-        ]);
-
-        $cacheKey = $this->getTagsCacheKey(config('entities.project'), $projectId);
-        return $this->getCachedData($cacheKey, CACHE_TIME_PROJECT_TAGS_DATA, function () use ($projectId) {
-            return Tag::where('entity_type', '=', config('entities.project'))->where('entity_id', '=', $projectId)->get();
-        });
-    }
-
-    public function getByProjectIds(array $projectIds): Collection
-    {
-        Log::debug('Getting tags by projectIds', [
-            'projectIds' => $projectIds
-        ]);
-
-        return $this->getCachedCollection($projectIds, function ($projectId) {
-            return $this->getByProjectId($projectId);
-        });
+        return $this->getCachedCollection($entityIds, function ($entityId, $entityType) {
+            return $this->getByEntityId($entityId, $entityType);
+        }, $entityType);
     }
 
     public function create(CreateTagDTO $dto): Tag
@@ -150,6 +71,25 @@ class TagRepository implements TagRepositoryInterface
 
     protected function getTagsCacheKey(string $entityType, int $entityId): string
     {
-        return $this->cacheKeys[$entityType] . $entityId;
+        $cacheKeys = [
+            config('entities.user') => CACHE_KEY_USER_TAGS_DATA,
+            config('entities.team') => CACHE_KEY_TEAM_TAGS_DATA,
+            config('entities.post') => CACHE_KEY_POST_TAGS_DATA,
+            config('entities.project') => CACHE_KEY_PROJECT_TAGS_DATA,
+        ];
+
+        return $cacheKeys[$entityType] . $entityId;
+    }
+
+    protected function getTagsCacheTime(string $entityType): string
+    {
+        $cacheTime = [
+            config('entities.user') => CACHE_TIME_USER_TAGS_DATA,
+            config('entities.team') => CACHE_TIME_TEAM_TAGS_DATA,
+            config('entities.post') => CACHE_TIME_POST_TAGS_DATA,
+            config('entities.project') => CACHE_TIME_PROJECT_TAGS_DATA,
+        ];
+
+        return $cacheTime[$entityType];
     }
 }
