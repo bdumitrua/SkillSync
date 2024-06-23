@@ -28,6 +28,18 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
         });
     }
 
+    public function getById(int $teamVacancyId): ?TeamVacancy
+    {
+        Log::debug('Getting vacancy data by id', [
+            'teamVacancyId' => $teamVacancyId
+        ]);
+
+        $cacheKey = $this->getVacancyCacheKey($teamVacancyId);
+        return $this->getCachedData($cacheKey, CACHE_TIME_TEAM_VACANCY_DATA, function () use ($teamVacancyId) {
+            return TeamVacancy::find($teamVacancyId);
+        });
+    }
+
     public function getByIds(array $teamVacancyIds): Collection
     {
         Log::debug('Getting vacancies data by ids', [
@@ -39,18 +51,6 @@ class TeamVacancyRepository implements TeamVacancyRepositoryInterface
         });
 
         return $vacancies->sortByDesc('created_at')->values();
-    }
-
-    public function getById(int $teamVacancyId): ?TeamVacancy
-    {
-        Log::debug('Getting vacancy data by id', [
-            'teamVacancyId' => $teamVacancyId
-        ]);
-
-        $cacheKey = $this->getVacancyCacheKey($teamVacancyId);
-        return $this->getCachedData($cacheKey, CACHE_TIME_TEAM_VACANCY_DATA, function () use ($teamVacancyId) {
-            return TeamVacancy::find($teamVacancyId);
-        });
     }
 
     public function create(CreateTeamVacancyDTO $dto): TeamVacancy

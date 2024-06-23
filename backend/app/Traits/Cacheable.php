@@ -2,6 +2,7 @@
 
 namespace App\Traits;
 
+use TypeError;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Collection;
@@ -65,16 +66,21 @@ trait Cacheable
     public function getCachedCollection(array $modelIds, \Closure $callback, ...$params): Collection
     {
         $data = array_map(function ($modelId) use ($callback, $params) {
-            if (!empty($queryData = $callback($modelId, ...$params))) {
-                return $queryData;
-            }
+            return $callback($modelId, ...$params);
         }, $modelIds);
 
-        if ($data instanceof Collection) {
-            return $data;
+        // Создаём пустую коллекцию, куда будем добавлять результаты
+        $collection = new Collection();
+
+        foreach ($data as $item) {
+            if ($item instanceof Collection) {
+                $collection = $collection->merge($item);
+            } elseif ($item !== null) {
+                $collection->push($item);
+            }
         }
 
-        return new Collection($data);
+        return $collection;
     }
 
     /**

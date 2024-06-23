@@ -32,6 +32,13 @@ trait AttachEntityData
         ]);
 
         $entitiesIds = $collection->pluck($entityFieldKey)->unique()->all();
+
+        $entitiesIdsIsEmpty = empty($entitiesIds) || !array_diff($entitiesIds, [null]);
+        if ($entitiesIdsIsEmpty) {
+            Log::debug('Empty entitiesIds while setting collection entity data');
+            return;
+        }
+
         $entitiesData = $entityRepository->getByIds($entitiesIds);
 
         foreach ($collection as $item) {

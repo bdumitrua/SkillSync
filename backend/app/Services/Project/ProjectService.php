@@ -169,7 +169,7 @@ class ProjectService implements ProjectServiceInterface
         ]);
 
         $projectsIds = $projects->pluck('id')->toArray();
-        $projectsMembers = $this->projectMemberRepository->getByProjectsIds($projectsIds)->flatten();
+        $projectsMembers = $this->projectMemberRepository->getByProjectsIds($projectsIds);
         $this->setCollectionEntityData($projectsMembers, 'user_id', 'userData', $this->userRepository);
 
         Log::debug('Setting projects membersData');
@@ -189,11 +189,11 @@ class ProjectService implements ProjectServiceInterface
         ]);
 
         $projectsIds = $projects->pluck('id')->toArray();
-        $projectsTags = $this->tagRepository->getByEntityIds($projectsIds, config('entities.project'))->flatten();
+        $projectsTags = $this->tagRepository->getByEntityIds($projectsIds, config('entities.project'));
 
         Log::debug('Setting projects tagsData');
         foreach ($projects as &$project) {
-            $project->tagsData = $projectsTags->where('entity_id', $project->id);
+            $project->tagsData = $projectsTags->where('entity_id', '=', $project->id);
         }
 
         Log::debug("Successfully set projects tags data", [
@@ -208,10 +208,10 @@ class ProjectService implements ProjectServiceInterface
         ]);
 
         $projectsIds = $projects->pluck('id')->toArray();
-        $projectsLinks = $this->projectLinkRepository->getByProjectsIds($projectsIds)->groupBy('project_id');
+        $projectsLinks = $this->projectLinkRepository->getByProjectsIds($projectsIds);
 
         foreach ($projects as &$project) {
-            $project->linksData = $projectsLinks->get($project->id) ?? [];
+            $project->linksData = $projectsLinks->where('project_id', '=', $project->id);
         }
 
         Log::debug("Successfully set projects links data", [
