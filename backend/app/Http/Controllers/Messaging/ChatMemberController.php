@@ -27,14 +27,14 @@ class ChatMemberController extends Controller
     public function add(Chat $chat, User $user)
     {
         return $this->handleServiceCall(function () use ($chat, $user) {
-            return $this->chatMemberService->add($chat, $user);
+            return $this->chatMemberService->add($chat, $user->id);
         });
     }
 
     public function delete(Chat $chat, User $user)
     {
         return $this->handleServiceCall(function () use ($chat, $user) {
-            return $this->chatMemberService->delete($chat, $user);
+            return $this->chatMemberService->delete($chat, $user->id);
         });
     }
 }

@@ -14,6 +14,8 @@ use App\Repositories\Team\Interfaces\TeamMemberRepositoryInterface;
 use App\Models\TeamMember;
 use App\Models\Team;
 use App\Http\Resources\Team\TeamMemberResource;
+use App\Events\NewTeamMemberEvent;
+use App\Events\DeleteTeamMemberEvent;
 use App\DTO\Team\UpdateTeamMemberDTO;
 use App\DTO\Team\CreateTeamMemberDTO;
 
@@ -21,15 +23,16 @@ class TeamMemberService implements TeamMemberServiceInterface
 {
     use AttachEntityData;
 
-    protected $teamMemberRepository;
     protected $userRepository;
+    protected $groupChatRepository;
+    protected $teamMemberRepository;
 
     public function __construct(
-        TeamMemberRepositoryInterface $teamMemberRepository,
         UserRepositoryInterface $userRepository,
+        TeamMemberRepositoryInterface $teamMemberRepository,
     ) {
-        $this->teamMemberRepository = $teamMemberRepository;
         $this->userRepository = $userRepository;
+        $this->teamMemberRepository = $teamMemberRepository;
     }
 
     public function team(int $teamId): JsonResource
@@ -54,6 +57,7 @@ class TeamMemberService implements TeamMemberServiceInterface
         Gate::authorize('create', [TeamMember::class, $membership]);
 
         $this->teamMemberRepository->addMember($createTeamMemberDTO);
+        event(new NewTeamMemberEvent($teamId, $createTeamMemberDTO->userId));
     }
 
     public function update(int $teamId, int $userId, UpdateTeamMemberDTO $updateTeamMemberDTO): void
@@ -82,6 +86,7 @@ class TeamMemberService implements TeamMemberServiceInterface
         Gate::authorize('delete', [TeamMember::class, $membership, $team]);
 
         $this->teamMemberRepository->removeMember($membership);
+        event(new DeleteTeamMemberEvent($team->id, $userId));
     }
 
     protected function assebmleMembersData(Collection $teamMembers): Collection

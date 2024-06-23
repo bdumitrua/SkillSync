@@ -17,17 +17,17 @@ interface ChatMemberServiceInterface
 
     /**
      * @param Chat $chat
-     * @param User $user
+     * @param int $newUserId
      * 
      * @return void
      */
-    public function add(Chat $chat, User $user): void;
+    public function add(Chat $chat, int $newUserId): void;
 
     /**
      * @param Chat $chat
-     * @param User $user
+     * @param int $userToDeleteId
      * 
      * @return void
      */
-    public function delete(Chat $chat, User $user): void;
+    public function delete(Chat $chat, int $userToDeleteId): void;
 }

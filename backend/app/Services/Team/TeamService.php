@@ -16,6 +16,7 @@ use App\Repositories\Interfaces\SubscriptionRepositoryInterface;
 use App\Models\Team;
 use App\Http\Resources\Team\TeamResource;
 use App\Http\Resources\Team\TeamDataResource;
+use App\Events\NewTeamMemberEvent;
 use App\DTO\Team\UpdateTeamDTO;
 use App\DTO\Team\CreateTeamMemberDTO;
 use App\DTO\Team\CreateTeamDTO;

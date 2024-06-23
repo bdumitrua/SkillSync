@@ -29,9 +29,9 @@ interface ChatRepositoryInterface
     /**
      * @param int $teamId
      * 
-     * @return GroupChat|null
+     * @return Chat|null
      */
-    public function getChatByTeamId(int $teamId): ?GroupChat;
+    public function getChatByTeamId(int $teamId): ?Chat;
 
     /**
      * @param string $query

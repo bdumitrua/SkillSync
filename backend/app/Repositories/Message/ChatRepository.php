@@ -4,6 +4,7 @@ namespace App\Repositories\Message;
 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use App\Traits\Updateable;
 use App\Repositories\Message\Interfaces\ChatRepositoryInterface;
 use App\Models\GroupChat;
@@ -39,11 +40,15 @@ class ChatRepository implements ChatRepositoryInterface
         return $chats;
     }
 
-    public function getChatByTeamId(int $teamId): ?GroupChat
+    public function getChatByTeamId(int $teamId): ?Chat
     {
-        return GroupChat::where('admin_type', '=', config('entities.team'))
-            ->where('admin_id', '=', $teamId)
-            ->first();
+        return Chat::where(function (Builder $query) use ($teamId) {
+            $chatId = GroupChat::where('admin_type', '=', config('entities.team'))
+                ->where('admin_id', '=', $teamId)
+                ->first('chat_id')?->chat_id;
+
+            $query->where('id', '=', $chatId);
+        })->first();
     }
 
     public function search(string $query): Collection

@@ -28,7 +28,7 @@ class GroupChatMemberPolicy
     /**
      * Determine whether the user can create models.
      */
-    public function create(User $user, Chat $chat, User $newUser, ?GroupChatMember $chatMembership): Response
+    public function create(User $user, Chat $chat, int $newUserId, ?GroupChatMember $chatMembership): Response
     {
         if (!empty($chatMembership)) {
             return Response::deny("User is already member of this chat.");
@@ -45,7 +45,7 @@ class GroupChatMemberPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Chat $chat, User $userToDelete, ?GroupChatMember $chatMembership): Response
+    public function delete(User $user, Chat $chat, int $userToDeleteId, ?GroupChatMember $chatMembership): Response
     {
         if (empty($chatMembership)) {
             return Response::deny("User is not member of this chat.");
@@ -60,13 +60,13 @@ class GroupChatMemberPolicy
         $groupChat = $this->chatRepository->getChatData($chat);
         if ($groupChat->isTeamChat()) {
             $team = $this->teamRepository->getById($groupChat->admin_id);
-            $userToDeleteIsTeamAdmin = $userToDelete->id === $team->admin_id;
+            $userToDeleteIsTeamAdmin = $userToDeleteId === $team->admin_id;
 
             if ($userToDeleteIsTeamAdmin) {
                 return Response::deny("You have insufficient rigths.");
             }
         } elseif ($groupChat->isUserGroupChat()) {
-            if ($userToDelete->id === $groupChat->admin_id) {
+            if ($userToDeleteId === $groupChat->admin_id) {
                 return Response::deny("Chat admin can't be removed from chat.");
             }
         }
