@@ -14,6 +14,7 @@ use App\Repositories\Team\Interfaces\TeamRepositoryInterface;
 use App\Repositories\Project\Interfaces\ProjectRepositoryInterface;
 use App\Repositories\Project\Interfaces\ProjectMemberRepositoryInterface;
 use App\Repositories\Project\Interfaces\ProjectLinkRepositoryInterface;
+use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Repositories\Interfaces\LikeRepositoryInterface;
 use App\Models\User;
 use App\Models\Team;
@@ -27,6 +28,7 @@ class ProjectService implements ProjectServiceInterface
 {
     use AttachEntityData;
 
+    protected $tagRepository;
     protected $userRepository;
     protected $teamRepository;
     protected $likeRepository;
@@ -36,6 +38,7 @@ class ProjectService implements ProjectServiceInterface
     protected ?int $authorizedUserId;
 
     public function __construct(
+        TagRepositoryInterface $tagRepository,
         UserRepositoryInterface $userRepository,
         TeamRepositoryInterface $teamRepository,
         LikeRepositoryInterface $likeRepository,
@@ -43,6 +46,7 @@ class ProjectService implements ProjectServiceInterface
         ProjectLinkRepositoryInterface $projectLinkRepository,
         ProjectMemberRepositoryInterface $projectMemberRepository,
     ) {
+        $this->tagRepository = $tagRepository;
         $this->userRepository = $userRepository;
         $this->teamRepository = $teamRepository;
         $this->likeRepository = $likeRepository;
@@ -137,6 +141,7 @@ class ProjectService implements ProjectServiceInterface
         $this->setProjectsAuthorData($projects);
         $this->setProjectsMembersData($projects);
         $this->setProjectsLinks($projects);
+        $this->setProjectsTags($projects);
         $this->setProjectsRighs($projects);
         $this->setCollectionIsLiked($projects, 'project', $this->likeRepository);
 
@@ -173,6 +178,25 @@ class ProjectService implements ProjectServiceInterface
         }
 
         Log::debug("Successfully set projects members data", [
+            'projects' => $projects->pluck('id')->toArray(),
+        ]);
+    }
+
+    protected function setProjectsTags(Collection &$projects): void
+    {
+        Log::debug("Setting projects tags data", [
+            'projects' => $projects->pluck('id')->toArray(),
+        ]);
+
+        $projectsIds = $projects->pluck('id')->toArray();
+        $projectsTags = $this->tagRepository->getByProjectIds($projectsIds)->flatten();
+
+        Log::debug('Setting projects tagsData');
+        foreach ($projects as &$project) {
+            $project->tagsData = $projectsTags->where('entity_id', $project->id);
+        }
+
+        Log::debug("Successfully set projects tags data", [
             'projects' => $projects->pluck('id')->toArray(),
         ]);
     }

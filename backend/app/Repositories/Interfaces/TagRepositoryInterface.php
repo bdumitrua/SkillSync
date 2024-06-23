@@ -51,6 +51,20 @@ interface TagRepositoryInterface
     public function getByPostIds(array $postIds): Collection;
 
     /**
+     * @param int $projectId
+     * 
+     * @return Collection
+     */
+    public function getByProjectId(int $projectId): Collection;
+
+    /**
+     * @param array $projectIds
+     * 
+     * @return Collection
+     */
+    public function getByProjectIds(array $projectIds): Collection;
+
+    /**
      * @param CreateTagDTO $dto
      * 
      * @return Tag

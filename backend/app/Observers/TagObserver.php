@@ -17,6 +17,7 @@ class TagObserver
             config('entities.user') => CACHE_KEY_USER_TAGS_DATA,
             config('entities.team') => CACHE_KEY_TEAM_TAGS_DATA,
             config('entities.post') => CACHE_KEY_POST_TAGS_DATA,
+            config('entities.project') => CACHE_KEY_PROJECT_TAGS_DATA,
         ];
     }
 

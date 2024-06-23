@@ -30,7 +30,7 @@ class CreateTagRequest extends FormRequest
     {
         return [
             'title' => 'required|string|min:2|max:20',
-            'entityType' => 'required|in:user,team,post',
+            'entityType' => 'required|in:user,team,post,project',
             'entityId' => [new EntityIdRule()],
         ];
     }

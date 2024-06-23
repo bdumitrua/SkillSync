@@ -43,6 +43,7 @@ class ProjectObserver
         return [
             CACHE_KEY_PROJECT_MEMBERS_DATA . $projectId,
             CACHE_KEY_PROJECT_LINKS_DATA . $projectId,
+            CACHE_KEY_PROJECT_TAGS_DATA . $projectId,
         ];
     }
 

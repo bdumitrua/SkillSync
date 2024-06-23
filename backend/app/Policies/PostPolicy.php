@@ -52,6 +52,10 @@ class PostPolicy
     {
         $post = $this->postRepository->getById($postId);
 
+        if (empty($post)) {
+            return Response::deny('Post not found', 404);
+        }
+
         return $this->update($user, $post);
     }
 

@@ -7,6 +7,7 @@ use Illuminate\Auth\Access\Response;
 use App\Models\User;
 use App\Models\Team;
 use App\Models\Tag;
+use App\Models\Project;
 use App\Models\Post;
 
 class TagPolicy
@@ -41,6 +42,10 @@ class TagPolicy
 
         if ($entityType === config('entities.post')) {
             return Gate::inspect('tag', [Post::class, $entityId]);
+        }
+
+        if ($entityType === config('entities.project')) {
+            return Gate::inspect('tag', [Project::class, $entityId]);
         }
 
         return Response::deny("Unauthorized action.");

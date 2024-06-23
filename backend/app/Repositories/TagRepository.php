@@ -21,6 +21,7 @@ class TagRepository implements TagRepositoryInterface
             config('entities.user') => CACHE_KEY_USER_TAGS_DATA,
             config('entities.team') => CACHE_KEY_TEAM_TAGS_DATA,
             config('entities.post') => CACHE_KEY_POST_TAGS_DATA,
+            config('entities.project') => CACHE_KEY_PROJECT_TAGS_DATA,
         ];
     }
 
@@ -90,6 +91,29 @@ class TagRepository implements TagRepositoryInterface
 
         return $this->getCachedCollection($postIds, function ($postId) {
             return $this->getByPostId($postId);
+        });
+    }
+
+    public function getByProjectId(int $projectId): Collection
+    {
+        Log::debug('Getting tags by projectId', [
+            'projectId' => $projectId
+        ]);
+
+        $cacheKey = $this->getTagsCacheKey(config('entities.project'), $projectId);
+        return $this->getCachedData($cacheKey, CACHE_TIME_PROJECT_TAGS_DATA, function () use ($projectId) {
+            return Tag::where('entity_type', '=', config('entities.project'))->where('entity_id', '=', $projectId)->get();
+        });
+    }
+
+    public function getByProjectIds(array $projectIds): Collection
+    {
+        Log::debug('Getting tags by projectIds', [
+            'projectIds' => $projectIds
+        ]);
+
+        return $this->getCachedCollection($projectIds, function ($projectId) {
+            return $this->getByProjectId($projectId);
         });
     }
 

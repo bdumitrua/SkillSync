@@ -6,6 +6,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Request;
 use App\Http\Resources\User\UserDataResource;
 use App\Http\Resources\Team\TeamDataResource;
+use App\Http\Resources\TagResource;
 use App\Http\Resources\ActionsResource;
 
 class ProjectResource extends JsonResource
@@ -25,6 +26,10 @@ class ProjectResource extends JsonResource
                 $authorData = (new TeamDataResource($authorData));
             }
         }
+
+        $tagsData = !empty($this->tagsData)
+            ? (TagResource::collection($this->tagsData))->resolve()
+            : [];
 
         $membersData = !empty($this->membersData)
             ? (ProjectMemberResource::collection($this->membersData))->resolve()
@@ -49,6 +54,7 @@ class ProjectResource extends JsonResource
             "authorData" => $authorData,
             "membersData" => $membersData,
             "linksData" => $linksData,
+            "tagsData" => $tagsData,
             'isLiked' => $this->isLiked,
             'actions' => $actions
         ];
